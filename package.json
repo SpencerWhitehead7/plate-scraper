@@ -1,5 +1,5 @@
 {
-  "name": "recipe scraper",
+  "name": "recipe_scraper",
   "version": "1.0.0",
   "description": "an app for scraping recipes off cooking websites and formatting them",
   "main": "server/index",
