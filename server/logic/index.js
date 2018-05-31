@@ -4,6 +4,7 @@ const fs = require(`fs`)
 
 const seriousEatsParser = require(`./seriousEatsParser`)
 const allrecipesParser = require(`./allrecipesParser`)
+const epicuriousParser = require(`./epicuriousParser`)
 
 class Page{
 	constructor(url){
@@ -31,13 +32,14 @@ const scrape = url => {
 	requestPromiseNative(page)
 		.then(html => {
 			// giant block of if/else or switch clauses for different websites; break all the crap under here into their own functions for each clause
-			// seriouseats clauses
 			if(page.uri.includes(`seriouseats.com`) && !page.uri.includes(`seriouseats.com/recipes`)){
 				console.log(`Make sure your URL is at seriouseats.com/recipes, not just seriouseats.com`)
 			}else if(page.uri.includes(`seriouseats.com/recipes`)){ // SeriousEats
 				seriousEatsParser(recipe, html)
 			}else if(page.uri.includes(`allrecipes.com`)){ // Allrecipes
 				allrecipesParser(recipe, html)
+			}else if(page.uri.includes(`epicurious.com`)){
+				epicuriousParser(recipe, html)
 			}else{
 				console.log(`Sorry, we don't support that website`)
 			}
@@ -57,6 +59,6 @@ module.exports = {
 	scrape,
 }
 
-const testUrl = `https://www.allrecipes.com/recipe/223045/spicy-tarragon-yogurt-chicken/?internalSource=rotd&referringContentType=home%20page&clickId=cardslot%201`
+const testUrl = `https://www.epicurious.com/recipes/food/views/chickpea-almond-blondie-muffins`
 
 scrape(testUrl)

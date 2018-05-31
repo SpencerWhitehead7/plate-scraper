@@ -8,7 +8,6 @@ const allrecipesParser = (recipe, html) => {
 		recipe.instructions.push(`${html(this).text().trim()}`)
 	})
 	recipe.instructions = recipe.instructions.slice(0, -1) // to deal with some html BS
-	return recipe
 }
 
 module.exports = allrecipesParser
