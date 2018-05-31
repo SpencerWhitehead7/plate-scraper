@@ -14,6 +14,7 @@ const simplyrecipes = require(`./simplyrecipes`)
 const cookinglight = require(`./cookinglight`)
 const bettycrocker = require(`./bettycrocker`)
 const food52 = require(`./food52`)
+const jamieoliver = require(`./jamieoliver`)
 
 class Page{
 	constructor(url){
@@ -71,8 +72,8 @@ const scrape = url => {
 				parserLoader(bettycrocker)
 			}else if(page.uri.includes(`food52.com`)){ // food52
 				parserLoader(food52)
-			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-				parserLoader(cookinglight)
+			}else if(page.uri.includes(`jamieoliver.com`)){ // jamieoliver
+				parserLoader(jamieoliver)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
 				parserLoader(cookinglight)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
@@ -99,4 +100,4 @@ const scrape = url => {
 
 module.exports = scrape
 
-scrape(`https://food52.com/recipes/38174-moroccan-moules-frites`)
+scrape(`https://www.jamieoliver.com/recipes/aubergine-recipes/miso-grilled-aubergine-cucumber-pickle-rice-bowl/`)
