@@ -68,6 +68,6 @@ module.exports = {
 	scrape,
 }
 
-const testUrl = `https://www.epicurious.com/recipes/food/views/chickpea-almond-blondie-muffins`
+const testUrl = `https://www.thekitchn.com/recipe-chicken-amp-tomato-no-boil-pasta-bake-157548`
 
 scrape(testUrl)
