@@ -17,6 +17,7 @@ const food52 = require(`./food52`)
 const jamieoliver = require(`./jamieoliver`)
 const eatingwell = require(`./eatingwell`)
 const foodandwine = require(`./foodandwine`)
+const myrecipes = require(`./myrecipes`)
 
 class Page{
 	constructor(url){
@@ -80,18 +81,11 @@ const scrape = url => {
 				parserLoader(eatingwell)
 			}else if(page.uri.includes(`foodandwine.com`)){ // foodandwine
 				parserLoader(foodandwine)
-			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-				parserLoader(cookinglight)
-			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-				parserLoader(cookinglight)
-			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-				parserLoader(cookinglight)
-			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-				parserLoader(cookinglight)
+			}else if(page.uri.includes(`myrecipes.com`)){ // myrecipes
+				parserLoader(myrecipes)
+			}else{
+				console.log(`Sorry, we don't support that website`)
 			}
-			// else{
-			// 	console.log(`Sorry, we don't support that website`)
-			// }
 			const recipeStr = `Source: ${page.uri}\n\n${recipeToStr(recipe)}`
 			console.log(recipeStr)
 			return recipeStr
@@ -102,4 +96,4 @@ const scrape = url => {
 
 module.exports = scrape
 
-scrape(`https://www.foodandwine.com/recipes/gabys-famous-guacamole`)
+scrape(`http://www.myrecipes.com/recipe/bananas-foster-bread`)
