@@ -6,7 +6,7 @@ class Main extends Component{
 		super()
 		this.state = {
 			url : ``,
-			recipe : `AAA`,
+			recipe : ``,
 		}
 	}
 
@@ -18,8 +18,13 @@ class Main extends Component{
 
   handleSubmit = event => {
   	event.preventDefault()
-  	console.log(event.target)
-  	// axios??? some command to backend to make it run the script
+  	axios.post(`/api`, {url : this.state.url})
+  		.then(recipe => {
+  			this.setState({
+  				recipe : recipe.data,
+  			})
+  		})
+  		.catch(error => console.log(error))
   }
 
   render(){
@@ -36,11 +41,9 @@ class Main extends Component{
   				</button>
   			</form>
   			{
-  				this.state.recipe === ``
+  				this.state.recipeText === ``
   					? <div/>
-  					: <textarea>
-  						  {this.state.recipe}
-  					  </textarea>
+  					: <textarea name="recipe" onChange={this.handleChange} value={this.state.recipe}/>
   			}
   		</div>
   	)
