@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import axios from 'axios'
 
-class Main extends Component{
+class Main extends React.Component{
 	constructor(){
 		super()
 		this.state = {
@@ -31,17 +31,22 @@ class Main extends Component{
   	return (
   		<div>
   			<form onChange={this.handleChange} onSubmit={this.handleSubmit}>
-  				<label htmlFor="url">url to scrape</label>
+  				<label htmlFor="url">recipe url:</label>
   				<input type="text" name="url" value={this.state.url}/>
   				<button
   					type="submit"
-  					disabled={false} // add conditionals for if scraping the site would fail (ie, not supported)
+  					disabled={
+  						!this.state.url.includes(`seriouseats.com/recipes`) &&
+  						!this.state.url.includes(`allrecipes.com`) &&
+  						!this.state.url.includes(`epicurious.com`) &&
+  						!this.state.url.includes(`thekitchn.com`)
+  					} // add conditionals to check if site is supported
   				>
           Scrape!
   				</button>
   			</form>
   			{
-  				this.state.recipeText === ``
+  				this.state.recipe === ``
   					? <div/>
   					: <textarea name="recipe" onChange={this.handleChange} value={this.state.recipe}/>
   			}
