@@ -35,11 +35,11 @@ class Main extends React.Component{
   				<input type="text" name="url" value={this.state.url}/>
   				<button
   					type="submit"
-  					disabled={
-  						!this.state.url.includes(`seriouseats.com/recipes`) &&
-  						!this.state.url.includes(`allrecipes.com`) &&
-  						!this.state.url.includes(`epicurious.com`) &&
-  						!this.state.url.includes(`thekitchn.com`)
+  					disabled={false
+  						// !this.state.url.includes(`seriouseats.com/recipes`) &&
+  						// !this.state.url.includes(`allrecipes.com`) &&
+  						// !this.state.url.includes(`epicurious.com`) &&
+  						// !this.state.url.includes(`thekitchn.com`)
   					} // add conditionals to check if site is supported
   				>
           Scrape!
