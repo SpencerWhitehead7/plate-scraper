@@ -12,6 +12,7 @@ const geniuskitchenOrfood = require(`./geniuskitchenOrfood`)
 const chowhound = require(`./chowhound`)
 const simplyrecipes = require(`./simplyrecipes`)
 const cookinglight = require(`./cookinglight`)
+const bettycrocker = require(`./bettycrocker`)
 
 class Page{
 	constructor(url){
@@ -65,6 +66,24 @@ const scrape = url => {
 				parserLoader(simplyrecipes)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
 				parserLoader(cookinglight)
+			}else if(page.uri.includes(`bettycrocker.com`)){ // bettycrocker
+				parserLoader(bettycrocker)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
 			}
 			// else{
 			// 	console.log(`Sorry, we don't support that website`)
@@ -79,6 +98,4 @@ const scrape = url => {
 
 module.exports = scrape
 
-const testUrl = `http://www.cookinglight.com/recipes/honey-tempeh-cauliflower-crumbles`
-
-scrape(testUrl)
+scrape(`https://www.bettycrocker.com/recipes/bacon-chile-and-cream-cheese-stuffed-chicken-breasts/c770259e-eee5-44a9-a6b1-0fd185ed1d8d`)
