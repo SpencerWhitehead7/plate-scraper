@@ -1,8 +1,8 @@
 const requestPromiseNative = require(`request-promise-native`)
 const cheerio = require(`cheerio`)
-const fs = require(`fs`)
+// const fs = require(`fs`)
 
-// parsers
+// Parsers
 const seriousEats = require(`./seriousEats`)
 const allrecipes = require(`./allrecipes`)
 const epicurious = require(`./epicurious`)
@@ -31,7 +31,7 @@ const scrape = url => {
 		instructions : [],
 	}
 	const page = new Page(url)
-	requestPromiseNative(page)
+	return requestPromiseNative(page)
 		.then(html => {
 			const parserLoader = parser => parser(recipe, html)
 			// Deals with the edge case seriousEats pages
@@ -43,31 +43,27 @@ const scrape = url => {
 				parserLoader(seriousEats)
 			}else if(page.uri.includes(`allrecipes.com`)){ // Allrecipes
 				parserLoader(allrecipes)
-			}else if(page.uri.includes(`epicurious.com`)){
+			}else if(page.uri.includes(`epicurious.com`)){ // Epicurious
 				parserLoader(epicurious)
-			}else if(page.uri.includes(`thekitchn.com`)){
+			}else if(page.uri.includes(`thekitchn.com`)){ // theKitchn
 				parserLoader(thekitchn)
 			}
-
 			// else{
 			// 	console.log(`Sorry, we don't support that website`)
 			// }
-			// alright back to universals
-			console.log(recipe)
-			fs.appendFile(`recipes.txt`, recipeToStr(recipe), error => {
-				if(error) throw error
-				console.log(`Recipes updated!`)
-			})
+			// // alright back to universals
+			const recipeStr = recipeToStr(recipe)
+			return recipeStr
+			// fs.appendFile(`recipes.txt`, recipeStr, error => {
+			// 	if(error) throw error
+			// 	console.log(`Recipes updated!`)
+			// })
 		})
 		.catch(error => {console.log(error)})
 }
 
-module.exports = {
-	Page,
-	recipeToStr,
-	scrape,
-}
+module.exports = scrape
 
-const testUrl = `https://www.thekitchn.com/recipe-chicken-amp-tomato-no-boil-pasta-bake-157548`
+// const testUrl = `https://www.thekitchn.com/recipe-chicken-amp-tomato-no-boil-pasta-bake-157548`
 
-scrape(testUrl)
+// scrape(testUrl)
