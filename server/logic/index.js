@@ -9,6 +9,8 @@ const thekitchn = require(`./thekitchn`)
 const bonappetit = require(`./bonappetit`)
 const foodnetwork = require(`./foodnetwork`)
 const geniuskitchenOrfood = require(`./geniuskitchenOrfood`)
+const chowhound = require(`./chowhound`)
+const simplyrecipes = require(`./simplyrecipes`)
 
 class Page{
 	constructor(url){
@@ -54,8 +56,12 @@ const scrape = url => {
 				parserLoader(bonappetit)
 			}else if(page.uri.includes(`foodnetwork.com`)){ // foodnetwork
 				parserLoader(foodnetwork)
-			}else if(page.uri.includes(`geniuskitchen.com`)){ // foodnetwork
+			}else if(page.uri.includes(`geniuskitchen.com`)){ // geniuskitchen/food
 				parserLoader(geniuskitchenOrfood)
+			}else if(page.uri.includes(`chowhound.com`)){ // chowhound
+				parserLoader(chowhound)
+			}else if(page.uri.includes(`simplyrecipes.com`)){ // simplyrecipes
+				parserLoader(simplyrecipes)
 			}
 			// else{
 			// 	console.log(`Sorry, we don't support that website`)
@@ -70,6 +76,6 @@ const scrape = url => {
 
 module.exports = scrape
 
-const testUrl = `http://www.geniuskitchen.com/recipe/vegetarian-taco-salad-low-fat-277797`
+const testUrl = `https://www.simplyrecipes.com/recipes/chili_garlic_chicken/`
 
 scrape(testUrl)
