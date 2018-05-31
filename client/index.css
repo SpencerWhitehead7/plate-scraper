@@ -4,3 +4,8 @@
   box-sizing: border-box;
   background-color: white;
 }
+
+#recipe-textarea{
+  width: 50vw;
+  /* height: 50vh; */
+}
