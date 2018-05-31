@@ -6,7 +6,7 @@ const simplyrecipes = (recipe, html) => {
 	html(`.entry-details.recipe-method.instructions p`).each(function(){
 		if(`${html(this).text().trim()}` !== ``){
 			recipe.instructions.push(`${html(this).text().trim()}`
-				.replace(/^[\s\d]+/, ``))
+				.replace(/^[\s\d]+/, ``)) // to deal with inline numbers
 		}
 	})
 }
