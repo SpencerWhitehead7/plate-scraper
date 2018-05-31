@@ -8,6 +8,7 @@ const epicurious = require(`./epicurious`)
 const thekitchn = require(`./thekitchn`)
 const bonappetit = require(`./bonappetit`)
 const foodnetwork = require(`./foodnetwork`)
+const geniuskitchenOrfood = require(`./geniuskitchenOrfood`)
 
 class Page{
 	constructor(url){
@@ -49,10 +50,12 @@ const scrape = url => {
 				parserLoader(epicurious)
 			}else if(page.uri.includes(`thekitchn.com`)){ // theKitchn
 				parserLoader(thekitchn)
-			}else if(page.uri.includes(`bonappetit.com`)){
+			}else if(page.uri.includes(`bonappetit.com`)){ // bonappetit
 				parserLoader(bonappetit)
-			}else if(page.uri.includes(`foodnetwork.com`)){
+			}else if(page.uri.includes(`foodnetwork.com`)){ // foodnetwork
 				parserLoader(foodnetwork)
+			}else if(page.uri.includes(`geniuskitchen.com`)){ // foodnetwork
+				parserLoader(geniuskitchenOrfood)
 			}
 			// else{
 			// 	console.log(`Sorry, we don't support that website`)
@@ -67,6 +70,6 @@ const scrape = url => {
 
 module.exports = scrape
 
-const testUrl = `https://www.foodnetwork.com/recipes/giada-de-laurentiis/chicken-or-steak-with-balsamic-bbq-sauce-recipe-1953568`
+const testUrl = `http://www.geniuskitchen.com/recipe/vegetarian-taco-salad-low-fat-277797`
 
 scrape(testUrl)
