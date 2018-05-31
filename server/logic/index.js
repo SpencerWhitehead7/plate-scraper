@@ -11,6 +11,7 @@ const foodnetwork = require(`./foodnetwork`)
 const geniuskitchenOrfood = require(`./geniuskitchenOrfood`)
 const chowhound = require(`./chowhound`)
 const simplyrecipes = require(`./simplyrecipes`)
+const cookinglight = require(`./cookinglight`)
 
 class Page{
 	constructor(url){
@@ -62,6 +63,8 @@ const scrape = url => {
 				parserLoader(chowhound)
 			}else if(page.uri.includes(`simplyrecipes.com`)){ // simplyrecipes
 				parserLoader(simplyrecipes)
+			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+				parserLoader(cookinglight)
 			}
 			// else{
 			// 	console.log(`Sorry, we don't support that website`)
@@ -76,6 +79,6 @@ const scrape = url => {
 
 module.exports = scrape
 
-const testUrl = `https://www.simplyrecipes.com/recipes/chili_garlic_chicken/`
+const testUrl = `http://www.cookinglight.com/recipes/honey-tempeh-cauliflower-crumbles`
 
 scrape(testUrl)
