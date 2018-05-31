@@ -1,12 +1,12 @@
 const requestPromiseNative = require(`request-promise-native`)
 const cheerio = require(`cheerio`)
-// const fs = require(`fs`)
 
 // Parsers
 const seriousEats = require(`./seriousEats`)
 const allrecipes = require(`./allrecipes`)
 const epicurious = require(`./epicurious`)
 const thekitchn = require(`./thekitchn`)
+const bonappetit = require(`./bonappetit`)
 
 class Page{
 	constructor(url){
@@ -47,23 +47,21 @@ const scrape = url => {
 				parserLoader(epicurious)
 			}else if(page.uri.includes(`thekitchn.com`)){ // theKitchn
 				parserLoader(thekitchn)
+			}else if(page.uri.includes(`bonappetit.com`)){
+				parserLoader(bonappetit)
 			}
 			// else{
 			// 	console.log(`Sorry, we don't support that website`)
 			// }
-			// // alright back to universals
 			const recipeStr = `Source: ${page.uri}\n\n${recipeToStr(recipe)}`
+			console.log(recipeStr)
 			return recipeStr
-			// fs.appendFile(`recipes.txt`, recipeStr, error => {
-			// 	if(error) throw error
-			// 	console.log(`Recipes updated!`)
-			// })
 		})
 		.catch(error => {console.log(error)})
 }
 
 module.exports = scrape
 
-// const testUrl = `https://www.thekitchn.com/recipe-chicken-amp-tomato-no-boil-pasta-bake-157548`
+const testUrl = `https://www.bonappetit.com/recipe/spicy-pork-bowl-with-greens-and-carrots`
 
-// scrape(testUrl)
+scrape(testUrl)
