@@ -7,6 +7,7 @@ const allrecipes = require(`./allrecipes`)
 const epicurious = require(`./epicurious`)
 const thekitchn = require(`./thekitchn`)
 const bonappetit = require(`./bonappetit`)
+const foodnetwork = require(`./foodnetwork`)
 
 class Page{
 	constructor(url){
@@ -32,13 +33,14 @@ const scrape = url => {
 	}
 	const page = new Page(url)
 	return requestPromiseNative(page)
+	/* eslint-disable complexity */ // Ignores "massively" complex parsers clause
 		.then(html => {
 			const parserLoader = parser => parser(recipe, html)
 			// Deals with the edge case seriousEats pages
 			if(page.uri.includes(`seriouseats.com`) && !page.uri.includes(`seriouseats.com/recipes`)){
 				console.log(`Make sure your URL is at seriouseats.com/recipes, not just seriouseats.com`)
 
-				// Clauses to let you use different parsers for different websites
+			// Clauses to let you use different parsers for different websites
 			}else if(page.uri.includes(`seriouseats.com/recipes`)){ // SeriousEats
 				parserLoader(seriousEats)
 			}else if(page.uri.includes(`allrecipes.com`)){ // Allrecipes
@@ -49,6 +51,8 @@ const scrape = url => {
 				parserLoader(thekitchn)
 			}else if(page.uri.includes(`bonappetit.com`)){
 				parserLoader(bonappetit)
+			}else if(page.uri.includes(`foodnetwork.com`)){
+				parserLoader(foodnetwork)
 			}
 			// else{
 			// 	console.log(`Sorry, we don't support that website`)
@@ -57,11 +61,12 @@ const scrape = url => {
 			console.log(recipeStr)
 			return recipeStr
 		})
+	/* eslint-enable complexity */
 		.catch(error => {console.log(error)})
 }
 
 module.exports = scrape
 
-const testUrl = `https://www.bonappetit.com/recipe/spicy-pork-bowl-with-greens-and-carrots`
+const testUrl = `https://www.foodnetwork.com/recipes/giada-de-laurentiis/chicken-or-steak-with-balsamic-bbq-sauce-recipe-1953568`
 
 scrape(testUrl)
