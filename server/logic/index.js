@@ -2,9 +2,11 @@ const requestPromiseNative = require(`request-promise-native`)
 const cheerio = require(`cheerio`)
 const fs = require(`fs`)
 
-const seriousEatsParser = require(`./seriousEatsParser`)
-const allrecipesParser = require(`./allrecipesParser`)
-const epicuriousParser = require(`./epicuriousParser`)
+// parsers
+const seriousEats = require(`./seriousEats`)
+const allrecipes = require(`./allrecipes`)
+const epicurious = require(`./epicurious`)
+const thekitchn = require(`./thekitchn`)
 
 class Page{
 	constructor(url){
@@ -31,18 +33,25 @@ const scrape = url => {
 	const page = new Page(url)
 	requestPromiseNative(page)
 		.then(html => {
-			// giant block of if/else or switch clauses for different websites; break all the crap under here into their own functions for each clause
+			const parserLoader = parser => parser(recipe, html)
+			// Deals with the edge case seriousEats pages
 			if(page.uri.includes(`seriouseats.com`) && !page.uri.includes(`seriouseats.com/recipes`)){
 				console.log(`Make sure your URL is at seriouseats.com/recipes, not just seriouseats.com`)
+
+				// Clauses to let you use different parsers for different websites
 			}else if(page.uri.includes(`seriouseats.com/recipes`)){ // SeriousEats
-				seriousEatsParser(recipe, html)
+				parserLoader(seriousEats)
 			}else if(page.uri.includes(`allrecipes.com`)){ // Allrecipes
-				allrecipesParser(recipe, html)
+				parserLoader(allrecipes)
 			}else if(page.uri.includes(`epicurious.com`)){
-				epicuriousParser(recipe, html)
-			}else{
-				console.log(`Sorry, we don't support that website`)
+				parserLoader(epicurious)
+			}else if(page.uri.includes(`thekitchn.com`)){
+				parserLoader(thekitchn)
 			}
+
+			// else{
+			// 	console.log(`Sorry, we don't support that website`)
+			// }
 			// alright back to universals
 			console.log(recipe)
 			fs.appendFile(`recipes.txt`, recipeToStr(recipe), error => {

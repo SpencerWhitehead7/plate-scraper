@@ -1,11 +1,11 @@
-const seriousEatsParser = (recipe, html) => {
-	recipe.title = (html(`h1`).text())
+const epicurious = (recipe, html) => {
+	recipe.title = (html(`h1`).text().trim())
 	html(`.ingredient`).each(function(){
 		recipe.ingredients.push(`• ${html(this).text().trim()}`)
 	})
-	html(`.recipe-procedure-text`).each(function(){
+	html(`.preparation-step`).each(function(){
 		recipe.instructions.push(`${html(this).text().trim()}`)
 	})
 }
 
-module.exports = seriousEatsParser
+module.exports = epicurious

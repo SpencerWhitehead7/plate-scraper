@@ -1,4 +1,4 @@
-const allrecipesParser = (recipe, html) => {
+const allrecipes = (recipe, html) => {
 	recipe.title = (html(`h1`).text().trim())
 	html(`.checkList__line`).each(function(){
 		recipe.ingredients.push(`• ${html(this).text().trim()}`)
@@ -10,4 +10,4 @@ const allrecipesParser = (recipe, html) => {
 	recipe.instructions = recipe.instructions.slice(0, -1) // to deal with some html BS
 }
 
-module.exports = allrecipesParser
+module.exports = allrecipes
