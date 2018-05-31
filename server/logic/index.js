@@ -15,6 +15,7 @@ const cookinglight = require(`./cookinglight`)
 const bettycrocker = require(`./bettycrocker`)
 const food52 = require(`./food52`)
 const jamieoliver = require(`./jamieoliver`)
+const eatingwell = require(`./eatingwell`)
 
 class Page{
 	constructor(url){
@@ -74,8 +75,8 @@ const scrape = url => {
 				parserLoader(food52)
 			}else if(page.uri.includes(`jamieoliver.com`)){ // jamieoliver
 				parserLoader(jamieoliver)
-			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-				parserLoader(cookinglight)
+			}else if(page.uri.includes(`eatingwell.com`)){ // eatingwell
+				parserLoader(eatingwell)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
 				parserLoader(cookinglight)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
@@ -100,4 +101,4 @@ const scrape = url => {
 
 module.exports = scrape
 
-scrape(`https://www.jamieoliver.com/recipes/aubergine-recipes/miso-grilled-aubergine-cucumber-pickle-rice-bowl/`)
+scrape(`http://www.eatingwell.com/recipe/259996/quinoa-chickpea-salad-with-roasted-red-pepper-hummus-dressing/`)
