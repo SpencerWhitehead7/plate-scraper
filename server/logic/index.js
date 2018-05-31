@@ -52,7 +52,7 @@ const scrape = url => {
 			// 	console.log(`Sorry, we don't support that website`)
 			// }
 			// // alright back to universals
-			const recipeStr = recipeToStr(recipe)
+			const recipeStr = `Source: ${page.uri}\n\n${recipeToStr(recipe)}`
 			return recipeStr
 			// fs.appendFile(`recipes.txt`, recipeStr, error => {
 			// 	if(error) throw error
