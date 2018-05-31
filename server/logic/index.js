@@ -13,6 +13,7 @@ const chowhound = require(`./chowhound`)
 const simplyrecipes = require(`./simplyrecipes`)
 const cookinglight = require(`./cookinglight`)
 const bettycrocker = require(`./bettycrocker`)
+const food52 = require(`./food52`)
 
 class Page{
 	constructor(url){
@@ -68,8 +69,8 @@ const scrape = url => {
 				parserLoader(cookinglight)
 			}else if(page.uri.includes(`bettycrocker.com`)){ // bettycrocker
 				parserLoader(bettycrocker)
-			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-				parserLoader(cookinglight)
+			}else if(page.uri.includes(`food52.com`)){ // food52
+				parserLoader(food52)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
 				parserLoader(cookinglight)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
@@ -98,4 +99,4 @@ const scrape = url => {
 
 module.exports = scrape
 
-scrape(`https://www.bettycrocker.com/recipes/bacon-chile-and-cream-cheese-stuffed-chicken-breasts/c770259e-eee5-44a9-a6b1-0fd185ed1d8d`)
+scrape(`https://food52.com/recipes/38174-moroccan-moules-frites`)
