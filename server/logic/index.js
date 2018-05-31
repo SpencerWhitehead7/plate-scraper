@@ -16,6 +16,7 @@ const bettycrocker = require(`./bettycrocker`)
 const food52 = require(`./food52`)
 const jamieoliver = require(`./jamieoliver`)
 const eatingwell = require(`./eatingwell`)
+const foodandwine = require(`./foodandwine`)
 
 class Page{
 	constructor(url){
@@ -77,8 +78,8 @@ const scrape = url => {
 				parserLoader(jamieoliver)
 			}else if(page.uri.includes(`eatingwell.com`)){ // eatingwell
 				parserLoader(eatingwell)
-			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-				parserLoader(cookinglight)
+			}else if(page.uri.includes(`foodandwine.com`)){ // foodandwine
+				parserLoader(foodandwine)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
 				parserLoader(cookinglight)
 			}else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
@@ -101,4 +102,4 @@ const scrape = url => {
 
 module.exports = scrape
 
-scrape(`http://www.eatingwell.com/recipe/259996/quinoa-chickpea-salad-with-roasted-red-pepper-hummus-dressing/`)
+scrape(`https://www.foodandwine.com/recipes/gabys-famous-guacamole`)
