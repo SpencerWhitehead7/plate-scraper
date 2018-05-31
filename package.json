@@ -12,6 +12,7 @@
   "license": "Unlicense",
   "dependencies": {
     "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
@@ -22,6 +23,8 @@
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5",
     "sequelize": "^4.37.10"
   },
   "devDependencies": {
