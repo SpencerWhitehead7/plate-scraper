@@ -59,7 +59,7 @@ handleChange = event => {
   					<input
   							type="text"
   							name="url"
-  							placeholder="url to scrape"
+  							placeholder="url to scrape: for example, https://www.allrecipes.com/recipe/22918/pop-cake/"
   							value={this.state.url}
   							id="input"
   					/>
