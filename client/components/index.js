@@ -11,6 +11,7 @@ class Main extends React.Component{
 		this.state = {
 			url : ``,
 			recipe : ``,
+			error : false,
 		}
 	}
 
@@ -24,10 +25,18 @@ handleChange = event => {
   	event.preventDefault()
   	axios.post(`/api`, {url : this.state.url})
   	.then(recipe => {
-  		this.setState({
-  			url : ``,
-  			recipe : recipe.data,
-  		})
+  		if(!recipe.data.includes(`•`) || !recipe.data.includes(`1)`)){
+  			this.setState({
+  				error : true,
+  				recipe : ``,
+  			})
+  		}else{
+  		  this.setState({
+  			  url : ``,
+  				recipe : recipe.data,
+  				error : false,
+  			})
+  		}
   	})
   		.catch(error => console.log(error))
   }
@@ -42,7 +51,7 @@ handleChange = event => {
             Paste in a recipe url from a supported site and Scrape!<br/>
   						{
   						  (this.state.url.includes(`seriouseats.com`) && !this.state.url.includes(`seriouseats.com/recipes`))
-  								? <span id="warning">{`Make sure your url is from seriouseats.com/recipes, not just seriouseats.com`}</span>
+  								? <span className="warning">{`Make sure your url is from seriouseats.com/recipes, not just seriouseats.com`}</span>
   								: <span/>
   						}
   					</label>
@@ -57,18 +66,26 @@ handleChange = event => {
   						<SubmitButton url={this.state.url}/>
   				</div>
   					</form>
-  			{
-  				this.state.recipe === ``
-  					? <div/>
-  					: <div id="textarea-container">
-  						  <Textarea
+  			<div id="textarea-error-container">
+  				{
+  					this.state.recipe === ``
+  						? <div/>
+  						:	<Textarea
   							name="recipe"
   							onChange={this.handleChange}
   							value={this.state.recipe}
   							id="recipe-textarea"
-  						  />
-  					  </div>
-  			}
+  						/>
+  				}
+  				{
+  					this.state.error
+  						? <div className="warning">
+                  Error: failed to scrape: invalid url<br/>
+                  Make sure you're using the url of a specific recipe
+  						  </div>
+  						: <div/>
+  				}
+  			</div>
   		</div>
   	)
   }
