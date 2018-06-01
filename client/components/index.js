@@ -25,6 +25,7 @@ handleChange = event => {
   	axios.post(`/api`, {url : this.state.url})
   	.then(recipe => {
   		this.setState({
+  			url : ``,
   			recipe : recipe.data,
   		})
   	})
@@ -33,33 +34,40 @@ handleChange = event => {
 
   render(){
   	return (
-  		<div>
+  		<div id="whole-page">
+  			<h1 id="title">Plate Scraper!</h1>
   			<SupportedSites/>
-  			<form onChange={this.handleChange} onSubmit={this.handleSubmit} id="input">
-  				<label htmlFor="url">
-            recipe url:
-  					{
-  						(this.state.url.includes(`seriouseats.com`) && !this.state.url.includes(`seriouseats.com/recipes`))
-  							? (<span id="se-warning">{`SeriousEats recipes must be at seriouseats.com/recipes, not seriouseats.com`} </span>)
-  							: (<span/>)
-  					}
-  				</label>
-  				<input
-  					type="text"
-  					name="url"
-  					value={this.state.url}
-  				/>
-  				<SubmitButton url={this.state.url}/>
-  			</form>
+  					<form onChange={this.handleChange} onSubmit={this.handleSubmit} id="input-form">
+  					<label htmlFor="url">
+            Paste in a recipe url from a supported site and Scrape!<br/>
+  						{
+  						  (this.state.url.includes(`seriouseats.com`) && !this.state.url.includes(`seriouseats.com/recipes`))
+  								? <span id="warning">{`Make sure your url is from seriouseats.com/recipes, not just seriouseats.com`}</span>
+  								: <span/>
+  						}
+  					</label>
+  				<div id="input-button-container">
+  					<input
+  							type="text"
+  							name="url"
+  							placeholder="url to scrape"
+  							value={this.state.url}
+  							id="input"
+  					/>
+  						<SubmitButton url={this.state.url}/>
+  				</div>
+  					</form>
   			{
   				this.state.recipe === ``
   					? <div/>
-  					: <Textarea
-  						name="recipe"
-  						onChange={this.handleChange}
-  						value={this.state.recipe}
-  						id="recipe-textarea"
-  					/>
+  					: <div id="textarea-container">
+  						  <Textarea
+  							name="recipe"
+  							onChange={this.handleChange}
+  							value={this.state.recipe}
+  							id="recipe-textarea"
+  						  />
+  					  </div>
   			}
   		</div>
   	)
