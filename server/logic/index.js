@@ -31,7 +31,6 @@ const recipeToStr = recipe => {
 	recipe.ingredients.forEach(ingredient => {output += `\n    ${ingredient}`})
 	output += `\n\nInstructions\n`
 	recipe.instructions.forEach((instruction, i) => {output += `\n    ${i + 1}) ${recipe.instructions[i]}`})
-	output += `\n\n`
 	return output
 }
 
