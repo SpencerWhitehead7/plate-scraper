@@ -8,5 +8,8 @@ public/bundle.js.map
 # NPM errors
 npm-debug.log
 
+#Secrets
+secrets.js
+
 # Personal notefile
 ___.txt
