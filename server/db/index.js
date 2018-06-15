@@ -1,11 +1,8 @@
 'use strict'
 
-const db = require(`./database`)
-const tokenModel = require(`./models/tokenModel`)
+const database = require(`./database`)
 
-// Define model associations here
+// register models
+require(`./models`)
 
-module.exports = {
-	db,
-	tokenModel,
-}
+module.exports = database
