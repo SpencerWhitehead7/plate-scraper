@@ -10,14 +10,3 @@ const eatingwell = (recipe, html) => {
 }
 
 module.exports = eatingwell
-
-const eatingwell = recipe => {
-  recipe.title = ($(`h1`).text())
-  $(`.checkListListItem.checkListLine > span`).each(function(){
-    recipe.ingredients.push(`• ${$(this).text().trim()}`)
-  })
-  $(`.recipeDirectionsListItem`).each(function(){
-    recipe.instructions.push(`${$(this).text().trim()}`)
-  })
-  recipe.instructions = recipe.instructions.slice(0, -1) // to deal with some html BS
-}
