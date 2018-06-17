@@ -5,7 +5,7 @@ import axios from 'axios'
 import SupportedSites from './SupportedSites'
 import SubmitButton from './SubmitButton'
 
-class Main extends React.Component{
+class FrontPage extends React.Component{
   constructor(){
     super()
     this.state = {
@@ -86,4 +86,4 @@ handleChange = event => {
   }
 }
 
-export default Main
+export default FrontPage
