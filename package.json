@@ -29,8 +29,7 @@
     "redux-thunk": "^2.3.0",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
-    "sequelize": "^4.37.10",
-    "tesseract.js": "^1.0.10"
+    "sequelize": "^4.37.10"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

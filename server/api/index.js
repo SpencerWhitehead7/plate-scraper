@@ -6,8 +6,6 @@ const router = require(`express`).Router()
 
 // /api/scrape
 router.use(`/scrape`, require(`./scrape`))
-// /api/ocr
-router.use(`/ocr`, require(`./ocr`))
 
 // Get data
 
