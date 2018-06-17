@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended : true }))
 
 // Session middleware with passport
 app.use(session({
-  secret : process.env.SESSION_SECRET || `truly a best security practices secret`,
+  secret : process.env.SESSION_SECRET || `truly best security practices`,
   store : sessionStore,
   resave : false,
   saveUninitialized : false,
