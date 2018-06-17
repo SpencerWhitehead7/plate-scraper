@@ -23,7 +23,7 @@ handleChange = event => {
 
   handleSubmit = event => {
     event.preventDefault()
-    axios.post(`/api`, {url : this.state.url})
+    axios.post(`/api/scrape`, { url : this.state.url })
       .then(recipe => {
         if(!recipe.data.includes(`•`) || !recipe.data.includes(`1)`)){
           this.setState({
@@ -78,7 +78,7 @@ handleChange = event => {
             ? <div className="warning">
                 Error: failed to scrape: invalid url<br/>
                 Make sure you're using the url of a specific recipe
-            </div>
+              </div>
             : null
         }
       </div>
