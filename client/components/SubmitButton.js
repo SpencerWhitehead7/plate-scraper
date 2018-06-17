@@ -2,11 +2,11 @@ import React from 'react'
 
 /* eslint-disable complexity */ // this button, man
 const SubmitButton = (props) => {
-	return (
-		<button
-			type="submit"
-			disabled={
-				!props.url.includes(`allrecipes.com`) &&
+  return (
+    <button
+      type="submit"
+      disabled={
+        !props.url.includes(`allrecipes.com`) &&
         !props.url.includes(`bettycrocker.com`) &&
         !props.url.includes(`bonappetit.com`) &&
         !props.url.includes(`chowhound.com`) &&
@@ -22,12 +22,12 @@ const SubmitButton = (props) => {
         !props.url.includes(`seriouseats.com/recipes`) &&
         !props.url.includes(`simplyrecipes.com`) &&
         !props.url.includes(`thekitchn.com`)
-			}
-			id="btn-sub"
-		>
+      }
+      id="btn-sub"
+    >
       Scrape!
-		</button>
-	)
+    </button>
+  )
 }
 /* eslint-enable complexity */
 

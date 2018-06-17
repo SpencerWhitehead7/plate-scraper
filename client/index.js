@@ -8,8 +8,8 @@ import store from './redux/store'
 import Main from './components'
 
 ReactDOM.render(
-	<Provider store={store}>
-		<Main/>
-	</Provider>,
-	document.getElementById(`root`)
+  <Provider store={store}>
+    <Main/>
+  </Provider>,
+  document.getElementById(`root`)
 )
