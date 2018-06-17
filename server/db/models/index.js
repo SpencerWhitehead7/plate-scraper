@@ -1,9 +1,12 @@
 'use strict'
 
-const TokenModel = require(`./tokenModel`)
+const user = require(`./user`)
+const recipe = require(`./recipe`)
+
 
 // Make associations here
 
 module.exports = {
-  TokenModel,
+  user,
+  recipe,
 }
