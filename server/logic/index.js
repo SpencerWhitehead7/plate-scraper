@@ -34,61 +34,61 @@ const recipeToStr = recipe => {
   return output
 }
 
-const scrape = url => {
+/* eslint-disable complexity */ // Ignores "massively" complex parsers clause
+const scrape = async url => {
   const recipe = {
     title : ``,
     ingredients : [],
     instructions : [],
   }
   const page = new Page(url)
-  return requestPromiseNative(page)
-  /* eslint-disable complexity */ // Ignores "massively" complex parsers clause
-    .then(html => {
-      const parserLoader = parser => parser(recipe, html)
-      // Deals with the edge case seriousEats pages
-      if(page.uri.includes(`seriouseats.com`) && !page.uri.includes(`seriouseats.com/recipes`)){
-        return `Make sure your URL is at seriouseats.com/recipes, not just seriouseats.com`
-        // Clauses to let you use different parsers for different websites
-      }else if(page.uri.includes(`allrecipes.com`)){ // allrecipes
-        parserLoader(allrecipes)
-      }else if(page.uri.includes(`bettycrocker.com`)){ // bettycrocker
-        parserLoader(bettycrocker)
-      }else if(page.uri.includes(`bonappetit.com`)){ // bonappetit
-        parserLoader(bonappetit)
-      }else if(page.uri.includes(`chowhound.com`)){ // chowhound
-        parserLoader(chowhound)
-      }else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
-        parserLoader(cookinglight)
-      }else if(page.uri.includes(`eatingwell.com`)){ // eatingwell
-        parserLoader(eatingwell)
-      }else if(page.uri.includes(`epicurious.com`)){ // epicurious
-        parserLoader(epicurious)
-      }else if(page.uri.includes(`food52.com`)){ // food52
-        parserLoader(food52)
-      }else if(page.uri.includes(`foodandwine.com`)){ // foodandwine
-        parserLoader(foodandwine)
-      }else if(page.uri.includes(`foodnetwork.com`)){ // foodnetwork
-        parserLoader(foodnetwork)
-      }else if(page.uri.includes(`geniuskitchen.com`)){ // geniuskitchen/food
-        parserLoader(geniuskitchenOrfood)
-      }else if(page.uri.includes(`jamieoliver.com`)){ // jamieoliver
-        parserLoader(jamieoliver)
-      }else if(page.uri.includes(`myrecipes.com`)){ // myrecipes
-        parserLoader(myrecipes)
-      }else if(page.uri.includes(`seriouseats.com/recipes`)){ // seriouseats
-        parserLoader(seriousEats)
-      }else if(page.uri.includes(`simplyrecipes.com`)){ // simplyrecipes
-        parserLoader(simplyrecipes)
-      }else if(page.uri.includes(`thekitchn.com`)){ // thekitchn
-        parserLoader(thekitchn)
-      }else{
-        return `Sorry, we don't support that website`
-      }
-      const recipeStr = `Source: ${page.uri}\n\n${recipeToStr(recipe)}`
-      return recipeStr
-    })
-  /* eslint-enable complexity */
-    .catch(error => {console.log(error)})
+  try{
+    const html = await requestPromiseNative(page)
+    const parserLoader = parser => parser(recipe, html)
+    // Clauses to use different parsers for different websites
+    if(page.uri.includes(`seriouseats.com`) && !page.uri.includes(`seriouseats.com/recipes`)){ // Deals with the edge case seriousEats pages
+      return `Make sure your URL is at seriouseats.com/recipes, not just seriouseats.com`
+    }else if(page.uri.includes(`allrecipes.com`)){ // allrecipes
+      parserLoader(allrecipes)
+    }else if(page.uri.includes(`bettycrocker.com`)){ // bettycrocker
+      parserLoader(bettycrocker)
+    }else if(page.uri.includes(`bonappetit.com`)){ // bonappetit
+      parserLoader(bonappetit)
+    }else if(page.uri.includes(`chowhound.com`)){ // chowhound
+      parserLoader(chowhound)
+    }else if(page.uri.includes(`cookinglight.com`)){ // cookinglight
+      parserLoader(cookinglight)
+    }else if(page.uri.includes(`eatingwell.com`)){ // eatingwell
+      parserLoader(eatingwell)
+    }else if(page.uri.includes(`epicurious.com`)){ // epicurious
+      parserLoader(epicurious)
+    }else if(page.uri.includes(`food52.com`)){ // food52
+      parserLoader(food52)
+    }else if(page.uri.includes(`foodandwine.com`)){ // foodandwine
+      parserLoader(foodandwine)
+    }else if(page.uri.includes(`foodnetwork.com`)){ // foodnetwork
+      parserLoader(foodnetwork)
+    }else if(page.uri.includes(`geniuskitchen.com`)){ // geniuskitchen/food
+      parserLoader(geniuskitchenOrfood)
+    }else if(page.uri.includes(`jamieoliver.com`)){ // jamieoliver
+      parserLoader(jamieoliver)
+    }else if(page.uri.includes(`myrecipes.com`)){ // myrecipes
+      parserLoader(myrecipes)
+    }else if(page.uri.includes(`seriouseats.com/recipes`)){ // seriouseats
+      parserLoader(seriousEats)
+    }else if(page.uri.includes(`simplyrecipes.com`)){ // simplyrecipes
+      parserLoader(simplyrecipes)
+    }else if(page.uri.includes(`thekitchn.com`)){ // thekitchn
+      parserLoader(thekitchn)
+    }else{
+      return `Sorry, we don't support that website`
+    }
+    const recipeStr = `Source: ${page.uri}\n\n${recipeToStr(recipe)}`
+    return recipeStr
+  }catch(error){
+    console.log(error)
+  }
 }
+/* eslint-enable complexity */
 
 module.exports = scrape
