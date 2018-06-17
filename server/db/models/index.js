@@ -1,12 +1,13 @@
 'use strict'
 
-const user = require(`./user`)
-const recipe = require(`./recipe`)
+const User = require(`./user`)
+const Recipe = require(`./recipe`)
 
-
-// Make associations here
+// Associations
+Recipe.belongsTo(User)
+User.hasMany(Recipe)
 
 module.exports = {
-  user,
-  recipe,
+  User,
+  Recipe,
 }
