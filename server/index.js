@@ -7,11 +7,11 @@ const session = require(`express-session`)
 const passport = require(`passport`)
 const path = require(`path`)
 
-const { database } = require(`./db`)
+const database = require(`./db`)
 const { User } = require(`./db`)
 
 const SequelizeStore = require(`connect-session-sequelize`)(session.Store)
-const sessionStore = new SequelizeStore({ database })
+const sessionStore = new SequelizeStore({ db : database })
 sessionStore.sync()
 
 const app = express()
@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended : true }))
 
 // Session middleware with passport
 app.use(session({
-  secret : process.env.SESSION_SECRET || `truly best security practices secret`,
+  secret : process.env.SESSION_SECRET || `truly a best security practices secret`,
   store : sessionStore,
   resave : false,
   saveUninitialized : false,
