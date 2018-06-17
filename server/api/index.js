@@ -2,18 +2,24 @@
 
 const router = require(`express`).Router()
 
-const scrape = require(`../logic/`)
+// Trigger scripts
 
-router.post(`/`, (req, res, next) => {
-	scrape(req.body.url)
-		.then(recipe => res.json(recipe))
-		.catch(error => next(error))
-})
+// /api/scrape
+router.use(`/scrape`, require(`./scrape`))
+// /api/ocr
+router.use(`/ocr`, require(`./ocr`))
+
+// Get data
+
+// /api/user
+router.use(`/user`, require(`./user`))
+// /api/recipe
+router.use(`/recipe`, require(`./recipe`))
 
 router.use((req, res, next) => {
-	const error = new Error(`Not Found.`)
-	error.status = 404
-	next(error)
+  const error = new Error(`Not Found.`)
+  error.status = 404
+  next(error)
 })
 
 module.exports = router
