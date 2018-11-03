@@ -1,5 +1,5 @@
 const router = require(`express`).Router()
-const { User } = require(`../db`)
+const {User} = require(`../db`)
 
 // GET /api/user/:wildcard
 router.get(`/:id`, async (req, res, next) => {
@@ -25,7 +25,7 @@ router.post(`/`, async (req, res, next) => {
 router.put(`/:id`, async (req, res, next) => {
   try{
     const [, user] = await User.update(req.body, {
-      where : { id : req.params.id },
+      where : {id : req.params.id},
       returning : true,
       plain : true,
     })

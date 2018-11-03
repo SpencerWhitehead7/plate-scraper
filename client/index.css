@@ -1,12 +1,11 @@
 *{
   padding: 0;
   margin: 0;
-  box-sizing: border-box;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+  font-family: 'Open Sans';
 }
 
 #whole-page{
-  background: linear-gradient(rgb(128, 223, 255, 1), rgb(128, 223, 255, 0));
+  background: linear-gradient(rgba(128, 223, 255, 1), rgba(128, 223, 255, 0));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,13 +16,14 @@
   padding: 20px 0px;
 }
 
-#site-label{
+#supported-sites-title{
   text-align: center;
 }
 
 #site-cols-container{
   width: 100vw;
   display: flex;
+  flex-wrap: "wrap";
   justify-content: space-evenly;
   padding: 10px 0px;
 }
@@ -51,31 +51,69 @@ label{
   text-align: center;
 }
 
-#input{
+#url-input{
+  width: 46vw;
+  height: 4vh;
+  background: white;
+  border-radius: 10px 0px 0px 10px;
+  outline: none;
+}
+
+#sub-btn{
+  width: 120px;
+  height: 4vh;
+  flex: 0 0 auto;
+  color: black;
+  background: gold;
+  border-radius: 0px 10px 10px 0px;
+  outline: none;
+}
+
+#sub-btn:enabled:hover{
+  box-shadow: 1px 1px 3px;
+}
+
+#sub-btn:disabled{
+  background-color: lightgray;
+}
+
+.loading {
+  border: 16px solid white;
+  border-top: 16px solid rgba(128, 223, 255, 1);
+  border-radius: 50%;
+  width: 20vh;
+  height: 20vh;
+  margin-top: 10vh;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+#recipe-textarea{
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* DOWNLOAD COMP */
+
+#download input{
   width: 46vw;
   height: 4vh;
   background: white;
   border-radius: 10px 0px 0px 10px;
 }
 
-#btn-sub{
-  width: 70px;
+#download button {
+  width: 120px;
   height: 4vh;
-  flex: 0 0 auto;
   color: black;
   background: gold;
   border-radius: 0px 10px 10px 0px;
+  outline: none;
 }
 
-#btn-sub:enabled:hover{
+#download button:enabled:hover{
   box-shadow: 1px 1px 3px;
-}
-
-#btn-sub:disabled{
-  background-color: lightgray;
-}
-
-#recipe-textarea{
-  width: 50vw;
-  border-radius: 0px 0px 5px 5px;
 }

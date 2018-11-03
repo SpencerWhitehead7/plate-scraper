@@ -1,5 +1,3 @@
-'use strict'
-
 const Sequelize = require(`sequelize`)
 const database = require(`../database`)
 
@@ -8,19 +6,21 @@ const Recipe = database.define(`recipe`, {
     type : Sequelize.TEXT,
     allowNull : false,
   },
-  sourceSite : { // the site it's from (null if a self-upload)
-    type : Sequelize.STRING,
-  },
-  sourceUrl : { // the site it's from (null if it's a self upload)
-    type : Sequelize.STRING,
-  },
-  createdBy : { // user who originally scraped / uplaoded it
-    type : Sequelize.STRING,
+  title : { // the recipe's title
+    type : Sequelize.TEXT,
     allowNull : false,
   },
-  tags : { // for sorting
-    type : Sequelize.ARRAY(Sequelize.TEXT),
-    defaultValue : [],
+  sourceSite : { // the site it's from (null if a self-upload)
+    type : Sequelize.STRING,
+    defaultValue : `User Upload`,
+  },
+  sourceUrl : { // the exact page it's from (null if it's a self upload)
+    type : Sequelize.STRING,
+    defaultValue : `User Upload`,
+  },
+  createdBy : { // user who originally scraped / uploaded it
+    type : Sequelize.STRING,
+    allowNull : false,
   },
   forkedCount : { // number of people who've made their own copies (technically, times it's been copied)
     type : Sequelize.INTEGER,

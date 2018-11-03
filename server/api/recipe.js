@@ -1,5 +1,5 @@
 const router = require(`express`).Router()
-const { Recipe } = require(`../db`)
+const {Recipe} = require(`../db`)
 
 // GET /api/recipe
 router.get(`/`, async (req, res, next) => {
@@ -35,7 +35,7 @@ router.post(`/`, async (req, res, next) => {
 router.put(`/:id`, async (req, res, next) => {
   try{
     const [, recipe] = await Recipe.update(req.body, {
-      where : { id : req.params.id },
+      where : {id : req.params.id},
       returning : true,
       plain : true,
     })

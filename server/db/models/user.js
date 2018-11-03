@@ -1,19 +1,19 @@
-'use strict'
-
-const crypto = require(`crypto`)
 const Sequelize = require(`sequelize`)
-const database = require(`../database`)
+const crypto = require(`crypto`)
 
-const User = database.define(`user`, {
+const db = require(`../database`)
+
+const User = db.define(`user`, {
   email : {
     type : Sequelize.STRING,
-    unique : true,
+    unqiue : true,
     allowNull : false,
   },
   password : {
     type : Sequelize.STRING,
+    allowNull : false,
     get(){
-      return () => this.getDataValue(`password`)
+      return () => this.getDataValue(`salt`)
     },
   },
   salt : {
@@ -24,35 +24,33 @@ const User = database.define(`user`, {
   },
 })
 
-module.exports = User
-
-// instance methods
-
-User.prototype.correctPassword = function(candidatePw){
-  return User.encryptedPassword(candidatePw, this.salt()) === this.password()
+// Instance methods
+User.prototype.correctPassword = function(passwordAttempt){
+  return User.encryptPassword(passwordAttempt, this.salt()) === this.password()
 }
 
-// class methods
-
-User.generateSalt = function (){
+// Class methods
+User.generateSalt = function(){
   return crypto.randomBytes(16).toString(`base64`)
 }
 
-User.encryptPassword = function(plainText, salt){
-  return crypto.createHash(`RSA-SHA256`)
-    .update(plainText)
+User.encryptPassword = function(newPasswordPlainText, salt){
+  return crypto
+    .createHash(`RSA-SHA256`)
+    .update(newPasswordPlainText)
     .update(salt)
     .digest(`hex`)
 }
 
-// hooks
-
-const setSaltandPassword = user => {
+const setSaltAndPassword = user => {
   if(user.changed(`password`)){
     user.salt = User.generateSalt()
-    user.password = User.encryptPassword(user.password(), user.salt)
+    user.password = User.encryptPassword(user.password(), user.salt())
   }
 }
 
-User.beforeCreate(setSaltandPassword)
-User.beforeUpdate(setSaltandPassword)
+// Hooks
+User.beforeCreate(setSaltAndPassword)
+User.beforeUpdate(setSaltAndPassword)
+
+module.exports = User
