@@ -6,14 +6,17 @@ const db = require(`../database`)
 const User = db.define(`user`, {
   email : {
     type : Sequelize.STRING,
-    unqiue : true,
+    unique : true,
     allowNull : false,
+    validate : {
+      isEmail : true,
+    },
   },
   password : {
     type : Sequelize.STRING,
     allowNull : false,
     get(){
-      return () => this.getDataValue(`salt`)
+      return () => this.getDataValue(`password`)
     },
   },
   salt : {
