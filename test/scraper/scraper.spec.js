@@ -2,7 +2,7 @@
 
 const expect = require(`chai`).expect
 
-const scrape = require(`../server/logic`)
+const scrape = require(`../../server/logic`)
 
 describe(`the scraping function`, () => {
   let result = {}
@@ -28,7 +28,7 @@ describe(`the scraping function`, () => {
 })
 
 describe(`the parsers`, () => {
-  const sourceUrls = require(`./correct-recipes/sourceUrls`)
+  const sourceUrls = require(`./sourceUrls`)
   let counter = 0
   let i = 0
   let results = []
