@@ -4,7 +4,7 @@
   "description": "an app for scraping recipes off cooking websites, formatting them, and saving them",
   "main": "server/index",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --timeout 30000",
     "lint": "eslint . --ext .js,.jsx --ignore-pattern /public/*",
     "lint-fix": "eslint . --ext .js,.jsx --fix --ignore-pattern /public/*",
     "start": "node server",
@@ -41,7 +41,9 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.0",
+    "chai": "^4.2.0",
     "css-loader": "^1.0.0",
+    "mocha": "^5.2.0",
     "style-loader": "^0.23.1",
     "volleyball": "^1.5.1",
     "webpack": "^4.24.0",
