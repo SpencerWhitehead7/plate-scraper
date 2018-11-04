@@ -17,6 +17,7 @@ describe(`Tag model`, () => {
         console.log(error)
       }
     })
+
     it(`has a name field`, () => expect(TT.name).not.to.be.an(`undefined`))
   })
 

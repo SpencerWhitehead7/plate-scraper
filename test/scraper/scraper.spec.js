@@ -4,7 +4,7 @@ const expect = require(`chai`).expect
 
 const scrape = require(`../../server/logic`)
 
-describe(`the scraping function`, () => {
+describe(`The scraping function`, () => {
   let result = {}
   before(async () => {
     result = await scrape(`https://www.allrecipes.com/recipe/22918/pop-cake/`)
@@ -27,7 +27,7 @@ describe(`the scraping function`, () => {
   })
 })
 
-describe(`the parsers`, () => {
+describe(`The parsers`, () => {
   const sourceUrls = require(`./sourceUrls`)
   let counter = 0
   let i = 0
@@ -48,56 +48,56 @@ describe(`the parsers`, () => {
 
   afterEach(() => i++)
 
-  it(`allrecipes`, () => {
+  it(`allrecipes pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/allrecipes`))
   })
-  it(`bettycrocker`, () => {
+  it(`bettycrocker pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/bettycrocker`))
   })
-  it(`bonappetit`, () => {
+  it(`bonappetit pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/bonappetit`))
   })
-  it(`chowhound`, () => {
+  it(`chowhound pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/chowhound`))
   })
-  it(`cookinglight`, () => {
+  it(`cookinglight pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/cookinglight`))
   })
-  it(`eatingwell`, () => {
+  it(`eatingwell pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/eatingwell`))
   })
-  it(`myrecipes`, () => {
+  it(`myrecipes pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/myrecipes`))
   })
-  it(`epicurious`, () => {
+  it(`epicurious pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/epicurious`))
   })
   // it('food52', () => { uncomment if I ever get it working
   //   expect(results[i]s.recipe).to.equal(require('./food52'))
   // })
-  it(`foodandwine`, () => {
+  it(`foodandwine pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/foodandwine`))
   })
-  it(`foodnetwork html0`, () => {
+  it(`foodnetwork html0 template pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/foodnetwork0`))
   })
-  it(`foodnetwork html1`, () => {
+  it(`foodnetwork html1 template pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/foodnetwork1`))
   })
   // There may be other, as yet unknown, foodnetwork html layouts, but I'll add them as I find them.
-  it(`geniuskitchen`, () => {
+  it(`geniuskitchen pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/geniuskitchen`))
   })
-  it(`jamieoliver`, () => {
+  it(`jamieoliver pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/jamieoliver`))
   })
-  it(`thekitchn`, () => {
+  it(`thekitchn pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/thekitchn`))
   })
-  it(`simplyrecipes`, () => {
+  it(`simplyrecipes pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/simplyrecipes`))
   })
-  it(`seriouseats`, () => {
+  it(`seriouseats pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/seriouseats`))
   })
 })
