@@ -13,6 +13,7 @@
   "author": "spencer",
   "license": "Unlicense",
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
     "connect-session-sequelize": "^6.0.0",
@@ -35,11 +36,11 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.0",
     "css-loader": "^1.0.0",
     "style-loader": "^0.23.1",
     "volleyball": "^1.5.1",
