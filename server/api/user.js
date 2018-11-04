@@ -11,16 +11,6 @@ router.get(`/:id`, async (req, res, next) => {
   }
 })
 
-// POST /api/user
-router.post(`/`, async (req, res, next) => {
-  try{
-    const user = await User.create(req.body)
-    res.json(user)
-  }catch(error){
-    next(error)
-  }
-})
-
 // PUT /api/user/:wildcard
 router.put(`/:id`, async (req, res, next) => {
   try{
