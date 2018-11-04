@@ -37,7 +37,7 @@ class Main extends React.Component{
       isLoading : true,
     }, async () => {
       try{
-        const {data} = await axios.post(`/api`, {url : this.state.url})
+        const {data} = await axios.post(`/api/scrape`, {url : this.state.url})
         if(!data.recipe ||
         !data.recipe.includes(`•`) ||
         !data.recipe.includes(`1)`)){
