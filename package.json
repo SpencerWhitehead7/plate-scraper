@@ -1,7 +1,7 @@
 {
   "name": "plate-scraper",
   "version": "1.0.0",
-  "description": "an app for scraping recipes off cooking websites, formatting them, and saving them",
+  "description": "An app for collecting, editing, organizing, and storing recipes",
   "main": "server/index",
   "scripts": {
     "test": "mocha --timeout 10000 --exit -- test/*",
