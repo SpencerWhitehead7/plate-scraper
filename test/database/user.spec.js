@@ -14,7 +14,7 @@ describe(`User model`, () => {
   })
 
   describe(`The User model`, () => {
-    it(`The model exists`, () => expect(User).not.to.be.an(`undefined`))
+    it(`the model exists`, () => expect(User).not.to.be.an(`undefined`))
   })
 
   describe(`Each desired field exists`, () => {
@@ -32,102 +32,78 @@ describe(`User model`, () => {
   describe(`Each field validates and accepts only the correct data types`, () => {
     let testUser
     before(async () => {
-      try{
-        await db.sync({force : true})
-        testUser = await User.create({email : `testUser@example.com`, password : `pw`})
-      }catch(error){
-        console.log(error)
-      }
+      testUser = await createTestInstance(User, SUCCESS,
+        [`email`, `testUser@example.com`],
+        [`password`, `pw`])
+    })
+    describe(`Email Field`, () => {
+      it(`email field is required`, async () => {
+        const test = await createTestInstance(User, ERROR,
+          [`password`, `pw`])
+        expect(test.errors[0].message).to.equal(`user.email cannot be null`)
+      })
+      it(`email field accepts only strings`, async () => {
+        const test = await createTestInstance(User, ERROR,
+          [`email`, []],
+          [`password`, `pw`])
+        expect(test.errors[0].message).to.equal(`email cannot be an array or an object`)
+      })
+      it(`email field rejects duplicate emails`, async () => {
+        await createTestInstance(User, SUCCESS,
+          [`email`, `testUser@example.com`],
+          [`password`, `pw`])
+        const test = await createTestInstance(User, ERROR,
+          [`email`, `testUser@example.com`],
+          [`password`, `pw`])
+        expect(test.errors[0].message).to.equal(`email must be unique`)
+      })
+      it(`email field rejects non-email strings`, async () => {
+        const test = await createTestInstance(User, ERROR,
+          [`email`, `not an email`],
+          [`password`, `pw`])
+        expect(test.errors[0].message).to.equal(`Validation isEmail on email failed`)
+      })
     })
 
-    it(`email field is required`, async () => {
-      let testVal
-      try{
-        await User.create({password : `pw`})
-      }catch(error){
-        testVal = error
-      }
-      expect(testVal.errors[0].message).to.equal(`user.email cannot be null`)
-    })
-    it(`email field accepts only strings`, async () => {
-      let testVal
-      try{
-        await User.create({email : [], password : `pw`})
-      }catch(error){
-        testVal = error
-      }
-      expect(testVal.errors[0].message).to.equal(`email cannot be an array or an object`)
-    })
-    it(`email field rejects duplicate emails`, async () => {
-      let testVal
-      try{
-        await User.create({email : `testUser@example.com`, password : `pw`})
-        await User.create({email : `testUser@example.com`, password : `pw`})
-      }catch(error){
-        testVal = error
-      }
-      expect(testVal.errors[0].message).to.equal(`email must be unique`)
-    })
-    it(`email field rejects non-email strings`, async () => {
-      let testVal
-      try{
-        await testUser.update({email : `not an email`})
-      }catch(error){
-        testVal = error
-      }
-      expect(testVal.errors[0].message).to.equal(`Validation isEmail on email failed`)
+    describe(`Password Field`, () => {
+      it(`password field accepts only strings`, async () => {
+        const test = await createTestInstance(User, ERROR,
+          [`email`, `testUser@example.com`],
+          [`password`, []])
+        expect(test.errors[0].message).to.equal(`password cannot be an array or an object`)
+      })
+      it(`password field's contents are hidden in a function`, () => {
+        expect(testUser.password).to.be.a(`function`)
+      })
     })
 
-    it(`password field accepts only strings`, async () => {
-      let testVal
-      try{
-        await testUser.update({password : []})
-      }catch(error){
-        testVal = error
-      }
-      expect(testVal.errors[0].message).to.equal(`password cannot be an array or an object`)
-    })
-    it(`password field's contents are hidden in a function`, () => {
-      expect(testUser.password).to.be.a(`function`)
-    })
-
-    it(`salt field is a string`, () => {
-      expect(testUser.salt()).to.be.a(`string`)
-    })
-    it(`salt field's contents are hidden in a function`, () => {
-      expect(testUser.salt).to.be.a(`function`)
+    describe(`Salt Field`, () => {
+      it(`salt field is a string`, () => {
+        expect(testUser.salt()).to.be.a(`string`)
+      })
+      it(`salt field's contents are hidden in a function`, () => {
+        expect(testUser.salt).to.be.a(`function`)
+      })
     })
   })
 
   describe(`Class methods`, () => {
     let testUser
+    let secondUser
     before(async () => {
-      await db.sync({force : true})
-      testUser = await User.create({
-        email : `testUser@example.com`,
-        password : `pw`,
-      })
+      testUser = await createTestInstance(User, SUCCESS,
+        [`email`, `testUser@example.com`],
+        [`password`, `pw`])
+      secondUser = await createTestInstance(User, SUCCESS,
+        [`email`, `secondUser@example.com`],
+        [`password`, `pw`])
     })
 
-    describe(`password`, () => {
-      it(`password field is encrypted with randomized salting and hashing`, async () => {
-        let firstUser
-        let secondUser
-        try{
-          firstUser = await User.create({
-            email : `firstAddress@example.com`,
-            password : `pw`,
-          })
-          secondUser = await User.create({
-            email : `secondAddress@example.com`,
-            password : `pw`,
-          })
-        }catch(error){
-          console.log(error)
-        }
-        expect(firstUser.password()).not.to.equal(secondUser.password())
+    describe(`Password behaviors`, () => {
+      it(`password field is encrypted with randomized salting and hashing`, () => {
+        expect(testUser.password()).not.to.equal(secondUser.password())
       })
-      it(`password field is re-encrypted on update`, async () => {
+      it(`password field is re-encrypted with random salt on update`, async () => {
         const oldPassword = testUser.password()
         try{
           await testUser.update({password : `pw`})
@@ -138,23 +114,9 @@ describe(`User model`, () => {
       })
     })
 
-    describe(`salt`, () => {
+    describe(`Salt behaviors`, () => {
       it(`salt field is randomly generated on account creation`, async () => {
-        let firstUser
-        let secondUser
-        try{
-          firstUser = await User.create({
-            email : `third@example.com`,
-            password : `pw`,
-          })
-          secondUser = await User.create({
-            email : `fourth@example.com`,
-            password : `pw`,
-          })
-        }catch(error){
-          console.log(error)
-        }
-        expect(firstUser.salt()).not.to.equal(secondUser.salt())
+        expect(testUser.salt()).not.to.equal(secondUser.salt())
       })
       it(`salt field is randomly regenerated on password update`, async () => {
         const oldSalt = testUser.salt()
@@ -171,18 +133,16 @@ describe(`User model`, () => {
   describe(`Instance methods`, () => {
     let testUser
     before(async () => {
-      await db.sync({force : true})
-      testUser = await User.create({
-        email : `testUser@example.com`,
-        password : `pw`,
-      })
+      testUser = await createTestInstance(User, SUCCESS,
+        [`email`, `testUser@example.com`],
+        [`password`, `pw`])
     })
 
     describe(`correctPassword`, () => {
-      it(`retestUserrns true if the password is correct`, () => {
+      it(`returns true if the password is correct`, () => {
         expect(testUser.correctPassword(`pw`)).to.be.equal(true)
       })
-      it(`retestUserrns false if the password is incorrect`, () => {
+      it(`returns false if the password is incorrect`, () => {
         expect(testUser.correctPassword(`wrongpw`)).to.be.equal(false)
       })
     })
