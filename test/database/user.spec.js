@@ -1,3 +1,5 @@
+/* eslint-disable init-declarations */
+
 const {expect} = require(`chai`)
 const db = require(`../../server/db`)
 const User = db.model(`user`)
@@ -115,7 +117,7 @@ describe(`User model`, () => {
     })
 
     describe(`Salt behaviors`, () => {
-      it(`salt field is randomly generated on account creation`, async () => {
+      it(`salt field is randomly generated on account creation`, () => {
         expect(testUser.salt()).not.to.equal(secondUser.salt())
       })
       it(`salt field is randomly regenerated on password update`, async () => {

@@ -1,3 +1,5 @@
+/* eslint-disable init-declarations */
+
 const {expect} = require(`chai`)
 const db = require(`../../server/db`)
 const Recipe = db.model(`recipe`)
@@ -14,7 +16,7 @@ describe(`Recipe model`, () => {
   })
 
   describe(`The Recipe model`, () => {
-    it(`The model exists`, () => expect(Recipe).not.to.be.an(`undefined`))
+    it(`the model exists`, () => expect(Recipe).not.to.be.an(`undefined`))
   })
 
   describe(`Each desired field exists`, () => {

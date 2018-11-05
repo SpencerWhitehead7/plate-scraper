@@ -1,3 +1,5 @@
+/* eslint-disable init-declarations */
+
 const SUCCESS = `SUCCESS`
 const ERROR = `ERROR`
 

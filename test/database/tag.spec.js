@@ -1,3 +1,5 @@
+/* eslint-disable init-declarations */
+
 const {expect} = require(`chai`)
 const db = require(`../../server/db`)
 const Tag = db.model(`tag`)
@@ -14,7 +16,7 @@ describe(`Tag model`, () => {
   })
 
   describe(`The Tag model`, () => {
-    it(`The model exists`, () => expect(Tag).not.to.be.an(`undefined`))
+    it(`the model exists`, () => expect(Tag).not.to.be.an(`undefined`))
   })
 
   describe(`Each desired field exists`, () => {
