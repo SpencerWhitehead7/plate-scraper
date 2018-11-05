@@ -17,12 +17,14 @@ describe(`Recipe model`, () => {
     it(`The model exists`, () => expect(Recipe).not.to.be.an(`undefined`))
   })
 
-  describe(`Each desired field exists`, async () => {
-    const test = await createTestInstance(Recipe, SUCCESS,
-      [`text`, `recipe`],
-      [`title`, `title`],
-      [`createdBy`, `testUser`])
-
+  describe(`Each desired field exists`, () => {
+    let test
+    before(async () => {
+      test = await createTestInstance(Recipe, SUCCESS,
+        [`text`, `recipe`],
+        [`title`, `title`],
+        [`createdBy`, `testUser`])
+    })
     it(`has a text field`, () => expect(test.text).not.to.be.an(`undefined`))
     it(`has a title field`, () => expect(test.title).not.to.be.an(`undefined`))
     it(`has a sourceSite field`, () => expect(test.sourceSite).not.to.be.an(`undefined`))

@@ -2,31 +2,34 @@ const {expect} = require(`chai`)
 const db = require(`../../server/db`)
 const User = db.model(`user`)
 
+const {SUCCESS, ERROR, createTestInstance} = require(`./logic`)
+
 describe(`User model`, () => {
+  beforeEach(async () => {
+    try{
+      await User.sync({force : true})
+    }catch(err){
+      console.log(err)
+    }
+  })
+
   describe(`The User model`, () => {
     it(`The model exists`, () => expect(User).not.to.be.an(`undefined`))
   })
 
   describe(`Each desired field exists`, () => {
-    let testUser
+    let test
     before(async () => {
-      try{
-        await db.sync({force : true})
-        testUser = await User.create({
-          email : `testUser@example.com`,
-          password : `pw`,
-        })
-      }catch(error){
-        console.log(error)
-      }
+      test = await createTestInstance(User, SUCCESS,
+        [`email`, `testUser@example.com`],
+        [`password`, `pw`])
     })
-
-    it(`has an email field`, () => expect(testUser.email).not.to.be.an(`undefined`))
-    it(`has a password field`, () => expect(testUser.password).not.to.be.an(`undefined`))
-    it(`has a salt field`, () => expect(testUser.salt).not.to.be.an(`undefined`))
+    it(`has an email field`, () => expect(test.email).not.to.be.an(`undefined`))
+    it(`has a password field`, () => expect(test.password).not.to.be.an(`undefined`))
+    it(`has a salt field`, () => expect(test.salt).not.to.be.an(`undefined`))
   })
 
-  describe(`Each field accepts only the correct data types`, () => {
+  describe(`Each field validates and accepts only the correct data types`, () => {
     let testUser
     before(async () => {
       try{
@@ -58,6 +61,7 @@ describe(`User model`, () => {
     it(`email field rejects duplicate emails`, async () => {
       let testVal
       try{
+        await User.create({email : `testUser@example.com`, password : `pw`})
         await User.create({email : `testUser@example.com`, password : `pw`})
       }catch(error){
         testVal = error

@@ -17,8 +17,11 @@ describe(`Tag model`, () => {
     it(`The model exists`, () => expect(Tag).not.to.be.an(`undefined`))
   })
 
-  describe(`Each desired field exists`, async () => {
-    const test = await createTestInstance(Tag, SUCCESS, [`name`, `tagname`])
+  describe(`Each desired field exists`, () => {
+    let test
+    before(async () => {
+      test = await createTestInstance(Tag, SUCCESS, [`name`, `tagname`])
+    })
     it(`has a name field`, () => expect(test.name).not.to.be.an(`undefined`))
   })
 
