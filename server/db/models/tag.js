@@ -8,6 +8,8 @@ const Tag = database.define(`tag`, {
     unique : true,
     validate : {
       notEmpty : true,
+      isAlpha : true,
+      isLowercase : true,
     },
   },
 })

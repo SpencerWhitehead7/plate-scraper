@@ -8,17 +8,17 @@ describe(`Tag model`, () => {
   })
 
   describe(`Each desired field exists`, () => {
-    let TT
+    let testTag
     before(async () => {
       try{
         await db.sync({force : true})
-        TT = await Tag.create({name : `dessert`})
+        testTag = await Tag.create({name : `dessert`})
       }catch(error){
         console.log(error)
       }
     })
 
-    it(`has a name field`, () => expect(TT.name).not.to.be.an(`undefined`))
+    it(`has a name field`, () => expect(testTag.name).not.to.be.an(`undefined`))
   })
 
   describe(`Each field accepts only the correct data types`, () => {
@@ -48,6 +48,33 @@ describe(`Tag model`, () => {
         testVal = error
       }
       expect(testVal.errors[0].message).to.equal(`Validation notEmpty on name failed`)
+    })
+    it(`name field does not accept strings with numeric (non-alphabetical) characters`, async () => {
+      let testVal
+      try{
+        await Tag.create({name : `7`})
+      }catch(error){
+        testVal = error
+      }
+      expect(testVal.errors[0].message).to.equal(`Validation isAlpha on name failed`)
+    })
+    it(`name field does not accept strings with symbol (non-alphabetical) characters`, async () => {
+      let testVal
+      try{
+        await Tag.create({name : `&`})
+      }catch(error){
+        testVal = error
+      }
+      expect(testVal.errors[0].message).to.equal(`Validation isAlpha on name failed`)
+    })
+    it(`name field does not accept strings with uppercase characters`, async () => {
+      let testVal
+      try{
+        await Tag.create({name : `aAa`})
+      }catch(error){
+        testVal = error
+      }
+      expect(testVal.errors[0].message).to.equal(`Validation isLowercase on name failed`)
     })
   })
 })
