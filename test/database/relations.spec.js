@@ -27,7 +27,6 @@ describe(`Relationships`, () => {
           [`password`, `pw`]),
       ])
       await recipe.setUser(user.id)
-
       expect(recipe.userId).to.equal(user.id)
     })
   })
