@@ -17,7 +17,11 @@ describe(`Relationships`, () => {
 
   describe(`The User-Recipe one-many relation`, () => {
     it(`the relation exists`, async () => {
-      const [recipe, user] = await Promise.all([
+      const [recipe1, recipe2, user] = await Promise.all([
+        createTestInstance(Recipe, SUCCESS,
+          [`text`, `recipe`],
+          [`title`, `title`],
+          [`createdBy`, `testUser`]),
         createTestInstance(Recipe, SUCCESS,
           [`text`, `recipe`],
           [`title`, `title`],
@@ -26,8 +30,9 @@ describe(`Relationships`, () => {
           [`email`, `testUser@example.com`],
           [`password`, `pw`]),
       ])
-      await recipe.setUser(user.id)
-      expect(recipe.userId).to.equal(user.id)
+      await recipe1.setUser(user.id)
+      await recipe2.setUser(user.id)
+      expect(await user.countRecipes()).to.equal(2)
     })
   })
 

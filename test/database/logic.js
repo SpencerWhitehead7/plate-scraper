@@ -11,9 +11,17 @@ const createTestInstance = async (model, isTesting, ...inputParams) => {
   })
   try{
     const testModel = await model.create(instanceParams)
-    if(isTesting === SUCCESS) res = testModel
+    if(isTesting === SUCCESS){
+      res = testModel
+    }else{
+      console.log(`EXPECTED ERROR, BUT SUCCEEDED`)
+    }
   }catch(err){
-    if(isTesting === ERROR) res = err
+    if(isTesting === ERROR){
+      res = err
+    }else{
+      console.log(`EXPECTED SUCCESS, BUT ERRORED:`, err)
+    }
   }
   return res
 }
