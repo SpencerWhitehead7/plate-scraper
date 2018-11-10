@@ -4,8 +4,8 @@
   "description": "An app for collecting, editing, organizing, and storing recipes",
   "main": "server/index",
   "scripts": {
-    "test": "mocha --timeout 10000 --exit -- test/*",
-    "testpart": "mocha --timeout 10000 --exit -- test/api/recipe.spec.js",
+    "test": "NODE_ENV='test' mocha --timeout 10000 --exit -- test/*",
+    "testpart": "NODE_ENV='test' mocha --timeout 10000 --exit -- test/auth/auth.spec.js",
     "lint": "eslint . --ext .js,.jsx --ignore-pattern /public/*",
     "lint-fix": "eslint . --ext .js,.jsx --fix --ignore-pattern /public/*",
     "start": "node server",
