@@ -1,6 +1,5 @@
 module.exports = {
   entry : [`@babel/polyfill`, `./client/index.js`],
-  mode : `development`,
   output : {
     path : __dirname, // assumes your bundle.js will be in the root of your project folder
     filename : `./public/bundle.js`,
