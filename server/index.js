@@ -94,3 +94,5 @@ db.sync(/* {force : true} */)
     console.log(`\nDatabase Synced\n`)
     app.listen(PORT, () => console.log(`Partying hard on http://localhost:${PORT}\n`))
   })
+
+module.exports = app // for testing
