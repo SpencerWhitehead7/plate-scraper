@@ -42,13 +42,19 @@ router.post(`/login`, async (req, res, next) => {
 // POST /auth/logout
 router.post(`/logout`, (req, res) => {
   req.logout()
-  req.session.destory()
+  req.session.destroy()
   res.redirect(`/`)
 })
 
 // GET /auth/me
-router.get(`/me`, (req, res) => {
-  res.json(req.user)
+router.get(`/me`, (req, res, next) => {
+  if(req.user){
+    res.json(req.user)
+  }else{
+    const err = new Error(`Not logged in`)
+    err.status = 401
+    next(err)
+  }
 })
 
 module.exports = router
