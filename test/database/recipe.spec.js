@@ -25,7 +25,7 @@ describe(`Recipe model`, () => {
       test = await createTestInstance(Recipe, SUCCESS,
         [`text`, `recipe`],
         [`title`, `title`],
-        [`createdBy`, `testUser`])
+        [`createdBy`, 1])
     })
     it(`has a text field`, () => expect(test.text).not.to.be.an(`undefined`))
     it(`has a title field`, () => expect(test.title).not.to.be.an(`undefined`))
@@ -40,21 +40,21 @@ describe(`Recipe model`, () => {
       it(`text field is required`, async () => {
         const test = await createTestInstance(Recipe, ERROR,
           [`title`, `title`],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`recipe.text cannot be null`)
       })
       it(`text field accepts only strings`, async () => {
         const test = await createTestInstance(Recipe, ERROR,
           [`text`, []],
           [`title`, `title`],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`text cannot be an array or an object`)
       })
       it(`text field does not accept empty strings`, async () => {
         const test = await createTestInstance(Recipe, ERROR,
           [`text`, ``],
           [`title`, `title`],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`Validation notEmpty on text failed`)
       })
     })
@@ -63,21 +63,21 @@ describe(`Recipe model`, () => {
       it(`title field is required`, async () => {
         const test = await createTestInstance(Recipe, ERROR,
           [`text`, `recipe`],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`recipe.title cannot be null`)
       })
       it(`title field accepts only strings`, async () => {
         const test = await createTestInstance(Recipe, ERROR,
           [`text`, `recipe`],
           [`title`, []],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`title cannot be an array or an object`)
       })
       it(`title field does not accept empty strings`, async () => {
         const test = await createTestInstance(Recipe, ERROR,
           [`text`, `recipe`],
           [`title`, ``],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`Validation notEmpty on title failed`)
       })
     })
@@ -88,7 +88,7 @@ describe(`Recipe model`, () => {
           [`text`, `recipe`],
           [`title`, `title`],
           [`sourceSite`, []],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`sourceSite cannot be an array or an object`)
       })
       it(`sourceSite field does not accept empty strings`, async () => {
@@ -96,14 +96,14 @@ describe(`Recipe model`, () => {
           [`text`, `recipe`],
           [`title`, `title`],
           [`sourceSite`, ``],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`Validation notEmpty on sourceSite failed`)
       })
       it(`sourceSite field defaults to "User Upload"`, async () => {
         const test = await createTestInstance(Recipe, SUCCESS,
           [`text`, `recipe`],
           [`title`, `title`],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.sourceSite).to.equal(`User Upload`)
       })
     })
@@ -114,7 +114,7 @@ describe(`Recipe model`, () => {
           [`text`, `recipe`],
           [`title`, `title`],
           [`sourceUrl`, []],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`sourceUrl cannot be an array or an object`)
       })
       it(`sourceUrl field does not accept empty strings`, async () => {
@@ -122,14 +122,14 @@ describe(`Recipe model`, () => {
           [`text`, `recipe`],
           [`title`, `title`],
           [`sourceUrl`, ``],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.errors[0].message).to.equal(`Validation notEmpty on sourceUrl failed`)
       })
       it(`sourceUrl field defaults to "User Upload"`, async () => {
         const test = await createTestInstance(Recipe, SUCCESS,
           [`text`, `recipe`],
           [`title`, `title`],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.sourceUrl).to.equal(`User Upload`)
       })
     })
@@ -141,12 +141,12 @@ describe(`Recipe model`, () => {
           [`title`, `title`])
         expect(test.errors[0].message).to.equal(`recipe.createdBy cannot be null`)
       })
-      it(`createdBy field accepts only strings`, async () => {
+      it(`createdBy field accepts only integers`, async () => {
         const test = await createTestInstance(Recipe, ERROR,
           [`text`, `recipe`],
           [`title`, `title`],
-          [`createdBy`, []])
-        expect(test.errors[0].message).to.equal(`createdBy cannot be an array or an object`)
+          [`createdBy`, `str`])
+        expect(test.original.message).to.equal(`invalid input syntax for integer: "str"`)
       })
       it(`createdBy field does not accept empty strings`, async () => {
         const test = await createTestInstance(Recipe, ERROR,
@@ -162,7 +162,7 @@ describe(`Recipe model`, () => {
         const test = await createTestInstance(Recipe, ERROR,
           [`text`, `recipe`],
           [`title`, `title`],
-          [`createdBy`, `testUser`],
+          [`createdBy`, 1],
           [`forkedCount`, `str`])
         expect(test.original.message).to.equal(`invalid input syntax for integer: "str"`)
       })
@@ -170,7 +170,7 @@ describe(`Recipe model`, () => {
         const test = await createTestInstance(Recipe, SUCCESS,
           [`text`, `recipe`],
           [`title`, `title`],
-          [`createdBy`, `testUser`])
+          [`createdBy`, 1])
         expect(test.forkedCount).to.equal(0)
       })
     })

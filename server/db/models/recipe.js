@@ -31,7 +31,7 @@ const Recipe = database.define(`recipe`, {
     },
   },
   createdBy : { // user who originally scraped / uploaded it
-    type : Sequelize.STRING,
+    type : Sequelize.INTEGER,
     allowNull : false,
     validate : {
       notEmpty : true,
