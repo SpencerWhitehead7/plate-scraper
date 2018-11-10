@@ -1,6 +1,5 @@
 // NPM modules and built-ins
 const express = require(`express`)
-const volleyball = require(`volleyball`)
 const session = require(`express-session`)
 const SequelizeStore = require(`connect-session-sequelize`)(session.Store)
 const passport = require(`passport`)
@@ -30,8 +29,12 @@ passport.deserializeUser(async (id, done) => {
 // Initialize app
 const app = express()
 
-// Logging middleware
-app.use(volleyball)
+// Logging middleware for development environment
+if(!process.env.NODE_ENV){
+  /* eslint-disable global-require */
+  app.use(require(`volleyball`))
+  /* eslint-enable global-require */
+}
 
 // Body parsing middleware
 app.use(express.json())
