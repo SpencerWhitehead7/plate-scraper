@@ -14,7 +14,7 @@ router.get(`/`, async (req, res, next) => {
 // GET /api/recipe/:wildcard
 router.get(`/:id`, async (req, res, next) => {
   try{
-    const recipe = await Recipe.findById(req.params.id)
+    const recipe = await Recipe.findByPk(req.params.id)
     res.json(recipe)
   }catch(error){
     next(error)

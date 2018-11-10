@@ -1,10 +1,10 @@
 const router = require(`express`).Router()
-const {User} = require(`../db`)
+const {User} = require(`../db/models`)
 
 // GET /api/user/:wildcard
 router.get(`/:id`, async (req, res, next) => {
   try{
-    const user = await User.findById(req.params.id)
+    const user = await User.findByPk(req.params.id)
     res.json(user)
   }catch(error){
     next(error)
@@ -28,7 +28,7 @@ router.put(`/:id`, async (req, res, next) => {
 // DELTE /api/user/:wildcard
 router.delete(`/:id`, async (req, res, next) => {
   try{
-    await User.destory({
+    await User.destroy({
       where : {
         id : req.params.id,
       },
