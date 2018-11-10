@@ -30,7 +30,7 @@ passport.deserializeUser(async (id, done) => {
 const app = express()
 
 // Logging middleware for development environment
-if(!process.env.NODE_ENV){
+if(process.env.NODE_ENV !== `production`){
   /* eslint-disable global-require */
   app.use(require(`volleyball`))
   /* eslint-enable global-require */
