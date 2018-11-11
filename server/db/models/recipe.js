@@ -16,14 +16,14 @@ const Recipe = database.define(`recipe`, {
       notEmpty : true,
     },
   },
-  sourceSite : { // the site it's from (null if a self-upload)
+  sourceSite : { // the site it's from with default for uploads
     type : Sequelize.STRING,
     defaultValue : `User Upload`,
     validate : {
       notEmpty : true,
     },
   },
-  sourceUrl : { // the exact page it's from (null if it's a self upload)
+  sourceUrl : { // the exact page it's from with default for uploads
     type : Sequelize.STRING,
     defaultValue : `User Upload`,
     validate : {
@@ -33,11 +33,8 @@ const Recipe = database.define(`recipe`, {
   createdBy : { // user who originally scraped / uploaded it
     type : Sequelize.INTEGER,
     allowNull : false,
-    validate : {
-      notEmpty : true,
-    },
   },
-  forkedCount : { // number of people who've made their own copies (technically, times it's been copied)
+  forkedCount : { // times it's been copied by others
     type : Sequelize.INTEGER,
     defaultValue : 0,
   },
