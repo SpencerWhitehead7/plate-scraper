@@ -14,4 +14,12 @@ const Tag = database.define(`tag`, {
   },
 })
 
+const normalize = tag => {
+  if(tag.changed(`name`) && typeof tag.name === `string`){
+    tag.name = tag.name.toLowerCase().replace(/[^a-z]/gi, ``)
+  }
+}
+
+Tag.beforeValidate(normalize)
+
 module.exports = Tag
