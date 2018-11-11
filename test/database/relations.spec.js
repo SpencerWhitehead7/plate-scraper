@@ -1,42 +1,45 @@
 const {expect} = require(`chai`)
-const db = require(`../../server/db`)
-const Recipe = db.model(`recipe`)
-const User = db.model(`user`)
-const RecipeTraits = db.model(`recipeTraits`)
-
-const {SUCCESS, createTestInstance} = require(`./logic`)
+const User = require(`../../server/db`).model(`user`)
+const Recipe = require(`../../server/db`).model(`recipe`)
+const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
 
 describe(`Relationships`, () => {
+  let testUser = null
+  let testRecipe = null
   before(async () => {
     try{
-      await db.sync({force : true})
+      testUser = await User.create({
+        email : `testUser@example.com`,
+        password : `pw`,
+      })
+      testRecipe = await Recipe.create({
+        text : `recipe`,
+        title : `title`,
+        createdBy : 1,
+      })
+    }catch(err){
+      console.log(err)
+    }
+  })
+  after(async () => {
+    try{
+      await Recipe.sync({force : true})
+      await User.sync({force : true})
     }catch(err){
       console.log(err)
     }
   })
 
   describe(`The User-Recipe one-many relation`, () => {
-    it(`the relation exists`, async () => {
-      const [recipe1, recipe2, user] = await Promise.all([
-        createTestInstance(Recipe, SUCCESS,
-          [`text`, `recipe`],
-          [`title`, `title`],
-          [`createdBy`, 1]),
-        createTestInstance(Recipe, SUCCESS,
-          [`text`, `recipe`],
-          [`title`, `title`],
-          [`createdBy`, 1]),
-        createTestInstance(User, SUCCESS,
-          [`email`, `testUser@example.com`],
-          [`password`, `pw`]),
-      ])
-      await recipe1.setUser(user.id)
-      await recipe2.setUser(user.id)
-      expect(await user.countRecipes()).to.equal(2)
+    it(`exists`, () => {
+      expect(testRecipe.getUsers).to.be.an(`undefined`)
+      expect(testRecipe.getUser).not.to.be.an(`undefined`)
+      expect(testUser.getRecipes).not.to.be.an(`undefined`)
+      expect(testUser.getRecipe).to.be.an(`undefined`)
     })
   })
 
   describe(`The Recipe-Tag many-many relation`, () => {
-    it(`the relation exists`, () => expect(RecipeTraits).not.to.be.undefined)
+    it(`exists`, () => expect(RecipeTraits).not.to.be.undefined)
   })
 })
