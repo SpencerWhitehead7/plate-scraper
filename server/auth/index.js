@@ -2,25 +2,7 @@ const router = require(`express`).Router()
 
 const User = require(`../db/models/user`)
 
-const isAlreadyAuthenticated = (req, res, next) => {
-  if(req.isAuthenticated()){
-    const err = new Error(`Already logged in to an account`)
-    err.status = 409
-    next(err)
-  }else{
-    next()
-  }
-}
-
-const isAuthenticated = (req, res, next) => {
-  if(req.isAuthenticated()){
-    next()
-  }else{
-    const err = new Error(`Not logged in`)
-    err.status = 401
-    next(err)
-  }
-}
+const {isAuthenticated, isAlreadyAuthenticated} = require(`../authenticationLogic`)
 
 // POST /auth/signup
 router.post(`/signup`, isAlreadyAuthenticated, async (req, res, next) => {

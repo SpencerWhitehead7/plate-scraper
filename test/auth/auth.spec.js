@@ -6,7 +6,6 @@ const db = require(`../../server/db`)
 const User = db.model(`user`)
 
 const agent = request.agent(app)
-const oneOff = request(app)
 
 describe(`Auth Route: /auth`, () => {
   const userCred = {email : `testUser@example.com`, password : `pw`}
@@ -43,7 +42,7 @@ describe(`Auth Route: /auth`, () => {
         expect(res.text).to.equal(`Already logged in to an account`)
       })
       it(`returns a 409 if the user already exists`, async () => {
-        const res = await oneOff.post(`/auth/signup`).send(userCred)
+        const res = await request(app).post(`/auth/signup`).send(userCred)
         expect(res.status).to.equal(409)
         expect(res.text).to.equal(`Validation error`)
       })
@@ -97,7 +96,7 @@ describe(`Auth Route: /auth`, () => {
         expect(res.header[`location`]).to.equal(`/`)
       })
       it(`returns a 401 if the user is not logged in`, async () => {
-        const res = await oneOff.post(`/auth/logout`)
+        const res = await request(app).post(`/auth/logout`)
         expect(res.status).to.equal(401)
       })
     })
