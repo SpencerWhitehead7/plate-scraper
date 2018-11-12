@@ -15,7 +15,7 @@ router.use(`/recipe`, recipe)
 
 // error handling
 router.use((req, res, next) => {
-  const error = new Error(`Not Found.`)
+  const error = new Error(`Route not found`)
   error.status = 404
   next(error)
 })

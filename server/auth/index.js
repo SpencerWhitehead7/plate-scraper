@@ -2,35 +2,47 @@ const router = require(`express`).Router()
 
 const User = require(`../db/models/user`)
 
+const isAlreadyAuthenticated = (req, res, next) => {
+  if(req.isAuthenticated()){
+    const err = new Error(`Already logged in to an account`)
+    err.status = 409
+    next(err)
+  }else{
+    next()
+  }
+}
+
+const isAuthenticated = (req, res, next) => {
+  if(req.isAuthenticated()){
+    next()
+  }else{
+    const err = new Error(`Not logged in`)
+    err.status = 401
+    next(err)
+  }
+}
+
 // POST /auth/signup
-router.post(`/signup`, async (req, res, next) => {
+router.post(`/signup`, isAlreadyAuthenticated, async (req, res, next) => {
   try{
     const user = await User.create(req.body)
     req.login(user, err => err ? next(err) : res.json(user))
   }catch(err){
     if(err.name === `SequelizeUniqueConstraintError`){
-      err.status = 401
+      err.status = 409
     }
     next(err)
   }
 })
 
 // POST /auth/login/
-router.post(`/login`, async (req, res, next) => {
-  const usernameOrPasswordFailure = () => {
-    const err = new Error(`Wrong username or password`)
-    err.status = 401
-    next(err)
-  }
-
+router.post(`/login`, isAlreadyAuthenticated, async (req, res, next) => {
   try{
     const user = await User.findOne({where : {email : req.body.email}})
-    if(!user){
-      console.log(`User not found: ${req.body.email}`)
-      usernameOrPasswordFailure()
-    }else if(!user.correctPassword(req.body.password)){
-      console.log(`Incorrect password for user: ${req.body.email}`)
-      usernameOrPasswordFailure()
+    if(!user || !user.correctPassword(req.body.password)){
+      const err = new Error(`Wrong username or password`)
+      err.status = 401
+      next(err)
     }else{
       req.login(user, err => err ? next(err) : res.json(user))
     }
@@ -40,21 +52,17 @@ router.post(`/login`, async (req, res, next) => {
 })
 
 // POST /auth/logout
-router.post(`/logout`, (req, res) => {
+router.post(`/logout`, isAuthenticated, (req, res, next) => {
   req.logout()
-  req.session.destroy()
-  res.redirect(`/`)
+  req.session.destroy(err => {
+    delete req.session
+    err ? next(err) : res.redirect(`/`)
+  })
 })
 
 // GET /auth/me
-router.get(`/me`, (req, res, next) => {
-  if(req.user){
-    res.json(req.user)
-  }else{
-    const err = new Error(`Not logged in`)
-    err.status = 401
-    next(err)
-  }
+router.get(`/me`, isAuthenticated, (req, res, next) => {
+  res.json(req.user)
 })
 
 module.exports = router

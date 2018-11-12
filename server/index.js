@@ -42,15 +42,20 @@ app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
 // db of sessions for connect-session-sequelize
-const dbStoreSessions = new SequelizeStore({db})
-dbStoreSessions.sync() // sync so that session table will be created
+const sessionStore = new SequelizeStore({db})
+sessionStore.sync() // sync so that session table will be created
 
 // Sessions middleware
 app.use(session({
-  secret : process.env.SESSION_SECRET || `a perhaps worst-practices secret`,
-  store : dbStoreSessions,
+  cookie : {
+    maxAge : 604800, // a week
+    secure : process.env.NODE_ENV === `production`,
+  },
   resave : false,
   saveUninitialized : false,
+  secret : process.env.SESSION_SECRET || `a perhaps worst-practices secret`,
+  store : sessionStore,
+  unset : `destroy`,
 }))
 
 // Passport middleware
@@ -67,13 +72,13 @@ app.use(`/api`, api)
 app.use(`/auth`, auth)
 
 // All other requests
-app.get(`*`, (req, res) => {
+app.get(`/`, (req, res) => {
   res.sendFile(path.join(__dirname, `../public/index.html`))
 })
 
 // 404 response
 app.use((req, res, next) => {
-  const err = new Error(`Page Not Found`)
+  const err = new Error(`Page not found`)
   err.status = 404
   next(err)
 })
