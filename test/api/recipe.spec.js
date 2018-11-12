@@ -79,6 +79,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(recipe.createdBy).to.equal(1)
       })
       it(`ensures forkedCount will use default value of 0, even with bad input`, async () => {
+        const recipe = await Recipe.findOne({where : {text : `testText1`}})
+        expect(recipe.forkedCount).to.equal(0)
       })
       it(`returns the recipe`, async () => {
       })

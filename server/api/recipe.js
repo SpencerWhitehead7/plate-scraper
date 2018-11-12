@@ -18,6 +18,7 @@ router.post(`/`, isAuthenticated, async (req, res, next) => {
   try{
     const recipeInfo = JSON.parse(JSON.stringify(req.body))
     recipeInfo.createdBy = req.user.id
+    delete recipeInfo.forkedCount
     const recipe = await Recipe.create(recipeInfo)
     res.json(recipe)
   }catch(error){
