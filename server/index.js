@@ -92,10 +92,12 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 1337
 
 // Sync the DB and start up the server
-db.sync(/* {force : true} */)
-  .then(() => {
-    console.log(`\nDatabase Synced\n`)
-    app.listen(PORT, () => console.log(`Partying hard on http://localhost:${PORT}\n`))
-  })
+if(process.env.NODE_ENV !== `test`){
+  db.sync(/* {force : true} */)
+    .then(() => {
+      console.log(`\nDatabase Synced\n`)
+      app.listen(PORT, () => console.log(`Partying hard on http://localhost:${PORT}\n`))
+    })
+}
 
 module.exports = app // for testing
