@@ -87,10 +87,9 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   if(process.env.NODE_ENV !== `test`){
     console.error(err)
-    console.error(err.stack)
   }
   res.status(err.status || 500)
-  res.send(err.message || `Internal Server Error`)
+  res.send(err.message || `Internal server error`)
 })
 
 // Define port
