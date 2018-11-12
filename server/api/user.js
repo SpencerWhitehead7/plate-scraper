@@ -1,10 +1,10 @@
 const router = require(`express`).Router()
-const {User} = require(`../db/models`)
+const {User, Recipe} = require(`../db/models`)
 
 // GET /api/user/:wildcard
 router.get(`/:id`, async (req, res, next) => {
   try{
-    const user = await User.findByPk(req.params.id)
+    const user = await User.findByPk(req.params.id, {include : [Recipe]})
     res.json(user)
   }catch(error){
     next(error)
@@ -25,7 +25,7 @@ router.put(`/:id`, async (req, res, next) => {
   }
 })
 
-// DELTE /api/user/:wildcard
+// DELETE /api/user/:wildcard
 router.delete(`/:id`, async (req, res, next) => {
   try{
     await User.destroy({
