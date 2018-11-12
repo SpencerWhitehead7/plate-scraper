@@ -1,37 +1,77 @@
-/* eslint-disable init-declarations */
-
 const {expect} = require(`chai`)
 const request = require(`supertest`)
+
 const app = require(`../../server`)
 const db = require(`../../server/db`)
 const User = db.model(`user`)
 const Recipe = db.model(`recipe`)
 
-describe(`API Route: /api/recipe`, () => {
+const agent = request.agent(app)
+
+describe(`API Route Recipe: /api/recipe`, () => {
+  const userCred = {email : `testUser@example.com`, password : `pw`}
+  const createRecipe = i => Recipe.create({
+    text : `text${i}`,
+    title : `title${i}`,
+    createdBy : i + 1,
+  })
+
   before(async () => {
     try{
+      const promises = []
+      for(let i = 0; i < 2; i++){
+        promises.push(createRecipe(i))
+      }
+      promises.push(User.create(userCred))
+      await Promise.all(promises)
+    }catch(err){
+      console.log(err)
+    }
+  })
+  after(async () => {
+    try{
+      // can't run in parallel for some arcane sequelize reason
+      await Recipe.sync({force : true})
       await User.sync({force : true})
-      await Recipe.sync({force : true}) // can't run in parallel for arcance sequelize reasons
-      const recipe1Promise = Recipe.create({text : `text1`, title : `title1`, sourceSite : `sourceSite1`, sourceUrl : `SourceUrl1`, createdBy : 1})
-      const recipe2Promise = Recipe.create({text : `text2`, title : `title2`, sourceSite : `sourceSite2`, sourceUrl : `SourceUrl2`, createdBy : 2})
-      const recipe3Promise = Recipe.create({text : `text3`, title : `title3`, sourceSite : `sourceSite3`, sourceUrl : `SourceUrl3`, createdBy : 3})
-      const user1Promise = User.create({email : `testUser1@example.com`, password : `pw`})
-      const user2Promise = User.create({email : `testUser2@example.com`, password : `pw`})
-      const [recipe1, recipe2, recipe3] = await Promise.all([recipe1Promise, recipe2Promise, recipe3Promise, user1Promise, user2Promise])
-      const recipe1SetUserPromise = recipe1.setUser(1)
-      const recipe2SetUserPromise = recipe2.setUser(2)
-      const recipe3SetUserPromise = recipe3.setUser(2)
-      await Promise.all([recipe1SetUserPromise, recipe2SetUserPromise, recipe3SetUserPromise])
     }catch(err){
       console.log(err)
     }
   })
 
-  describe(`the / route`, () => {
+  describe(`/`, () => {
     describe(`GET`, () => {
       it(`returns all the recipes in the database`, async () => {
         const res = await request(app).get(`/api/recipe`)
-        expect(res.body.length).to.equal(3)
+        expect(res.status).to.equal(200)
+        expect(res.body.length).to.equal(2)
+      })
+    })
+
+    describe(`POST`, () => {
+      before(async () => {
+        try{
+          await agent.post(`/auth/login`).send(userCred)
+        }catch(err){
+          console.log(err)
+        }
+      })
+
+      it(`creates a new recipe in the database`, async () => {
+        await agent.post(`/api/recipe`).send({text : `testText1`, title : `title`, createdBy : 1})
+        const recipe = await Recipe.findOne({where : {text : `testText1`}})
+        expect(recipe).not.to.be.a(`null`)
+      })
+      it(`rejects unauthenticated users' attempts`, async () => {
+        await agent.post(`/auth/logout`)
+        const res = await agent.post(`/api/recipe`).send({text : `testText2`, title : `title`, createdBy : 1})
+        await agent.post(`/auth/login`).send(userCred)
+        expect(res.status).to.equal(401)
+      })
+      it(`sets createdBy to the user's ID`, async () => {
+      })
+      it(`ensures forkedCount will use default value of 0, even with bad input`, async () => {
+      })
+      it(`returns the recipe`, async () => {
       })
     })
   })

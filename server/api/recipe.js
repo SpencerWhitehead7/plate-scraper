@@ -1,6 +1,8 @@
 const router = require(`express`).Router()
 const {Recipe} = require(`../db/models`)
 
+const {isAuthenticated} = require(`../authenticationLogic`)
+
 // GET /api/recipe
 router.get(`/`, async (req, res, next) => {
   try{
@@ -11,20 +13,20 @@ router.get(`/`, async (req, res, next) => {
   }
 })
 
-// GET /api/recipe/:wildcard
-router.get(`/:id`, async (req, res, next) => {
+// POST /api/recipe
+router.post(`/`, isAuthenticated, async (req, res, next) => {
   try{
-    const recipe = await Recipe.findByPk(req.params.id)
+    const recipe = await Recipe.create(req.body)
     res.json(recipe)
   }catch(error){
     next(error)
   }
 })
 
-// POST /api/recipe
-router.post(`/`, async (req, res, next) => {
+// GET /api/recipe/:wildcard
+router.get(`/:id`, async (req, res, next) => {
   try{
-    const recipe = await Recipe.create(req.body)
+    const recipe = await Recipe.findByPk(req.params.id)
     res.json(recipe)
   }catch(error){
     next(error)
