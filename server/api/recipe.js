@@ -16,7 +16,9 @@ router.get(`/`, async (req, res, next) => {
 // POST /api/recipe
 router.post(`/`, isAuthenticated, async (req, res, next) => {
   try{
-    const recipe = await Recipe.create(req.body)
+    const recipeInfo = JSON.parse(JSON.stringify(req.body))
+    recipeInfo.createdBy = req.user.id
+    const recipe = await Recipe.create(recipeInfo)
     res.json(recipe)
   }catch(error){
     next(error)

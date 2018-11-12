@@ -51,23 +51,32 @@ describe(`API Route Recipe: /api/recipe`, () => {
       before(async () => {
         try{
           await agent.post(`/auth/login`).send(userCred)
+          await agent.post(`/api/recipe`).send({
+            text : `testText1`,
+            title : `title`,
+            createdBy : 10,
+            forkedCount : 10,
+          })
         }catch(err){
           console.log(err)
         }
       })
 
       it(`creates a new recipe in the database`, async () => {
-        await agent.post(`/api/recipe`).send({text : `testText1`, title : `title`, createdBy : 1})
         const recipe = await Recipe.findOne({where : {text : `testText1`}})
         expect(recipe).not.to.be.a(`null`)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
         await agent.post(`/auth/logout`)
         const res = await agent.post(`/api/recipe`).send({text : `testText2`, title : `title`, createdBy : 1})
+        const recipe = await Recipe.findOne({where : {text : `testText2`}})
         await agent.post(`/auth/login`).send(userCred)
         expect(res.status).to.equal(401)
+        expect(recipe).to.be.a(`null`)
       })
-      it(`sets createdBy to the user's ID`, async () => {
+      it(`sets createdBy to the user's ID, even with bad input`, async () => {
+        const recipe = await Recipe.findOne({where : {text : `testText1`}})
+        expect(recipe.createdBy).to.equal(1)
       })
       it(`ensures forkedCount will use default value of 0, even with bad input`, async () => {
       })
