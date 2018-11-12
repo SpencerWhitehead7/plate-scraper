@@ -6,24 +6,25 @@ const db = require(`../../server/db`)
 const User = db.model(`user`)
 const Recipe = db.model(`recipe`)
 
-const agent = request.agent(app)
+const agent1 = request.agent(app)
+const agent2 = request.agent(app)
 
 describe(`API Route Recipe: /api/recipe`, () => {
   const userCred = {email : `testUser@example.com`, password : `pw`}
-  const createRecipe = i => Recipe.create({
-    text : `text${i}`,
-    title : `title${i}`,
-    createdBy : i + 1,
-  })
+  const user2Cred = {email : `testUser2@example.com`, password : `pw`}
 
   before(async () => {
     try{
-      const promises = []
-      for(let i = 0; i < 2; i++){
-        promises.push(createRecipe(i))
-      }
-      promises.push(User.create(userCred))
-      await Promise.all(promises)
+      await agent1.post(`/auth/signup`).send(userCred)
+      await agent2.post(`/auth/signup`).send(user2Cred)
+      await agent1.post(`/api/recipe`).send({
+        text : `testText1`,
+        title : `title1`,
+      })
+      await agent1.post(`/api/recipe`).send({
+        text : `testText2`,
+        title : `title2`,
+      })
     }catch(err){
       console.log(err)
     }
@@ -40,7 +41,7 @@ describe(`API Route Recipe: /api/recipe`, () => {
 
   describe(`/`, () => {
     describe(`GET`, () => {
-      it(`returns all the recipes in the database`, async () => {
+      it(`returns all recipes`, async () => {
         const res = await request(app).get(`/api/recipe`)
         expect(res.status).to.equal(200)
         expect(res.body.length).to.equal(2)
@@ -48,49 +49,157 @@ describe(`API Route Recipe: /api/recipe`, () => {
     })
 
     describe(`POST`, () => {
-      let returnedRecipe = null
+      let res = null
       before(async () => {
         try{
-          await agent.post(`/auth/login`).send(userCred)
-          returnedRecipe = await agent.post(`/api/recipe`).send({
-            text : `testText1`,
-            title : `title`,
+          res = await agent1.post(`/api/recipe`).send({
+            text : `testText3`,
+            title : `title3`,
             createdBy : 10,
             forkedCount : 10,
+            userId : 10,
           })
         }catch(err){
           console.log(err)
         }
       })
 
-      it(`creates a new recipe in the database`, async () => {
-        const recipe = await Recipe.findOne({where : {text : `testText1`}})
+      it(`creates a recipe`, async () => {
+        const recipe = await Recipe.findByPk(3)
         expect(recipe).not.to.be.a(`null`)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
-        await agent.post(`/auth/logout`)
-        const res = await agent.post(`/api/recipe`).send({text : `testText2`, title : `title`, createdBy : 1})
-        const recipe = await Recipe.findOne({where : {text : `testText2`}})
-        await agent.post(`/auth/login`).send(userCred)
-        expect(res.status).to.equal(401)
+        await agent1.post(`/auth/logout`)
+        const failedRes = await agent1.post(`/api/recipe`).send({text : `failedText`, title : `failedText`, createdBy : 1})
+        const recipe = await Recipe.findOne({where : {text : `failedText`}})
+        await agent1.post(`/auth/login`).send(userCred)
+        expect(failedRes.status).to.equal(401)
         expect(recipe).to.be.a(`null`)
       })
       it(`sets createdBy to the user's ID, even with bad input`, async () => {
-        const recipe = await Recipe.findOne({where : {text : `testText1`}})
+        const recipe = await Recipe.findByPk(3)
         expect(recipe.createdBy).to.equal(1)
       })
       it(`ensures forkedCount will use default value of 0, even with bad input`, async () => {
-        const recipe = await Recipe.findOne({where : {text : `testText1`}})
+        const recipe = await Recipe.findByPk(3)
         expect(recipe.forkedCount).to.equal(0)
       })
+      it(`sets the recipe's owner to the creator`, async () => {
+        const recipe = await Recipe.findByPk(3)
+        expect(recipe.userId).to.equal(1)
+      })
       it(`returns the recipe`, () => {
-        expect(returnedRecipe.body.id).to.equal(3)
-        expect(returnedRecipe.body.text).to.equal(`testText1`)
-        expect(returnedRecipe.body.title).to.equal(`title`)
-        expect(returnedRecipe.body.sourceSite).to.equal(`User Upload`)
-        expect(returnedRecipe.body.sourceUrl).to.equal(`User Upload`)
-        expect(returnedRecipe.body.createdBy).to.equal(1)
-        expect(returnedRecipe.body.forkedCount).to.equal(0)
+        expect(res.status).to.equal(200)
+        expect(res.body.id).to.equal(3)
+        expect(res.body.text).to.equal(`testText3`)
+        expect(res.body.title).to.equal(`title3`)
+        expect(res.body.sourceSite).to.equal(`User Upload`)
+        expect(res.body.sourceUrl).to.equal(`User Upload`)
+        expect(res.body.createdBy).to.equal(1)
+        expect(res.body.forkedCount).to.equal(0)
+        expect(res.body.userId).to.equal(1)
+      })
+    })
+  })
+
+  describe(`/:id`, () => {
+    describe(`GET`, () => {
+      it(`returns the recipe with the matching ID`, async () => {
+        const res = await request(app).get(`/api/recipe/1`)
+        expect(res.status).to.equal(200)
+        expect(res.body.id).to.equal(1)
+      })
+    })
+
+    describe(`PUT`, () => {
+      let res = null
+      before(async () => {
+        try{
+          res = await agent1.put(`/api/recipe/3`).send({
+            id : 10,
+            text : `newText`,
+            title : `newTitle`,
+            sourceSite : `new site`,
+            sourceUrl : `new url`,
+            createdBy : 10,
+            forkedCount : 10,
+            userId : 10,
+          })
+        }catch(err){
+          console.log(err)
+        }
+      })
+
+      it(`edits a recipe`, async () => {
+        const recipe = await Recipe.findByPk(3)
+        expect(recipe.text).to.equal(`newText`)
+      })
+      it(`rejects unauthenticated users' attempts`, async () => {
+        await agent1.post(`/auth/logout`)
+        const failedRes = await agent1.put(`/api/recipe/3`).send({text : `failedText`})
+        const recipe = await Recipe.findOne({where : {text : `failedText`}})
+        await agent1.post(`/auth/login`).send(userCred)
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Not logged in`)
+        expect(recipe).to.be.a(`null`)
+      })
+      it(`rejects attempts to edit a recipe the user does not own`, async () => {
+        const failedRes = await agent2.put(`/api/recipe/3`).send({text : `failedText`})
+        const recipe = await Recipe.findOne({where : {text : `failedText`}})
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Permission denied`)
+        expect(recipe).to.be.a(`null`)
+      })
+      it(`allows users to edit only text and title, even if they attempt to edit other fields`, () => {
+        expect(res.body.id).to.equal(3)
+        expect(res.body.sourceSite).to.equal(`User Upload`)
+        expect(res.body.sourceUrl).to.equal(`User Upload`)
+        expect(res.body.createdBy).to.equal(1)
+        expect(res.body.forkedCount).to.equal(0)
+        expect(res.body.userId).to.equal(1)
+      })
+      it(`returns the recipe`, () => {
+        expect(res.status).to.equal(200)
+        expect(res.body.id).to.equal(3)
+        expect(res.body.text).to.equal(`newText`)
+        expect(res.body.title).to.equal(`newTitle`)
+        expect(res.body.sourceSite).to.equal(`User Upload`)
+        expect(res.body.sourceUrl).to.equal(`User Upload`)
+        expect(res.body.createdBy).to.equal(1)
+        expect(res.body.forkedCount).to.equal(0)
+        expect(res.body.userId).to.equal(1)
+      })
+    })
+
+    describe(`DELETE`, () => {
+      let res = null
+      before(async () => {
+        try{
+          res = await agent1.delete(`/api/recipe/3`)
+        }catch(error){
+          console.log(error)
+        }
+      })
+      it(`deletes a recipe`, async () => {
+        const recipe = await Recipe.findAll()
+        expect(res.status).to.equal(200)
+        expect(recipe.length).to.equal(2)
+      })
+      it(`rejects unauthenticated users' attempts`, async () => {
+        await agent1.post(`/auth/logout`)
+        const failedRes = await agent1.delete(`/api/recipe/2`)
+        const recipe = await Recipe.findByPk(2)
+        await agent1.post(`/auth/login`).send(userCred)
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Not logged in`)
+        expect(recipe).not.to.be.a(`null`)
+      })
+      it(`rejects attempts to edit a recipe the user does not own`, async () => {
+        const failedRes = await agent2.delete(`/api/recipe/2`)
+        const recipe = await Recipe.findByPk(2)
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Permission denied`)
+        expect(recipe).not.to.be.a(`null`)
       })
     })
   })
