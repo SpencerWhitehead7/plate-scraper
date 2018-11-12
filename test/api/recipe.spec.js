@@ -48,10 +48,11 @@ describe(`API Route Recipe: /api/recipe`, () => {
     })
 
     describe(`POST`, () => {
+      let returnedRecipe = null
       before(async () => {
         try{
           await agent.post(`/auth/login`).send(userCred)
-          await agent.post(`/api/recipe`).send({
+          returnedRecipe = await agent.post(`/api/recipe`).send({
             text : `testText1`,
             title : `title`,
             createdBy : 10,
@@ -82,7 +83,14 @@ describe(`API Route Recipe: /api/recipe`, () => {
         const recipe = await Recipe.findOne({where : {text : `testText1`}})
         expect(recipe.forkedCount).to.equal(0)
       })
-      it(`returns the recipe`, async () => {
+      it(`returns the recipe`, () => {
+        expect(returnedRecipe.body.id).to.equal(3)
+        expect(returnedRecipe.body.text).to.equal(`testText1`)
+        expect(returnedRecipe.body.title).to.equal(`title`)
+        expect(returnedRecipe.body.sourceSite).to.equal(`User Upload`)
+        expect(returnedRecipe.body.sourceUrl).to.equal(`User Upload`)
+        expect(returnedRecipe.body.createdBy).to.equal(1)
+        expect(returnedRecipe.body.forkedCount).to.equal(0)
       })
     })
   })
