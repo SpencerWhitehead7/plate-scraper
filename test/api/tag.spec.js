@@ -66,11 +66,9 @@ describe(`API Route User: /api/tag`, () => {
       it(`if the tag does not exist, it creates the tag in the database`, () => {
 
       })
-      it(`it assigns the tag to the given recipe`, () => {
+      it(`it assigns the tag to the given recipe and returns 200`, () => {
         expect(recipe.body.tags[0].id).to.equal(2)
-      })
-      it(`if successful, it returns the relation`, () => {
-
+        expect(res.status).to.equal(200)
       })
     })
   })
