@@ -66,6 +66,7 @@ router.post(`/`,
   })
 
 router.delete(`/:recipeId/:tagId`,
+  isAuthenticated,
   async (req, res, next) => {
     try{
       let recipe = await Recipe.findByPk(req.params.recipeId)
