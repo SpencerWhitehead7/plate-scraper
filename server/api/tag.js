@@ -65,4 +65,20 @@ router.post(`/`,
     }
   })
 
+router.delete(`/:recipeId/:tagId`,
+  async (req, res, next) => {
+    try{
+      let recipe = await Recipe.findByPk(req.params.recipeId)
+      const tag = await Tag.findByPk(req.params.tagId)
+      await recipe.removeTag(tag)
+      recipe = await Recipe.findByPk(
+        req.params.recipeId,
+        {include : [Tag]}
+      )
+      res.json(recipe)
+    }catch(error){
+      console.log(error)
+    }
+  })
+
 module.exports = router
