@@ -59,7 +59,11 @@ describe(`API Route User: /api/tag`, () => {
         expect(failedTag).to.be.a(`null`)
       })
       it(`rejects attempts to tag to a non-existant recipe`, async () => {
-
+        const failedRes = await agent1.post(`/api/tag`).send({name : `failedtest`, recipe : 2})
+        const failedTag = await Tag.findOne({where : {name : `failedtest`}})
+        expect(failedRes.status).to.equal(500)
+        expect(failedRes.text).to.equal(`No such recipe`)
+        expect(failedTag).to.be.a(`null`)
       })
       it(`rejects attempts of users who are not the recipe's owner`, () => {
 
