@@ -27,15 +27,28 @@ const isOwner = (req, res, next) => {
   }
 }
 
+const doesTagExist = async (req, res, next) => {
+  try{
+    let tag = await Tag.findOne({where : {name : req.body.name}})
+    if(!tag){
+      tag = await Tag.create({name : req.body.name})
+    }
+    req.body.tag = tag
+    next()
+  }catch(error){
+    console.log(error)
+  }
+}
+
 // POST /api/tag
 router.post(`/`,
   isAuthenticated,
   doesRecipeExist,
   isOwner,
+  doesTagExist,
   async (req, res, next) => {
     try{
-      const tag = await Tag.create({name : req.body.name})
-      await req.body.recipe.addTag(tag)
+      await req.body.recipe.addTag(req.body.tag)
       res.sendStatus(200)
     }catch(error){
       next(error)
