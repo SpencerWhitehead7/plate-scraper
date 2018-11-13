@@ -31,6 +31,7 @@ describe(`API Route User: /api/user`, () => {
   after(async () => {
     try{
       await agent1.post(`/auth/logout`)
+      await agent2.post(`/auth/logout`)
       await Recipe.sync({force : true})
       await User.sync({force : true})
     }catch(err){
@@ -80,6 +81,13 @@ describe(`API Route User: /api/user`, () => {
         const user = await User.findOne({where : {email : `failed@email.com`}})
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
+        expect(user).to.be.a(`null`)
+      })
+      it(`rejects attempts to edit users other than the logged in user`, async () => {
+        const failedRes = await agent2.put(`/api/user/1`).send({email : `failed@email.com`})
+        const user = await User.findOne({where : {email : `failed@email.com`}})
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Permission denied`)
         expect(user).to.be.a(`null`)
       })
     })
