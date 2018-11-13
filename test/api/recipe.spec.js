@@ -45,6 +45,7 @@ describe(`API Route Recipe: /api/recipe`, () => {
         const res = await request(app).get(`/api/recipe`)
         expect(res.status).to.equal(200)
         expect(res.body.length).to.equal(2)
+        expect(res.body[0].tags).not.to.be.an(`undefined`)
       })
     })
 
@@ -103,10 +104,11 @@ describe(`API Route Recipe: /api/recipe`, () => {
 
   describe(`/:id`, () => {
     describe(`GET`, () => {
-      it(`returns the recipe with the matching ID`, async () => {
+      it(`returns the recipe with the matching ID, including tags`, async () => {
         const res = await request(app).get(`/api/recipe/1`)
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
+        expect(res.body.tags).not.to.be.an(`undefined`)
       })
     })
 
