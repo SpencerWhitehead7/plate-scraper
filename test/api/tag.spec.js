@@ -51,8 +51,11 @@ describe(`API Route User: /api/tag`, () => {
         }
       })
       // flowchart style, not priority style
-      it(`rejects unauthenticated users' attempts`, () => {
-
+      it(`rejects unauthenticated users' attempts`, async () => {
+        const failedRes = await request(app).post(`/api/tag`).send({name : `failedtest`})
+        const failedTag = await Tag.findOne({where : {name : `failedtest`}})
+        expect(failedRes.text).to.equal(`Not logged in`)
+        expect(failedTag).to.be.a(`null`)
       })
       it(`rejects attempts to tag to a non-existant recipe`, () => {
 
