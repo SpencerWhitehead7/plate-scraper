@@ -1,8 +1,10 @@
 const router = require(`express`).Router()
 const {Tag, Recipe} = require(`../db/models`)
 
+const {isAuthenticated} = require(`../authenticationLogic`)
+
 // POST /api/tag
-router.post(`/`, async (req, res, next) => {
+router.post(`/`, isAuthenticated, async (req, res, next) => {
   try{
     const tag = await Tag.create({name : req.body.name})
     const recipe = await Recipe.findByPk(req.body.recipe)
