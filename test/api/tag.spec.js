@@ -58,7 +58,7 @@ describe(`API Route User: /api/tag`, () => {
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(failedTag).to.be.a(`null`)
       })
-      it(`rejects attempts to tag to a non-existant recipe`, async () => {
+      it(`rejects attempts to tag non-existant recipes`, async () => {
         const failedRes = await agent1.post(`/api/tag`).send({name : `failedtest`, recipeId : 2})
         const failedTag = await Tag.findOne({where : {name : `failedtest`}})
         expect(failedRes.status).to.equal(500)
@@ -113,6 +113,11 @@ describe(`API Route User: /api/tag`, () => {
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(failedRecipe.dataValues.tags.length).to.equal(2)
+      })
+      it(`rejects attempts to untag non-existant recipes`, async () => {
+        const failedRes = await agent1.delete(`/api/tag/2/1`)
+        expect(failedRes.status).to.equal(500)
+        expect(failedRes.text).to.equal(`No such recipe`)
       })
       it(`it removes the tag from the recipe and returns the recipe with its tags`, () => {
         expect(res.status).to.equal(200)
