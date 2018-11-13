@@ -105,5 +105,21 @@ describe(`API Route User: /api/user`, () => {
         expect(res.body.email).to.equal(`new@example.com`)
       })
     })
+
+    describe(`DELETE`, () => {
+      let res = null
+      before(async () => {
+        try{
+          res = await agent1.delete(`/api/user/1`)
+        }catch(error){
+          console.log(error)
+        }
+      })
+      it(`deletes a user`, async () => {
+        const user = await User.findByPk(1)
+        expect(res.status).to.equal(200)
+        expect(user).to.be.a(`null`)
+      })
+    })
   })
 })
