@@ -5,7 +5,8 @@ const {isAuthenticated} = require(`../authenticationLogic`)
 
 const doesRecipeExist = async (req, res, next) => {
   try{
-    const recipe = await Recipe.findByPk(req.body.recipeId)
+    const selector = req.params.recipeId ? req.params.recipeId : req.body.recipeId
+    const recipe = await Recipe.findByPk(selector)
     if(recipe){
       req.body.recipe = recipe
       next()
@@ -67,6 +68,7 @@ router.post(`/`,
 
 router.delete(`/:recipeId/:tagId`,
   isAuthenticated,
+  doesRecipeExist,
   async (req, res, next) => {
     try{
       let recipe = await Recipe.findByPk(req.params.recipeId)
