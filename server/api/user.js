@@ -42,11 +42,7 @@ router.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
 // DELETE /api/user/:wildcard
 router.delete(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
   try{
-    await User.destroy({
-      where : {
-        id : req.params.id,
-      },
-    })
+    await User.destroy({where : {id : req.params.id}})
     req.logout()
     req.session.destroy(err => err ? next(err) : res.redirect(`/`))
   }catch(error){

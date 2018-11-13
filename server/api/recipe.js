@@ -60,10 +60,7 @@ router.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
     if(text) recipeInfo.text = text
     if(title) recipeInfo.title = title
     const [, recipes] = await Recipe.update(recipeInfo, {
-      where : {
-        id : req.params.id,
-        userId : req.user.id,
-      },
+      where : {id : req.params.id},
       returning : true,
       plain : true,
     })
@@ -76,12 +73,7 @@ router.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
 // DELTE /api/recipe/:wildcard
 router.delete(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
   try{
-    await Recipe.destroy({
-      where : {
-        id : req.params.id,
-        userId : req.user.id,
-      },
-    })
+    await Recipe.destroy({where : {id : req.params.id}})
     res.end()
   }catch(error){
     next(error)
