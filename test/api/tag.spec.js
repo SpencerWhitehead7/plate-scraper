@@ -106,7 +106,15 @@ describe(`API Route User: /api/tag`, () => {
           console.log(error)
         }
       })
-      it(`it assigns the tag to the given recipe and returns the recipe with its tags`, () => {
+      // flowchart style, not priority style
+      it(`rejects unauthenticated users' attempts`, async () => {
+        const failedRes = await request(app).delete(`/api/tag/1/2`)
+        const failedRecipe = await Recipe.findByPk(1, {include : [Tag]})
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Not logged in`)
+        expect(failedRecipe.dataValues.tags.length).to.equal(2)
+      })
+      it(`it removes the tag from the recipe and returns the recipe with its tags`, () => {
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
         expect(res.body.text).to.equal(`testText`)
