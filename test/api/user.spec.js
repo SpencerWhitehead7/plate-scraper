@@ -138,6 +138,10 @@ describe(`API Route User: /api/user`, () => {
         expect(failedRes.text).to.equal(`Permission denied`)
         expect(user).not.to.be.a(`null`)
       })
+      it(`returns a 200 and nothing else`, () => {
+        expect(res.status).to.equal(200)
+        expect(res.body).to.deep.equal({})
+      })
     })
   })
 })
