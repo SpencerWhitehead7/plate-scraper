@@ -24,30 +24,36 @@ router.get(`/:id`, async (req, res, next) => {
 })
 
 // PUT /api/user/:wildcard
-router.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
-  try{
-    const userInfo = JSON.parse(JSON.stringify(req.body))
-    delete userInfo.salt
-    const [, user] = await User.update(userInfo, {
-      where : {id : req.params.id},
-      returning : true,
-      plain : true,
-    })
-    res.json(user)
-  }catch(error){
-    next(error)
-  }
-})
+router.put(`/:id`,
+  isAuthenticated,
+  isOwner,
+  async (req, res, next) => {
+    try{
+      const userInfo = JSON.parse(JSON.stringify(req.body))
+      delete userInfo.salt
+      const [, user] = await User.update(userInfo, {
+        where : {id : req.params.id},
+        returning : true,
+        plain : true,
+      })
+      res.json(user)
+    }catch(error){
+      next(error)
+    }
+  })
 
 // DELETE /api/user/:wildcard
-router.delete(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
-  try{
-    await User.destroy({where : {id : req.params.id}})
-    req.logout()
-    req.session.destroy(err => err ? next(err) : res.redirect(`/`))
-  }catch(error){
-    next(error)
-  }
-})
+router.delete(`/:id`,
+  isAuthenticated,
+  isOwner,
+  async (req, res, next) => {
+    try{
+      await User.destroy({where : {id : req.params.id}})
+      req.logout()
+      req.session.destroy(err => err ? next(err) : res.redirect(`/`))
+    }catch(error){
+      next(error)
+    }
+  })
 
 module.exports = router
