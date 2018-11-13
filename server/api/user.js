@@ -26,7 +26,9 @@ router.get(`/:id`, async (req, res, next) => {
 // PUT /api/user/:wildcard
 router.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
   try{
-    const [, user] = await User.update(req.body, {
+    const userInfo = JSON.parse(JSON.stringify(req.body))
+    delete userInfo.salt
+    const [, user] = await User.update(userInfo, {
       where : {id : req.params.id},
       returning : true,
       plain : true,

@@ -61,34 +61,43 @@ describe(`API Route User: /api/user`, () => {
 
     describe(`PUT`, () => {
       let res = null
+      let oldSalt = null
+      let newSalt = null
       before(async () => {
         try{
+          let user = await User.findOne({where : {email : `testUser@example.com`}})
+          oldSalt = user.dataValues.salt
           res = await agent1.put(`/api/user/1`).send({
-            email : `new@email.com`,
+            email : `new@example.com`,
             salt : `new salt`,
           })
+          user = await User.findOne({where : {email : `new@example.com`}})
+          newSalt = user.dataValues.salt
         }catch(err){
           console.log(err)
         }
       })
 
       it(`edits a user`, async () => {
-        const user = await User.findOne({where : {email : `new@email.com`}})
+        const user = await User.findOne({where : {email : `new@example.com`}})
         expect(user).not.to.be.a(`null`)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
-        const failedRes = await request(app).put(`/api/user/1`).send({email : `failed@email.com`})
-        const user = await User.findOne({where : {email : `failed@email.com`}})
+        const failedRes = await request(app).put(`/api/user/1`).send({email : `failed@example.com`})
+        const user = await User.findOne({where : {email : `failed@example.com`}})
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(user).to.be.a(`null`)
       })
       it(`rejects attempts to edit users other than the logged in user`, async () => {
-        const failedRes = await agent2.put(`/api/user/1`).send({email : `failed@email.com`})
-        const user = await User.findOne({where : {email : `failed@email.com`}})
+        const failedRes = await agent2.put(`/api/user/1`).send({email : `failed@example.com`})
+        const user = await User.findOne({where : {email : `failed@example.com`}})
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Permission denied`)
         expect(user).to.be.a(`null`)
+      })
+      it(`does not allow you to edit the user's salt`, () => {
+        expect(oldSalt).to.equal(newSalt)
       })
     })
   })
