@@ -55,7 +55,6 @@ app.use(session({
   saveUninitialized : false,
   secret : process.env.SESSION_SECRET || `a perhaps worst-practices secret`,
   store : sessionStore,
-  unset : `destroy`,
 }))
 
 // Passport middleware
