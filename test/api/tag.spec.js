@@ -119,6 +119,11 @@ describe(`API Route User: /api/tag`, () => {
         expect(failedRes.status).to.equal(500)
         expect(failedRes.text).to.equal(`No such recipe`)
       })
+      it(`rejects attempts of users who are not the recipe's owner`, async () => {
+        const failedRes = await agent2.delete(`/api/tag/1/2`)
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Permission denied`)
+      })
       it(`it removes the tag from the recipe and returns the recipe with its tags`, () => {
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
