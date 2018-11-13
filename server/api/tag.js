@@ -27,6 +27,11 @@ const isOwner = (req, res, next) => {
   }
 }
 
+const cleanName = (req, res, next) => {
+  req.body.name = req.body.name.toLowerCase().replace(/[^a-z]/gi, ``)
+  next()
+}
+
 const doesTagExist = async (req, res, next) => {
   try{
     let tag = await Tag.findOne({where : {name : req.body.name}})
@@ -45,6 +50,7 @@ router.post(`/`,
   isAuthenticated,
   doesRecipeExist,
   isOwner,
+  cleanName,
   doesTagExist,
   async (req, res, next) => {
     try{
