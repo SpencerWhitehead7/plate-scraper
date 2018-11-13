@@ -43,39 +43,37 @@ describe(`API Route User: /api/tag`, () => {
   describe(`/`, () => {
     describe(`POST`, () => {
       let res = null
-      let recipe = null
       before(async () => {
         try{
-          res = await agent1.post(`/api/tag`).send({name : `testtwo`, recipe : 1})
-          recipe = await agent1.get(`/api/recipe/1`)
+          res = await agent1.post(`/api/tag`).send({name : `testtwo`, recipeId : 1})
         }catch(error){
           console.log(error)
         }
       })
       // flowchart style, not priority style
       it(`rejects unauthenticated users' attempts`, async () => {
-        const failedRes = await request(app).post(`/api/tag`).send({name : `failedtest`, recipe : 1})
+        const failedRes = await request(app).post(`/api/tag`).send({name : `failedtest`, recipeId : 1})
         const failedTag = await Tag.findOne({where : {name : `failedtest`}})
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(failedTag).to.be.a(`null`)
       })
       it(`rejects attempts to tag to a non-existant recipe`, async () => {
-        const failedRes = await agent1.post(`/api/tag`).send({name : `failedtest`, recipe : 2})
+        const failedRes = await agent1.post(`/api/tag`).send({name : `failedtest`, recipeId : 2})
         const failedTag = await Tag.findOne({where : {name : `failedtest`}})
         expect(failedRes.status).to.equal(500)
         expect(failedRes.text).to.equal(`No such recipe`)
         expect(failedTag).to.be.a(`null`)
       })
       it(`rejects attempts of users who are not the recipe's owner`, async () => {
-        const failedRes = await agent2.post(`/api/tag`).send({name : `failedtest`, recipe : 1})
+        const failedRes = await agent2.post(`/api/tag`).send({name : `failedtest`, recipeId : 1})
         const failedTag = await Tag.findOne({where : {name : `failedtest`}})
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Permission denied`)
         expect(failedTag).to.be.a(`null`)
       })
       it(`name is lowercased and non-alphas are stripped`, async () => {
-        await agent1.post(`/api/tag`).send({name : `name &7-Ab`, recipe : 1})
+        await agent1.post(`/api/tag`).send({name : `name &7-Ab`, recipeId : 1})
         const updatedRecipe = await agent1.get(`/api/recipe/1`)
         expect(updatedRecipe.body.tags[1].name).to.equal(`nameab`)
       })
@@ -84,13 +82,16 @@ describe(`API Route User: /api/tag`, () => {
         expect(tag).not.to.be.an(`null`)
       })
       it(`if the tag does exist, it just assigns it to the given recipe`, async () => {
-        await agent1.post(`/api/tag`).send({name : `testone`, recipe : 1})
+        await agent1.post(`/api/tag`).send({name : `testone`, recipeId : 1})
         const updatedRecipe = await agent1.get(`/api/recipe/1`)
         expect(updatedRecipe.body.tags.length).to.equal(3)
       })
-      it(`it assigns the tag to the given recipe and returns 200`, () => {
-        expect(recipe.body.tags[0].id).to.equal(2)
+      it(`it assigns the tag to the given recipe and returns the recipe with its tags`, () => {
         expect(res.status).to.equal(200)
+        expect(res.body.id).to.equal(1)
+        expect(res.body.text).to.equal(`testText`)
+        expect(res.body.title).to.equal(`testTitle`)
+        expect(res.body.tags[0].id).to.equal(2)
       })
     })
   })

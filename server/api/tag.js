@@ -5,7 +5,7 @@ const {isAuthenticated} = require(`../authenticationLogic`)
 
 const doesRecipeExist = async (req, res, next) => {
   try{
-    const recipe = await Recipe.findByPk(req.body.recipe)
+    const recipe = await Recipe.findByPk(req.body.recipeId)
     if(recipe){
       req.body.recipe = recipe
       next()
@@ -55,7 +55,11 @@ router.post(`/`,
   async (req, res, next) => {
     try{
       await req.body.recipe.addTag(req.body.tag)
-      res.sendStatus(200)
+      const recipe = await Recipe.findByPk(
+        req.body.recipeId,
+        {include : [Tag]}
+      )
+      res.json(recipe)
     }catch(error){
       next(error)
     }
