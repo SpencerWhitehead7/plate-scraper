@@ -99,6 +99,11 @@ describe(`API Route User: /api/user`, () => {
       it(`does not allow you to edit the user's salt`, () => {
         expect(oldSalt).to.equal(newSalt)
       })
+      it(`returns the user`, () => {
+        expect(res.status).to.equal(200)
+        expect(res.body.id).to.equal(1)
+        expect(res.body.email).to.equal(`new@example.com`)
+      })
     })
   })
 })
