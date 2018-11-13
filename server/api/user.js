@@ -1,6 +1,8 @@
 const router = require(`express`).Router()
 const {User, Recipe} = require(`../db/models`)
 
+const {isAuthenticated} = require(`../authenticationLogic`)
+
 // GET /api/user/:wildcard
 router.get(`/:id`, async (req, res, next) => {
   try{
@@ -12,7 +14,7 @@ router.get(`/:id`, async (req, res, next) => {
 })
 
 // PUT /api/user/:wildcard
-router.put(`/:id`, async (req, res, next) => {
+router.put(`/:id`, isAuthenticated, async (req, res, next) => {
   try{
     const [, user] = await User.update(req.body, {
       where : {id : req.params.id},

@@ -75,7 +75,13 @@ describe(`API Route User: /api/user`, () => {
         const user = await User.findOne({where : {email : `new@email.com`}})
         expect(user).not.to.be.a(`null`)
       })
+      it(`rejects unauthenticated users' attempts`, async () => {
+        const failedRes = await request(app).put(`/api/user/1`).send({email : `failed@email.com`})
+        const user = await User.findOne({where : {email : `failed@email.com`}})
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Not logged in`)
+        expect(user).to.be.a(`null`)
+      })
     })
   })
 })
-
