@@ -21,7 +21,7 @@ describe(`API Route User: /api/tag`, () => {
         text : `testText1`,
         title : `title1`,
       })
-      await Tag.create({name : `text`})
+      await Tag.create({name : `testone`})
     }catch(err){
       console.log(err)
     }
@@ -40,6 +40,16 @@ describe(`API Route User: /api/tag`, () => {
 
   describe(`/`, () => {
     describe(`POST`, () => {
+      let res = null
+      let recipe = null
+      before(async () => {
+        try{
+          res = await agent1.post(`/api/tag`).send({name : `testtwo`, recipe : 1})
+          recipe = await agent1.get(`/api/recipe/1`)
+        }catch(error){
+          console.log(error)
+        }
+      })
       // flowchart style, not priority style
       it(`rejects unauthenticated users' attempts`, () => {
 
@@ -50,11 +60,14 @@ describe(`API Route User: /api/tag`, () => {
       it(`rejects attempts of users who are not the recipe's owner`, () => {
 
       })
+      it(`rejects attempts to assign a tag to a recipe multiple times`, () => {
+
+      })
       it(`if the tag does not exist, it creates the tag in the database`, () => {
 
       })
       it(`it assigns the tag to the given recipe`, () => {
-
+        expect(recipe.body.tags[0].id).to.equal(2)
       })
       it(`if successful, it returns the relation`, () => {
 
