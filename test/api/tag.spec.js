@@ -79,6 +79,11 @@ describe(`API Route User: /api/tag`, () => {
         const tag = await Tag.findOne({where : {name : `testtwo`}})
         expect(tag).not.to.be.an(`null`)
       })
+      it(`if the tag does exist, it just assigns it to the given recipe`, async () => {
+        await agent1.post(`/api/tag`).send({name : `testone`, recipe : 1})
+        const updatedRecipe = await agent1.get(`/api/recipe/1`)
+        expect(updatedRecipe.body.tags.length).to.equal(2)
+      })
       it(`it assigns the tag to the given recipe and returns 200`, () => {
         expect(recipe.body.tags[0].id).to.equal(2)
         expect(res.status).to.equal(200)
