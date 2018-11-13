@@ -13,7 +13,7 @@ const isOwner = (req, res, next) => {
   }
 }
 
-// GET /api/user/:wildcard
+// GET /api/user/:id
 router.get(`/:id`, async (req, res, next) => {
   try{
     const user = await User.findByPk(req.params.id, {include : [Recipe]})
@@ -23,7 +23,7 @@ router.get(`/:id`, async (req, res, next) => {
   }
 })
 
-// PUT /api/user/:wildcard
+// PUT /api/user/:id
 router.put(`/:id`,
   isAuthenticated,
   isOwner,
@@ -42,7 +42,7 @@ router.put(`/:id`,
     }
   })
 
-// DELETE /api/user/:wildcard
+// DELETE /api/user/:id
 router.delete(`/:id`,
   isAuthenticated,
   isOwner,

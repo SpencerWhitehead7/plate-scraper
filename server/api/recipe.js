@@ -44,7 +44,9 @@ router.post(`/`,
     }
   })
 
-// GET /api/recipe/:wildcard
+// GET /api/recipe/tag/?tags
+
+// GET /api/recipe/:id
 router.get(`/:id`, async (req, res, next) => {
   try{
     const recipe = await Recipe.findByPk(
@@ -57,7 +59,7 @@ router.get(`/:id`, async (req, res, next) => {
   }
 })
 
-// PUT /api/recipe/:wildcard
+// PUT /api/recipe/:id
 router.put(`/:id`,
   isAuthenticated,
   isOwner,
@@ -81,7 +83,7 @@ router.put(`/:id`,
     }
   })
 
-// DELTE /api/recipe/:wildcard
+// DELETE /api/recipe/:id
 router.delete(`/:id`,
   isAuthenticated,
   isOwner,

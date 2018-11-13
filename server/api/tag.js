@@ -66,6 +66,7 @@ router.post(`/`,
     }
   })
 
+// DELETE /api/tag/:recipeId/:tagId
 router.delete(`/:recipeId/:tagId`,
   isAuthenticated,
   doesRecipeExist,
