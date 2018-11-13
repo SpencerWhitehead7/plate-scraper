@@ -8,6 +8,7 @@ const agent = request.agent(app)
 
 describe(`Auth Route: /auth`, () => {
   const userCred = {email : `testUser@example.com`, password : `pw`}
+
   beforeEach(async () => {
     try{
       await agent.post(`/auth/signup`).send(userCred)

@@ -30,7 +30,6 @@ describe(`API Route Recipe: /api/recipe`, () => {
   })
   after(async () => {
     try{
-      // can't run in parallel for some arcane sequelize reason
       await agent1.post(`/auth/logout`)
       await agent2.post(`/auth/logout`)
       await Recipe.sync({force : true})
