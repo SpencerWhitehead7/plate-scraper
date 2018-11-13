@@ -86,12 +86,32 @@ describe(`API Route User: /api/tag`, () => {
         const updatedRecipe = await agent1.get(`/api/recipe/1`)
         expect(updatedRecipe.body.tags.length).to.equal(3)
       })
-      it(`it assigns the tag to the given recipe and returns the recipe with its tags`, () => {
+      it(`it assigns the tag to the given recipe and returns the updated recipe with its tags`, () => {
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
         expect(res.body.text).to.equal(`testText`)
         expect(res.body.title).to.equal(`testTitle`)
         expect(res.body.tags[0].id).to.equal(2)
+      })
+    })
+  })
+
+  describe(`/:recipeId/:tagId`, () => {
+    describe(`DELETE`, () => {
+      let res = null
+      before(async () => {
+        try{
+          res = await agent1.delete(`/api/tag/1/3`)
+        }catch(error){
+          console.log(error)
+        }
+      })
+      it(`it assigns the tag to the given recipe and returns the recipe with its tags`, () => {
+        expect(res.status).to.equal(200)
+        expect(res.body.id).to.equal(1)
+        expect(res.body.text).to.equal(`testText`)
+        expect(res.body.title).to.equal(`testTitle`)
+        expect(res.body.tags.length).to.equal(2)
       })
     })
   })
