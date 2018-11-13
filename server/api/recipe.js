@@ -1,5 +1,5 @@
 const router = require(`express`).Router()
-const {Recipe} = require(`../db/models`)
+const {Recipe, Tag} = require(`../db/models`)
 
 const {isAuthenticated} = require(`../authenticationLogic`)
 
@@ -21,7 +21,7 @@ const isOwner = async (req, res, next) => {
 // GET /api/recipe
 router.get(`/`, async (req, res, next) => {
   try{
-    const recipes = await Recipe.findAll()
+    const recipes = await Recipe.findAll({include : [Tag]})
     res.json(recipes)
   }catch(error){
     next(error)
@@ -45,7 +45,10 @@ router.post(`/`, isAuthenticated, async (req, res, next) => {
 // GET /api/recipe/:wildcard
 router.get(`/:id`, async (req, res, next) => {
   try{
-    const recipe = await Recipe.findByPk(req.params.id)
+    const recipe = await Recipe.findByPk(
+      req.params.id,
+      {include : [Tag]}
+    )
     res.json(recipe)
   }catch(error){
     next(error)
@@ -59,11 +62,14 @@ router.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
     const recipeInfo = {}
     if(text) recipeInfo.text = text
     if(title) recipeInfo.title = title
-    const [, recipes] = await Recipe.update(recipeInfo, {
-      where : {id : req.params.id},
-      returning : true,
-      plain : true,
-    })
+    const [, recipes] = await Recipe.update(
+      recipeInfo,
+      {
+        where : {id : req.params.id},
+        returning : true,
+        plain : true,
+      }
+    )
     res.json(recipes)
   }catch(error){
     next(error)
