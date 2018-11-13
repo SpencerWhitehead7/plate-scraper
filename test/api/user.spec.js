@@ -7,15 +7,18 @@ const Recipe = require(`../../server/db`).model(`recipe`)
 
 const agent1 = request.agent(app)
 const agent2 = request.agent(app)
+const agent3 = request.agent(app)
 
 describe(`API Route User: /api/user`, () => {
   const userCred = {email : `testUser@example.com`, password : `pw`}
   const user2Cred = {email : `testUser2@example.com`, password : `pw`}
+  const user3Cred = {email : `testUser3@example.com`, password : `pw`}
 
   before(async () => {
     try{
       await agent1.post(`/auth/signup`).send(userCred)
       await agent2.post(`/auth/signup`).send(user2Cred)
+      await agent3.post(`/auth/signup`).send(user3Cred)
       await agent1.post(`/api/recipe`).send({
         text : `testText1`,
         title : `title1`,
@@ -32,6 +35,7 @@ describe(`API Route User: /api/user`, () => {
     try{
       await agent1.post(`/auth/logout`)
       await agent2.post(`/auth/logout`)
+      await agent3.post(`/auth/logout`)
       await Recipe.sync({force : true})
       await User.sync({force : true})
     }catch(err){
@@ -125,6 +129,13 @@ describe(`API Route User: /api/user`, () => {
         const user = await User.findByPk(2)
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
+        expect(user).not.to.be.a(`null`)
+      })
+      it(`rejects attempts to delete users other than the logged in user`, async () => {
+        const failedRes = await agent2.delete(`/api/user/3`)
+        const user = await User.findByPk(3)
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Permission denied`)
         expect(user).not.to.be.a(`null`)
       })
     })
