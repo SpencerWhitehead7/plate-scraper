@@ -52,12 +52,13 @@ describe(`API Route User: /api/tag`, () => {
       })
       // flowchart style, not priority style
       it(`rejects unauthenticated users' attempts`, async () => {
-        const failedRes = await request(app).post(`/api/tag`).send({name : `failedtest`})
+        const failedRes = await request(app).post(`/api/tag`).send({name : `failedtest`, recipe : 1})
         const failedTag = await Tag.findOne({where : {name : `failedtest`}})
+        expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(failedTag).to.be.a(`null`)
       })
-      it(`rejects attempts to tag to a non-existant recipe`, () => {
+      it(`rejects attempts to tag to a non-existant recipe`, async () => {
 
       })
       it(`rejects attempts of users who are not the recipe's owner`, () => {
@@ -66,8 +67,9 @@ describe(`API Route User: /api/tag`, () => {
       it(`rejects attempts to assign a tag to a recipe multiple times`, () => {
 
       })
-      it(`if the tag does not exist, it creates the tag in the database`, () => {
-
+      it(`if the tag does not exist, it creates the tag in the database`, async () => {
+        const tag = await Tag.findOne({where : {name : `testtwo`}})
+        expect(tag).not.to.be.an(`null`)
       })
       it(`it assigns the tag to the given recipe and returns 200`, () => {
         expect(recipe.body.tags[0].id).to.equal(2)
