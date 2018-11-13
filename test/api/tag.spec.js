@@ -3,6 +3,7 @@ const request = require(`supertest`)
 
 const app = require(`../../server`)
 const Recipe = require(`../../server/db`).model(`recipe`)
+const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
 const Tag = require(`../../server/db`).model(`tag`)
 const User = require(`../../server/db`).model(`user`)
 
@@ -31,6 +32,7 @@ describe(`API Route User: /api/tag`, () => {
       await agent1.post(`/auth/logout`)
       await agent2.post(`/auth/logout`)
       await Recipe.sync({force : true})
+      await RecipeTraits.sync({force : true})
       await Tag.sync({force : true})
       await User.sync({force : true})
     }catch(err){
@@ -71,9 +73,6 @@ describe(`API Route User: /api/tag`, () => {
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Permission denied`)
         expect(failedTag).to.be.a(`null`)
-      })
-      it(`rejects attempts to assign a tag to a recipe multiple times`, () => {
-
       })
       it(`if the tag does not exist, it creates the tag in the database`, async () => {
         const tag = await Tag.findOne({where : {name : `testtwo`}})
