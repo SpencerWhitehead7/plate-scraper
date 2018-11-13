@@ -120,6 +120,13 @@ describe(`API Route User: /api/user`, () => {
         expect(res.status).to.equal(200)
         expect(user).to.be.a(`null`)
       })
+      it(`rejects unauthenticated users' attempts`, async () => {
+        const failedRes = await request(app).delete(`/api/user/2`)
+        const user = await User.findByPk(2)
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Not logged in`)
+        expect(user).not.to.be.a(`null`)
+      })
     })
   })
 })

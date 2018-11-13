@@ -40,7 +40,7 @@ router.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
 })
 
 // DELETE /api/user/:wildcard
-router.delete(`/:id`, async (req, res, next) => {
+router.delete(`/:id`, isAuthenticated, async (req, res, next) => {
   try{
     await User.destroy({
       where : {
