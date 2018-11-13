@@ -2,8 +2,7 @@ const {expect} = require(`chai`)
 const request = require(`supertest`)
 
 const app = require(`../../server`)
-const db = require(`../../server/db`)
-const User = db.model(`user`)
+const User = require(`../../server/db`).model(`user`)
 
 const agent = request.agent(app)
 
@@ -18,9 +17,8 @@ describe(`Auth Route: /auth`, () => {
   })
   afterEach(async () => {
     try{
-      const resetUsers = User.sync({force : true})
-      const logout = agent.post(`/auth/logout`)
-      await Promise.all([resetUsers, logout])
+      await agent.post(`/auth/logout`)
+      await User.sync({force : true})
     }catch(err){
       console.log(err)
     }
@@ -50,27 +48,21 @@ describe(`Auth Route: /auth`, () => {
   })
 
   describe(`the /login route`, () => {
-    beforeEach(async () => {
-      try{
-        await agent.post(`/auth/logout`)
-      }catch(err){
-        console.log(err)
-      }
-    })
     describe(`POST`, () => {
       it(`logs the user in if they provide correct credentials`, async () => {
+        // using a one-off results in a lasting row in the sessions db
+        await agent.post(`/auth/logout`)
         const res = await agent.post(`/auth/login`).send(userCred)
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
         expect(res.body.email).to.equal(`testUser@example.com`)
       })
       it(`returns a 401 if the user provides incorrect credentials`, async () => {
-        const res = await agent.post(`/auth/login`).send({email : `testUser@example.com`, password : `wrongpw`})
+        const res = await request(app).post(`/auth/login`).send({email : `testUser@example.com`, password : `wrongpw`})
         expect(res.status).to.equal(401)
         expect(res.text).to.equal(`Wrong username or password`)
       })
       it(`returns a 409 if the user is already logged in`, async () => {
-        await agent.post(`/auth/login`).send(userCred)
         const res = await agent.post(`/auth/login`).send(userCred)
         expect(res.status).to.equal(409)
         expect(res.text).to.equal(`Already logged in to an account`)
@@ -84,6 +76,7 @@ describe(`Auth Route: /auth`, () => {
         await agent.post(`/auth/logout`)
         const res = await agent.get(`/auth/me`)
         expect(res.status).to.equal(401)
+        expect(res.text).to.equal(`Not logged in`)
       })
       it(`destroy's the user's session if the user is logged in`, async () => {
         const res = await agent.post(`/auth/logout`)
@@ -98,6 +91,7 @@ describe(`Auth Route: /auth`, () => {
       it(`returns a 401 if the user is not logged in`, async () => {
         const res = await request(app).post(`/auth/logout`)
         expect(res.status).to.equal(401)
+        expect(res.text).to.equal(`Not logged in`)
       })
     })
   })
@@ -105,8 +99,7 @@ describe(`Auth Route: /auth`, () => {
   describe(`the /me route`, () => {
     describe(`GET`, () => {
       it(`if the user is not logged in, it returns a 401 error`, async () => {
-        await agent.post(`/auth/logout`)
-        const res = await agent.get(`/auth/me`)
+        const res = await request(app).get(`/auth/me`)
         expect(res.status).to.equal(401)
         expect(res.text).to.equal(`Not logged in`)
       })
@@ -115,9 +108,6 @@ describe(`Auth Route: /auth`, () => {
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
         expect(res.body.email).to.equal(`testUser@example.com`)
-        // this is to clear the session from the session DB
-        // I have no idea why the afterEach hook isn't doing it, but this works
-        await agent.post(`/auth/logout`)
       })
     })
   })

@@ -31,6 +31,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
   after(async () => {
     try{
       // can't run in parallel for some arcane sequelize reason
+      await agent1.post(`/auth/logout`)
+      await agent2.post(`/auth/logout`)
       await Recipe.sync({force : true})
       await User.sync({force : true})
     }catch(err){
@@ -68,11 +70,10 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(recipe).not.to.be.a(`null`)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
-        await agent1.post(`/auth/logout`)
-        const failedRes = await agent1.post(`/api/recipe`).send({text : `failedText`, title : `failedText`, createdBy : 1})
+        const failedRes = await request(app).post(`/api/recipe`).send({text : `failedText`, title : `failedText`, createdBy : 1})
         const recipe = await Recipe.findOne({where : {text : `failedText`}})
-        await agent1.post(`/auth/login`).send(userCred)
         expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Not logged in`)
         expect(recipe).to.be.a(`null`)
       })
       it(`sets createdBy to the user's ID, even with bad input`, async () => {
@@ -134,10 +135,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(recipe.text).to.equal(`newText`)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
-        await agent1.post(`/auth/logout`)
-        const failedRes = await agent1.put(`/api/recipe/3`).send({text : `failedText`})
+        const failedRes = await request(app).put(`/api/recipe/3`).send({text : `failedText`})
         const recipe = await Recipe.findOne({where : {text : `failedText`}})
-        await agent1.post(`/auth/login`).send(userCred)
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(recipe).to.be.a(`null`)
@@ -185,10 +184,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(recipe.length).to.equal(2)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
-        await agent1.post(`/auth/logout`)
-        const failedRes = await agent1.delete(`/api/recipe/2`)
+        const failedRes = await request(app).delete(`/api/recipe/2`)
         const recipe = await Recipe.findByPk(2)
-        await agent1.post(`/auth/login`).send(userCred)
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(recipe).not.to.be.a(`null`)
