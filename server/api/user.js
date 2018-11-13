@@ -47,7 +47,8 @@ router.delete(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
         id : req.params.id,
       },
     })
-    res.end()
+    req.logout()
+    req.session.destroy(err => err ? next(err) : res.redirect(`/`))
   }catch(error){
     next(error)
   }

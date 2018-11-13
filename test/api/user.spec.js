@@ -121,8 +121,12 @@ describe(`API Route User: /api/user`, () => {
       })
       it(`deletes a user`, async () => {
         const user = await User.findByPk(1)
-        expect(res.status).to.equal(200)
         expect(user).to.be.a(`null`)
+      })
+      it(`logs the user out`, async () => {
+        const failedRes = await agent1.get(`/auth/me`)
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Not logged in`)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
         const failedRes = await request(app).delete(`/api/user/2`)
@@ -138,9 +142,9 @@ describe(`API Route User: /api/user`, () => {
         expect(failedRes.text).to.equal(`Permission denied`)
         expect(user).not.to.be.a(`null`)
       })
-      it(`returns a 200 and nothing else`, () => {
-        expect(res.status).to.equal(200)
-        expect(res.body).to.deep.equal({})
+      it(`redirects the user to the main page`, () => {
+        expect(res.status).to.equal(302)
+        expect(res.header[`location`]).to.equal(`/`)
       })
     })
   })

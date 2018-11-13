@@ -36,9 +36,7 @@ router.post(`/login`, isAlreadyAuthenticated, async (req, res, next) => {
 // POST /auth/logout
 router.post(`/logout`, isAuthenticated, (req, res, next) => {
   req.logout()
-  req.session.destroy(err => {
-    err ? next(err) : res.redirect(`/`)
-  })
+  req.session.destroy(err => err ? next(err) : res.redirect(`/`))
 })
 
 // GET /auth/me
