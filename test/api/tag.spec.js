@@ -19,8 +19,8 @@ describe(`API Route User: /api/tag`, () => {
       await agent1.post(`/auth/signup`).send(userCred)
       await agent2.post(`/auth/signup`).send(user2Cred)
       await agent1.post(`/api/recipe`).send({
-        text : `testText1`,
-        title : `title1`,
+        text : `testText`,
+        title : `testTitle`,
       })
       await Tag.create({name : `testone`})
     }catch(err){
@@ -74,6 +74,11 @@ describe(`API Route User: /api/tag`, () => {
         expect(failedRes.text).to.equal(`Permission denied`)
         expect(failedTag).to.be.a(`null`)
       })
+      it(`name is lowercased and non-alphas are stripped`, async () => {
+        await agent1.post(`/api/tag`).send({name : `name &7-Ab`, recipe : 1})
+        const updatedRecipe = await agent1.get(`/api/recipe/1`)
+        expect(updatedRecipe.body.tags[1].name).to.equal(`nameab`)
+      })
       it(`if the tag does not exist, it creates the tag in the database`, async () => {
         const tag = await Tag.findOne({where : {name : `testtwo`}})
         expect(tag).not.to.be.an(`null`)
@@ -81,7 +86,7 @@ describe(`API Route User: /api/tag`, () => {
       it(`if the tag does exist, it just assigns it to the given recipe`, async () => {
         await agent1.post(`/api/tag`).send({name : `testone`, recipe : 1})
         const updatedRecipe = await agent1.get(`/api/recipe/1`)
-        expect(updatedRecipe.body.tags.length).to.equal(2)
+        expect(updatedRecipe.body.tags.length).to.equal(3)
       })
       it(`it assigns the tag to the given recipe and returns 200`, () => {
         expect(recipe.body.tags[0].id).to.equal(2)
