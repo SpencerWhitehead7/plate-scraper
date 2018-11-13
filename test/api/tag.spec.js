@@ -65,8 +65,12 @@ describe(`API Route User: /api/tag`, () => {
         expect(failedRes.text).to.equal(`No such recipe`)
         expect(failedTag).to.be.a(`null`)
       })
-      it(`rejects attempts of users who are not the recipe's owner`, () => {
-
+      it(`rejects attempts of users who are not the recipe's owner`, async () => {
+        const failedRes = await agent2.post(`/api/tag`).send({name : `failedtest`, recipe : 1})
+        const failedTag = await Tag.findOne({where : {name : `failedtest`}})
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Permission denied`)
+        expect(failedTag).to.be.a(`null`)
       })
       it(`rejects attempts to assign a tag to a recipe multiple times`, () => {
 
