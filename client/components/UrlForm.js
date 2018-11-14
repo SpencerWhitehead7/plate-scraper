@@ -9,7 +9,7 @@ const UrlForm = props => {
     <React.Fragment>
       {
         url.toLowerCase().includes(`seriouseats.com`) && !url.toLowerCase().includes(`seriouseats.com/recipes`) &&
-        <Warning error="Make sure your url is from seriouseats.com/recipes, not just seriouseats.com"/>
+        <Warning err="Make sure your url is from seriouseats.com/recipes, not just seriouseats.com"/>
       }
       <form onSubmit={handleSubmit}>
         <input

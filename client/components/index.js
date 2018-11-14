@@ -15,7 +15,7 @@ class Main extends React.Component{
       sourceUrl : ``,
       title : ``,
       recipe : ``,
-      error : {},
+      err : {},
       isLoading : false,
     }
   }
@@ -33,32 +33,29 @@ class Main extends React.Component{
       sourceUrl : ``,
       title : ``,
       recipe : ``,
-      error : {},
+      err : {},
       isLoading : true,
     }, async () => {
       try{
-        const {data} = await axios.post(`/api/scrape`, {url : this.state.url})
-        if(!data.recipe ||
-        !data.recipe.includes(`•`) ||
-        !data.recipe.includes(`1)`)){
-          this.setState({
-            error : {message : `Failed to scrape; make sure you're using a valid recipe URL`},
-            isLoading : false,
-          })
+        const {data} = await axios.post(`/api`, {url : this.state.url})
+        console.log(data)
+        if(data.message && data.name &&
+          !data.sourceSite && !data.sourceUrl && !data.title && !data.recipe){ // duck typing to check for errors
+          this.setState({err : data, isLoading : false})
         }else{
           this.setState({
             sourceSite : data.sourceSite,
             sourceUrl : data.sourceUrl,
             title : data.title,
             recipe : data.recipe,
-            error : {},
+            err : {},
             isLoading : false,
           })
         }
       }catch(err){
         console.log(err)
         this.setState({
-          error : err,
+          err,
           isLoading : false,
         })
       }
@@ -85,7 +82,7 @@ class Main extends React.Component{
               sourceSite={this.state.sourceSite}
             />
         }
-        {Object.keys(this.state.error).length > 0 && <Warning error={this.state.error.message}/>}
+        {Object.keys(this.state.err).length > 0 && <Warning err={this.state.err.message}/>}
       </div>
     )
   }

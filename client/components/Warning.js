@@ -1,10 +1,10 @@
 import React from 'react'
 
 const Warning = props => {
-  const {error} = props
+  const {err} = props
   return (
     <span className="warning">
-      {error}
+      {err}
     </span>
   )
 }
