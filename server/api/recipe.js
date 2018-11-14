@@ -61,7 +61,9 @@ router.get(`/byid/:id`, async (req, res, next) => {
 router.get(`/bytag`, async (req, res, next) => {
   try{
     const tagNames = []
-    Object.keys(req.query).forEach(key => {tagNames.push(req.query[key].toLowerCase().replace(/[^a-z]/gi, ``))})
+    Object.keys(req.query).forEach(key => {
+      tagNames.push(req.query[key].toLowerCase().replace(/[^a-z]/gi, ``))
+    })
     const tagPromises = []
     tagNames.forEach(tag => {
       tagPromises.push(Tag.findOne({
@@ -70,11 +72,15 @@ router.get(`/bytag`, async (req, res, next) => {
       }))
     })
     const tags = await Promise.all(tagPromises)
-    const recipes = []
+    const recipes = {}
     tags.forEach(tag => {
-      if(tag)recipes.push(...tag.dataValues.recipes)
+      if(tag){
+        tag.dataValues.recipes.forEach(recipe => {
+          recipes[recipe.id] = recipe
+        })
+      }
     })
-    res.json(recipes)
+    res.json(Object.values(recipes))
   }catch(error){
     console.log(error)
   }
