@@ -44,10 +44,8 @@ router.post(`/`,
     }
   })
 
-// GET /api/recipe/tag/?tags
-
-// GET /api/recipe/:id
-router.get(`/:id`, async (req, res, next) => {
+// GET /api/recipe/byid/:id
+router.get(`/byid/:id`, async (req, res, next) => {
   try{
     const recipe = await Recipe.findByPk(
       req.params.id,
@@ -56,6 +54,27 @@ router.get(`/:id`, async (req, res, next) => {
     res.json(recipe)
   }catch(error){
     next(error)
+  }
+})
+
+// GET /api/recipe/bytag
+router.get(`/bytag`, async (req, res, next) => {
+  try{
+    const tagNames = []
+    Object.keys(req.query).forEach(key => {tagNames.push(req.query[key].toLowerCase().replace(/[^a-z]/gi, ``))})
+    const tagPromises = []
+    tagNames.forEach(tag => {
+      tagPromises.push(Tag.findOne({
+        where : {name : tag},
+        include : [Recipe],
+      }))
+    })
+    const tags = await Promise.all(tagPromises)
+    const recipes = []
+    tags.forEach(tag => {recipes.push(...tag.dataValues.recipes)})
+    res.json(recipes)
+  }catch(error){
+    console.log(error)
   }
 })
 
