@@ -154,6 +154,11 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(res.body[0].id).to.equal(1)
         expect(res.body[1].id).to.equal(2)
       })
+      it(`handles searching for tags that do not exist`, async () => {
+        const res = await request(app).get(`/api/recipe/bytag?0=nonexistant`)
+        expect(res.status).to.equal(200)
+        expect(res.body.length).to.equal(0)
+      })
     })
   })
 
