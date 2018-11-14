@@ -3,6 +3,8 @@ const request = require(`supertest`)
 
 const app = require(`../../server`)
 const Recipe = require(`../../server/db`).model(`recipe`)
+const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
+const Tag = require(`../../server/db`).model(`tag`)
 const User = require(`../../server/db`).model(`user`)
 
 const agent1 = request.agent(app)
@@ -33,6 +35,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
       await agent1.post(`/auth/logout`)
       await agent2.post(`/auth/logout`)
       await Recipe.sync({force : true})
+      await RecipeTraits.sync({force : true})
+      await Tag.sync({force : true})
       await User.sync({force : true})
     }catch(err){
       console.log(err)
@@ -41,7 +45,7 @@ describe(`API Route Recipe: /api/recipe`, () => {
 
   describe(`/`, () => {
     describe(`GET`, () => {
-      it(`returns all recipes`, async () => {
+      it(`returns all recipes, including tags`, async () => {
         const res = await request(app).get(`/api/recipe`)
         expect(res.status).to.equal(200)
         expect(res.body.length).to.equal(2)
@@ -102,16 +106,58 @@ describe(`API Route Recipe: /api/recipe`, () => {
     })
   })
 
-  describe(`/:id`, () => {
+  describe(`/byid`, () => {
     describe(`GET`, () => {
       it(`returns the recipe with the matching ID, including tags`, async () => {
-        const res = await request(app).get(`/api/recipe/1`)
+        const res = await request(app).get(`/api/recipe/byid/1`)
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
         expect(res.body.tags).not.to.be.an(`undefined`)
       })
     })
+  })
 
+  describe(`/bytag?`, () => {
+    before(async () => {
+      try{
+        const addTags = []
+        addTags.push(agent1.post(`/api/tag`).send({
+          name : `ttone`,
+          recipeId : 1,
+        }))
+        addTags.push(agent1.post(`/api/tag`).send({
+          name : `tttwo`,
+          recipeId : 1,
+        }))
+        addTags.push(agent1.post(`/api/tag`).send({
+          name : `ttthree`,
+          recipeId : 1,
+        }))
+        addTags.push(agent1.post(`/api/tag`).send({
+          name : `ttone`,
+          recipeId : 2,
+        }))
+        addTags.push(agent1.post(`/api/tag`).send({
+          name : `ttthree`,
+          recipeId : 3,
+        }))
+        await Promise.all(addTags)
+      }catch(error){
+        console.log(error)
+      }
+    })
+    describe(`GET`, () => {
+      it(`returns all recipes which have a tag that matches a queried tag`, async () => {
+        const res = await request(app).get(`/api/recipe/bytag?0=ttone`)
+        expect(res.status).to.equal(200)
+        expect(res.body.length).to.equal(2)
+        expect(res.body[0].id).to.equal(1)
+        expect(res.body[1].id).to.equal(2)
+      })
+    })
+  })
+
+  describe(`/:id`, () => {
     describe(`PUT`, () => {
       let res = null
       before(async () => {
