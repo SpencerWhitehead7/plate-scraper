@@ -71,7 +71,9 @@ router.get(`/bytag`, async (req, res, next) => {
     })
     const tags = await Promise.all(tagPromises)
     const recipes = []
-    tags.forEach(tag => {recipes.push(...tag.dataValues.recipes)})
+    tags.forEach(tag => {
+      if(tag)recipes.push(...tag.dataValues.recipes)
+    })
     res.json(recipes)
   }catch(error){
     console.log(error)
