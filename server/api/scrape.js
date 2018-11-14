@@ -6,9 +6,15 @@ const scrape = require(`../logic/`)
 router.post(`/`, async (req, res, next) => {
   try{
     const recipeData = await scrape(req.body.url)
-    res.json(recipeData)
-  }catch(error){
-    next(error)
+    if(!recipeData.title){
+      const err = new Error(`Failed to scrape: invalid URL`)
+      err.status = 406
+      next(err)
+    }else{
+      res.json(recipeData)
+    }
+  }catch(err){
+    next(err)
   }
 })
 

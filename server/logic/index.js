@@ -26,11 +26,11 @@ class Page{
   }
 }
 
-const recipeToStr = recipe => {
-  let output = `${recipe.title}\n\nIngredients\n`
-  recipe.ingredients.forEach(ingredient => {output += `\n    ${ingredient}`})
+const recipeToStr = (url, recipe) => {
+  let output = `Source: ${url}\n\n${recipe.title}\n\nIngredients\n`
+  recipe.ingredients.forEach(ingredient => {output += `\n${ingredient}`})
   output += `\n\nInstructions\n`
-  recipe.instructions.forEach((instruction, i) => {output += `\n    ${i + 1}) ${instruction}`})
+  recipe.instructions.forEach(instruction => {output += `\n${instruction}\n`})
   return output
 }
 
@@ -87,9 +87,9 @@ const scrape = async url => {
       parserLoader(thekitchn, `thekitchn.com`)
     }
     recipeData.title = recipe.title
-    recipeData.recipe = `Source: ${url}\n\n${recipeToStr(recipe)}`
-  }catch(error){
-    console.log(error)
+    recipeData.recipe = recipeToStr(url, recipe)
+  }catch(err){
+    console.log(err)
   }
   return recipeData
 }

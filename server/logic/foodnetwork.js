@@ -2,11 +2,11 @@ const foodnetwork = (recipe, html) => {
   recipe.title = html(`.o-AssetTitle__a-HeadlineText`)[0].children[0].data // This works, [0].text does not, don't know why
 
   html(`.o-Ingredients__m-Body ul li`).each(function(){
-    recipe.ingredients.push(`• ${html(this).text().trim()}`)
+    recipe.ingredients.push(`${html(this).text().trim()}`)
   })
   if(recipe.ingredients.length === 0){ // /sigh other html layout
     html(`.o-Ingredients__m-Body p`).each(function(){
-      recipe.ingredients.push(`• ${html(this).text().trim()}`)
+      recipe.ingredients.push(`${html(this).text().trim()}`)
     })
   }
 
