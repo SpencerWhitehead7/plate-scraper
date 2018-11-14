@@ -130,16 +130,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
           recipeId : 1,
         }))
         addTags.push(agent1.post(`/api/tag`).send({
-          name : `ttthree`,
-          recipeId : 1,
-        }))
-        addTags.push(agent1.post(`/api/tag`).send({
           name : `ttone`,
           recipeId : 2,
-        }))
-        addTags.push(agent1.post(`/api/tag`).send({
-          name : `ttthree`,
-          recipeId : 3,
         }))
         await Promise.all(addTags)
       }catch(error){
@@ -149,6 +141,13 @@ describe(`API Route Recipe: /api/recipe`, () => {
     describe(`GET`, () => {
       it(`returns all recipes which have a tag that matches a queried tag`, async () => {
         const res = await request(app).get(`/api/recipe/bytag?0=ttone`)
+        expect(res.status).to.equal(200)
+        expect(res.body.length).to.equal(2)
+        expect(res.body[0].id).to.equal(1)
+        expect(res.body[1].id).to.equal(2)
+      })
+      it(`does not return any duplicate recipes`, async () => {
+        const res = await request(app).get(`/api/recipe/bytag?0=ttone&1=tttwo`)
         expect(res.status).to.equal(200)
         expect(res.body.length).to.equal(2)
         expect(res.body[0].id).to.equal(1)
