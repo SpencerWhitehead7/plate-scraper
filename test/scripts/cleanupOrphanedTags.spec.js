@@ -10,15 +10,15 @@ describe(`CleanupOrphanedTags`, () => {
       await RecipeTraits.sync({force : true})
       await Recipe.sync({force : true})
       await Tag.sync({force : true})
-      const promises = []
-      promises.push(Recipe.create({
-        text : `text1`,
-        title : `title1`,
-        createdBy : 1,
-      }))
-      promises.push(Tag.create({name : `ttone`}))
-      promises.push(Tag.create({name : `tttwo`}))
-      const [recipe, tag1] = await Promise.all(promises)
+      const [recipe, tag1] = await Promise.all([
+        Recipe.create({
+          text : `text1`,
+          title : `title1`,
+          createdBy : 1,
+        }),
+        Tag.create({name : `ttone`}),
+        Tag.create({name : `tttwo`}),
+      ])
       await recipe.addTag(tag1)
     }catch(err){
       console.log(err)

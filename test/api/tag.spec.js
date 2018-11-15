@@ -20,21 +20,27 @@ describe(`API Route User: /api/tag`, () => {
       await RecipeTraits.sync({force : true})
       await Tag.sync({force : true})
       await User.sync({force : true})
-      await agent1.post(`/auth/signup`).send(userCred)
-      await agent2.post(`/auth/signup`).send(user2Cred)
-      await agent1.post(`/api/recipe`).send({
-        text : `testText`,
-        title : `testTitle`,
-      })
-      await Tag.create({name : `testone`})
+      await Promise.all([
+        agent1.post(`/auth/signup`).send(userCred),
+        agent2.post(`/auth/signup`).send(user2Cred),
+      ])
+      await Promise.all([
+        agent1.post(`/api/recipe`).send({
+          text : `text`,
+          title : `title`,
+        }),
+        Tag.create({name : `testone`}),
+      ])
     }catch(err){
       console.log(err)
     }
   })
   after(async () => {
     try{
-      await agent1.post(`/auth/logout`)
-      await agent2.post(`/auth/logout`)
+      await Promise.all([
+        agent1.post(`/auth/logout`),
+        agent2.post(`/auth/logout`),
+      ])
       await Recipe.sync({force : true})
       await RecipeTraits.sync({force : true})
       await Tag.sync({force : true})
@@ -93,8 +99,8 @@ describe(`API Route User: /api/tag`, () => {
       it(`it assigns the tag to the given recipe and returns the updated recipe with its tags`, () => {
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
-        expect(res.body.text).to.equal(`testText`)
-        expect(res.body.title).to.equal(`testTitle`)
+        expect(res.body.text).to.equal(`text`)
+        expect(res.body.title).to.equal(`title`)
         expect(res.body.tags[0].id).to.equal(2)
       })
     })
@@ -131,8 +137,8 @@ describe(`API Route User: /api/tag`, () => {
       it(`it removes the tag from the recipe and returns the recipe with its tags`, () => {
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
-        expect(res.body.text).to.equal(`testText`)
-        expect(res.body.title).to.equal(`testTitle`)
+        expect(res.body.text).to.equal(`text`)
+        expect(res.body.title).to.equal(`title`)
         expect(res.body.tags.length).to.equal(2)
       })
     })
