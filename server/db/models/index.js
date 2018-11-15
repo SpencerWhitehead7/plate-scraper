@@ -5,7 +5,10 @@ const Tag = require(`./tag`)
 // Associations
 // One-Many relation between Users and Recipes
 Recipe.belongsTo(User)
-User.hasMany(Recipe)
+User.hasMany(Recipe, {
+  onDelete : `CASCADE`,
+  hooks : true,
+})
 
 // Many-Many relation between Recipes and Tags
 Tag.belongsToMany(Recipe, {through : `recipeTraits`})
