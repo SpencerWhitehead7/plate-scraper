@@ -16,6 +16,10 @@ describe(`API Route User: /api/tag`, () => {
 
   before(async () => {
     try{
+      await Recipe.sync({force : true})
+      await RecipeTraits.sync({force : true})
+      await Tag.sync({force : true})
+      await User.sync({force : true})
       await agent1.post(`/auth/signup`).send(userCred)
       await agent2.post(`/auth/signup`).send(user2Cred)
       await agent1.post(`/api/recipe`).send({
@@ -74,7 +78,7 @@ describe(`API Route User: /api/tag`, () => {
       })
       it(`name is lowercased and non-alphas are stripped`, async () => {
         await agent1.post(`/api/tag`).send({name : `name &7-Ab`, recipeId : 1})
-        const updatedRecipe = await agent1.get(`/api/recipe/1`)
+        const updatedRecipe = await agent1.get(`/api/recipe/byid/1`)
         expect(updatedRecipe.body.tags[1].name).to.equal(`nameab`)
       })
       it(`if the tag does not exist, it creates the tag in the database`, async () => {
@@ -83,7 +87,7 @@ describe(`API Route User: /api/tag`, () => {
       })
       it(`if the tag does exist, it just assigns it to the given recipe`, async () => {
         await agent1.post(`/api/tag`).send({name : `testone`, recipeId : 1})
-        const updatedRecipe = await agent1.get(`/api/recipe/1`)
+        const updatedRecipe = await agent1.get(`/api/recipe/byid/1`)
         expect(updatedRecipe.body.tags.length).to.equal(3)
       })
       it(`it assigns the tag to the given recipe and returns the updated recipe with its tags`, () => {

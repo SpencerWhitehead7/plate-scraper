@@ -7,10 +7,10 @@ const cleanupOrphanedTags = require(`../../server/scripts/cleanupOrphanedTags`)
 describe(`CleanupOrphanedTags`, () => {
   before(async () => {
     try{
-      const promises = []
       await RecipeTraits.sync({force : true})
       await Recipe.sync({force : true})
       await Tag.sync({force : true})
+      const promises = []
       promises.push(Recipe.create({
         text : `text1`,
         title : `title1`,

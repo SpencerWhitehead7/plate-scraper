@@ -1,13 +1,16 @@
 const {expect} = require(`chai`)
-const User = require(`../../server/db`).model(`user`)
 const Recipe = require(`../../server/db`).model(`recipe`)
 const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
+const User = require(`../../server/db`).model(`user`)
 
 describe(`Relationships`, () => {
   let testUser = null
   let testRecipe = null
   before(async () => {
     try{
+      await Recipe.sync({force : true})
+      await RecipeTraits.sync({force : true})
+      await User.sync({force : true})
       testUser = await User.create({
         email : `testUser@example.com`,
         password : `pw`,
@@ -24,6 +27,7 @@ describe(`Relationships`, () => {
   after(async () => {
     try{
       await Recipe.sync({force : true})
+      await RecipeTraits.sync({force : true})
       await User.sync({force : true})
     }catch(err){
       console.log(err)

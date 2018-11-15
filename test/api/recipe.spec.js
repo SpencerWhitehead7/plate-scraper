@@ -16,6 +16,10 @@ describe(`API Route Recipe: /api/recipe`, () => {
 
   before(async () => {
     try{
+      await Recipe.sync({force : true})
+      await RecipeTraits.sync({force : true})
+      await Tag.sync({force : true})
+      await User.sync({force : true})
       await agent1.post(`/auth/signup`).send(userCred)
       await agent2.post(`/auth/signup`).send(user2Cred)
       await agent1.post(`/api/recipe`).send({

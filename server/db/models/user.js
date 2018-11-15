@@ -45,6 +45,7 @@ User.encryptPassword = function(newPasswordPlainText, salt){
     .digest(`hex`)
 }
 
+// Hooks
 const setSaltAndPassword = user => {
   if(user.changed(`password`)){
     user.salt = User.generateSalt()
@@ -52,7 +53,6 @@ const setSaltAndPassword = user => {
   }
 }
 
-// Hooks
 User.beforeCreate(setSaltAndPassword)
 User.beforeUpdate(setSaltAndPassword)
 

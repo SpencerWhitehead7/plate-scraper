@@ -11,6 +11,7 @@ describe(`Auth Route: /auth`, () => {
 
   beforeEach(async () => {
     try{
+      await User.sync({force : true})
       await agent.post(`/auth/signup`).send(userCred)
     }catch(err){
       console.log(err)
