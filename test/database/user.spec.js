@@ -1,5 +1,6 @@
 const chai = require(`chai`)
 const chaiAsPromised = require(`chai-as-promised`)
+const Recipe = require(`../../server/db`).model(`recipe`)
 const User = require(`../../server/db`).model(`user`)
 
 chai.use(chaiAsPromised)
@@ -8,22 +9,42 @@ const expect = chai.expect
 describe(`The User model`, () => {
   let testUser = null
   let secondUser = null
+  let testRecipe1 = null
   before(async () => {
     try{
-      testUser = await User.create({
-        email : `testUser@example.com`,
-        password : `pw`,
-      })
-      secondUser = await User.create({
-        email : `secondUser@example.com`,
-        password : `pw`,
-      })
+      await Recipe.sync({force : true})
+      await User.sync({force : true})
+      const [tu1, tu2, r1] = await Promise.all([
+        User.create({
+          email : `testUser@example.com`,
+          password : `pw`,
+        }),
+        User.create({
+          email : `secondUser@example.com`,
+          password : `pw`,
+        }),
+        Recipe.create({
+          text : `text1`,
+          title : `title1`,
+          createdBy : 1,
+        }),
+        Recipe.create({
+          text : `text2`,
+          title : `title2`,
+          createdBy : 2,
+        }),
+      ])
+      testUser = tu1
+      secondUser = tu2
+      testRecipe1 = r1
+      await testUser.setRecipes([testRecipe1])
     }catch(err){
       console.log(err)
     }
   })
   after(async () => {
     try{
+      await Recipe.sync({force : true})
       await User.sync({force : true})
     }catch(err){
       console.log(err)
@@ -113,6 +134,15 @@ describe(`The User model`, () => {
       })
       it(`returns false if the password is incorrect`, () => {
         expect(testUser.correctPassword(`wrongpw`)).to.be.equal(false)
+      })
+    })
+    describe(`on deletion`, () => {
+      it(`deletes the user's recipes`, async () => {
+        const user = await User.findByPk(1)
+        await user.destroy()
+        const remaining = await Recipe.findAll()
+        expect(remaining.length).to.equal(1)
+        expect(remaining[0].id).to.equal(2)
       })
     })
   })
