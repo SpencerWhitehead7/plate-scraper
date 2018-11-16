@@ -7,7 +7,11 @@ const User = require(`../../server/db`).model(`user`)
 const agent = request.agent(app)
 
 describe(`Auth Route: /auth`, () => {
-  const userCred = {email : `testUser@example.com`, password : `pw`}
+  const userCred = {
+    email : `testUser@example.com`,
+    password : `pw`,
+    userName : `test User`,
+  }
 
   beforeEach(async () => {
     try{
@@ -35,6 +39,10 @@ describe(`Auth Route: /auth`, () => {
       it(`also logs that user into the app`, async () => {
         const res = await agent.get(`/auth/me`)
         expect(res.status).to.equal(200)
+      })
+      it(`strips any spaces from the userName`, async () => {
+        const res = await agent.get(`/auth/me`)
+        expect(res.body.userName).to.equal(`testUser`)
       })
       it(`returns a 409 if the user is already logged in`, async () => {
         const res = await agent.post(`/auth/signup`).send(userCred)
