@@ -28,20 +28,16 @@ describe(`API Route Recipe: /api/recipe`, () => {
       await RecipeTraits.sync({force : true})
       await Tag.sync({force : true})
       await User.sync({force : true})
-      await Promise.all([
-        agent1.post(`/auth/signup`).send(userCred),
-        agent2.post(`/auth/signup`).send(user2Cred),
-      ])
-      await Promise.all([
-        agent1.post(`/api/recipe`).send({
-          text : `text1`,
-          title : `title1`,
-        }),
-        agent1.post(`/api/recipe`).send({
-          text : `text2`,
-          title : `title2`,
-        }),
-      ])
+      await agent1.post(`/auth/signup`).send(userCred)
+      await agent2.post(`/auth/signup`).send(user2Cred)
+      await agent1.post(`/api/recipe`).send({
+        text : `text1`,
+        title : `title1`,
+      })
+      await agent1.post(`/api/recipe`).send({
+        text : `text2`,
+        title : `title2`,
+      })
     }catch(err){
       console.log(err)
     }
@@ -138,20 +134,20 @@ describe(`API Route Recipe: /api/recipe`, () => {
   describe(`/bytag?`, () => {
     before(async () => {
       try{
-        const addTags = []
-        addTags.push(agent1.post(`/api/tag`).send({
-          name : `ttone`,
-          recipeId : 1,
-        }))
-        addTags.push(agent1.post(`/api/tag`).send({
-          name : `tttwo`,
-          recipeId : 1,
-        }))
-        addTags.push(agent1.post(`/api/tag`).send({
-          name : `ttone`,
-          recipeId : 2,
-        }))
-        await Promise.all(addTags)
+        await Promise.all([
+          agent1.post(`/api/tag`).send({
+            name : `ttone`,
+            recipeId : 1,
+          }),
+          agent1.post(`/api/tag`).send({
+            name : `tttwo`,
+            recipeId : 1,
+          }),
+          agent1.post(`/api/tag`).send({
+            name : `ttone`,
+            recipeId : 2,
+          }),
+        ])
       }catch(error){
         console.log(error)
       }
@@ -187,6 +183,15 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(userTwosRecipes.length).to.equal(1)
         expect(userTwosRecipes[0].userId).to.equal(2)
         expect(userTwosRecipes[0].createdBy).to.equal(1)
+      })
+      it(`the copy inherits the original's tags`, async () => {
+        const original = await Recipe.findByPk(1, {include : [Tag]})
+        const copy = await Recipe.findAll({
+          where : {userId : 2},
+          include : [Tag],
+        })
+        expect(copy[0].tags[0].id).to.equal(original.tags[0].id)
+        expect(copy[0].tags[1].id).to.equal(original.tags[1].id)
       })
       it(`rejects unauthenticated users`, async () => {
         const failedRes = await request(app).post(`/api/recipe/fork/1`)
