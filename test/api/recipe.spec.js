@@ -11,8 +11,16 @@ const agent1 = request.agent(app)
 const agent2 = request.agent(app)
 
 describe(`API Route Recipe: /api/recipe`, () => {
-  const userCred = {email : `testUser@example.com`, password : `pw`}
-  const user2Cred = {email : `testUser2@example.com`, password : `pw`}
+  const userCred = {
+    email : `testUser@example.com`,
+    password : `pw`,
+    userName : `testUser`,
+  }
+  const user2Cred = {
+    email : `testUser2@example.com`,
+    password : `pw`,
+    userName : `testUser2`,
+  }
 
   before(async () => {
     try{

@@ -14,6 +14,7 @@ describe(`Relationships`, () => {
       testUser = await User.create({
         email : `testUser@example.com`,
         password : `pw`,
+        userName : `testUser`,
       })
       testRecipe = await Recipe.create({
         text : `recipe`,
