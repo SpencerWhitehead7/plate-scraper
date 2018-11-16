@@ -91,14 +91,19 @@ router.post(`/fork/:id`,
   isAuthenticated,
   async (req, res, next) => {
     try{
-      const recipe = await Recipe.findByPk(req.params.id)
+      const recipe = await Recipe.findByPk(req.params.id, {include : [Tag]})
       const user = await User.findByPk(req.user.id)
       if(recipe){
         const data = JSON.parse(JSON.stringify(recipe.dataValues))
-        delete data.id
-        delete data.userId
-        data.forkedCount = 0
-        const forked = await Recipe.create(data)
+        const forked = await Recipe.create({
+          text : data.text,
+          title : data.title,
+          sourceSite : data.sourceSite,
+          sourceUrl : data.sourceUrl,
+          createdBy : data.createdBy,
+          forkedCount : 0,
+        })
+        await forked.addTag(data.tags.map(tag => tag.id))
         await user.addRecipe(forked)
         if(recipe.userId !== req.user.id){
           const newForkedCount = recipe.forkedCount + 1
