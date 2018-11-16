@@ -17,14 +17,18 @@ describe(`The User model`, () => {
         User.create({
           email : `creatorDeleted@theirAccount.com`,
           password : `pw`,
+          userName : `DeletedAccount`,
         }),
         User.create({
           email : `testUser@example.com`,
           password : `pw`,
+          userName : `testUser`,
         }),
         User.create({
           email : `secondUser@example.com`,
           password : `pw`,
+          userName : `secondUser`,
+
         }),
         Recipe.create({
           text : `text1`,
@@ -60,6 +64,7 @@ describe(`The User model`, () => {
     it(`email`, () => expect(testUser.email).not.to.be.an(`undefined`))
     it(`password`, () => expect(testUser.password).not.to.be.an(`undefined`))
     it(`salt`, () => expect(testUser.salt).not.to.be.an(`undefined`))
+    it(`userName`, () => expect(testUser.userName).not.to.be.an(`undefined`))
   })
 
   describe(`Each field validates and accepts only the correct data types`, () => {
@@ -73,7 +78,7 @@ describe(`The User model`, () => {
         return expect(nonString()).to.be.rejectedWith(`string violation: email cannot be an array or an object`)
       })
       it(`rejects duplicate emails`, () => {
-        const duplicate = () => User.create({email : `testUser@example.com`, password : `pw`})
+        const duplicate = () => User.create({email : `testUser@example.com`, password : `pw`, userName : `duplicate`})
         return expect(duplicate()).to.be.rejectedWith(`Validation error`)
       })
       it(`rejects non-email strings`, () => {
@@ -93,6 +98,33 @@ describe(`The User model`, () => {
       })
       it(`'s contents are hidden in a function`, () => {
         expect(testUser.password).to.be.a(`function`)
+      })
+    })
+
+    describe(`userName`, () => {
+      it(`is required`, () => {
+        const none = () => User.create({})
+        return expect(none()).to.be.rejectedWith(`notNull Violation: user.userName cannot be null`)
+      })
+      it(`accepts only strings`, () => {
+        const nonString = () => User.create({userName : []})
+        return expect(nonString()).to.be.rejectedWith(`string violation: userName cannot be an array or an object`)
+      })
+      it(`rejects duplicate emails`, () => {
+        const duplicate = () => User.create({email : `thirdUser@example.com`, password : `pw`, userName : `testUser`})
+        return expect(duplicate()).to.be.rejectedWith(`Validation error`)
+      })
+      it(`rejects non-alphanumeric strings`, () => {
+        const nonAlphaNum = () => User.create({email : `thirdUser@example.com`, password : `pw`, userName : `test_User`})
+        return expect(nonAlphaNum()).to.be.rejectedWith(`Validation isAlphanumeric on userName failed`)
+      })
+      it(`rejects strings shorter than 5 characters`, () => {
+        const tooShort = () => User.create({email : `thirdUser@example.com`, password : `pw`, userName : `test`})
+        return expect(tooShort()).to.be.rejectedWith(`Validation len on userName failed`)
+      })
+      it(`rejects strings longer than 20 characters`, () => {
+        const tooLong = () => User.create({email : `thirdUser@example.com`, password : `pw`, userName : `testtesttesttesttest1`})
+        return expect(tooLong()).to.be.rejectedWith(`Validation len on userName failed`)
       })
     })
 
