@@ -26,6 +26,15 @@ const User = db.define(`user`, {
       return () => this.getDataValue(`salt`)
     },
   },
+  userName : {
+    type : Sequelize.STRING,
+    unique : true,
+    allowNull : false,
+    validate : {
+      isAlphanumeric : true,
+      len : [5, 20],
+    },
+  },
 })
 
 // Instance methods
