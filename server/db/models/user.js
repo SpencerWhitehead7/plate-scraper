@@ -2,6 +2,7 @@ const Sequelize = require(`sequelize`)
 const crypto = require(`crypto`)
 
 const db = require(`../database`)
+const Recipe = require(`./recipe`)
 
 const User = db.define(`user`, {
   email : {
@@ -53,7 +54,23 @@ const setSaltAndPassword = user => {
   }
 }
 
+const transferCreatedBy = async user => {
+  try{
+    await Recipe.update({
+      createdBy : 1,
+    }, {
+      where : {createdBy : user.id},
+      returning : true,
+      plain : true,
+    })
+  }catch(error){
+    console.log(error)
+  }
+}
+
 User.beforeCreate(setSaltAndPassword)
 User.beforeUpdate(setSaltAndPassword)
+
+User.beforeDestroy(transferCreatedBy)
 
 module.exports = User
