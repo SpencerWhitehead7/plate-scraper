@@ -28,17 +28,13 @@ describe(`API Route User: /api/tag`, () => {
       await RecipeTraits.sync({force : true})
       await Tag.sync({force : true})
       await User.sync({force : true})
-      await Promise.all([
-        agent1.post(`/auth/signup`).send(userCred),
-        agent2.post(`/auth/signup`).send(user2Cred),
-      ])
-      await Promise.all([
-        agent1.post(`/api/recipe`).send({
-          text : `text`,
-          title : `title`,
-        }),
-        Tag.create({name : `testone`}),
-      ])
+      await agent1.post(`/auth/signup`).send(userCred)
+      await agent2.post(`/auth/signup`).send(user2Cred)
+      await agent1.post(`/api/recipe`).send({
+        text : `text`,
+        title : `title`,
+      })
+      await Tag.create({name : `testone`})
     }catch(err){
       console.log(err)
     }

@@ -13,36 +13,32 @@ describe(`The User model`, () => {
     try{
       await Recipe.sync({force : true})
       await User.sync({force : true})
-      const [dummyAct, tu1, tu2, testRecipe1, testRecipe2] = await Promise.all([
-        User.create({
-          email : `creatorDeleted@theirAccount.com`,
-          password : `pw`,
-          userName : `DeletedAccount`,
-        }),
-        User.create({
-          email : `testUser@example.com`,
-          password : `pw`,
-          userName : `testUser`,
-        }),
-        User.create({
-          email : `secondUser@example.com`,
-          password : `pw`,
-          userName : `secondUser`,
+      await User.create({
+        email : `creatorDeleted@theirAccount.com`,
+        password : `pw`,
+        userName : `DeletedAccount`,
+      })
+      testUser = await User.create({
+        email : `testUser@example.com`,
+        password : `pw`,
+        userName : `testUser`,
+      })
+      secondUser = await User.create({
+        email : `secondUser@example.com`,
+        password : `pw`,
+        userName : `secondUser`,
 
-        }),
-        Recipe.create({
-          text : `text1`,
-          title : `title1`,
-          createdBy : 2,
-        }),
-        Recipe.create({
-          text : `text2`,
-          title : `title2`,
-          createdBy : 2,
-        }),
-      ])
-      testUser = tu1
-      secondUser = tu2
+      })
+      const testRecipe1 = await Recipe.create({
+        text : `text1`,
+        title : `title1`,
+        createdBy : 2,
+      })
+      const testRecipe2 = await Recipe.create({
+        text : `text2`,
+        title : `title2`,
+        createdBy : 2,
+      })
       await testUser.addRecipe(testRecipe1)
       await secondUser.addRecipe(testRecipe2)
     }catch(err){

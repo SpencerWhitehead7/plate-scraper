@@ -9,6 +9,7 @@ describe(`The Recipe model`, () => {
   let testRecipe = null
   before(async () => {
     try{
+      await Recipe.sync({force : true})
       testRecipe = await Recipe.create({
         text : `recipe`,
         title : `title`,

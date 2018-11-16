@@ -9,6 +9,7 @@ describe(`The Tag model`, () => {
   let testTag = null
   before(async () => {
     try{
+      await Tag.sync({force : true})
       testTag = await Tag.create({name : `tagname`})
     }catch(err){
       console.log(err)

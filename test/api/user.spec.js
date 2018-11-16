@@ -24,24 +24,20 @@ describe(`API Route User: /api/user`, () => {
     try{
       await Recipe.sync({force : true})
       await User.sync({force : true})
-      await Promise.all([
-        agent1.post(`/auth/signup`).send(userCred),
-        agent2.post(`/auth/signup`).send(user2Cred),
-      ])
-      await Promise.all([
-        agent1.post(`/api/recipe`).send({
-          text : `text1`,
-          title : `title1`,
-        }),
-        agent1.post(`/api/recipe`).send({
-          text : `text2`,
-          title : `title2`,
-        }),
-        agent2.post(`/api/recipe`).send({
-          text : `text3`,
-          title : `title3`,
-        }),
-      ])
+      await agent1.post(`/auth/signup`).send(userCred)
+      await agent2.post(`/auth/signup`).send(user2Cred)
+      await agent1.post(`/api/recipe`).send({
+        text : `text1`,
+        title : `title1`,
+      })
+      await agent1.post(`/api/recipe`).send({
+        text : `text2`,
+        title : `title2`,
+      })
+      await agent2.post(`/api/recipe`).send({
+        text : `text3`,
+        title : `title3`,
+      })
     }catch(err){
       console.log(err)
     }
