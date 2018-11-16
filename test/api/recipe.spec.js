@@ -171,6 +171,37 @@ describe(`API Route Recipe: /api/recipe`, () => {
     })
   })
 
+  describe(`/fork/:id`, () => {
+    describe(`POST`, () => {
+      it(`makes a copy of the recipe and saves it to the user's account`, async () => {
+        await agent2.post(`/api/recipe/fork/1`)
+        const userTwosRecipes = await Recipe.findAll({where : {userId : 2}})
+        expect(userTwosRecipes.length).to.equal(1)
+        expect(userTwosRecipes[0].userId).to.equal(2)
+        expect(userTwosRecipes[0].createdBy).to.equal(1)
+      })
+      it(`rejects unauthenticated users`, async () => {
+        const failedRes = await request(app).post(`/api/recipe/fork/1`)
+        expect(failedRes.status).to.equal(401)
+        expect(failedRes.text).to.equal(`Not logged in`)
+      })
+      it(`rejects attempts to fork non-existant recipes`, async () => {
+        const failedRes = await agent2.post(`/api/recipe/fork/100`)
+        expect(failedRes.status).to.equal(404)
+        expect(failedRes.text).to.equal(`Recipe not found`)
+      })
+      it(`if the user is not the recipe's creator, it increments the recipe's forkedCount`, async () => {
+        const forkedRecipe = await Recipe.findByPk(1)
+        expect(forkedRecipe.forkedCount).to.equal(1)
+      })
+      it(`if the user is the recipe's creator, it does not increment the recipe's forkedCount`, async () => {
+        await agent1.post(`/api/recipe/fork/1`)
+        const forkedRecipe = await Recipe.findByPk(1)
+        expect(forkedRecipe.forkedCount).to.equal(1)
+      })
+    })
+  })
+
   describe(`/:id`, () => {
     describe(`PUT`, () => {
       let res = null
@@ -242,7 +273,7 @@ describe(`API Route Recipe: /api/recipe`, () => {
       it(`deletes a recipe`, async () => {
         const recipe = await Recipe.findAll()
         expect(res.status).to.equal(200)
-        expect(recipe.length).to.equal(2)
+        expect(recipe.length).to.equal(4)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
         const failedRes = await request(app).delete(`/api/recipe/2`)
