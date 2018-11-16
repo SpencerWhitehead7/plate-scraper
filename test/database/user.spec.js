@@ -9,12 +9,15 @@ const expect = chai.expect
 describe(`The User model`, () => {
   let testUser = null
   let secondUser = null
-  let testRecipe1 = null
   before(async () => {
     try{
       await Recipe.sync({force : true})
       await User.sync({force : true})
-      const [tu1, tu2, r1] = await Promise.all([
+      const [dummyAct, tu1, tu2, testRecipe1, testRecipe2] = await Promise.all([
+        User.create({
+          email : `creatorDeleted@theirAccount.com`,
+          password : `pw`,
+        }),
         User.create({
           email : `testUser@example.com`,
           password : `pw`,
@@ -26,7 +29,7 @@ describe(`The User model`, () => {
         Recipe.create({
           text : `text1`,
           title : `title1`,
-          createdBy : 1,
+          createdBy : 2,
         }),
         Recipe.create({
           text : `text2`,
@@ -36,8 +39,8 @@ describe(`The User model`, () => {
       ])
       testUser = tu1
       secondUser = tu2
-      testRecipe1 = r1
-      await testUser.setRecipes([testRecipe1])
+      await testUser.addRecipe(testRecipe1)
+      await secondUser.addRecipe(testRecipe2)
     }catch(err){
       console.log(err)
     }
@@ -125,6 +128,30 @@ describe(`The User model`, () => {
         expect(testUser.salt()).not.to.equal(oldSalt)
       })
     })
+
+    describe(`Deletion behaviors`, () => {
+      let remaining = null
+      let dummy = null
+      before(async () => {
+        try{
+          const user = await User.findByPk(2)
+          await user.destroy()
+          remaining = await Recipe.findAll()
+          dummy = await User.findByPk(1)
+        }catch(error){
+          console.log(error)
+        }
+      })
+      it(`deletes the user's recipes`, () => {
+        expect(remaining.length).to.equal(1)
+        expect(remaining[0].id).to.equal(2)
+        expect(remaining[0].id).to.equal(2)
+      })
+      it(`transfers forked recipes' createdBy attributes to the dummy account`, () => {
+        expect(remaining[0].createdBy).to.equal(1)
+        expect(dummy.email).to.equal(`creatorDeleted@theirAccount.com`)
+      })
+    })
   })
 
   describe(`Instance methods`, () => {
@@ -134,15 +161,6 @@ describe(`The User model`, () => {
       })
       it(`returns false if the password is incorrect`, () => {
         expect(testUser.correctPassword(`wrongpw`)).to.be.equal(false)
-      })
-    })
-    describe(`on deletion`, () => {
-      it(`deletes the user's recipes`, async () => {
-        const user = await User.findByPk(1)
-        await user.destroy()
-        const remaining = await Recipe.findAll()
-        expect(remaining.length).to.equal(1)
-        expect(remaining[0].id).to.equal(2)
       })
     })
   })
