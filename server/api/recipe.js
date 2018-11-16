@@ -1,5 +1,5 @@
 const router = require(`express`).Router()
-const {Recipe, Tag} = require(`../db/models`)
+const {Recipe, Tag, User} = require(`../db/models`)
 
 const {isAuthenticated} = require(`../authenticationLogic`)
 
@@ -85,6 +85,35 @@ router.get(`/bytag`, async (req, res, next) => {
     console.log(error)
   }
 })
+
+// Post /api/recipe/fork/:id
+router.post(`/fork/:id`,
+  isAuthenticated,
+  async (req, res, next) => {
+    try{
+      const recipe = await Recipe.findByPk(req.params.id)
+      const user = await User.findByPk(req.user.id)
+      if(recipe){
+        const data = JSON.parse(JSON.stringify(recipe.dataValues))
+        delete data.id
+        delete data.userId
+        data.forkedCount = 0
+        const forked = await Recipe.create(data)
+        await user.addRecipe(forked)
+        if(recipe.userId !== req.user.id){
+          const newForkedCount = recipe.forkedCount + 1
+          await recipe.update({forkedCount : newForkedCount})
+        }
+        res.json(user)
+      }else{
+        const error = new Error(`Recipe not found`)
+        error.status = 404
+        next(error)
+      }
+    }catch(error){
+      next(error)
+    }
+  })
 
 // PUT /api/recipe/:id
 router.put(`/:id`,
