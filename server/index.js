@@ -71,7 +71,7 @@ app.use(`/api`, api)
 app.use(`/auth`, auth)
 
 // All other requests
-app.get(`/`, (req, res) => {
+app.get(`*`, (req, res) => {
   res.sendFile(path.join(__dirname, `../public/index.html`))
 })
 
