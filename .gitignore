@@ -8,8 +8,11 @@ public/bundle.js.map
 # NPM errors
 npm-debug.log
 
-#Secrets
+# Secrets
 secrets.js
+
+# Files being stored in firebase
+firebase-resources
 
 # Personal notefile
 ___.txt
