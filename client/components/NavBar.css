@@ -1,0 +1,56 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  height: 4vh;
+  background-color: #FBF8F9;
+  border-bottom: 1px solid #745941;
+}
+
+.logo {
+  display: inline-block;
+  height: 4vh;
+  vertical-align: middle;
+}
+
+.link {
+  display: inline-block;
+  height: 100%;
+  background-color: #745941;
+  color: #FBF8F9;
+  border: 1px solid #745941;
+  border-radius: 3px;
+  padding: 0rem 1rem;
+  vertical-align: middle;
+  font-size: 2.5rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link:hover {
+  background-color: #FBF8F9;
+  color: #745941;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  width: 100%;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content .link {
+  display: block;
+  text-align: center;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
