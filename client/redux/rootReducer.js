@@ -7,10 +7,12 @@ const initialState = {}
 // Action types
 const A = {
   GET : `GET_USER`,
+  REMOVE : `REMOVE_USER`,
 }
 
 // Action creators
 const getUser = user => racf(A.GET, user)
+const removeUser = () => racf(A.REMOVE)
 
 // Thunk creators
 export const me = () => async dispatch => {
@@ -33,12 +35,23 @@ export const auth = (email, password, method) => async dispach => {
   }
 }
 
+export const logout = () => async dispatch => {
+  try{
+    await axios.post(`/auth/logout`)
+    dispatch(removeUser())
+  }catch(err){
+    console.log(err)
+  }
+}
+
 // const reducer = combineReducers({}}
 
 const reducer = (state = initialState, action) => {
   switch(action.type){
     case A.GET:
       return action.user
+    case A.REMOVE:
+      return initialState
     default:
       return state
   }
