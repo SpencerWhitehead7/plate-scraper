@@ -24,6 +24,15 @@ export const me = () => async dispatch => {
   }
 }
 
+export const auth = (email, password, method) => async dispach => {
+  try{
+    const {data} = await axios.post(`/auth/${method}`, {email, password})
+    dispach(getUser(data))
+  }catch(err){
+    console.log(err)
+  }
+}
+
 // const reducer = combineReducers({}}
 
 const reducer = (state = initialState, action) => {
