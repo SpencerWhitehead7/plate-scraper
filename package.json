@@ -31,6 +31,7 @@
     "react-router-dom": "^4.2.2",
     "react-textarea-autosize": "^7.1.0-1",
     "redux": "^4.0.1",
+    "redux-action-creator-factory": "^1.0.3",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
@@ -50,7 +51,7 @@
     "style-loader": "^0.23.1",
     "supertest": "^3.3.0",
     "volleyball": "^1.5.1",
-    "webpack": "^4.26.0",
+    "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2"
   }
 }
