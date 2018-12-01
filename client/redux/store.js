@@ -5,12 +5,16 @@ import reducer from './rootReducer'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
+const logger = createLogger({
+  collapsed : true,
+})
+
 const store = createStore(
   reducer,
   composeEnhancers(
     applyMiddleware(
       thunkMiddleware,
-      createLogger()
+      logger,
     )
   )
 )
