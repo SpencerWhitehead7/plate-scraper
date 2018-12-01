@@ -106,7 +106,7 @@ describe(`The User model`, () => {
         const nonString = () => User.create({userName : []})
         return expect(nonString()).to.be.rejectedWith(`string violation: userName cannot be an array or an object`)
       })
-      it(`rejects duplicate emails`, () => {
+      it(`rejects duplicate usernames`, () => {
         const duplicate = () => User.create({email : `thirdUser@example.com`, password : `pw`, userName : `testUser`})
         return expect(duplicate()).to.be.rejectedWith(`Validation error`)
       })
