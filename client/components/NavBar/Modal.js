@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
 
+import LoginForm from './LoginForm'
+
 import s from './NavBar.css'
 
 const Modal = props => {
   const {toggleModal} = props
-  const [email, setEmail] = useState(``)
-  const [password, setPassword] = useState(``)
   return (
     <div
       className={s.modal}
@@ -15,13 +15,9 @@ const Modal = props => {
         className={s.modalMain}
         onClick={event => {event.stopPropagation()}}
       >
-        {/* forms for logging in and signing up also thunks somehow */}
-        <button
-          type="button"
-          onClick={toggleModal}
-        >
-          Close
-        </button>
+        <LoginForm
+          toggleModal={toggleModal}
+        />
       </section>
     </div>
   )
