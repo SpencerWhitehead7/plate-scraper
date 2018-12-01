@@ -3,20 +3,20 @@ import axios from 'axios'
 
 const initialState = {
   user : {},
-  loginError : {},
+  authError : {},
 }
 
 // Action types
 const A = {
   GET : `GET_USER`,
   REMOVE : `REMOVE_USER`,
-  LOGIN_ERROR : `LOGIN_ERROR`,
+  AUTH_ERROR : `AUTH_ERROR`,
 }
 
 // Action creators
 const getUser = user => ({type : A.GET, user})
 const removeUser = () => ({type : A.REMOVE})
-const loginError = err => ({type : A.LOGIN_ERROR, err})
+const authError = err => ({type : A.AUTH_ERROR, err})
 
 // Thunk creators
 export const me = () => async dispatch => {
@@ -29,12 +29,22 @@ export const me = () => async dispatch => {
   }
 }
 
-export const auth = (email, password, method) => async dispatch => {
+export const signup = (email, userName, password) => async dispatch => {
   try{
-    const {data} = await axios.post(`/auth/${method}`, {email, password})
+    const {data} = await axios.post(`/auth/signup`, {email, userName, password})
     dispatch(getUser(data))
   }catch(err){
-    dispatch(loginError(err.response))
+    dispatch(authError(err.response))
+    console.log(err)
+  }
+}
+
+export const login = (email, password) => async dispatch => {
+  try{
+    const {data} = await axios.post(`/auth/login`, {email, password})
+    dispatch(getUser(data))
+  }catch(err){
+    dispatch(authError(err.response))
     console.log(err)
   }
 }
@@ -53,11 +63,11 @@ export const logout = () => async dispatch => {
 const reducer = (state = initialState, action) => {
   switch(action.type){
     case A.GET:
-      return {...state, user : action.user, loginError : {}}
+      return {...state, user : action.user, authError : {}}
     case A.REMOVE:
       return initialState
-    case A.LOGIN_ERROR:
-      return {...state, loginError : action.err}
+    case A.AUTH_ERROR:
+      return {...state, authError : action.err}
     default:
       return state
   }

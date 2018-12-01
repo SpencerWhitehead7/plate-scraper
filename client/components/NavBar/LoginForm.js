@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
 
-import {auth} from '../../redux/rootReducer'
+import {login} from '../../redux/rootReducer'
 
 import s from './NavBar.css'
 
 const LoginForm = props => {
-  const {toggleModal, user, loginError} = props
+  const {toggleModal, user, authError} = props
   const [email, setEmail] = useState(``)
   const [password, setPassword] = useState(``)
   const [err, setErr] = useState({})
@@ -16,7 +16,7 @@ const LoginForm = props => {
     if(!email || !password){
       setErr({missingField : true})
     }else{
-      setErr({...loginError})
+      setErr({...authError})
       props.login(email, password)
     }
   }
@@ -26,7 +26,7 @@ const LoginForm = props => {
       {/* this jank bs closes modal on successful login */}
       {user.id && toggleModal()}
       {/* this jank bs sets error states in conjunction with redux */}
-      {loginError.status !== err.status && setErr({...err, ...loginError})}
+      {authError.status !== err.status && setErr({...err, ...authError})}
       {err.status &&
       <span>
         {`Error: ${err.status} ${err.statusText}`}
@@ -64,11 +64,11 @@ const LoginForm = props => {
 
 const mstp = state => ({
   user : state.user,
-  loginError : state.loginError,
+  authError : state.authError,
 })
 
 const mdtp = dispatch => ({
-  login : (email, password) => dispatch(auth(email, password, `login`)),
+  login : (email, password) => dispatch(login(email, password)),
 })
 
 export default connect(mstp, mdtp)(LoginForm)
