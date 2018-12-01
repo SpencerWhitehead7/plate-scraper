@@ -9,7 +9,6 @@ router.post(`/signup`,
   isAlreadyAuthenticated,
   async (req, res, next) => {
     try{
-      req.body.userName = req.body.userName.replace(` `, ``)
       const user = await User.create(req.body)
       req.login(user, err => err ? next(err) : res.json(user))
     }catch(err){
