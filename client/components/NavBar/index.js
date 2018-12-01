@@ -1,17 +1,21 @@
 import React, {useState} from 'react'
 import {NavLink} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import Modal from './Modal'
+
+import {logout} from '../../redux/rootReducer'
 
 import urls from '../../urls'
 import s from './NavBar.css'
 
-const Navbar = () => {
+const Navbar = props => {
   const [showModal, setShowModal] = useState(false)
   const toggleModal = () => {setShowModal(!showModal)}
 
   return (
     <React.Fragment>
+
       <nav className={s.navbar}>
         <div className={s.dropdown}>
           <NavLink exact to="/">
@@ -31,40 +35,51 @@ const Navbar = () => {
         </div>
 
         <NavLink exact to="/search" className={s.link}>
-      Search
+          Search
         </NavLink>
 
-        {/* display conditionally based on logged-in state */}
-        <div className={s.dropdown}>
-          <NavLink exact to="/account" className={s.link}>
-        My&nbsp;Account
-          </NavLink>
-          <div className={s.dropdownContent}>
+        {props.user.id ?
+          <div className={s.dropdown}>
             <NavLink exact to="/account" className={s.link}>
-          Recipes
+              My&nbsp;Account
             </NavLink>
-            <NavLink exact to="/settings" className={s.link}>
-          Settings
-            </NavLink>
-            {/* log you out on click; maybe redirect you */}
-            <div className={s.link}>Logout</div>
+            <div className={s.dropdownContent}>
+              <NavLink exact to="/account" className={s.link}>
+                Recipes
+              </NavLink>
+              <NavLink exact to="/settings" className={s.link}>
+                Settings
+              </NavLink>
+              <div
+                className={s.link}
+                onClick={props.logout}
+                // maybe logout should also redirect you if you're on a private page
+              >
+                Logout
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* open a "log you in" modal, */}
-        <div
-          className={s.link}
-          onClick={toggleModal}
-        >
-      Signup&nbsp;/&nbsp;Login
-        </div>
+          :
+          <div
+            className={s.link}
+            onClick={toggleModal}
+          >
+            Signup&nbsp;/&nbsp;Login
+          </div>}
       </nav>
-      {showModal && <Modal
-        toggleModal={toggleModal}
-      />}
-    </React.Fragment>
 
+      {showModal && <Modal toggleModal={toggleModal}/>}
+
+    </React.Fragment>
   )
 }
 
-export default Navbar
+const mstp = state => ({
+  user : state,
+})
+
+const mdtp = dispatch => ({
+  logout : () => dispatch(logout()),
+})
+
+export default connect(mstp, mdtp)(Navbar)
