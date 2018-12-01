@@ -1,6 +1,5 @@
 // import { combineReducers} from 'redux'
 import axios from 'axios'
-import racf from 'redux-action-creator-factory'
 
 const initialState = {}
 
@@ -11,8 +10,8 @@ const A = {
 }
 
 // Action creators
-const getUser = user => racf(A.GET, user)
-const removeUser = () => racf(A.REMOVE)
+const getUser = user => ({type : A.GET, user})
+const removeUser = () => ({type : A.REMOVE})
 
 // Thunk creators
 export const me = () => async dispatch => {
@@ -26,10 +25,10 @@ export const me = () => async dispatch => {
   }
 }
 
-export const auth = (email, password, method) => async dispach => {
+export const auth = (email, password, method) => async dispatch => {
   try{
     const {data} = await axios.post(`/auth/${method}`, {email, password})
-    dispach(getUser(data))
+    dispatch(getUser(data))
   }catch(err){
     console.log(err)
   }

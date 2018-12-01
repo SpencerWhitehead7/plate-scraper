@@ -31,7 +31,6 @@
     "react-router-dom": "^4.2.2",
     "react-textarea-autosize": "^7.1.0-1",
     "redux": "^4.0.1",
-    "redux-action-creator-factory": "^1.0.3",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
