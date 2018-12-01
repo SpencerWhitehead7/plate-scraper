@@ -14,7 +14,7 @@ const Navbar = props => {
   const toggleModal = () => {setShowModal(!showModal)}
 
   return (
-    <React.Fragment>
+    <>
 
       <nav className={s.navbar}>
         <div className={s.dropdown}>
@@ -70,12 +70,12 @@ const Navbar = props => {
 
       {showModal && <Modal toggleModal={toggleModal}/>}
 
-    </React.Fragment>
+    </>
   )
 }
 
 const mstp = state => ({
-  user : state,
+  user : state.user,
 })
 
 const mdtp = dispatch => ({

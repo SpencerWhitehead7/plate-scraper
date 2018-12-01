@@ -6,7 +6,7 @@ import Warning from './Warning'
 const UrlForm = props => {
   const {handleSubmit, handleChange, url} = props
   return (
-    <React.Fragment>
+    <>
       {
         url.toLowerCase().includes(`seriouseats.com`) && !url.toLowerCase().includes(`seriouseats.com/recipes`) &&
         <Warning err="Make sure your url is from seriouseats.com/recipes, not just seriouseats.com"/>
@@ -22,7 +22,7 @@ const UrlForm = props => {
         />
         <SubmitButton url={url}/>
       </form>
-    </React.Fragment>
+    </>
   )
 }
 

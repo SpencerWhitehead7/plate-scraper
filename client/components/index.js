@@ -7,13 +7,13 @@ import NoMatch from './noMatch'
 
 const Main = () => (
   <BrowserRouter>
-    <React.Fragment>
+    <>
       <NavBar/>
       <Switch>
         <Route exact path="/" component={Scrape}/>
         <Route component={NoMatch}/>
       </Switch>
-    </React.Fragment>
+    </>
   </BrowserRouter>
 )
 
