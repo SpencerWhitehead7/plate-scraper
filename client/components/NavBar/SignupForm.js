@@ -1,23 +1,24 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
 
-import {login} from '../../redux/rootReducer'
+import {signup} from '../../redux/rootReducer'
 
 import s from './NavBar.css'
 
-const LoginForm = props => {
+const SignupForm = props => {
   const {authError} = props
   const [email, setEmail] = useState(``)
+  const [userName, setUserName] = useState(``)
   const [password, setPassword] = useState(``)
   const [err, setErr] = useState({})
 
   const handleSubmit = evt => {
     evt.preventDefault()
-    if(!email || !password){
+    if(!email || !password || !userName){
       setErr({missingField : true})
     }else{
       setErr({...authError})
-      props.login(email, password)
+      props.signup(email, userName, password)
     }
   }
 
@@ -43,6 +44,16 @@ const LoginForm = props => {
           />
         </label>
         <label>
+          UserName:
+          {err.missingField && !userName && <span>UserName Required</span>}
+          <input
+            type="text"
+            name="userName"
+            value={userName}
+            onChange={evt => setUserName(evt.target.value)}
+          />
+        </label>
+        <label>
           Password:
           {err.missingField && !password && <span>Password Required</span>}
           <input
@@ -53,7 +64,7 @@ const LoginForm = props => {
           />
         </label>
         <button type="submit">
-          Login
+          Signup
         </button>
       </form>
     </>
@@ -65,7 +76,7 @@ const mstp = state => ({
 })
 
 const mdtp = dispatch => ({
-  login : (email, password) => dispatch(login(email, password)),
+  signup : (email, userName, password) => dispatch(signup(email, userName, password)),
 })
 
-export default connect(mstp, mdtp)(LoginForm)
+export default connect(mstp, mdtp)(SignupForm)

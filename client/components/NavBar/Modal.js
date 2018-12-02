@@ -1,26 +1,35 @@
-import React, {useState} from 'react'
+import React from 'react'
+import {connect} from 'react-redux'
 
 import LoginForm from './LoginForm'
+import SignupForm from './SignupForm'
 
 import s from './NavBar.css'
 
 const Modal = props => {
-  const {toggleModal} = props
+  const {toggleModal, user} = props
   return (
-    <div
-      className={s.modal}
-      onClick={toggleModal}
-    >
-      <section
-        className={s.modalMain}
-        onClick={event => {event.stopPropagation()}}
+    <>
+      {user.id && toggleModal()}
+      <div
+        className={s.modal}
+        onClick={toggleModal}
       >
-        <LoginForm
-          toggleModal={toggleModal}
-        />
-      </section>
-    </div>
+        <section
+          className={s.modalMain}
+          onClick={event => {event.stopPropagation()}}
+        >
+          <LoginForm/>
+          <SignupForm/>
+        </section>
+      </div>
+    </>
   )
 }
 
-export default Modal
+const mstp = state => ({
+  user : state.user,
+})
+
+export default connect(mstp, null)(Modal)
+
