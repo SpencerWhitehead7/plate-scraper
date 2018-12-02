@@ -1,12 +1,20 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import NavBar from './NavBar'
 import Scrape from './scrape'
 import NoMatch from './noMatch'
 
-const Main = () => (
-  <BrowserRouter>
+import {me} from '../redux/rootReducer'
+
+const Main = props => {
+  useEffect(() => {
+    props.checkUser()
+  })
+
+  return (
+    <BrowserRouter>
     <>
       <NavBar/>
       <Switch>
@@ -14,7 +22,13 @@ const Main = () => (
         <Route component={NoMatch}/>
       </Switch>
     </>
-  </BrowserRouter>
-)
+    </BrowserRouter>
+  )
+}
 
-export default Main
+const mdtp = dispatch => ({
+  checkUser : () => dispatch(me()),
+})
+
+
+export default connect(null, mdtp)(Main)
