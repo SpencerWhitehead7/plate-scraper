@@ -22,14 +22,14 @@ const Navbar = props => {
             <img src={urls.logo} className={s.logo}/>
           </NavLink>
           <NavLink exact to="/" className={s.link}>
-        Add&nbsp;Recipe
+            Add&nbsp;Recipe
           </NavLink>
           <div className={s.dropdownContent}>
             <NavLink exact to="/" className={s.link}>
-          Scrape
+              Scrape
             </NavLink>
             <NavLink exact to="/upload" className={s.link}>
-          Upload
+              Upload
             </NavLink>
           </div>
         </div>

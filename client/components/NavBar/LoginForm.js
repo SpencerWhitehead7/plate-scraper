@@ -6,7 +6,7 @@ import {login} from '../../redux/rootReducer'
 import s from './NavBar.css'
 
 const LoginForm = props => {
-  const {authError} = props
+  const {loginError} = props
   const [email, setEmail] = useState(``)
   const [password, setPassword] = useState(``)
   const [err, setErr] = useState({})
@@ -14,9 +14,8 @@ const LoginForm = props => {
   const handleSubmit = evt => {
     evt.preventDefault()
     if(!email || !password){
-      setErr({missingField : true})
+      setErr({...err, missingField : true})
     }else{
-      setErr({...authError})
       props.login(email, password)
     }
   }
@@ -24,7 +23,7 @@ const LoginForm = props => {
   return (
     <>
       {/* this jank bs sets error states in conjunction with redux */}
-      {authError.status !== err.status && setErr({...err, ...authError})}
+      {loginError.status !== err.status && setErr({...err, ...loginError})}
       {err.status &&
       <span>
         {`Error: ${err.status} ${err.statusText}`}
@@ -61,7 +60,7 @@ const LoginForm = props => {
 }
 
 const mstp = state => ({
-  authError : state.authError,
+  loginError : state.loginError,
 })
 
 const mdtp = dispatch => ({
