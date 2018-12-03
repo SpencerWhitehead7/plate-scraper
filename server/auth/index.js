@@ -46,10 +46,8 @@ router.post(`/logout`,
   })
 
 // GET /auth/me
-router.get(`/me`,
-  isAuthenticated,
-  (req, res, next) => {
-    res.json(req.user)
-  })
+router.get(`/me`, (req, res, next) => {
+  res.json(req.user)
+})
 
 module.exports = router

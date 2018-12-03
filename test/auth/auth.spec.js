@@ -10,7 +10,7 @@ describe(`Auth Route: /auth`, () => {
   const userCred = {
     email : `testUser@example.com`,
     password : `pw`,
-    userName : `test User`,
+    userName : `testUser`,
   }
 
   beforeEach(async () => {
@@ -57,7 +57,7 @@ describe(`Auth Route: /auth`, () => {
     })
   })
 
-  describe(`the /login route`, () => {
+  describe(`/login`, () => {
     describe(`POST`, () => {
       it(`logs the user in if they provide correct credentials`, async () => {
         // using a one-off results in a lasting row in the sessions db
@@ -85,8 +85,7 @@ describe(`Auth Route: /auth`, () => {
       it(`logs the user out if the user is logged in`, async () => {
         await agent.post(`/auth/logout`)
         const res = await agent.get(`/auth/me`)
-        expect(res.status).to.equal(401)
-        expect(res.text).to.equal(`Not logged in`)
+        expect(res.body).to.equal(``)
       })
       it(`destroy's the user's session if the user is logged in`, async () => {
         const res = await agent.post(`/auth/logout`)
@@ -108,12 +107,12 @@ describe(`Auth Route: /auth`, () => {
 
   describe(`the /me route`, () => {
     describe(`GET`, () => {
-      it(`if the user is not logged in, it returns a 401 error`, async () => {
+      it(`if the user is not logged in, it returns 200 with no body`, async () => {
         const res = await request(app).get(`/auth/me`)
-        expect(res.status).to.equal(401)
-        expect(res.text).to.equal(`Not logged in`)
+        expect(res.status).to.equal(200)
+        expect(res.body).to.equal(``)
       })
-      it(`if the user is logged in, it returns the user's information`, async () => {
+      it(`if the user is logged in, it returns 200 with the user's information`, async () => {
         const res = await agent.get(`/auth/me`)
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)

@@ -28,10 +28,7 @@ export const me = () => async dispatch => {
     const user = data || initialState
     dispatch(getUser(user))
   }catch(err){
-    if(err.response.status !== 401){
-      console.log(err)
-    }
-    dispatch(getUser({}))
+    console.log(err)
   }
 }
 
