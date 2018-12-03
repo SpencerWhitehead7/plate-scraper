@@ -34,6 +34,7 @@ describe(`API Route User: /api/user`, () => {
         text : `text2`,
         title : `title2`,
       })
+      await agent1.post(`/api/tag`).send({name : `testtag`, recipeId : 1})
       await agent2.post(`/api/recipe`).send({
         text : `text3`,
         title : `title3`,
@@ -129,12 +130,24 @@ describe(`API Route User: /api/user`, () => {
   })
 
   describe(`/:id`, () => {
+    let res = null
+    before(async () => {
+      try{
+        res = await request(app).get(`/api/user/1`)
+      }catch(err){
+        console.log(err)
+      }
+    })
     describe(`GET`, () => {
-      it(`returns the user and all their recipes`, async () => {
-        const res = await request(app).get(`/api/user/1`)
+      it(`returns the user and all their recipes and all their recipes' tags`, () => {
         expect(res.status).to.equal(200)
         expect(res.body.email).to.equal(`new@example.com`)
+      })
+      it(`and all their recipes`, () => {
         expect(res.body.recipes.length).to.equal(2)
+      })
+      it(`and all their recipes' tags`, () => {
+        expect(res.body.recipes[0].tags.length).to.equal(1)
       })
     })
   })
