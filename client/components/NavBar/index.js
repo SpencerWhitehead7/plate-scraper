@@ -40,16 +40,10 @@ const Navbar = props => {
 
         {props.user.id ?
           <div className={s.dropdown}>
-            <NavLink exact to="/account" className={s.link}>
+            <NavLink exact to="/me" className={s.link}>
               My&nbsp;Account
             </NavLink>
             <div className={s.dropdownContent}>
-              <NavLink exact to="/account" className={s.link}>
-                Recipes
-              </NavLink>
-              <NavLink exact to="/settings" className={s.link}>
-                Settings
-              </NavLink>
               <div
                 className={s.link}
                 onClick={props.logout}
