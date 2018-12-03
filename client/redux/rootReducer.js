@@ -24,7 +24,7 @@ const loginError = err => ({type : A.LOGIN_ERROR, err})
 // Thunk creators
 export const me = () => async dispatch => {
   try{
-    const {data} = await axios.get(`auth/me`)
+    const {data} = await axios.get(`/auth/me`)
     const user = data || initialState
     dispatch(getUser(user))
   }catch(err){
