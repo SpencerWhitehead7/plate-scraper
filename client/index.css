@@ -1,3 +1,14 @@
 * {
   box-sizing: border-box;
 }
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 96vh;
+}
+
+.center-text {
+  text-align: center;
+}

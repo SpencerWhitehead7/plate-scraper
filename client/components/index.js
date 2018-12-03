@@ -4,7 +4,8 @@ import {connect} from 'react-redux'
 
 import NavBar from './NavBar'
 import Scrape from './scrape'
-import NoMatch from './noMatch'
+import Account from './Account'
+import PageFailure from './PageFailure'
 
 import {me} from '../redux/rootReducer'
 
@@ -15,13 +16,15 @@ const Main = props => {
 
   return (
     <BrowserRouter>
-    <>
-      <NavBar/>
-      <Switch>
-        <Route exact path="/" component={Scrape}/>
-        <Route component={NoMatch}/>
-      </Switch>
-    </>
+      <>
+        <NavBar/>
+        <Switch>
+          <Route exact path="/" component={Scrape}/>
+          <Route exact path="/me" component={Account}/>
+          <Route exact path="/user/:userId" component={Account}/>
+          <Route render={() => <PageFailure type="404"/>}/>
+        </Switch>
+      </>
     </BrowserRouter>
   )
 }
