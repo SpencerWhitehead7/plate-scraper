@@ -114,8 +114,7 @@ describe(`API Route User: /api/user`, () => {
       })
       it(`logs the user out`, async () => {
         const failedRes = await agent2.get(`/auth/me`)
-        expect(failedRes.status).to.equal(401)
-        expect(failedRes.text).to.equal(`Not logged in`)
+        expect(failedRes.body).to.equal(``)
       })
       it(`rejects unauthenticated users`, async () => {
         const failedRes = await request(app).delete(`/api/user`)
