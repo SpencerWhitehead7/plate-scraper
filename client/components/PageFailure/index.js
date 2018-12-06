@@ -10,8 +10,8 @@ const pageFailure = props => {
       title = `404 Page Not Found:`
       subtitle = `Oh no, there's nothing here!`
       break
-    case `501`:
-      title = `501 Unauthorized:`
+    case `401`:
+      title = `401 Unauthorized:`
       subtitle = `You must log in to see this!`
       break
     default:
