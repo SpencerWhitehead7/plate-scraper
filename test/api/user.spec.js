@@ -66,8 +66,12 @@ describe(`API Route User: /api/user`, () => {
           let user = await User.findOne({where : {email : `testUser@example.com`}})
           oldSalt = user.dataValues.salt
           res = await agent1.put(`/api/user`).send({
-            email : `new@example.com`,
-            salt : `new salt`,
+            newInfo : {
+              email : `new@example.com`,
+              salt : `new salt`,
+              id : 10,
+            },
+            password : `pw`,
           })
           user = await User.findOne({where : {email : `new@example.com`}})
           newSalt = user.dataValues.salt
@@ -86,6 +90,24 @@ describe(`API Route User: /api/user`, () => {
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(user).to.be.a(`null`)
+      })
+      it(`requires the user to submit their password to edit their info`, async () => {
+        const failedRes1 = await agent1.put(`/api/user`).send({
+          newInfo : {email : `new2@example.com`},
+          password : `anIncorrectPassword`,
+        })
+        const failedRes2 = await agent2.put(`/api/user`).send({
+          newInfo : {email : `new3@example.com`},
+        })
+        const failedUser1 = await User.findOne({where : {email : `new2@example.com`}})
+        const failedUser2 = await User.findOne({where : {email : `new3@example.com`}})
+        expect(failedRes1.status).to.equal(401)
+        expect(failedRes2.status).to.equal(401)
+        expect(failedUser1).to.be.a(`null`)
+        expect(failedUser2).to.be.a(`null`)
+      })
+      it(`does not allow the user to edit their id`, () => {
+        expect(res.body.id).to.equal(1)
       })
       it(`does not allow the user to edit salt`, () => {
         expect(oldSalt).to.equal(newSalt)
