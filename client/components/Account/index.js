@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import axios from 'axios'
 
 import Settings from './Settings'
+import RecipeRow from '../shared/RecipeRow'
 import PageFailure from '../PageFailure'
 
 import s from './Account.css'
@@ -25,7 +26,7 @@ const Account = props => {
       console.log(err)
     }
   }
-  useEffect(() => {fetchUser()}, [me])
+  useEffect(() => {fetchUser()}, [location])
 
 
   // console.log(props)
@@ -47,14 +48,17 @@ const Account = props => {
         </button>}
         {showSettings && <Settings/>}
         { // replace with an actual recipeRow comp
-          user.recipes && user.recipes.map(recipe => <div key={recipe.id}>{recipe.title}</div>)
+          user.recipes && user.recipes.map(recipe => (
+            <RecipeRow
+              key={recipe.id}
+              recipe={recipe}
+            />
+          ))
         }
       </main>
     )
   }
 }
-
-// add a 404 option for visiting the page of a user who does not exist
 
 const mstp = state => ({
   me : state.user,
