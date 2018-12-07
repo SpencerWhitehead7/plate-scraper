@@ -3,6 +3,7 @@ import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import axios from 'axios'
 
+import Settings from './Settings'
 import PageFailure from '../PageFailure'
 
 import s from './Account.css'
@@ -44,8 +45,7 @@ const Account = props => {
         >
           Settings
         </button>}
-        {/* Replace with settings comp that lets you change displayname, email, pw, etc */}
-        {showSettings && <h6>hi</h6>}
+        {showSettings && <Settings/>}
         { // replace with an actual recipeRow comp
           user.recipes && user.recipes.map(recipe => <div key={recipe.id}>{recipe.title}</div>)
         }
