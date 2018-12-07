@@ -8,8 +8,11 @@ import s from './Account.css'
 
 const LoginForm = props => {
   const [authentication, setAuthentication] = useState(``)
+  const [showEmail, setShowEmail] = useState(false)
   const [email, setEmail] = useState(``)
+  const [showUserName, setShowUserName] = useState(false)
   const [userName, setUserName] = useState(``)
+  const [showPassword, setShowPassword] = useState(false)
   const [password, setPassword] = useState(``)
   const [passwordConfirm, setPasswordConfirm] = useState(``)
 
@@ -44,15 +47,29 @@ const LoginForm = props => {
         />
         {!authentication && <span>Required</span>}
       </label>
-      <label>
+      <ShowHide
+        name="Email"
+        status={showEmail}
+        setStatus={setShowEmail}
+        setValue={() => setEmail(``)}
+      />
+      {showEmail &&
+        <label>
         Email:
-        <input
-          type="text"
-          name="email"
-          value={email}
-          onChange={evt => setEmail(evt.target.value)}
-        />
-      </label>
+          <input
+            type="text"
+            name="email"
+            value={email}
+            onChange={evt => setEmail(evt.target.value)}
+          />
+        </label>}
+      <ShowHide
+        name="Username"
+        status={showUserName}
+        setStatus={setShowUserName}
+        setValue={() => setUserName(``)}
+      />
+      {showUserName &&
       <label>
         Username:
         <input
@@ -61,28 +78,40 @@ const LoginForm = props => {
           value={userName}
           onChange={evt => setUserName(evt.target.value)}
         />
-      </label>
-      <label>
+      </label>}
+      <ShowHide
+        name="Password"
+        status={showPassword}
+        setStatus={setShowPassword}
+        setValue={() => {
+          setPassword(``)
+          setPasswordConfirm(``)
+        }}
+      />
+      {showPassword &&
+      <>
+        <label>
         Password:
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={evt => {
-            setPassword(evt.target.value)
-          }}
-        />
-      </label>
-      <label>
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={evt => {
+              setPassword(evt.target.value)
+            }}
+          />
+        </label>
+        <label>
         Confirm password:
-        <input
-          type="password"
-          name="passwordConfirm"
-          value={passwordConfirm}
-          onChange={evt => setPasswordConfirm(evt.target.value)}
-        />
-        {password !== passwordConfirm && <span>Passwords do not match</span>}
-      </label>
+          <input
+            type="password"
+            name="passwordConfirm"
+            value={passwordConfirm}
+            onChange={evt => setPasswordConfirm(evt.target.value)}
+          />
+          {password !== passwordConfirm && <span>Passwords do not match</span>}
+        </label>
+      </>}
       <button
         type="submit"
         disabled={!authentication || password !== passwordConfirm}
@@ -90,6 +119,21 @@ const LoginForm = props => {
         Edit Info
       </button>
     </form>
+  )
+}
+
+const ShowHide = props => {
+  const {name, status, setStatus, setValue} = props
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        setStatus(!status)
+        setValue()
+      }}
+    >
+      {status ? `Cancel` : `Change ${name}`}
+    </button>
   )
 }
 
