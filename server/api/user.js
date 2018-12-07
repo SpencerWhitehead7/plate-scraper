@@ -8,14 +8,20 @@ router.put(`/`,
   isAuthenticated,
   async (req, res, next) => {
     try{
-      const userInfo = JSON.parse(JSON.stringify(req.body))
-      delete userInfo.salt
-      const [, user] = await User.update(userInfo, {
-        where : {id : req.user.id},
-        returning : true,
-        plain : true,
-      })
-      res.json(user)
+      const newInfo = JSON.parse(JSON.stringify(req.body.newInfo))
+      const user = await User.findByPk(req.user.id)
+      if(req.body.password && user.correctPassword(req.body.password)){
+        delete newInfo.salt
+        delete newInfo.id
+        const [, updatedUser] = await User.update(newInfo, {
+          where : {id : req.user.id},
+          returning : true,
+          plain : true,
+        })
+        res.json(updatedUser)
+      }else{
+        res.sendStatus(401)
+      }
     }catch(error){
       next(error)
     }
