@@ -23,7 +23,7 @@ const Account = props => {
       console.log(err)
     }
   }
-  useEffect(() => {fetchUser()}, [location])
+  useEffect(() => {fetchUser()}, [me])
 
   return (
     user ?
