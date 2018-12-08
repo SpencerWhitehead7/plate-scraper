@@ -40,7 +40,7 @@ const Navbar = props => {
 
         {props.user.id ?
           <div className={s.dropdown}>
-            <NavLink exact to="/me" className={s.link}>
+            <NavLink exact to={`/user/${props.user.id}`} className={s.link}>
               My&nbsp;Account
             </NavLink>
             <div className={s.dropdownContent}>
