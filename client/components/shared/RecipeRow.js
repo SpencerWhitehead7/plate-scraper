@@ -5,7 +5,9 @@ const RecipeRow = props => {
   const {createdBy, forkedCount, id, sourceSite, tags, text, title, userId} = props.recipe
   return (
     <div>
-      <span>{`${id} : ${title} : ${sourceSite}`}</span>
+      <NavLink to={`/recipe/${id}`}>
+        {`${id} : ${title} : ${sourceSite}`}
+      </NavLink>
       {tags.length
         ? tags.map(tag => (
           <NavLink
@@ -24,7 +26,7 @@ const RecipeRow = props => {
         {`OwnerId: ${userId}`}
       </NavLink>
       <span>{`Forked ${forkedCount} times`}</span>
-      <span>{text.slice(0, 140)}</span>
+      <span>{`${text.slice(0, 140)}...`}</span>
 
     </div>
   )

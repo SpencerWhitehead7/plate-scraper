@@ -47,14 +47,12 @@ const Account = props => {
           Settings
         </button>}
         {showSettings && <Settings/>}
-        { // replace with an actual recipeRow comp
-          user.recipes && user.recipes.map(recipe => (
-            <RecipeRow
-              key={recipe.id}
-              recipe={recipe}
-            />
-          ))
-        }
+        {user.recipes && user.recipes.map(recipe => (
+          <RecipeRow
+            key={recipe.id}
+            recipe={recipe}
+          />
+        ))}
       </main>
     )
   }
