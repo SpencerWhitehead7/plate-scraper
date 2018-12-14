@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import NavBar from './NavBar'
 import Scrape from './scrape'
 import Account from './Account'
+import Recipe from './Recipe'
 import PageFailure from './PageFailure'
 
 import {me} from '../redux/rootReducer'
@@ -22,6 +23,7 @@ const Main = props => {
           <Route exact path="/" component={Scrape}/>
           <Route exact path="/me" component={Account}/>
           <Route exact path="/user/:userId" component={Account}/>
+          <Route exact path="/recipe/:recipeId" component={Recipe}/>
           <Route render={() => <PageFailure type="404"/>}/>
         </Switch>
       </>
