@@ -86,7 +86,7 @@ router.get(`/bytag`, async (req, res, next) => {
   }
 })
 
-// Post /api/recipe/fork/:id
+// POST /api/recipe/fork/:id
 router.post(`/fork/:id`,
   isAuthenticated,
   async (req, res, next) => {
@@ -130,7 +130,7 @@ router.put(`/:id`,
       const recipeInfo = {}
       if(text) recipeInfo.text = text
       if(title) recipeInfo.title = title
-      const [, recipes] = await Recipe.update(
+      await Recipe.update(
         recipeInfo,
         {
           where : {id : req.params.id},
@@ -138,7 +138,11 @@ router.put(`/:id`,
           plain : true,
         }
       )
-      res.json(recipes)
+      const recipe = await Recipe.findByPk(
+        req.params.id,
+        {include : [Tag]}
+      )
+      res.json(recipe)
     }catch(error){
       next(error)
     }
