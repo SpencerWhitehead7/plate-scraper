@@ -8,11 +8,10 @@ const DispMode = props => (
     Tags&nbsp;
     {props.recipe.tags ?
       props.recipe.tags.map(tag => (
-        // TODO add "to" for search page for that tag
-        // TODO create actual tag comp that deletes tag when clicked (if tag exists) or adds tag to tags (if adding)
+        // TODO create tag searchpage and send redirect there
         <NavLink
           key={tag.id}
-          to="/"
+          to={`/searchfortag${tag.name}`}
         >
           {`${tag.name} `}
         </NavLink>
