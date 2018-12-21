@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import {withRouter, NavLink} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import axios from 'axios'
-import TextAreaAutosize from 'react-textarea-autosize'
 
+import DispMode from './DispMode'
+import EditMode from './EditMode'
 import PageFailure from '../PageFailure'
 
 import s from './recipe.css'
@@ -22,7 +23,7 @@ const Account = props => {
       console.log(err)
     }
   }
-  useEffect(() => {fetchRecipe()}, [location, editMode])
+  useEffect(() => {fetchRecipe()}, [location])
   useEffect(() => {setIsMyRecipe(recipe.userId === me.id)}, [recipe, me])
 
   console.log(recipe)
@@ -35,24 +36,17 @@ const Account = props => {
             type="button"
             onClick={() => setEditMode(!editMode)}
           >
-            {editMode ? `Done` : `Edit`}
+            {editMode ? `Cancel` : `Edit`}
           </button>}
-        {`Tags `}
-        {recipe.tags ?
-          recipe.tags.map(tag => (
-          // TODO add "to" for search page for that tag
-            <NavLink
-              key={tag.id}
-              to="/"
-            >
-              {`${tag.name} `}
-            </NavLink>
-          ))
-          : `none`
+        {
+          editMode && isMyRecipe ? /* undoes edit mode if you log out while on page */
+            <EditMode
+              recipe={recipe}
+              setRecipe={setRecipe}
+              setEditMode={setEditMode}
+            /> :
+            <DispMode recipe={recipe}/>
         }
-        <div className={s.recipeText}>
-          {recipe.text}
-        </div>
       </main>
       :
       <PageFailure type="404"/>
