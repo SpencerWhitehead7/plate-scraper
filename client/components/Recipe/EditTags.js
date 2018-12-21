@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React from 'react'
+import {withRouter} from 'react-router-dom'
 import {WithContext as ReactTags} from 'react-tag-input'
 
 const delimiters = {
@@ -10,28 +11,26 @@ const delimiters = {
 
 const EditTags = props => {
   const {tags, setTags} = props
-  const [input, setInput] = useState(``)
 
   const handleDelete = i => {
-    console.log(i)
-    setTags(tags.filter((tag, index) => index !== i))
+    setTags(tags.filter((_, index) => index !== i))
   }
 
   const handleAddition = tag => {
-    console.log(tag)
-    // setState(state => ({tags : [...state.tags, tag]}))
-  }
-
-  const handleInputChange = change => {
-    // clean the input here
-    console.log(change)
+    tag.name = tag.name.toLowerCase().replace(/[^a-z]/gi, ``)
+    tag.id = tag.id.toLowerCase().replace(/[^a-z]/gi, ``)
+    tag.isNew = true // for reconciliation
+    // unfortunately, the API seems to lack any way to make this a truly controlled input
+    // so cleaning it onsubmit is the best I can do
+    setTags([...tags, tag])
   }
 
   const handleTagClick = i => {
-    // send you to the search page for that tag
-    console.log(`clicked`)
+    // TODO create actual search by tag page for this thing to redirect you to
+    const name = tags[i].name
+    props.history.push(`/searchfortag${name}`)
   }
-  console.log(tags)
+
   return (
     <div>
       <ReactTags
@@ -41,8 +40,8 @@ const EditTags = props => {
         handleAddition={handleAddition}
         handleDelete={handleDelete}
         autofocus={false}
+        handleTagClick={handleTagClick}
         allowDeleteFromEmptyInput={false}
-        handleInputChange={handleInputChange}
         inline={false}
         allowDragDrop={false}
       />
@@ -50,4 +49,4 @@ const EditTags = props => {
   )
 }
 
-export default EditTags
+export default withRouter(EditTags)
