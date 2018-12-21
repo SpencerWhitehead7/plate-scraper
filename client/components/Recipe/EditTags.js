@@ -10,19 +10,26 @@ const delimiters = {
 }
 
 const EditTags = props => {
-  const {tags, setTags} = props
+  const {tags, setTags, originalTags, originalTagSet} = props
+  const tagSet = new Set(tags.map(tag => tag.name))
 
   const handleDelete = i => {
+    tagSet.delete(tags[i].name)
     setTags(tags.filter((_, index) => index !== i))
   }
 
   const handleAddition = tag => {
     tag.name = tag.name.toLowerCase().replace(/[^a-z]/gi, ``)
     tag.id = tag.id.toLowerCase().replace(/[^a-z]/gi, ``)
-    tag.isNew = true // for reconciliation
-    // unfortunately, the API seems to lack any way to make this a truly controlled input
-    // so cleaning it onsubmit is the best I can do
-    setTags([...tags, tag])
+    // unfortunately, the API doesn't seem to have a way to make this a truly controlled input, so cleaning it onsubmit is the best I can do
+    if(!tagSet.has(tag.name)){ // prevents duplication
+      tagSet.add(tag.name)
+      if(originalTagSet.has(tag.name)){ // simplifies reconciliation
+        setTags([...tags, ...originalTags.filter(originalTag => originalTag.name === tag.name)])
+      }else{
+        setTags([...tags, tag])
+      }
+    }
   }
 
   const handleTagClick = i => {

@@ -26,7 +26,6 @@ const Account = props => {
   useEffect(() => {fetchRecipe()}, [location])
   useEffect(() => {setIsMyRecipe(recipe.userId === me.id)}, [recipe, me])
 
-  console.log(recipe)
   return (
     recipe ?
       <main>
@@ -43,6 +42,7 @@ const Account = props => {
             <EditMode
               recipe={recipe}
               setRecipe={setRecipe}
+              editMode={editMode}
               setEditMode={setEditMode}
             /> :
             <DispMode recipe={recipe}/>
