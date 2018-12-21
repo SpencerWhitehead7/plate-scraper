@@ -11,10 +11,12 @@ const doesRecipeExist = async (req, res, next) => {
       req.body.recipe = recipe
       next()
     }else{
-      next(new Error(`No such recipe`))
+      const err = new Error(`Recipe not found`)
+      err.status = 404
+      next(err)
     }
-  }catch(error){
-    next(error)
+  }catch(err){
+    next(err)
   }
 }
 
@@ -22,9 +24,9 @@ const isOwner = (req, res, next) => {
   if(req.body.recipe.userId === req.user.id){
     next()
   }else{
-    const error = new Error(`Permission denied`)
-    error.status = 401
-    next(error)
+    const err = new Error(`Permission denied`)
+    err.status = 401
+    next(err)
   }
 }
 
@@ -48,8 +50,8 @@ router.post(`/`,
         {include : [Tag]}
       )
       res.json(recipe)
-    }catch(error){
-      next(error)
+    }catch(err){
+      next(err)
     }
   })
 
@@ -68,8 +70,8 @@ router.delete(`/:recipeId/:tagId`,
         {include : [Tag]}
       )
       res.json(recipe)
-    }catch(error){
-      console.log(error)
+    }catch(err){
+      console.log(err)
     }
   })
 
