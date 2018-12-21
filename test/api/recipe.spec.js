@@ -78,6 +78,10 @@ describe(`API Route Recipe: /api/recipe`, () => {
             forkedCount : 10,
             userId : 10,
           })
+          await agent1.post(`/api/tag`).send({
+            name : `testtag`,
+            recipeId : 3,
+          })
         }catch(err){
           console.log(err)
         }
@@ -261,11 +265,12 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(res.body.forkedCount).to.equal(0)
         expect(res.body.userId).to.equal(1)
       })
-      it(`returns the recipe`, () => {
+      it(`returns the recipe, including tags`, () => {
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(3)
         expect(res.body.text).to.equal(`newText`)
         expect(res.body.title).to.equal(`newTitle`)
+        expect(res.body.tags).not.to.be.an(`undefined`)
         expect(res.body.sourceSite).to.equal(`User Upload`)
         expect(res.body.sourceUrl).to.equal(`User Upload`)
         expect(res.body.createdBy).to.equal(1)
