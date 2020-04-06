@@ -25,19 +25,11 @@ module.exports = {
           {
             loader : `css-loader`,
             options : {
-              modules : true,
-              localIdentName : `[path][name]_[local]-[hash:base64:5]`,
-              camelCase : true,
+              modules : {
+                localIdentName : `[path][name]_[local]-[hash:base64:5]`,
+              },
             },
           },
-        ],
-      },
-      {
-        test : /\.scss$/,
-        use : [
-          `style-loader`,
-          `css-loader`,
-          `sass-loader`,
         ],
       },
     ],
