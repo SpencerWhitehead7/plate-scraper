@@ -1,4 +1,4 @@
-const requestPromiseNative = require(`request-promise-native`)
+const axios = require(`axios`)
 const cheerio = require(`cheerio`)
 
 // Parsers
@@ -18,13 +18,6 @@ const myrecipes = require(`./myrecipes`)
 const seriousEats = require(`./seriousEats`)
 const simplyrecipes = require(`./simplyrecipes`)
 const thekitchn = require(`./thekitchn`)
-
-class Page {
-  constructor(url) {
-    this.uri = url
-    this.transform = body => cheerio.load(body)
-  }
-}
 
 const recipeToStr = (url, recipe) => {
   let output = `Source: ${url}\n\n${recipe.title}\n\nIngredients\n`
@@ -46,9 +39,9 @@ const scrape = async url => {
     title: ``,
     recipe: ``,
   }
-  const page = new Page(url)
   try {
-    const html = await requestPromiseNative(page)
+    const { data } = await axios.get(url)
+    const html = cheerio.load(data)
     const parserLoader = (parser, sourceSite) => {
       parser(recipe, html)
       recipeData.sourceSite = sourceSite
