@@ -1,6 +1,6 @@
 module.exports = `Source: https://www.bonappetit.com/recipe/grilled-salmon-with-lemon-sesame-sauce
 
-Grilled Salmon with Lemon-Sesame Sauce
+Grilled Crispy-Skinned Salmon with Whole Lemon-Sesame Sauce
 
 Ingredients
 
