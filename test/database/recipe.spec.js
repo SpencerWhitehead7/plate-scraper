@@ -8,21 +8,21 @@ const expect = chai.expect
 describe(`The Recipe model`, () => {
   let testRecipe = null
   before(async () => {
-    try{
-      await Recipe.sync({force : true})
+    try {
+      await Recipe.sync({ force: true })
       testRecipe = await Recipe.create({
-        text : `recipe`,
-        title : `title`,
-        createdBy : 1,
+        text: `recipe`,
+        title: `title`,
+        createdBy: 1,
       })
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   })
   after(async () => {
-    try{
-      await Recipe.sync({force : true})
-    }catch(err){
+    try {
+      await Recipe.sync({ force: true })
+    } catch (err) {
       console.log(err)
     }
   })
@@ -45,11 +45,11 @@ describe(`The Recipe model`, () => {
         return expect(none()).to.be.rejectedWith(`notNull Violation: recipe.text cannot be null`)
       })
       it(`accepts only strings`, () => {
-        const nonString = () => Recipe.create({text : []})
+        const nonString = () => Recipe.create({ text: [] })
         return expect(nonString()).to.be.rejectedWith(`string violation: text cannot be an array or an object`)
       })
       it(`does not accept empty strings`, () => {
-        const empty = () => Recipe.create({text : ``})
+        const empty = () => Recipe.create({ text: `` })
         return expect(empty()).to.be.rejectedWith(`Validation error: Validation notEmpty on text failed`)
       })
     })
@@ -60,22 +60,22 @@ describe(`The Recipe model`, () => {
         return expect(none()).to.be.rejectedWith(`notNull Violation: recipe.title cannot be null`)
       })
       it(`accepts only strings`, () => {
-        const nonString = () => Recipe.create({title : []})
+        const nonString = () => Recipe.create({ title: [] })
         return expect(nonString()).to.be.rejectedWith(`string violation: title cannot be an array or an object`)
       })
       it(`does not accept empty strings`, () => {
-        const empty = () => Recipe.create({title : ``})
+        const empty = () => Recipe.create({ title: `` })
         return expect(empty()).to.be.rejectedWith(`Validation error: Validation notEmpty on title failed`)
       })
     })
 
     describe(`SourceSite`, () => {
       it(`accepts only strings`, () => {
-        const nonString = () => Recipe.create({sourceSite : []})
+        const nonString = () => Recipe.create({ sourceSite: [] })
         return expect(nonString()).to.be.rejectedWith(`string violation: sourceSite cannot be an array or an object`)
       })
       it(`does not accept empty strings`, () => {
-        const empty = () => Recipe.create({sourceSite : ``})
+        const empty = () => Recipe.create({ sourceSite: `` })
         return expect(empty()).to.be.rejectedWith(`Validation error: Validation notEmpty on sourceSite failed`)
       })
       it(`defaults to "User Upload"`, () => {
@@ -85,11 +85,11 @@ describe(`The Recipe model`, () => {
 
     describe(`SourceUrl Field`, () => {
       it(`accepts only strings`, () => {
-        const nonString = () => Recipe.create({sourceUrl : []})
+        const nonString = () => Recipe.create({ sourceUrl: [] })
         return expect(nonString()).to.be.rejectedWith(`string violation: sourceUrl cannot be an array or an object`)
       })
       it(`does not accept empty strings`, () => {
-        const empty = () => Recipe.create({sourceUrl : ``})
+        const empty = () => Recipe.create({ sourceUrl: `` })
         return expect(empty()).to.be.rejectedWith(`Validation error: Validation notEmpty on sourceUrl failed`)
       })
       it(`defaults to "User Upload"`, () => {
@@ -103,14 +103,14 @@ describe(`The Recipe model`, () => {
         return expect(none()).to.be.rejectedWith(`notNull Violation: recipe.createdBy cannot be null`)
       })
       it(`accepts only integers`, () => {
-        const nonInteger = () => Recipe.create({text : `recipe`, title : `title`, createdBy : `str`})
+        const nonInteger = () => Recipe.create({ text: `recipe`, title: `title`, createdBy: `str` })
         return expect(nonInteger()).to.be.rejectedWith(`invalid input syntax for integer: "str"`)
       })
     })
 
     describe(`ForkedCount`, () => {
       it(`accepts only integers`, () => {
-        const nonInteger = () => Recipe.create({text : `recipe`, title : `title`, createdBy : 1, forkedCount : `str`})
+        const nonInteger = () => Recipe.create({ text: `recipe`, title: `title`, createdBy: 1, forkedCount: `str` })
         return expect(nonInteger()).to.be.rejectedWith(`invalid input syntax for integer: "str"`)
       })
       it(`forkedCount field defaults to 0`, () => {

@@ -1,4 +1,4 @@
-const {expect} = require(`chai`)
+const { expect } = require(`chai`)
 const request = require(`supertest`)
 
 const app = require(`../../server`)
@@ -12,47 +12,47 @@ const agent2 = request.agent(app)
 
 describe(`API Route Recipe: /api/recipe`, () => {
   const userCred = {
-    email : `testUser@example.com`,
-    password : `pw`,
-    userName : `testUser`,
+    email: `testUser@example.com`,
+    password: `pw`,
+    userName: `testUser`,
   }
   const user2Cred = {
-    email : `testUser2@example.com`,
-    password : `pw`,
-    userName : `testUser2`,
+    email: `testUser2@example.com`,
+    password: `pw`,
+    userName: `testUser2`,
   }
 
   before(async () => {
-    try{
-      await Recipe.sync({force : true})
-      await RecipeTraits.sync({force : true})
-      await Tag.sync({force : true})
-      await User.sync({force : true})
+    try {
+      await Recipe.sync({ force: true })
+      await RecipeTraits.sync({ force: true })
+      await Tag.sync({ force: true })
+      await User.sync({ force: true })
       await agent1.post(`/auth/signup`).send(userCred)
       await agent2.post(`/auth/signup`).send(user2Cred)
       await agent1.post(`/api/recipe`).send({
-        text : `text1`,
-        title : `title1`,
+        text: `text1`,
+        title: `title1`,
       })
       await agent1.post(`/api/recipe`).send({
-        text : `text2`,
-        title : `title2`,
+        text: `text2`,
+        title: `title2`,
       })
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   })
   after(async () => {
-    try{
+    try {
       await Promise.all([
         agent1.post(`/auth/logout`),
         agent2.post(`/auth/logout`),
       ])
-      await Recipe.sync({force : true})
-      await RecipeTraits.sync({force : true})
-      await Tag.sync({force : true})
-      await User.sync({force : true})
-    }catch(err){
+      await Recipe.sync({ force: true })
+      await RecipeTraits.sync({ force: true })
+      await Tag.sync({ force: true })
+      await User.sync({ force: true })
+    } catch (err) {
       console.log(err)
     }
   })
@@ -70,19 +70,19 @@ describe(`API Route Recipe: /api/recipe`, () => {
     describe(`POST`, () => {
       let res = null
       before(async () => {
-        try{
+        try {
           res = await agent1.post(`/api/recipe`).send({
-            text : `testText3`,
-            title : `title3`,
-            createdBy : 10,
-            forkedCount : 10,
-            userId : 10,
+            text: `testText3`,
+            title: `title3`,
+            createdBy: 10,
+            forkedCount: 10,
+            userId: 10,
           })
           await agent1.post(`/api/tag`).send({
-            name : `testtag`,
-            recipeId : 3,
+            name: `testtag`,
+            recipeId: 3,
           })
-        }catch(err){
+        } catch (err) {
           console.log(err)
         }
       })
@@ -92,8 +92,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(recipe).not.to.be.a(`null`)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
-        const failedRes = await request(app).post(`/api/recipe`).send({text : `failedText`, title : `failedText`, createdBy : 1})
-        const recipe = await Recipe.findOne({where : {text : `failedText`}})
+        const failedRes = await request(app).post(`/api/recipe`).send({ text: `failedText`, title: `failedText`, createdBy: 1 })
+        const recipe = await Recipe.findOne({ where: { text: `failedText` } })
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(recipe).to.be.a(`null`)
@@ -137,22 +137,22 @@ describe(`API Route Recipe: /api/recipe`, () => {
 
   describe(`/bytag?`, () => {
     before(async () => {
-      try{
+      try {
         await Promise.all([
           agent1.post(`/api/tag`).send({
-            name : `ttone`,
-            recipeId : 1,
+            name: `ttone`,
+            recipeId: 1,
           }),
           agent1.post(`/api/tag`).send({
-            name : `tttwo`,
-            recipeId : 1,
+            name: `tttwo`,
+            recipeId: 1,
           }),
           agent1.post(`/api/tag`).send({
-            name : `ttone`,
-            recipeId : 2,
+            name: `ttone`,
+            recipeId: 2,
           }),
         ])
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     })
@@ -183,16 +183,16 @@ describe(`API Route Recipe: /api/recipe`, () => {
     describe(`POST`, () => {
       it(`makes a copy of the recipe and saves it to the user's account`, async () => {
         await agent2.post(`/api/recipe/fork/1`)
-        const userTwosRecipes = await Recipe.findAll({where : {userId : 2}})
+        const userTwosRecipes = await Recipe.findAll({ where: { userId: 2 } })
         expect(userTwosRecipes.length).to.equal(1)
         expect(userTwosRecipes[0].userId).to.equal(2)
         expect(userTwosRecipes[0].createdBy).to.equal(1)
       })
       it(`the copy inherits the original's tags`, async () => {
-        const original = await Recipe.findByPk(1, {include : [Tag]})
+        const original = await Recipe.findByPk(1, { include: [Tag] })
         const copy = await Recipe.findAll({
-          where : {userId : 2},
-          include : [Tag],
+          where: { userId: 2 },
+          include: [Tag],
         })
         expect(copy[0].tags[0].id).to.equal(original.tags[0].id)
         expect(copy[0].tags[1].id).to.equal(original.tags[1].id)
@@ -223,18 +223,18 @@ describe(`API Route Recipe: /api/recipe`, () => {
     describe(`PUT`, () => {
       let res = null
       before(async () => {
-        try{
+        try {
           res = await agent1.put(`/api/recipe/3`).send({
-            id : 10,
-            text : `newText`,
-            title : `newTitle`,
-            sourceSite : `new site`,
-            sourceUrl : `new url`,
-            createdBy : 10,
-            forkedCount : 10,
-            userId : 10,
+            id: 10,
+            text: `newText`,
+            title: `newTitle`,
+            sourceSite: `new site`,
+            sourceUrl: `new url`,
+            createdBy: 10,
+            forkedCount: 10,
+            userId: 10,
           })
-        }catch(err){
+        } catch (err) {
           console.log(err)
         }
       })
@@ -244,15 +244,15 @@ describe(`API Route Recipe: /api/recipe`, () => {
         expect(recipe.text).to.equal(`newText`)
       })
       it(`rejects unauthenticated users' attempts`, async () => {
-        const failedRes = await request(app).put(`/api/recipe/3`).send({text : `failedText`})
-        const recipe = await Recipe.findOne({where : {text : `failedText`}})
+        const failedRes = await request(app).put(`/api/recipe/3`).send({ text: `failedText` })
+        const recipe = await Recipe.findOne({ where: { text: `failedText` } })
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(recipe).to.be.a(`null`)
       })
       it(`rejects attempts to edit a recipe the user does not own`, async () => {
-        const failedRes = await agent2.put(`/api/recipe/3`).send({text : `failedText`})
-        const recipe = await Recipe.findOne({where : {text : `failedText`}})
+        const failedRes = await agent2.put(`/api/recipe/3`).send({ text: `failedText` })
+        const recipe = await Recipe.findOne({ where: { text: `failedText` } })
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Permission denied`)
         expect(recipe).to.be.a(`null`)
@@ -282,9 +282,9 @@ describe(`API Route Recipe: /api/recipe`, () => {
     describe(`DELETE`, () => {
       let res = null
       before(async () => {
-        try{
+        try {
           res = await agent1.delete(`/api/recipe/3`)
-        }catch(error){
+        } catch (error) {
           console.log(error)
         }
       })

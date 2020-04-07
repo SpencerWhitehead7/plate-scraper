@@ -34,14 +34,14 @@ describe(`The parsers`, () => {
   let results = []
 
   before(async () => {
-    try{
+    try {
       const promises = []
-      while(counter < sourceUrls.length){
+      while (counter < sourceUrls.length) {
         promises.push(scrape(sourceUrls[counter]))
         counter++
       }
       results = await Promise.all(promises)
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   })

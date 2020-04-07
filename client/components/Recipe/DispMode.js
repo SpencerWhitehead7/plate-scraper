@@ -1,13 +1,13 @@
 import React from 'react'
-import {NavLink} from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import s from './recipe.css'
 
-const DispMode = props => (
+const DispMode = ({ recipe }) => (
   <>
     Tags&nbsp;
-    {props.recipe.tags ?
-      props.recipe.tags.map(tag => (
+    {recipe.tags ?
+      recipe.tags.map(tag => (
         // TODO create tag searchpage and send redirect there
         <NavLink
           key={tag.id}
@@ -16,10 +16,9 @@ const DispMode = props => (
           {`${tag.name} `}
         </NavLink>
       ))
-      : `none`
-    }
+      : `none`}
     <div className={s.recipeText}>
-      {props.recipe.text}
+      {recipe.text}
     </div>
   </>
 )

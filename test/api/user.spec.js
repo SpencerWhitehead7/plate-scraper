@@ -1,4 +1,4 @@
-const {expect} = require(`chai`)
+const { expect } = require(`chai`)
 const request = require(`supertest`)
 
 const app = require(`../../server`)
@@ -10,48 +10,48 @@ const agent2 = request.agent(app)
 
 describe(`API Route User: /api/user`, () => {
   const userCred = {
-    email : `testUser@example.com`,
-    password : `pw`,
-    userName : `testUser`,
+    email: `testUser@example.com`,
+    password: `pw`,
+    userName: `testUser`,
   }
   const user2Cred = {
-    email : `testUser2@example.com`,
-    password : `pw`,
-    userName : `testUser2`,
+    email: `testUser2@example.com`,
+    password: `pw`,
+    userName: `testUser2`,
   }
 
   before(async () => {
-    try{
-      await Recipe.sync({force : true})
-      await User.sync({force : true})
+    try {
+      await Recipe.sync({ force: true })
+      await User.sync({ force: true })
       await agent1.post(`/auth/signup`).send(userCred)
       await agent2.post(`/auth/signup`).send(user2Cred)
       await agent1.post(`/api/recipe`).send({
-        text : `text1`,
-        title : `title1`,
+        text: `text1`,
+        title: `title1`,
       })
       await agent1.post(`/api/recipe`).send({
-        text : `text2`,
-        title : `title2`,
+        text: `text2`,
+        title: `title2`,
       })
-      await agent1.post(`/api/tag`).send({name : `testtag`, recipeId : 1})
+      await agent1.post(`/api/tag`).send({ name: `testtag`, recipeId: 1 })
       await agent2.post(`/api/recipe`).send({
-        text : `text3`,
-        title : `title3`,
+        text: `text3`,
+        title: `title3`,
       })
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   })
   after(async () => {
-    try{
+    try {
       await Promise.all([
         agent1.post(`/auth/logout`),
         agent2.post(`/auth/logout`),
       ])
-      await Recipe.sync({force : true})
-      await User.sync({force : true})
-    }catch(err){
+      await Recipe.sync({ force: true })
+      await User.sync({ force: true })
+    } catch (err) {
       console.log(err)
     }
   })
@@ -62,45 +62,45 @@ describe(`API Route User: /api/user`, () => {
       let oldSalt = null
       let newSalt = null
       before(async () => {
-        try{
-          let user = await User.findOne({where : {email : `testUser@example.com`}})
+        try {
+          let user = await User.findOne({ where: { email: `testUser@example.com` } })
           oldSalt = user.dataValues.salt
           res = await agent1.put(`/api/user`).send({
-            newInfo : {
-              email : `new@example.com`,
-              salt : `new salt`,
-              id : 10,
+            newInfo: {
+              email: `new@example.com`,
+              salt: `new salt`,
+              id: 10,
             },
-            password : `pw`,
+            password: `pw`,
           })
-          user = await User.findOne({where : {email : `new@example.com`}})
+          user = await User.findOne({ where: { email: `new@example.com` } })
           newSalt = user.dataValues.salt
-        }catch(err){
+        } catch (err) {
           console.log(err)
         }
       })
 
       it(`edits the logged in user`, async () => {
-        const user = await User.findOne({where : {email : `new@example.com`}})
+        const user = await User.findOne({ where: { email: `new@example.com` } })
         expect(user).not.to.be.a(`null`)
       })
       it(`rejects unauthenticated users`, async () => {
-        const failedRes = await request(app).put(`/api/user`).send({email : `failed@example.com`})
-        const user = await User.findOne({where : {email : `failed@example.com`}})
+        const failedRes = await request(app).put(`/api/user`).send({ email: `failed@example.com` })
+        const user = await User.findOne({ where: { email: `failed@example.com` } })
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
         expect(user).to.be.a(`null`)
       })
       it(`requires the user to submit their password to edit their info`, async () => {
         const failedRes1 = await agent1.put(`/api/user`).send({
-          newInfo : {email : `new2@example.com`},
-          password : `anIncorrectPassword`,
+          newInfo: { email: `new2@example.com` },
+          password: `anIncorrectPassword`,
         })
         const failedRes2 = await agent2.put(`/api/user`).send({
-          newInfo : {email : `new3@example.com`},
+          newInfo: { email: `new3@example.com` },
         })
-        const failedUser1 = await User.findOne({where : {email : `new2@example.com`}})
-        const failedUser2 = await User.findOne({where : {email : `new3@example.com`}})
+        const failedUser1 = await User.findOne({ where: { email: `new2@example.com` } })
+        const failedUser2 = await User.findOne({ where: { email: `new3@example.com` } })
         expect(failedRes1.status).to.equal(401)
         expect(failedRes2.status).to.equal(401)
         expect(failedUser1).to.be.a(`null`)
@@ -122,9 +122,9 @@ describe(`API Route User: /api/user`, () => {
     describe(`DELETE`, () => {
       let res = null
       before(async () => {
-        try{
+        try {
           res = await agent2.delete(`/api/user`)
-        }catch(error){
+        } catch (error) {
           console.log(error)
         }
       })
@@ -153,9 +153,9 @@ describe(`API Route User: /api/user`, () => {
   describe(`/:id`, () => {
     let res = null
     before(async () => {
-      try{
+      try {
         res = await request(app).get(`/api/user/1`)
-      }catch(err){
+      } catch (err) {
         console.log(err)
       }
     })

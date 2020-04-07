@@ -1,4 +1,4 @@
-const {expect} = require(`chai`)
+const { expect } = require(`chai`)
 const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
 const Recipe = require(`../../server/db`).model(`recipe`)
 const Tag = require(`../../server/db`).model(`tag`)
@@ -11,27 +11,27 @@ describe(`Seed`, () => {
   let TagInDb = null
   let UserInDb = null
   before(async () => {
-    try{
-      await RecipeTraits.sync({force : true})
-      await Recipe.sync({force : true})
-      await Tag.sync({force : true})
-      await User.sync({force : true})
+    try {
+      await RecipeTraits.sync({ force: true })
+      await Recipe.sync({ force: true })
+      await Tag.sync({ force: true })
+      await User.sync({ force: true })
       await seed()
       RecipeTraitsInDb = await RecipeTraits.findAll()
       RecipeInDb = await Recipe.findAll()
       TagInDb = await Tag.findAll()
       UserInDb = await User.findAll()
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
   })
   after(async () => {
-    try{
-      await RecipeTraits.sync({force : true})
-      await Recipe.sync({force : true})
-      await Tag.sync({force : true})
-      await User.sync({force : true})
-    }catch(error){
+    try {
+      await RecipeTraits.sync({ force: true })
+      await Recipe.sync({ force: true })
+      await Tag.sync({ force: true })
+      await User.sync({ force: true })
+    } catch (error) {
       console.log(error)
     }
   })

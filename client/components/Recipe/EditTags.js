@@ -1,16 +1,15 @@
 import React from 'react'
-import {withRouter} from 'react-router-dom'
-import {WithContext as ReactTags} from 'react-tag-input'
+import { withRouter } from 'react-router-dom'
+import { WithContext as ReactTags } from 'react-tag-input'
 
 const delimiters = {
-  comma : 188,
-  enter : 13,
-  space : 32,
-  tab : 9,
+  comma: 188,
+  enter: 13,
+  space: 32,
+  tab: 9,
 }
 
-const EditTags = props => {
-  const {tags, setTags, originalTags, originalTagSet} = props
+const EditTags = ({ history, tags, setTags, originalTags, originalTagSet }) => {
   const tagSet = new Set(tags.map(tag => tag.name))
 
   const handleDelete = i => {
@@ -22,11 +21,11 @@ const EditTags = props => {
     tag.name = tag.name.toLowerCase().replace(/[^a-z]/gi, ``)
     tag.id = tag.id.toLowerCase().replace(/[^a-z]/gi, ``)
     // unfortunately, the API doesn't seem to have a way to make this a truly controlled input, so cleaning it onsubmit is the best I can do
-    if(!tagSet.has(tag.name)){ // prevents duplication
+    if (!tagSet.has(tag.name)) { // prevents duplication
       tagSet.add(tag.name)
-      if(originalTagSet.has(tag.name)){ // simplifies reconciliation
+      if (originalTagSet.has(tag.name)) { // simplifies reconciliation
         setTags([...tags, ...originalTags.filter(originalTag => originalTag.name === tag.name)])
-      }else{
+      } else {
         setTags([...tags, tag])
       }
     }
@@ -35,7 +34,7 @@ const EditTags = props => {
   const handleTagClick = i => {
     // TODO create actual search by tag page for this thing to redirect you to
     const name = tags[i].name
-    props.history.push(`/searchfortag${name}`)
+    history.push(`/searchfortag${name}`)
   }
 
   return (

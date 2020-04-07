@@ -2,10 +2,10 @@ import React from 'react'
 
 import ss from '../../index.css'
 
-const pageFailure = props => {
+const pageFailure = ({ type }) => {
   let title = ``
   let subtitle = ``
-  switch(props.type){
+  switch (type) {
     case `404`:
       title = `404 Page Not Found:`
       subtitle = `Oh no, there's nothing here!`
@@ -22,7 +22,7 @@ const pageFailure = props => {
     <div className={ss.centerContainer}>
       <h1 className={ss.centerText}>
         {title}
-        <br/>
+        <br />
         {subtitle}
       </h1>
     </div>

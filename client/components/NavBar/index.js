@@ -1,17 +1,17 @@
-import React, {useState} from 'react'
-import {NavLink} from 'react-router-dom'
-import {connect} from 'react-redux'
+import React, { useState } from 'react'
+import { NavLink } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import Modal from './Modal'
 
-import {logout} from '../../redux/rootReducer'
+import { logout } from '../../redux/rootReducer'
 
 import urls from '../../urls'
 import s from './NavBar.css'
 
-const Navbar = props => {
+const Navbar = ({ logout, user }) => {
   const [showModal, setShowModal] = useState(false)
-  const toggleModal = () => {setShowModal(!showModal)}
+  const toggleModal = () => { setShowModal(!showModal) }
 
   return (
     <>
@@ -19,7 +19,7 @@ const Navbar = props => {
       <nav className={s.navbar}>
         <div className={s.dropdown}>
           <NavLink exact to="/">
-            <img src={urls.logo} className={s.logo}/>
+            <img src={urls.logo} className={s.logo} />
           </NavLink>
           <NavLink exact to="/" className={s.link}>
             Add&nbsp;Recipe
@@ -38,42 +38,44 @@ const Navbar = props => {
           Search
         </NavLink>
 
-        {props.user.id ?
+        {user.id ? (
           <div className={s.dropdown}>
-            <NavLink exact to={`/user/${props.user.id}`} className={s.link}>
+            <NavLink exact to={`/user/${user.id}`} className={s.link}>
               My&nbsp;Account
             </NavLink>
             <div className={s.dropdownContent}>
               <div
                 className={s.link}
-                onClick={props.logout}
+                onClick={logout}
                 // maybe logout should also redirect you if you're on a private page
               >
                 Logout
               </div>
             </div>
           </div>
-          :
-          <div
-            className={s.link}
-            onClick={toggleModal}
-          >
-            Signup&nbsp;/&nbsp;Login
-          </div>}
+        )
+          : (
+            <div
+              className={s.link}
+              onClick={toggleModal}
+            >
+              Signup&nbsp;/&nbsp;Login
+            </div>
+          )}
       </nav>
 
-      {showModal && <Modal toggleModal={toggleModal}/>}
+      {showModal && <Modal toggleModal={toggleModal} />}
 
     </>
   )
 }
 
 const mstp = state => ({
-  user : state.user,
+  user: state.user,
 })
 
 const mdtp = dispatch => ({
-  logout : () => dispatch(logout()),
+  logout: () => dispatch(logout()),
 })
 
 export default connect(mstp, mdtp)(Navbar)

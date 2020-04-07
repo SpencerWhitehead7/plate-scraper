@@ -1,4 +1,4 @@
-const {expect} = require(`chai`)
+const { expect } = require(`chai`)
 const request = require(`supertest`)
 
 const app = require(`../../server`)
@@ -8,24 +8,24 @@ const agent = request.agent(app)
 
 describe(`Auth Route: /auth`, () => {
   const userCred = {
-    email : `testUser@example.com`,
-    password : `pw`,
-    userName : `testUser`,
+    email: `testUser@example.com`,
+    password: `pw`,
+    userName: `testUser`,
   }
 
   beforeEach(async () => {
-    try{
-      await User.sync({force : true})
+    try {
+      await User.sync({ force: true })
       await agent.post(`/auth/signup`).send(userCred)
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   })
   afterEach(async () => {
-    try{
+    try {
       await agent.post(`/auth/logout`)
-      await User.sync({force : true})
-    }catch(err){
+      await User.sync({ force: true })
+    } catch (err) {
       console.log(err)
     }
   })
@@ -33,7 +33,7 @@ describe(`Auth Route: /auth`, () => {
   describe(`/signup`, () => {
     describe(`POST`, () => {
       it(`creates a user with the correct credentials in the database`, async () => {
-        const testUser = await User.findOne({where : {email : userCred.email}})
+        const testUser = await User.findOne({ where: { email: userCred.email } })
         expect(testUser.email).to.equal(userCred.email)
       })
       it(`also logs that user into the app`, async () => {
@@ -68,7 +68,7 @@ describe(`Auth Route: /auth`, () => {
         expect(res.body.email).to.equal(`testUser@example.com`)
       })
       it(`returns a 401 if the user provides incorrect credentials`, async () => {
-        const res = await request(app).post(`/auth/login`).send({email : `testUser@example.com`, password : `wrongpw`})
+        const res = await request(app).post(`/auth/login`).send({ email: `testUser@example.com`, password: `wrongpw` })
         expect(res.status).to.equal(401)
         expect(res.text).to.equal(`Wrong username or password`)
       })
@@ -87,10 +87,9 @@ describe(`Auth Route: /auth`, () => {
         const res = await agent.get(`/auth/me`)
         expect(res.body).to.equal(``)
       })
-      it(`destroy's the user's session if the user is logged in`, async () => {
-        const res = await agent.post(`/auth/logout`)
+      xit(`destroy's the user's session if the user is logged in`, async () => {
+        // const res = await agent.post(`/auth/logout`)
         // TODO figure out how to test this
-        expect(`dummy test`).to.equal(`dummy test`)
       })
       it(`redirects the user to the main page if the user is logged in`, async () => {
         const res = await agent.post(`/auth/logout`)

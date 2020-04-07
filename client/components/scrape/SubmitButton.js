@@ -1,29 +1,29 @@
 import React from 'react'
 
-const SubmitButton = props => (
+const SubmitButton = ({ url }) => (
   <button
     type="submit"
     disabled={
-      !props.url.includes(`allrecipes.com`) &&
-      !props.url.includes(`bettycrocker.com`) &&
-      !props.url.includes(`bonappetit.com`) &&
-      !props.url.includes(`chowhound.com`) &&
-      !props.url.includes(`cookinglight.com`) &&
-      !props.url.includes(`eatingwell.com`) &&
-      !props.url.includes(`epicurious.com`) &&
-      // !props.url.includes(`food52.com`) &&
-      !props.url.includes(`foodandwine.com`) &&
-      !props.url.includes(`foodnetwork.com`) &&
-      !props.url.includes(`geniuskitchen.com`) &&
-      !props.url.includes(`jamieoliver.com`) &&
-      !props.url.includes(`myrecipes.com`) &&
-      !props.url.includes(`seriouseats.com/recipes`) &&
-      !props.url.includes(`simplyrecipes.com`) &&
-      !props.url.includes(`thekitchn.com`)
+      !url.includes(`allrecipes.com`) &&
+      !url.includes(`bettycrocker.com`) &&
+      !url.includes(`bonappetit.com`) &&
+      !url.includes(`chowhound.com`) &&
+      !url.includes(`cookinglight.com`) &&
+      !url.includes(`eatingwell.com`) &&
+      !url.includes(`epicurious.com`) &&
+      // !url.includes(`food52.com`) &&
+      !url.includes(`foodandwine.com`) &&
+      !url.includes(`foodnetwork.com`) &&
+      !url.includes(`geniuskitchen.com`) &&
+      !url.includes(`jamieoliver.com`) &&
+      !url.includes(`myrecipes.com`) &&
+      !url.includes(`seriouseats.com/recipes`) &&
+      !url.includes(`simplyrecipes.com`) &&
+      !url.includes(`thekitchn.com`)
     }
     id="sub-btn"
   >
-  Scrape!
+    Scrape!
   </button>
 )
 

@@ -19,8 +19,8 @@ const seriousEats = require(`./seriousEats`)
 const simplyrecipes = require(`./simplyrecipes`)
 const thekitchn = require(`./thekitchn`)
 
-class Page{
-  constructor(url){
+class Page {
+  constructor(url) {
     this.uri = url
     this.transform = body => cheerio.load(body)
   }
@@ -28,67 +28,67 @@ class Page{
 
 const recipeToStr = (url, recipe) => {
   let output = `Source: ${url}\n\n${recipe.title}\n\nIngredients\n`
-  recipe.ingredients.forEach(ingredient => {output += `\n${ingredient}`})
+  recipe.ingredients.forEach(ingredient => { output += `\n${ingredient}` })
   output += `\n\nInstructions\n`
-  recipe.instructions.forEach(instruction => {output += `\n${instruction}\n`})
+  recipe.instructions.forEach(instruction => { output += `\n${instruction}\n` })
   return output
 }
 
 const scrape = async url => {
   const recipe = {
-    title : ``,
-    ingredients : [],
-    instructions : [],
+    title: ``,
+    ingredients: [],
+    instructions: [],
   }
   const recipeData = {
-    sourceSite : ``,
-    sourceUrl : url,
-    title : ``,
-    recipe : ``,
+    sourceSite: ``,
+    sourceUrl: url,
+    title: ``,
+    recipe: ``,
   }
   const page = new Page(url)
-  try{
+  try {
     const html = await requestPromiseNative(page)
     const parserLoader = (parser, sourceSite) => {
       parser(recipe, html)
       recipeData.sourceSite = sourceSite
     }
-    if(url.includes(`allrecipes.com`)){ // allrecipes
+    if (url.includes(`allrecipes.com`)) { // allrecipes
       parserLoader(allrecipes, `allrecipes.com`)
-    }else if(url.includes(`bettycrocker.com`)){ // bettycrocker
+    } else if (url.includes(`bettycrocker.com`)) { // bettycrocker
       parserLoader(bettycrocker, `bettycrocker.com`)
-    }else if(url.includes(`bonappetit.com`)){ // bonappetit
+    } else if (url.includes(`bonappetit.com`)) { // bonappetit
       parserLoader(bonappetit, `bonappetit.com`)
-    }else if(url.includes(`chowhound.com`)){ // chowhound
+    } else if (url.includes(`chowhound.com`)) { // chowhound
       parserLoader(chowhound, `chowhound.com`)
-    }else if(url.includes(`cookinglight.com`)){ // cookinglight
+    } else if (url.includes(`cookinglight.com`)) { // cookinglight
       parserLoader(cookinglight, `cookinglight.com`)
-    }else if(url.includes(`eatingwell.com`)){ // eatingwell
+    } else if (url.includes(`eatingwell.com`)) { // eatingwell
       parserLoader(eatingwell, `eatingwell.com`)
-    }else if(url.includes(`epicurious.com`)){ // epicurious
+    } else if (url.includes(`epicurious.com`)) { // epicurious
       parserLoader(epicurious, `epicurious.com`)
-    // }else if(url.includes(`food52.com`)){ // food52 uncomment if I ever get it working
-      // parserLoader(food52, `food52.com`)
-    }else if(url.includes(`foodandwine.com`)){ // foodandwine
+    // } else if (url.includes(`food52.com`)) { // food52 uncomment if I ever get it working
+    //   parserLoader(food52, `food52.com`)
+    } else if (url.includes(`foodandwine.com`)) { // foodandwine
       parserLoader(foodandwine, `foodandwine.com`)
-    }else if(url.includes(`foodnetwork.com`)){ // foodnetwork
+    } else if (url.includes(`foodnetwork.com`)) { // foodnetwork
       parserLoader(foodnetwork, `foodnetwork.com`)
-    }else if(url.includes(`geniuskitchen.com`)){ // geniuskitchen/food
+    } else if (url.includes(`geniuskitchen.com`)) { // geniuskitchen/food
       parserLoader(geniuskitchenOrfood, `geniuskitchen.com`)
-    }else if(url.includes(`jamieoliver.com`)){ // jamieoliver
+    } else if (url.includes(`jamieoliver.com`)) { // jamieoliver
       parserLoader(jamieoliver, `jamieoliver.com`)
-    }else if(url.includes(`myrecipes.com`)){ // myrecipes
+    } else if (url.includes(`myrecipes.com`)) { // myrecipes
       parserLoader(myrecipes, `myrecipes.com`)
-    }else if(url.includes(`seriouseats.com/recipes`)){ // seriouseats
+    } else if (url.includes(`seriouseats.com/recipes`)) { // seriouseats
       parserLoader(seriousEats, `seriouseats.com`)
-    }else if(url.includes(`simplyrecipes.com`)){ // simplyrecipes
+    } else if (url.includes(`simplyrecipes.com`)) { // simplyrecipes
       parserLoader(simplyrecipes, `simplyrecipes.com`)
-    }else if(url.includes(`thekitchn.com`)){ // thekitchn
+    } else if (url.includes(`thekitchn.com`)) { // thekitchn
       parserLoader(thekitchn, `thekitchn.com`)
     }
     recipeData.title = recipe.title
     recipeData.recipe = recipeToStr(url, recipe)
-  }catch(err){
+  } catch (err) {
     console.log(err)
   }
   return recipeData

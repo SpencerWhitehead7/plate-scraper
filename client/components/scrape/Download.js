@@ -1,44 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-class Download extends React.Component{
-  constructor(props){
-    super(props)
-    this.state = {
-      fileName : `${this.props.sourceSite.slice(0, -4)} ${this.props.title}`,
-    }
-  }
+const Download = ({ recipe, sourceSite, title }) => {
+  const [fileName, setFileName] = useState(`${sourceSite.slice(0, -4)} ${title}`)
 
-  componentDidUpdate(prevProps){
-    if(this.props.title !== prevProps.title ||
-      this.props.sourceSite !== prevProps.sourceSite){
-      this.setState({fileName : `${this.props.sourceSite} ${this.props.title}`})
-    }
-  }
-
-  handleSubmit = event => {
-    event.preventDefault()
-    const textAsBlob = new Blob([this.props.recipe], {type : `text/plain`})
-    const fileName = this.state.fileName
+  const handleSubmit = evt => {
+    evt.preventDefault()
+    const textAsBlob = new Blob([recipe], { type: `text/plain` })
     const downloadLink = document.createElement(`a`)
     downloadLink.download = fileName
     downloadLink.innerHTML = `Download Recipe`
     downloadLink.href = window.URL.createObjectURL(textAsBlob)
-    downloadLink.onclick = event => {document.body.removeChild(event.target)}
+    downloadLink.onclick = event => { document.body.removeChild(event.target) }
     downloadLink.style.display = `none`
     document.body.appendChild(downloadLink)
     downloadLink.click()
+    // eslint-disable-next-line no-alert
     alert(`Saved to your default download location`)
   }
 
-  render(){
-    return (
-      <form onSubmit={this.handleSubmit} id="download">
-        <label htmlFor="fileName">Filename:</label>
-        <input name="fileName" onChange={this.props.handleChange} value={this.state.fileName}/>
-        <button type="submit">Download Recipe</button>
-      </form>
-    )
-  }
+  return (
+    <form onSubmit={handleSubmit} id="download">
+      <label htmlFor="fileName">Filename:</label>
+      <input name="fileName" onChange={evt => setFileName(evt.target.value)} value={fileName} />
+      <button type="submit">Download Recipe</button>
+    </form>
+  )
 }
 
 export default Download

@@ -1,13 +1,10 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import TextAreaAutosize from 'react-textarea-autosize'
 
 import EditTags from './EditTags'
 
-import s from './recipe.css'
-
-const EditMode = props => {
-  const {recipe, setRecipe, editMode, setEditMode} = props
+const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
   const [title, setTitle] = useState(recipe.title)
   const [text, setText] = useState(recipe.text)
   const [tags, setTags] = useState(recipe.tags.map(tag => {
@@ -20,35 +17,35 @@ const EditMode = props => {
   const handleSubmit = async evt => {
     evt.preventDefault()
     const tagSet = new Set(tags.map(tag => tag.name))
-    try{
+    try {
       await Promise.all([
         ...tags.map(tag => {
-          if(!originalTagSet.has(tag.name)){
-            return axios.post(`/api/tag`, {recipeId : recipe.id, name : tag.name})
-          }else{
+          if (!originalTagSet.has(tag.name)) {
+            return axios.post(`/api/tag`, { recipeId: recipe.id, name: tag.name })
+          } else {
             return undefined
           }
         }),
         ...originalTags.map(tag => {
-          if(!tagSet.has(tag.name)){
+          if (!tagSet.has(tag.name)) {
             return axios.delete(`/api/tag/${recipe.id}/${tag.id}`)
-          }else{
+          } else {
             return undefined
           }
         }),
       ])
-      const {data} = await axios.put(`/api/recipe/${recipe.id}`, {title, text})
+      const { data } = await axios.put(`/api/recipe/${recipe.id}`, { title, text })
       setRecipe(data)
       setEditMode(!editMode)
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   }
   return (
-  <>
     <form onSubmit={handleSubmit}>
       <label>
-      Title:
+        Title:
+        {` `}
         <input
           type="text"
           name="title"
@@ -57,7 +54,8 @@ const EditMode = props => {
         />
       </label>
       <label>
-      Tags:
+        Tags:
+        {` `}
         <EditTags
           tags={tags}
           setTags={setTags}
@@ -66,7 +64,8 @@ const EditMode = props => {
         />
       </label>
       <label>
-      Recipe:
+        Recipe:
+        {` `}
         <TextAreaAutosize
           type="text"
           name="text"
@@ -78,7 +77,6 @@ const EditMode = props => {
         Save Changes
       </button>
     </form>
-  </>
   )
 }
 

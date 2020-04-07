@@ -1,62 +1,66 @@
 const router = require(`express`).Router()
-const {User, Recipe, Tag} = require(`../db/models`)
+const { User, Recipe, Tag } = require(`../db/models`)
 
-const {isAuthenticated} = require(`../authenticationLogic`)
+const { isAuthenticated } = require(`../authenticationLogic`)
 
 // PUT /api/user
-router.put(`/`,
+router.put(
+  `/`,
   isAuthenticated,
   async (req, res, next) => {
-    try{
+    try {
       const newInfo = JSON.parse(JSON.stringify(req.body.newInfo))
       const user = await User.findByPk(req.user.id)
-      if(req.body.password && user.correctPassword(req.body.password)){
+      if (req.body.password && user.correctPassword(req.body.password)) {
         delete newInfo.salt
         delete newInfo.id
         const [, updatedUser] = await User.update(newInfo, {
-          where : {id : req.user.id},
-          returning : true,
-          plain : true,
+          where: { id: req.user.id },
+          returning: true,
+          plain: true,
         })
         res.json(updatedUser)
-      }else{
+      } else {
         res.sendStatus(401)
       }
-    }catch(error){
+    } catch (error) {
       next(error)
     }
-  })
+  },
+)
 
 // DELETE /api/user
-router.delete(`/`,
+router.delete(
+  `/`,
   isAuthenticated,
   async (req, res, next) => {
-    try{
+    try {
       const user = await User.findByPk(req.user.id)
       await user.destroy()
       req.logout()
-      req.session.destroy(err => err ? next(err) : res.redirect(`/`))
-    }catch(error){
+      req.session.destroy(err => (err ? next(err) : res.redirect(`/`)))
+    } catch (error) {
       next(error)
     }
-  })
+  },
+)
 
 // GET /api/user/:id
 router.get(`/:id`, async (req, res, next) => {
-  try{
+  try {
     const user = await User.findByPk(
       req.params.id,
       {
-        include : [
+        include: [
           {
-            model : Recipe,
-            include : [Tag],
+            model: Recipe,
+            include: [Tag],
           },
         ],
-      }
+      },
     )
     res.json(user)
-  }catch(error){
+  } catch (error) {
     next(error)
   }
 })

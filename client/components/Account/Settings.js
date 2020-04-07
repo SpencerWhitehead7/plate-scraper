@@ -1,10 +1,8 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
-import {me} from '../../redux/rootReducer'
-
-import s from './Account.css'
+import { me } from '../../redux/rootReducer'
 
 const LoginForm = props => {
   const [authentication, setAuthentication] = useState(``)
@@ -17,20 +15,19 @@ const LoginForm = props => {
   const [passwordConfirm, setPasswordConfirm] = useState(``)
 
   const handleSubmit = async evt => {
-    try{
+    try {
       evt.preventDefault()
       const newInfo = {}
-      if(email) newInfo.email = email
-      if(userName) newInfo.userName = userName
-      if(password) newInfo.password = password
+      if (email) newInfo.email = email
+      if (userName) newInfo.userName = userName
+      if (password) newInfo.password = password
       const body = {
         newInfo,
-        password : authentication,
+        password: authentication,
       }
-      const {data} = await axios.put(`/api/user`, body)
-      console.log(data)
+      await axios.put(`/api/user`, body)
       await props.me()
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
   }
@@ -39,6 +36,7 @@ const LoginForm = props => {
     <form onSubmit={handleSubmit}>
       <label>
         Current password (for authentication):
+        {` `}
         <input
           type="password"
           name="authentication"
@@ -53,32 +51,36 @@ const LoginForm = props => {
         setStatus={setShowEmail}
         setValue={() => setEmail(``)}
       />
-      {showEmail &&
+      {showEmail && (
         <label>
-        Email:
+          Email:
+          {` `}
           <input
             type="text"
             name="email"
             value={email}
             onChange={evt => setEmail(evt.target.value)}
           />
-        </label>}
+        </label>
+      )}
       <ShowHide
         name="Username"
         status={showUserName}
         setStatus={setShowUserName}
         setValue={() => setUserName(``)}
       />
-      {showUserName &&
-      <label>
-        Username:
-        <input
-          type="text"
-          name="userName"
-          value={userName}
-          onChange={evt => setUserName(evt.target.value)}
-        />
-      </label>}
+      {showUserName && (
+        <label>
+          Username:
+          {` `}
+          <input
+            type="text"
+            name="userName"
+            value={userName}
+            onChange={evt => setUserName(evt.target.value)}
+          />
+        </label>
+      )}
       <ShowHide
         name="Password"
         status={showPassword}
@@ -88,30 +90,33 @@ const LoginForm = props => {
           setPasswordConfirm(``)
         }}
       />
-      {showPassword &&
-      <>
-        <label>
-        Password:
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={evt => {
-              setPassword(evt.target.value)
-            }}
-          />
-        </label>
-        <label>
-        Confirm password:
-          <input
-            type="password"
-            name="passwordConfirm"
-            value={passwordConfirm}
-            onChange={evt => setPasswordConfirm(evt.target.value)}
-          />
-          {password !== passwordConfirm && <span>Passwords do not match</span>}
-        </label>
-      </>}
+      {showPassword && (
+        <>
+          <label>
+            Password:
+            {` `}
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={evt => {
+                setPassword(evt.target.value)
+              }}
+            />
+          </label>
+          <label>
+            Confirm password:
+            {` `}
+            <input
+              type="password"
+              name="passwordConfirm"
+              value={passwordConfirm}
+              onChange={evt => setPasswordConfirm(evt.target.value)}
+            />
+            {password !== passwordConfirm && <span>Passwords do not match</span>}
+          </label>
+        </>
+      )}
       <button
         type="submit"
         disabled={!authentication || password !== passwordConfirm}
@@ -122,23 +127,21 @@ const LoginForm = props => {
   )
 }
 
-const ShowHide = props => {
-  const {name, status, setStatus, setValue} = props
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        setStatus(!status)
-        setValue()
-      }}
-    >
-      {status ? `Cancel` : `Change ${name}`}
-    </button>
-  )
-}
+const ShowHide = ({ name, status, setStatus, setValue }) => (
+  <button
+    type="button"
+    onClick={() => {
+      setStatus(!status)
+      setValue()
+    }}
+  >
+    {status ? `Cancel` : `Change ${name}`}
+  </button>
+)
+
 
 const mdtp = dispatch => ({
-  me : () => dispatch(me()),
+  me: () => dispatch(me()),
 })
 
 export default connect(null, mdtp)(LoginForm)

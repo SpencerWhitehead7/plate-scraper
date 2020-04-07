@@ -18,10 +18,10 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser(async (id, done) => {
-  try{
+  try {
     const user = await db.models.user.findByPk(id)
     done(null, user)
-  }catch(err){
+  } catch (err) {
     done(err)
   }
 })
@@ -30,8 +30,8 @@ passport.deserializeUser(async (id, done) => {
 const app = express()
 
 // Logging middleware for development environment
-if(process.env.NODE_ENV !== `production` &&
-    process.env.NODE_ENV !== `test`){
+if (process.env.NODE_ENV !== `production` &&
+    process.env.NODE_ENV !== `test`) {
   /* eslint-disable global-require */
   app.use(require(`volleyball`))
   /* eslint-enable global-require */
@@ -39,22 +39,22 @@ if(process.env.NODE_ENV !== `production` &&
 
 // Body parsing middleware
 app.use(express.json())
-app.use(express.urlencoded({extended : true}))
+app.use(express.urlencoded({ extended: true }))
 
 // db of sessions for connect-session-sequelize
-const sessionStore = new SequelizeStore({db})
+const sessionStore = new SequelizeStore({ db })
 sessionStore.sync() // sync so that session table will be created
 
 // Sessions middleware
 app.use(session({
-  cookie : {
-    maxAge : 604800, // a week
-    secure : process.env.NODE_ENV === `production`,
+  cookie: {
+    maxAge: 604800, // a week
+    secure: process.env.NODE_ENV === `production`,
   },
-  resave : false,
-  saveUninitialized : false,
-  secret : process.env.SESSION_SECRET || `a perhaps worst-practices secret`,
-  store : sessionStore,
+  resave: false,
+  saveUninitialized: false,
+  secret: process.env.SESSION_SECRET || `a perhaps worst-practices secret`,
+  store: sessionStore,
 }))
 
 // Passport middleware
@@ -84,7 +84,7 @@ app.use((req, res, next) => {
 
 // Error handling endware
 app.use((err, req, res, next) => {
-  if(process.env.NODE_ENV !== `test`){
+  if (process.env.NODE_ENV !== `test`) {
     console.error(err)
   }
   res.status(err.status || 500)
@@ -95,7 +95,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 1337
 
 // Sync the DB and start up the server
-if(process.env.NODE_ENV !== `test`){
+if (process.env.NODE_ENV !== `test`) {
   db.sync(/* {force : true} */)
     .then(() => {
       console.log(`\nDatabase Synced\n`)

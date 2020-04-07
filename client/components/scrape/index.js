@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React from 'react'
 import axios from 'axios'
 
@@ -6,83 +7,86 @@ import SupportedSites from './SupportedSites'
 import UrlForm from './UrlForm'
 import Warning from './Warning'
 
-class Scrape extends React.Component{
-  constructor(){
+class Scrape extends React.Component {
+  constructor() {
     super()
     this.state = {
-      url : ``,
-      sourceSite : ``,
-      sourceUrl : ``,
-      title : ``,
-      recipe : ``,
-      err : {},
-      isLoading : false,
+      url: ``,
+      sourceSite: ``,
+      sourceUrl: ``,
+      title: ``,
+      recipe: ``,
+      err: {},
+      isLoading: false,
     }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange = event => {
+  handleChange(event) {
     this.setState({
-      [event.target.name] : event.target.value,
+      [event.target.name]: event.target.value,
     })
   }
 
-  handleSubmit = event => {
+  handleSubmit(event) {
     event.preventDefault()
     this.setState({
-      sourceSite : ``,
-      sourceUrl : ``,
-      title : ``,
-      recipe : ``,
-      err : {},
-      isLoading : true,
+      sourceSite: ``,
+      sourceUrl: ``,
+      title: ``,
+      recipe: ``,
+      err: {},
+      isLoading: true,
     }, async () => {
-      try{
-        const {data} = await axios.post(`/api/scrape`, {url : this.state.url})
+      try {
+        const { data } = await axios.post(`/api/scrape`, { url: this.state.url })
         console.log(data)
-        if(data.message && data.name &&
-          !data.sourceSite && !data.sourceUrl && !data.title && !data.recipe){ // duck typing to check for errors
-          this.setState({err : data, isLoading : false})
-        }else{
+        if (data.message && data.name &&
+          !data.sourceSite && !data.sourceUrl && !data.title && !data.recipe) { // duck typing to check for errors
+          this.setState({ err: data, isLoading: false })
+        } else {
           this.setState({
-            sourceSite : data.sourceSite,
-            sourceUrl : data.sourceUrl,
-            title : data.title,
-            recipe : data.recipe,
-            err : {},
-            isLoading : false,
+            sourceSite: data.sourceSite,
+            sourceUrl: data.sourceUrl,
+            title: data.title,
+            recipe: data.recipe,
+            err: {},
+            isLoading: false,
           })
         }
-      }catch(err){
+      } catch (err) {
         console.log(err)
         this.setState({
           err,
-          isLoading : false,
+          isLoading: false,
         })
       }
     })
   }
 
-  render(){
+  render() {
     return (
       <div id="whole-page">
         <h1 id="title">Plate Scraper!</h1>
-        <SupportedSites/>
+        <SupportedSites />
         <UrlForm
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
           url={this.state.url}
         />
-        {this.state.isLoading && <div className="loading"/>}
+        {this.state.isLoading && <div className="loading" />}
         {
-          this.state.recipe !== `` &&
+          this.state.recipe !== `` && (
             <RecipeArea
               handleChange={this.handleChange}
               recipe={this.state.recipe}
               title={this.state.title}
               sourceSite={this.state.sourceSite}
             />
+          )
         }
-        {Object.keys(this.state.err).length > 0 && <Warning err={this.state.err.message}/>}
+        {Object.keys(this.state.err).length > 0 && <Warning err={this.state.err.message} />}
       </div>
     )
   }

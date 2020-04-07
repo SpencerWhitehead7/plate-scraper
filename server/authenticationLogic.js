@@ -1,7 +1,7 @@
 const isAuthenticated = (req, res, next) => {
-  if(req.isAuthenticated()){
+  if (req.isAuthenticated()) {
     next()
-  }else{
+  } else {
     const err = new Error(`Not logged in`)
     err.status = 401
     next(err)
@@ -9,11 +9,11 @@ const isAuthenticated = (req, res, next) => {
 }
 
 const isAlreadyAuthenticated = (req, res, next) => {
-  if(req.isAuthenticated()){
+  if (req.isAuthenticated()) {
     const err = new Error(`Already logged in to an account`)
     err.status = 409
     next(err)
-  }else{
+  } else {
     next()
   }
 }

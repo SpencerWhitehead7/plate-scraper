@@ -1,4 +1,4 @@
-module.exports  = [
+module.exports = [
   `https://www.allrecipes.com/recipe/22918/pop-cake/`,
   `https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44`,
   `https://www.bonappetit.com/recipe/grilled-salmon-with-lemon-sesame-sauce`,

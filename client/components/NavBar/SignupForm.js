@@ -1,12 +1,9 @@
-import React, {useState} from 'react'
-import {connect} from 'react-redux'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
 
-import {signup} from '../../redux/rootReducer'
+import { signup } from '../../redux/rootReducer'
 
-import s from './NavBar.css'
-
-const SignupForm = props => {
-  const {signupError} = props
+const SignupForm = ({ signup, signupError }) => {
   const [email, setEmail] = useState(``)
   const [userName, setUserName] = useState(``)
   const [password, setPassword] = useState(``)
@@ -14,23 +11,24 @@ const SignupForm = props => {
 
   const handleSubmit = evt => {
     evt.preventDefault()
-    if(!email || !password || !userName){
-      setErr({...err, missingField : true})
-    }else{
-      props.signup(email, userName, password)
+    if (!email || !password || !userName) {
+      setErr({ ...err, missingField: true })
+    } else {
+      signup(email, userName, password)
     }
   }
 
   return (
     <>
       {/* this jank bs sets error states in conjunction with redux */}
-      {signupError.status !== err.status && setErr({...err, ...signupError})}
-      {err.status &&
-      <span>
-        {`Error: ${err.status} ${err.statusText}`}
-        <br/>
-        {`${err.data}`}
-      </span>}
+      {signupError.status !== err.status && setErr({ ...err, ...signupError })}
+      {err.status && (
+        <span>
+          {`Error: ${err.status} ${err.statusText}`}
+          <br />
+          {`${err.data}`}
+        </span>
+      )}
       <form onSubmit={handleSubmit}>
         <label>
           Email:
@@ -71,11 +69,11 @@ const SignupForm = props => {
 }
 
 const mstp = state => ({
-  signupError : state.signupError,
+  signupError: state.signupError,
 })
 
 const mdtp = dispatch => ({
-  signup : (email, userName, password) => dispatch(signup(email, userName, password)),
+  signup: (email, userName, password) => dispatch(signup(email, userName, password)),
 })
 
 export default connect(mstp, mdtp)(SignupForm)

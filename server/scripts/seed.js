@@ -1,32 +1,32 @@
 const db = require(`../db`)
-const {Recipe, Tag, User} = require(`../db/models`)
+const { Recipe, Tag, User } = require(`../db/models`)
 
 const seed = async () => {
-  await db.sync({force : true})
+  await db.sync({ force: true })
   console.log(`Database synced`)
 
   const users = await Promise.all([
     User.create({
-      email : `creatorDeleted@theirAccount.com`,
-      password : `ASadDummyPassWord`,
-      userName : `DeletedAccount`,
+      email: `creatorDeleted@theirAccount.com`,
+      password: `ASadDummyPassWord`,
+      userName: `DeletedAccount`,
     }),
     User.create({
-      email : `testUser@example.com`,
-      password : `pw`,
-      userName : `TheFirstTestUser`,
+      email: `testUser@example.com`,
+      password: `pw`,
+      userName: `TheFirstTestUser`,
     }),
     User.create({
-      email : `testUser2@example.com`,
-      password : `pw2`,
-      userName : `TheSecondTestUser`,
+      email: `testUser2@example.com`,
+      password: `pw2`,
+      userName: `TheSecondTestUser`,
     }),
   ])
   console.log(`Seeded ${users.length} users`)
 
   const recipes = await Promise.all([
     Recipe.create({
-      text : `Source: https://www.allrecipes.com/recipe/22918/pop-cake/
+      text: `Source: https://www.allrecipes.com/recipe/22918/pop-cake/
 
       Pop Cake
       
@@ -48,26 +48,26 @@ const seed = async () => {
       
       Beat together instant pudding and milk until thick, then pour over cake.  Frost cake with whipped topping.  Keep cake refrigerated until ready to serve.
       `,
-      title : `Pop Cake`,
-      sourceSite : `allrecipes.com`,
-      sourceUrl : `https://www.allrecipes.com/recipe/22918/pop-cake/`,
-      createdBy : 1,
-      forkedCount : 1,
-      userId : 1,
+      title: `Pop Cake`,
+      sourceSite: `allrecipes.com`,
+      sourceUrl: `https://www.allrecipes.com/recipe/22918/pop-cake/`,
+      createdBy: 1,
+      forkedCount: 1,
+      userId: 1,
     }),
     Recipe.create({
-      text : `The Creator's Cream
+      text: `The Creator's Cream
       Just a bunch of cream! Drink it! Recipes can look like anything!
       `,
-      title : `Cream of the Creator`,
-      sourceSite : `User Upload`,
-      sourceUrl : `User Upload`,
-      createdBy : 1,
-      forkedCount : 0,
-      userId : 1,
+      title: `Cream of the Creator`,
+      sourceSite: `User Upload`,
+      sourceUrl: `User Upload`,
+      createdBy: 1,
+      forkedCount: 0,
+      userId: 1,
     }),
     Recipe.create({
-      text : `Source: https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44
+      text: `Source: https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44
 
       Skillet Chicken Stroganoff
       
@@ -97,15 +97,15 @@ const seed = async () => {
       
       Heat to simmering; reduce heat to medium-low, and cook 3 to 5 minutes, stirring occasionally, until sauce is thickened and chicken is cooked through. Remove from heat; stir in sour cream. Garnish with parsley. Serve mixture over cooked egg noodles.
       `,
-      title : `Skillet Chicken Stroganoff`,
-      sourceSite : `bettycrocker.com`,
-      sourceUrl : `https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44`,
-      createdBy : 2,
-      forkedCount : 0,
-      userId : 2,
+      title: `Skillet Chicken Stroganoff`,
+      sourceSite: `bettycrocker.com`,
+      sourceUrl: `https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44`,
+      createdBy: 2,
+      forkedCount: 0,
+      userId: 2,
     }),
     Recipe.create({
-      text : `Source: http://www.geniuskitchen.com/recipe/sonic-strawberry-cheesecake-shake-122785
+      text: `Source: http://www.geniuskitchen.com/recipe/sonic-strawberry-cheesecake-shake-122785
 
       Sonic Strawberry Cheesecake Shake
       
@@ -129,15 +129,15 @@ const seed = async () => {
       
       Serve.
       `,
-      title : `Sonic Strawberry Cheesecake Shake`,
-      sourceSite : `geniuskitchen.com`,
-      sourceUrl : `http://www.geniuskitchen.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
-      createdBy : 2,
-      forkedCount : 0,
-      userId : 2,
+      title: `Sonic Strawberry Cheesecake Shake`,
+      sourceSite: `geniuskitchen.com`,
+      sourceUrl: `http://www.geniuskitchen.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
+      createdBy: 2,
+      forkedCount: 0,
+      userId: 2,
     }),
     Recipe.create({
-      text : `Source: https://www.allrecipes.com/recipe/22918/pop-cake/
+      text: `Source: https://www.allrecipes.com/recipe/22918/pop-cake/
 
       Pop Cake
       
@@ -159,22 +159,22 @@ const seed = async () => {
       
       Beat together instant pudding and milk until thick, then pour over cake.  Frost cake with whipped topping.  Keep cake refrigerated until ready to serve.
       `,
-      title : `Pop Cake`,
-      sourceSite : `allrecipes.com`,
-      sourceUrl : `https://www.allrecipes.com/recipe/22918/pop-cake/`,
-      createdBy : 1,
-      forkedCount : 0,
-      userId : 2,
+      title: `Pop Cake`,
+      sourceSite: `allrecipes.com`,
+      sourceUrl: `https://www.allrecipes.com/recipe/22918/pop-cake/`,
+      createdBy: 1,
+      forkedCount: 0,
+      userId: 2,
     }),
   ])
   const [popcake, cream, chickenStrog, cakeShake, forkedPopcake] = recipes
   console.log(`Seeded ${recipes.length} recipes`)
 
   const tags = await Promise.all([
-    Tag.create({name : `dessert`}),
-    Tag.create({name : `beverage`}),
-    Tag.create({name : `entre`}),
-    Tag.create({name : `meat`}),
+    Tag.create({ name: `dessert` }),
+    Tag.create({ name: `beverage` }),
+    Tag.create({ name: `entre` }),
+    Tag.create({ name: `meat` }),
   ])
   const [dessert, beverage, entre, meat] = tags
   console.log(`Seeded ${tags.length} tags`)
@@ -189,16 +189,16 @@ const seed = async () => {
   console.log(`Set tags`)
 }
 
-if(module === require.main){
+if (module === require.main) {
   console.log(`Seeding...\n`);
   (async () => {
-    try{
+    try {
       await seed()
       console.log(`\nSeeding complete`)
-    }catch(error){
+    } catch (error) {
       console.log(error)
       process.exitCode = 1
-    }finally{
+    } finally {
       db.close()
     }
   })()

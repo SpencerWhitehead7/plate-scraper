@@ -6,13 +6,13 @@ const cleanupOrpanedTags = async () => {
   const tags = await Tag.findAll()
   const tagAssociationsP = []
   tags.forEach(tag => {
-    tagAssociationsP.push(RecipeTraits.findOne({where : {tagId : tag.id}}))
+    tagAssociationsP.push(RecipeTraits.findOne({ where: { tagId: tag.id } }))
   })
   const tagAssociations = await Promise.all(tagAssociationsP)
   const toBeDestroyed = []
   tagAssociations.forEach((association, i) => {
-    if(!association){
-      toBeDestroyed.push(Tag.destroy({where : {id : tags[i].id}}))
+    if (!association) {
+      toBeDestroyed.push(Tag.destroy({ where: { id: tags[i].id } }))
     }
   })
   await Promise.all(toBeDestroyed)
@@ -22,16 +22,16 @@ const cleanupOrpanedTags = async () => {
   console.log(`${updatedTags.length} tag${updatedTags.length > 1 || tags.length === 0 ? `s` : ``} remaining`)
 }
 
-if(module === require.main){
+if (module === require.main) {
   console.log(`Cleaning...\n`);
   (async () => {
-    try{
+    try {
       await cleanupOrpanedTags()
       console.log(`\nCleaning complete`)
-    }catch(error){
+    } catch (error) {
       console.log(error)
       process.exitCode = 1
-    }finally{
+    } finally {
       db.close()
     }
   })()
