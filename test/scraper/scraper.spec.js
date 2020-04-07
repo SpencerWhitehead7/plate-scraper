@@ -48,8 +48,11 @@ describe(`The parsers`, () => {
 
   afterEach(() => i++)
 
-  it(`allrecipes pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/allrecipes`))
+  it(`allrecipes html0 template pages are parsed correctly`, () => {
+    expect(results[i].recipe).to.equal(require(`./correct-recipes/allrecipes0`))
+  })
+  it(`allrecipes html1 template pages are parsed correctly`, () => {
+    expect(results[i].recipe).to.equal(require(`./correct-recipes/allrecipes1`))
   })
   it(`bettycrocker pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/bettycrocker`))
