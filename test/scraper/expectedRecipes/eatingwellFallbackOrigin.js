@@ -1,4 +1,4 @@
-module.exports = `Source: http://fallback-origin.eatingwell.com/recipe/278578/egyptian-lentil-soup/
+module.exports = `Source: https://fallback-origin.eatingwell.com/recipe/278578/egyptian-lentil-soup/
 
 Egyptian Lentil Soup
 

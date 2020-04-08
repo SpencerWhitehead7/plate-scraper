@@ -1,105 +1,75 @@
-/* eslint-disable global-require */
+const { expect } = require(`chai`)
 
-const expect = require(`chai`).expect
+const expecteds = require(`./expectedResults`)
 
 const scrape = require(`../../server/logic`)
 
-describe(`The scraping function`, () => {
-  let result = {}
-  before(async () => {
-    result = await scrape(`https://www.allrecipes.com/recipe/22918/pop-cake/`)
-  })
-
-  it(`should return an object`, () => {
-    expect(result).to.be.a(`object`)
-  })
-  it(`the object should have a sourceSite property set to the root address of the recipe's url`, () => {
-    expect(result.sourceSite).to.equal(`allrecipes.com`)
-  })
-  it(`the object should have a sourceUrl property set to the recipe's url`, () => {
-    expect(result.sourceUrl).to.equal(`https://www.allrecipes.com/recipe/22918/pop-cake/`)
-  })
-  it(`the object should have a title property set to the recipe's title`, () => {
-    expect(result.title).to.equal(`Pop Cake`)
-  })
-  it(`the object should have a recipe property set to the recipe's formatted text with a source note`, () => {
-    expect(result.recipe).to.equal(require(`./correct-recipes/allrecipes0`))
-  })
-})
-
-describe(`The parsers`, () => {
-  const sourceUrls = require(`./sourceUrls`)
-  let counter = 0
+describe(`The parsers handle`, () => {
+  let actuals = []
   let i = 0
-  let results = []
 
   before(async () => {
     try {
-      const promises = []
-      while (counter < sourceUrls.length) {
-        promises.push(scrape(sourceUrls[counter]))
-        counter++
-      }
-      results = await Promise.all(promises)
+      actuals = await Promise.all(expecteds.map(testItem => scrape(testItem.sourceUrl)))
     } catch (err) {
       console.log(err)
     }
   })
 
-  afterEach(() => i++)
+  afterEach(() => { i++ })
 
-  it(`allrecipes html0 template pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/allrecipes0`))
+  it(`allrecipes html0 template pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`allrecipes html1 template pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/allrecipes1`))
+  it(`allrecipes html1 template pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`bettycrocker pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/bettycrocker`))
+  it(`bettycrocker pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`bonappetit pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/bonappetit`))
+  it(`bonappetit pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`chowhound pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/chowhound`))
+  it(`chowhound pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`cookinglight pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/cookinglight`))
+  it(`cookinglight pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`eatingwell pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/eatingwell`))
+  it(`eatingwell pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`eatingwell fallback origin pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/eatingwellFallbackOrigin`))
+  it(`eatingwell fallback origin pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`myrecipes pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/myrecipes`))
+  it(`epicurious pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`epicurious pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/epicurious`))
+  it(`food pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`food pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/food`))
-  })
-  // it('food52', () => { uncomment if I ever get it working
-  //   expect(results[i]s.recipe).to.equal(require('./food52'))
+  // it('food52 pages', () => {
+  //   expect(actuals[i]).to.deep.equal(expecteds[i])
   // })
-  it(`foodandwine pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/foodandwine`))
+  it(`foodandwine pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`foodnetwork pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/foodnetwork`))
+  it(`foodnetwork pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`jamieoliver pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/jamieoliver`))
+  it(`jamieoliver pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`seriouseats pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/seriouseats`))
+  it(`myrecipes pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  it(`simplyrecipes pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/simplyrecipes`))
+  it(`seriouseats pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
   })
-  // it(`thekitchn pages are parsed correctly`, () => {
-  //   expect(results[i].recipe).to.equal(require(`./correct-recipes/thekitchn`))
+  it(`simplyrecipes pages`, () => {
+    expect(actuals[i]).to.deep.equal(expecteds[i])
+  })
+  // it(`thekitchn pages`, () => {
+  //   expect(actuals[i]).to.deep.equal(expecteds[i])
   // })
 })

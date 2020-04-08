@@ -1,4 +1,4 @@
-module.exports = `Source: http://www.myrecipes.com/recipe/grapefruit-pound-cake
+module.exports = `Source: https://www.myrecipes.com/recipe/grapefruit-pound-cake
 
 Grapefruit Pound Cake
 

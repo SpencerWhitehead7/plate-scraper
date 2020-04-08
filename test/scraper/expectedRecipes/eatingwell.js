@@ -1,4 +1,4 @@
-module.exports = `Source: http://www.eatingwell.com/recipe/278567/shaved-artichoke-salad-with-shrimp/
+module.exports = `Source: https://www.eatingwell.com/recipe/278567/shaved-artichoke-salad-with-shrimp/
 
 Shaved Artichoke Salad with Shrimp
 

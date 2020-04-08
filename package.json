@@ -5,7 +5,6 @@
   "main": "server/index",
   "scripts": {
     "test": "NODE_ENV='test' mocha --timeout 10000 --exit -- test/*",
-    "testpart": "NODE_ENV='test' mocha --timeout 10000 --exit -- test/scripts/seed.spec.js",
     "lint": "eslint . --ext .js,.jsx --ignore-pattern /public/*",
     "lint-fix": "eslint . --ext .js,.jsx --fix --ignore-pattern /public/*",
     "start": "node server",

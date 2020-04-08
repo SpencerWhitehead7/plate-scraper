@@ -105,7 +105,7 @@ const seed = async () => {
       userId: 2,
     }),
     Recipe.create({
-      text: `Source: http://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785
+      text: `Source: https://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785
 
       Sonic Strawberry Cheesecake Shake
       
@@ -131,7 +131,7 @@ const seed = async () => {
       `,
       title: `Sonic Strawberry Cheesecake Shake`,
       sourceSite: `foood.com`,
-      sourceUrl: `http://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
+      sourceUrl: `https://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
       createdBy: 2,
       forkedCount: 0,
       userId: 2,

@@ -1,4 +1,4 @@
-module.exports = `Source: http://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785
+module.exports = `Source: https://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785
 
 Sonic Strawberry Cheesecake Shake
 
