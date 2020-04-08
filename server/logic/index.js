@@ -10,14 +10,14 @@ const cookinglight = require(`./cookinglight`)
 const eatingwell = require(`./eatingwell`)
 const epicurious = require(`./epicurious`)
 const food = require(`./food`)
-// const food52 = require(`./food52`) uncomment if I ever get it working
+// const food52 = require(`./food52`) // uncomment if I ever get it working
 const foodandwine = require(`./foodandwine`)
 const foodnetwork = require(`./foodnetwork`)
 const jamieoliver = require(`./jamieoliver`)
 const myrecipes = require(`./myrecipes`)
 const seriousEats = require(`./seriousEats`)
 const simplyrecipes = require(`./simplyrecipes`)
-const thekitchn = require(`./thekitchn`)
+// const thekitchn = require(`./thekitchn`) // uncomment if I ever get it working
 
 const recipeToStr = (url, recipe) => {
   let output = `Source: ${url}\n\n${recipe.title}\n\nIngredients\n`
@@ -76,9 +76,9 @@ const scrape = async url => {
       parserLoader(seriousEats, `seriouseats.com`)
     } else if (url.includes(`simplyrecipes.com`)) { // simplyrecipes
       parserLoader(simplyrecipes, `simplyrecipes.com`)
-    } else if (url.includes(`thekitchn.com`)) { // thekitchn
-      parserLoader(thekitchn, `thekitchn.com`)
-    }
+    } // else if (url.includes(`thekitchn.com`)) { // thekitchn
+    //   parserLoader(thekitchn, `thekitchn.com`)
+    // }
     recipeData.title = recipe.title
     recipeData.recipe = recipeToStr(url, recipe)
   } catch (err) {

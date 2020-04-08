@@ -14,7 +14,7 @@ module.exports = [
   `https://www.foodandwine.com/recipes/classic-southern-fried-chicken`,
   `https://www.foodnetwork.com/recipes/bobby-flay/perfectly-grilled-steak-recipe-1973350`,
   `https://www.jamieoliver.com/recipes/eggs-recipes/amazing-yorkies/`,
-  `https://www.thekitchn.com/recipe-watermelon-mint-frose-233904`,
-  `https://www.simplyrecipes.com/recipes/grilled_salmon_with_peach_salsa/`,
   `https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html`,
+  `https://www.simplyrecipes.com/recipes/grilled_salmon_with_peach_salsa/`,
+  // `https://www.thekitchn.com/recipe-watermelon-mint-frose-233904`, uncomment if I ever get it working
 ]

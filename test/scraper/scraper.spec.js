@@ -93,13 +93,13 @@ describe(`The parsers`, () => {
   it(`jamieoliver pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/jamieoliver`))
   })
-  it(`thekitchn pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/thekitchn`))
+  it(`seriouseats pages are parsed correctly`, () => {
+    expect(results[i].recipe).to.equal(require(`./correct-recipes/seriouseats`))
   })
   it(`simplyrecipes pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/simplyrecipes`))
   })
-  it(`seriouseats pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/seriouseats`))
-  })
+  // it(`thekitchn pages are parsed correctly`, () => {
+  //   expect(results[i].recipe).to.equal(require(`./correct-recipes/thekitchn`))
+  // })
 })

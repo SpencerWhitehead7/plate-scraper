@@ -22,7 +22,7 @@ const SupportedSites = () => (
       <div className="site-col">
         <a href="https://www.jamieoliver.com">jamieoliver.com</a>
         <a href="https://www.myrecipes.com">myrecipes.com</a>
-        <a href="https://www.thekitchn.com">thekitchn.com</a>
+        {/* <a href="https://www.thekitchn.com">thekitchn.com</a> uncomment if I ever get it working */}
         <a href="https://www.simplyrecipes.com">simplyrecipes.com</a>
         <a href="https://www.seriouseats.com/recipes">seriouseats.com/recipes</a>
       </div>

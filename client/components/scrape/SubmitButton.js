@@ -19,7 +19,7 @@ const SubmitButton = ({ url }) => (
       !url.includes(`myrecipes.com`) &&
       !url.includes(`seriouseats.com/recipes`) &&
       !url.includes(`simplyrecipes.com`) &&
-      !url.includes(`thekitchn.com`)
+      // !url.includes(`thekitchn.com`)
     }
     id="sub-btn"
   >
