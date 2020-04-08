@@ -1,36 +1,24 @@
-module.exports = `Source: http://www.eatingwell.com/recipe/259692/easy-chicken-cacciatore/
+module.exports = `Source: http://www.eatingwell.com/recipe/278567/shaved-artichoke-salad-with-shrimp/
 
-Easy Chicken Cacciatore 
+Shaved Artichoke Salad with Shrimp
 
 Ingredients
 
-⅓ cup all-purpose flour
-2 pounds chicken thighs and/or drumsticks, skinned (8 pieces)
-¼ teaspoon kosher salt or sea salt
-⅛ teaspoon freshly ground black pepper
-2 tablespoons olive oil
-4 small carrots, peeled and cut crosswise into thirds
-3 stalks celery, cut crosswise into quarters
-1 medium onion, coarsely chopped
-8 cloves garlic, peeled and thinly sliced
-¼ cup tomato paste
-1 cup reduced sodium chicken broth
-1 cup dry red wine or cranberry juice
-2 tablespoons white wine vinegar
-6 medium plum tomatoes, coarsely chopped
-1 tablespoon snipped fresh thyme or 1 teaspoon dried thyme, crushed
-2 tablespoons freshly grated Parmesan cheese
-2 tablespoons snipped fresh flat-leaf parsley
+1  lemon, halved
+12  small to medium artichokes
+4 tablespoons extra-virgin olive oil, divided
+2 tablespoons torn fresh mint leaves
+Pinch of salt
+¼ teaspoon ground pepper, divided
+½ pound large shrimp (26-30 per pound), peeled and deveined
 
 Instructions
 
-Spread flour in a shallow dish. Season chicken pieces with the salt and pepper. Dip chicken in the flour, turning to coat evenly and gently shaking off excess.
+Squeeze a lemon half into a bowl of cold water. Cut stems from artichokes and discard. Working with one artichoke at a time, pull off all the leaves and soft purple petals and discard. Using a sharp paring knife, trim any remaining green parts from the heart. Rub with the cut side of the remaining lemon half. Scoop out the fuzzy choke with a melon baller or spoon. Rub again with the lemon half. Place the artichoke heart in the lemon water to prevent discoloration while you trim the rest.
 
-In a 5-quart Dutch oven, heat oil over medium-high heat. Add chicken pieces; cook about 6 minutes or until browned, turning occasionally.
+Very thinly slice the artichoke hearts and immediately toss them in a bowl with 2 tablespoons oil, mint, salt and 1/8 teaspoon pepper.
 
-Remove chicken from Dutch oven; set aside. Drain off fat, reserving 2 tablespoons in the Dutch oven. Add carrots, celery, onion, and garlic. Cook about 5 minutes or just until onion is tender, stirring occasionally.
+Heat the remaining 2 tablespoons oil in a large skillet over medium-high heat. Add shrimp and the remaining 1/8 teaspoon pepper. Cook, stirring occasionally, until the shrimp are pink, 3 to 4 minutes.
 
-Stir in tomato paste. Add broth, wine, and vinegar; bring to boiling. Add tomatoes and thyme. Return chicken to Dutch oven. Bring to boiling; reduce heat. Simmer, covered, for 60 to 70 minutes or until chicken and vegetables are tender.
-
-To serve, place chicken, vegetables, and cooking juices on a serving platter. Sprinkle with Parmesan cheese and parsley.
+Serve the shrimp with the artichokes and garnished with more mint, if desired.
 `

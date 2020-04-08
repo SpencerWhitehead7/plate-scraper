@@ -5,7 +5,8 @@ module.exports = [
   `https://www.bonappetit.com/recipe/grilled-salmon-with-lemon-sesame-sauce`,
   `https://www.chowhound.com/recipes/slow-cooker-red-pepper-butternut-squash-soup-31117`,
   `https://www.cookinglight.com/recipes/grapefruit-campari-bars-shortbread-crust`,
-  `http://www.eatingwell.com/recipe/259692/easy-chicken-cacciatore/`,
+  `http://www.eatingwell.com/recipe/278567/shaved-artichoke-salad-with-shrimp/`,
+  `http://fallback-origin.eatingwell.com/recipe/278578/egyptian-lentil-soup/`,
   `http://www.myrecipes.com/recipe/grapefruit-pound-cake`,
   `https://www.epicurious.com/recipes/food/views/iron-skillet-peach-crisp-56389711`,
   // add food52 here if I ever get it working

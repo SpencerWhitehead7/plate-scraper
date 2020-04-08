@@ -69,6 +69,9 @@ describe(`The parsers`, () => {
   it(`eatingwell pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/eatingwell`))
   })
+  it(`eatingwell fallback origin pages are parsed correctly`, () => {
+    expect(results[i].recipe).to.equal(require(`./correct-recipes/eatingwellFallbackOrigin`))
+  })
   it(`myrecipes pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/myrecipes`))
   })
