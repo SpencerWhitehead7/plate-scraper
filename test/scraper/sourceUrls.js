@@ -9,10 +9,10 @@ module.exports = [
   `http://fallback-origin.eatingwell.com/recipe/278578/egyptian-lentil-soup/`,
   `http://www.myrecipes.com/recipe/grapefruit-pound-cake`,
   `https://www.epicurious.com/recipes/food/views/iron-skillet-peach-crisp-56389711`,
+  `http://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
   // add food52 here if I ever get it working
   `https://www.foodandwine.com/recipes/classic-southern-fried-chicken`,
   `https://www.foodnetwork.com/recipes/bobby-flay/perfectly-grilled-steak-recipe-1973350`,
-  `http://www.geniuskitchen.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
   `https://www.jamieoliver.com/recipes/eggs-recipes/amazing-yorkies/`,
   `https://www.thekitchn.com/recipe-watermelon-mint-frose-233904`,
   `https://www.simplyrecipes.com/recipes/grilled_salmon_with_peach_salsa/`,

@@ -9,10 +9,10 @@ const chowhound = require(`./chowhound`)
 const cookinglight = require(`./cookinglight`)
 const eatingwell = require(`./eatingwell`)
 const epicurious = require(`./epicurious`)
+const food = require(`./food`)
 // const food52 = require(`./food52`) uncomment if I ever get it working
 const foodandwine = require(`./foodandwine`)
 const foodnetwork = require(`./foodnetwork`)
-const geniuskitchenOrfood = require(`./geniuskitchenOrfood`)
 const jamieoliver = require(`./jamieoliver`)
 const myrecipes = require(`./myrecipes`)
 const seriousEats = require(`./seriousEats`)
@@ -60,14 +60,14 @@ const scrape = async url => {
       parserLoader(eatingwell, `eatingwell.com`)
     } else if (url.includes(`epicurious.com`)) { // epicurious
       parserLoader(epicurious, `epicurious.com`)
+    } else if (url.includes(`food.com`)) {
+      parserLoader(food, `food.com`)
     // } else if (url.includes(`food52.com`)) { // food52 uncomment if I ever get it working
     //   parserLoader(food52, `food52.com`)
     } else if (url.includes(`foodandwine.com`)) { // foodandwine
       parserLoader(foodandwine, `foodandwine.com`)
     } else if (url.includes(`foodnetwork.com`)) { // foodnetwork
       parserLoader(foodnetwork, `foodnetwork.com`)
-    } else if (url.includes(`geniuskitchen.com`)) { // geniuskitchen/food
-      parserLoader(geniuskitchenOrfood, `geniuskitchen.com`)
     } else if (url.includes(`jamieoliver.com`)) { // jamieoliver
       parserLoader(jamieoliver, `jamieoliver.com`)
     } else if (url.includes(`myrecipes.com`)) { // myrecipes

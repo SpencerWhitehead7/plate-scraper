@@ -78,6 +78,9 @@ describe(`The parsers`, () => {
   it(`epicurious pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/epicurious`))
   })
+  it(`food pages are parsed correctly`, () => {
+    expect(results[i].recipe).to.equal(require(`./correct-recipes/food`))
+  })
   // it('food52', () => { uncomment if I ever get it working
   //   expect(results[i]s.recipe).to.equal(require('./food52'))
   // })
@@ -86,9 +89,6 @@ describe(`The parsers`, () => {
   })
   it(`foodnetwork pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/foodnetwork`))
-  })
-  it(`geniuskitchen pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/geniuskitchen`))
   })
   it(`jamieoliver pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/jamieoliver`))

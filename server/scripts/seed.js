@@ -105,19 +105,19 @@ const seed = async () => {
       userId: 2,
     }),
     Recipe.create({
-      text: `Source: http://www.geniuskitchen.com/recipe/sonic-strawberry-cheesecake-shake-122785
+      text: `Source: http://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785
 
       Sonic Strawberry Cheesecake Shake
       
       Ingredients
       
-      1  cup  milk
-      3  cups  vanilla ice cream
-      1⁄2 cup  strawberry, and syrup, from Jello-O No Bake Strawberry Cheesecake kit
-      3  tablespoons  cheesecake mix, powder from cheesecake kit
+      1    cup    milk
+      3    cups    vanilla ice cream
+      1⁄2   cup    strawberry, and syrup, from Jello-O No Bake Strawberry Cheesecake kit
+      3    tablespoons    cheesecake mix, powder from cheesecake kit
       topping
       canned whipped cream
-      2  teaspoons  graham cracker crumbs, from cheesecake kit
+      2    teaspoons    graham cracker crumbs, from cheesecake kit
       
       Instructions
       
@@ -130,8 +130,8 @@ const seed = async () => {
       Serve.
       `,
       title: `Sonic Strawberry Cheesecake Shake`,
-      sourceSite: `geniuskitchen.com`,
-      sourceUrl: `http://www.geniuskitchen.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
+      sourceSite: `foood.com`,
+      sourceUrl: `http://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
       createdBy: 2,
       forkedCount: 0,
       userId: 2,

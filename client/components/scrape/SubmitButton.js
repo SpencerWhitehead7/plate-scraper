@@ -11,10 +11,10 @@ const SubmitButton = ({ url }) => (
       !url.includes(`cookinglight.com`) &&
       !url.includes(`eatingwell.com`) &&
       !url.includes(`epicurious.com`) &&
+      !url.includes(`food.com`) &&
       // !url.includes(`food52.com`) &&
       !url.includes(`foodandwine.com`) &&
       !url.includes(`foodnetwork.com`) &&
-      !url.includes(`geniuskitchen.com`) &&
       !url.includes(`jamieoliver.com`) &&
       !url.includes(`myrecipes.com`) &&
       !url.includes(`seriouseats.com/recipes`) &&
