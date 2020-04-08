@@ -84,13 +84,9 @@ describe(`The parsers`, () => {
   it(`foodandwine pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/foodandwine`))
   })
-  it(`foodnetwork html0 template pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/foodnetwork0`))
+  it(`foodnetwork pages are parsed correctly`, () => {
+    expect(results[i].recipe).to.equal(require(`./correct-recipes/foodnetwork`))
   })
-  it(`foodnetwork html1 template pages are parsed correctly`, () => {
-    expect(results[i].recipe).to.equal(require(`./correct-recipes/foodnetwork1`))
-  })
-  // There may be other, as yet unknown, foodnetwork html layouts, but I'll add them as I find them.
   it(`geniuskitchen pages are parsed correctly`, () => {
     expect(results[i].recipe).to.equal(require(`./correct-recipes/geniuskitchen`))
   })

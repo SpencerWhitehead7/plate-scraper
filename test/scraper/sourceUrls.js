@@ -12,7 +12,6 @@ module.exports = [
   // add food52 here if I ever get it working
   `https://www.foodandwine.com/recipes/classic-southern-fried-chicken`,
   `https://www.foodnetwork.com/recipes/bobby-flay/perfectly-grilled-steak-recipe-1973350`,
-  `https://www.foodnetwork.com/recipes/patrick-and-gina-neely/old-fashioned-macaroni-salad-recipe-1948708`,
   `http://www.geniuskitchen.com/recipe/sonic-strawberry-cheesecake-shake-122785`,
   `https://www.jamieoliver.com/recipes/eggs-recipes/amazing-yorkies/`,
   `https://www.thekitchn.com/recipe-watermelon-mint-frose-233904`,
