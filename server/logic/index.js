@@ -15,7 +15,7 @@ const foodandwine = require(`./foodandwine`)
 const foodnetwork = require(`./foodnetwork`)
 const jamieoliver = require(`./jamieoliver`)
 const myrecipes = require(`./myrecipes`)
-const seriousEats = require(`./seriousEats`)
+const seriousEats = require(`./seriouseats`)
 const simplyrecipes = require(`./simplyrecipes`)
 // const thekitchn = require(`./thekitchn`) // uncomment if I ever get it working
 

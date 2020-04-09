@@ -11,7 +11,7 @@ const allrecipes = ($, url) => {
     ingredients = getCleanStrings($, `.checkList__line label`)
       .slice(0, -2) // to deal with some HTML BS
     instructions = getCleanStrings($, `.recipe-directions__list--item`)
-  } else if ($(`main`).length) {
+  } else {
     title = getCleanStrings($, `.headline-wrapper`)
     ingredients = getCleanStrings($, `.ingredients-item`)
     instructions = getCleanStrings($, `.section-body`, `.instructions-section`)

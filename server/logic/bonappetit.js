@@ -1,6 +1,6 @@
 const { getCleanStrings, getRecipe } = require(`./helpers`)
 
-const boneappetit = ($, url) => {
+const bonappetit = ($, url) => {
   const title = getCleanStrings($, `h1`)
   const ingredients = getCleanStrings($, `.ingredients__text`)
   const instructions = getCleanStrings($, `.step`)
@@ -13,4 +13,4 @@ const boneappetit = ($, url) => {
   }
 }
 
-module.exports = boneappetit
+module.exports = bonappetit

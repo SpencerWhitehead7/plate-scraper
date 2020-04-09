@@ -5,11 +5,12 @@ const eatingwell = ($, url) => {
   let ingredients
   let instructions
 
+  // two known recipe page templates; one without a main with that class, one with
   if ($(`body`).hasClass(`template-recipe`)) {
     title = getCleanStrings($, `.headline-wrapper`)
     ingredients = getCleanStrings($, `.ingredients-item`)
     instructions = getCleanStrings($, `.section-body`, `.instructions-section`)
-  } else if (!$(`body`).hasClass(``)) {
+  } else {
     title = getCleanStrings($, `.hideOnTabletToDesktop`)
     ingredients = getCleanStrings($, `.checkListListItem.checkListLine span`)
     instructions = getCleanStrings($, `.recipeDirectionsListItem`)
