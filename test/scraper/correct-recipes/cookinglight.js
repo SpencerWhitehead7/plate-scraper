@@ -15,7 +15,7 @@ Cooking spray
 3/4 cup fresh red grapefruit juice
 3 tablespoons cornstarch
 1/4 teaspoon kosher salt
-2  large egg yolks, lightly beaten
+2 large egg yolks, lightly beaten
 1 1/2 tablespoons Campari
 
 Instructions

@@ -1,14 +1,16 @@
-const food = (recipe, html) => {
-  recipe.title = html(`h1`).text()
-  html(`.recipe-ingredients__item`).each(function() {
-    recipe.ingredients.push(html(this)
-      .text()
-      .trim()
-      .replace(/\s+/g, ` `))
-  })
-  html(`.recipe-directions__step`).each(function() {
-    recipe.instructions.push(html(this).text().trim())
-  })
+const { getCleanStrings, getRecipe } = require(`./helpers`)
+
+const food = ($, url) => {
+  const title = getCleanStrings($, `h1`)
+  const ingredients = getCleanStrings($, `.recipe-ingredients__item`)
+  const instructions = getCleanStrings($, `.recipe-directions__step`)
+
+  return {
+    sourceSite: `food.com`,
+    sourceUrl: url,
+    title: title[0],
+    recipe: getRecipe(url, title, ingredients, instructions),
+  }
 }
 
 module.exports = food

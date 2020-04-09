@@ -1,12 +1,16 @@
-const bettycrocker = (recipe, html) => {
-  recipe.title = html(`h1`).text()
-  html(`.recipePartIngredient`).each(function() {
-    recipe.ingredients.push(`${html(this).text().trim()}`
-      .replace(/\s\s+/g, ` `)) // to deal with some html whitespace BS
-  })
-  html(`.recipePartStepDescription`).each(function() {
-    recipe.instructions.push(`${html(this).text().trim()}`)
-  })
+const { getCleanStrings, getRecipe } = require(`./helpers`)
+
+const bettycrocker = ($, url) => {
+  const title = getCleanStrings($, `h1`)
+  const ingredients = getCleanStrings($, `.recipePartIngredient`)
+  const instructions = getCleanStrings($, `.recipePartStepDescription`)
+
+  return {
+    sourceSite: `bettycrocker.com`,
+    sourceUrl: url,
+    title: title[0],
+    recipe: getRecipe(url, title, ingredients, instructions),
+  }
 }
 
 module.exports = bettycrocker

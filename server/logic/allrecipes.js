@@ -1,23 +1,27 @@
-const allrecipes = (recipe, html) => {
+const { getCleanStrings, getRecipe } = require(`./helpers`)
+
+const allrecipes = ($, url) => {
+  let title
+  let ingredients
+  let instructions
+
   // two known recipe page templates; one without a main, one with
-  if (!html(`main`).length) {
-    recipe.title = html(`h1`).text().trim()
-    html(`.checkList__line label`).each(function() {
-      recipe.ingredients.push(`${html(this).text().trim()}`)
-    })
-    recipe.ingredients = recipe.ingredients.slice(0, -3) // to deal with some html BS
-    html(`.recipe-directions__list--item`).each(function() {
-      recipe.instructions.push(`${html(this).text().trim()}`)
-    })
-    recipe.instructions = recipe.instructions.slice(0, -1) // to deal with some html BS
-  } else if (html(`main`).length) {
-    recipe.title = html(`.headline-wrapper`).text().trim()
-    html(`.ingredients-item`).each(function() {
-      recipe.ingredients.push(`${html(this).text().trim()}`)
-    })
-    html(`.section-body`, `.instructions-section`).each(function() {
-      recipe.instructions.push(`${html(this).text().trim()}`)
-    })
+  if (!$(`main`).length) {
+    title = getCleanStrings($, `h1`)
+    ingredients = getCleanStrings($, `.checkList__line label`)
+      .slice(0, -2) // to deal with some HTML BS
+    instructions = getCleanStrings($, `.recipe-directions__list--item`)
+  } else if ($(`main`).length) {
+    title = getCleanStrings($, `.headline-wrapper`)
+    ingredients = getCleanStrings($, `.ingredients-item`)
+    instructions = getCleanStrings($, `.section-body`, `.instructions-section`)
+  }
+
+  return {
+    sourceSite: `allrecipes.com`,
+    sourceUrl: url,
+    title: title[0],
+    recipe: getRecipe(url, title, ingredients, instructions),
   }
 }
 

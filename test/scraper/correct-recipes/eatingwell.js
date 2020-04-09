@@ -4,8 +4,8 @@ Shaved Artichoke Salad with Shrimp
 
 Ingredients
 
-1  lemon, halved
-12  small to medium artichokes
+1 lemon, halved
+12 small to medium artichokes
 4 tablespoons extra-virgin olive oil, divided
 2 tablespoons torn fresh mint leaves
 Pinch of salt

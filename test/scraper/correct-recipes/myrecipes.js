@@ -11,7 +11,7 @@ Baking spray with flour
 1 2/3 cups granulated sugar
 6 tablespoons butter, softened
 6 ounces 1/3-less-fat cream cheese
-2  large eggs
+2 large eggs
 1/4 cup canola oil
 2 tablespoons grated grapefruit rind
 1/2 teaspoon vanilla extract

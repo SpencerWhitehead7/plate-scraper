@@ -19,72 +19,49 @@ const seriousEats = require(`./seriousEats`)
 const simplyrecipes = require(`./simplyrecipes`)
 // const thekitchn = require(`./thekitchn`) // uncomment if I ever get it working
 
-const recipeToStr = (url, recipe) => {
-  let output = `Source: ${url}\n\n${recipe.title}\n\nIngredients\n`
-  recipe.ingredients.forEach(ingredient => { output += `\n${ingredient}` })
-  output += `\n\nInstructions\n`
-  recipe.instructions.forEach(instruction => { output += `\n${instruction}\n` })
-  return output
-}
-
 const scrape = async url => {
-  const recipe = {
-    title: ``,
-    ingredients: [],
-    instructions: [],
-  }
-  const recipeData = {
-    sourceSite: ``,
-    sourceUrl: url,
-    title: ``,
-    recipe: ``,
-  }
   try {
     const { data } = await axios.get(url)
-    const html = cheerio.load(data)
-    const parserLoader = (parser, sourceSite) => {
-      parser(recipe, html)
-      recipeData.sourceSite = sourceSite
-    }
-    if (url.includes(`allrecipes.com`)) { // allrecipes
-      parserLoader(allrecipes, `allrecipes.com`)
-    } else if (url.includes(`bettycrocker.com`)) { // bettycrocker
-      parserLoader(bettycrocker, `bettycrocker.com`)
-    } else if (url.includes(`bonappetit.com`)) { // bonappetit
-      parserLoader(bonappetit, `bonappetit.com`)
-    } else if (url.includes(`chowhound.com`)) { // chowhound
-      parserLoader(chowhound, `chowhound.com`)
-    } else if (url.includes(`cookinglight.com`)) { // cookinglight
-      parserLoader(cookinglight, `cookinglight.com`)
-    } else if (url.includes(`eatingwell.com`)) { // eatingwell
-      parserLoader(eatingwell, `eatingwell.com`)
-    } else if (url.includes(`epicurious.com`)) { // epicurious
-      parserLoader(epicurious, `epicurious.com`)
+    const $ = cheerio.load(data)
+
+    if (url.includes(`allrecipes.com`)) {
+      return allrecipes($, url)
+    } else if (url.includes(`bettycrocker.com`)) {
+      return bettycrocker($, url)
+    } else if (url.includes(`bonappetit.com`)) {
+      return bonappetit($, url)
+    } else if (url.includes(`chowhound.com`)) {
+      return chowhound($, url)
+    } else if (url.includes(`cookinglight.com`)) {
+      return cookinglight($, url)
+    } else if (url.includes(`eatingwell.com`)) {
+      return eatingwell($, url)
+    } else if (url.includes(`epicurious.com`)) {
+      return epicurious($, url)
     } else if (url.includes(`food.com`)) {
-      parserLoader(food, `food.com`)
-    // } else if (url.includes(`food52.com`)) { // food52 uncomment if I ever get it working
-    //   parserLoader(food52, `food52.com`)
-    } else if (url.includes(`foodandwine.com`)) { // foodandwine
-      parserLoader(foodandwine, `foodandwine.com`)
-    } else if (url.includes(`foodnetwork.com`)) { // foodnetwork
-      parserLoader(foodnetwork, `foodnetwork.com`)
-    } else if (url.includes(`jamieoliver.com`)) { // jamieoliver
-      parserLoader(jamieoliver, `jamieoliver.com`)
-    } else if (url.includes(`myrecipes.com`)) { // myrecipes
-      parserLoader(myrecipes, `myrecipes.com`)
-    } else if (url.includes(`seriouseats.com/recipes`)) { // seriouseats
-      parserLoader(seriousEats, `seriouseats.com`)
-    } else if (url.includes(`simplyrecipes.com`)) { // simplyrecipes
-      parserLoader(simplyrecipes, `simplyrecipes.com`)
-    } // else if (url.includes(`thekitchn.com`)) { // thekitchn
-    //   parserLoader(thekitchn, `thekitchn.com`)
-    // }
-    recipeData.title = recipe.title
-    recipeData.recipe = recipeToStr(url, recipe)
+      return food($, url)
+    // } else if (url.includes(`food52.com`)) { // uncomment if I ever get it working
+    //   return food52($, url)
+    } else if (url.includes(`foodandwine.com`)) {
+      return foodandwine($, url)
+    } else if (url.includes(`foodnetwork.com`)) {
+      return foodnetwork($, url)
+    } else if (url.includes(`jamieoliver.com`)) {
+      return jamieoliver($, url)
+    } else if (url.includes(`myrecipes.com`)) {
+      return myrecipes($, url)
+    } else if (url.includes(`seriouseats.com/recipes`)) {
+      return seriousEats($, url)
+    } else if (url.includes(`simplyrecipes.com`)) {
+      return simplyrecipes($, url)
+    // } else if (url.includes(`thekitchn.com`)) { // uncomment if I ever get it working
+    //   return thekitchn($, url)
+    } else {
+      return null
+    }
   } catch (err) {
     console.log(err)
   }
-  return recipeData
 }
 
 module.exports = scrape

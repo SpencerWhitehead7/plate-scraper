@@ -1,11 +1,16 @@
-const epicurious = (recipe, html) => {
-  recipe.title = html(`h1`).text().trim()
-  html(`.ingredient`).each(function() {
-    recipe.ingredients.push(`${html(this).text().trim()}`)
-  })
-  html(`.preparation-step`).each(function() {
-    recipe.instructions.push(`${html(this).text().trim()}`)
-  })
+const { getCleanStrings, getRecipe } = require(`./helpers`)
+
+const epicurious = ($, url) => {
+  const title = getCleanStrings($, `h1`)
+  const ingredients = getCleanStrings($, `.ingredient`)
+  const instructions = getCleanStrings($, `.preparation-step`)
+
+  return {
+    sourceSite: `epicurious.com`,
+    sourceUrl: url,
+    title: title[0],
+    recipe: getRecipe(url, title, ingredients, instructions),
+  }
 }
 
 module.exports = epicurious

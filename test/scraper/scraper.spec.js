@@ -23,7 +23,7 @@ describe(`The scraping function`, () => {
     expect(result.title).to.equal(`Pop Cake`)
   })
   it(`the object should have a recipe property set to the recipe's formatted text with a source note`, () => {
-    expect(result.recipe).to.equal(require(`./correct-recipes/allrecipes`))
+    expect(result.recipe).to.equal(require(`./correct-recipes/allrecipes0`))
   })
 })
 
