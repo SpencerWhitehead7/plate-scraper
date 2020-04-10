@@ -32,7 +32,7 @@ module.exports = (env, argv) => {
   ]
 
   return {
-    entry: [`@babel/polyfill`, srcPath],
+    entry: srcPath,
     output: {
       path: outputPath,
       publicPath: `/`,
@@ -62,7 +62,30 @@ module.exports = (env, argv) => {
           use: {
             loader: `babel-loader`,
             options: {
-              presets: [`@babel/preset-react`, `@babel/preset-env`],
+              cacheDirectory: true,
+              presets: [
+                [
+                  `@babel/preset-env`,
+                  {
+                    bugfixes: true,
+                    useBuiltIns: `usage`,
+                    corejs: `3`,
+                    targets: isDev ? `last 2 chrome versions` : `> 0.25%, not dead`,
+                  },
+                ],
+                `@babel/preset-react`,
+              ],
+              plugins: [
+                [
+                  `@babel/plugin-transform-runtime`,
+                  {
+                    absoluteRuntime: true,
+                    corejs: 3,
+                    useESModules: true,
+                    version: `7.9.2`,
+                  },
+                ],
+              ],
             },
           },
         },
