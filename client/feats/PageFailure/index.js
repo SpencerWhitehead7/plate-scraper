@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ss from '../../index.css'
+import hc from '../../helperClasses.css'
 
 const pageFailure = ({ type }) => {
   let title = ``
@@ -19,9 +19,9 @@ const pageFailure = ({ type }) => {
   }
 
   return (
-    <div className={ss.centerContainer}>
-      <h1 className={ss.centerText}>{title}</h1>
-      <h2 className={ss.centerText}>{subtitle}</h2>
+    <div className={hc.centerContainer}>
+      <h1 className={hc.centerText}>{title}</h1>
+      <h2 className={hc.centerText}>{subtitle}</h2>
     </div>
   )
 }

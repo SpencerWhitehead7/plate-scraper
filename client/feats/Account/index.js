@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 
 import Settings from './Settings'
-import RecipeRow from '../shared/RecipeRow'
+import RecipeRow from '../../comps/RecipeRow'
 import PageFailure from '../PageFailure'
 
 const Account = ({ me, location }) => {

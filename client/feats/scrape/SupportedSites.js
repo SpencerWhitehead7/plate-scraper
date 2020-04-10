@@ -1,11 +1,11 @@
 import React from 'react'
 
-import ss from '../../index.css'
+import hc from '../../helperClasses.css'
 import s from './scrape.css'
 
 const SupportedSites = () => (
   <div>
-    <h3 className={ss.textCenter}> Supported Sites: </h3>
+    <h3 className={hc.textCenter}> Supported Sites: </h3>
     <div className={s.siteColsContainer}>
       <div className={s.siteCol}>
         <a href="https://www.allrecipes.com">allrecipes.com</a>

@@ -1,7 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
 .centerContainer {
   display: flex;
   flex-direction: column;
