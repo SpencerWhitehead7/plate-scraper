@@ -17,16 +17,14 @@ const Main = ({ checkUser }) => {
 
   return (
     <BrowserRouter>
-      <>
-        <NavBar />
-        <Switch>
-          <Route exact path="/" component={Scrape} />
-          <Route exact path="/me" component={Account} />
-          <Route exact path="/user/:userId" component={Account} />
-          <Route exact path="/recipe/:recipeId" component={Recipe} />
-          <Route render={() => <PageFailure type="404" />} />
-        </Switch>
-      </>
+      <NavBar />
+      <Switch>
+        <Route exact path="/" component={Scrape} />
+        <Route exact path="/me" component={Account} />
+        <Route exact path="/user/:userId" component={Account} />
+        <Route exact path="/recipe/:recipeId" component={Recipe} />
+        <Route render={() => <PageFailure type="404" />} />
+      </Switch>
     </BrowserRouter>
   )
 }

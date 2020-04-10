@@ -3,6 +3,8 @@ import React from 'react'
 import SubmitButton from './SubmitButton'
 import Warning from './Warning'
 
+import s from './scrape.css'
+
 const UrlForm = ({ handleSubmit, handleChange, url }) => (
   <>
     {
@@ -16,7 +18,7 @@ const UrlForm = ({ handleSubmit, handleChange, url }) => (
         placeholder="url of recipe you want to scrape, e.g. https://www.allrecipes.com/recipe/22918/pop-cake/"
         value={url}
         onChange={handleChange}
-        id="url-input"
+        className={s.urlInput}
       />
       <SubmitButton url={url} />
     </form>

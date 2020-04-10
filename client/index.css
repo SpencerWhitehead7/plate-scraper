@@ -2,13 +2,58 @@
   box-sizing: border-box;
 }
 
-.center-container {
+.centerContainer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 96vh;
 }
 
-.center-text {
+.textCenter {
   text-align: center;
+}
+
+.border {
+  border: 1px solid black;
+}
+
+.borderT {
+  border-top: 1px solid black; 
+}
+
+.borderR {
+  border-right: 1px solid black; 
+}
+
+.borderB {
+  border-bottom: 1px solid black; 
+}
+
+.borderL {
+  border-left: 1px solid black; 
+}
+
+.p {
+  padding: 8px;
+}
+
+.pT{
+  padding-top: 8px;
+}
+
+.pR {
+  padding-right: 8px;
+}
+
+.pB {
+  padding-bottom: 8px;
+}
+
+.pL {
+  padding-left: 8px;
+}
+
+.newlineSplit {
+  white-space: pre-wrap;
 }

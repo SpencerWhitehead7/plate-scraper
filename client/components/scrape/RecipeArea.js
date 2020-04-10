@@ -3,13 +3,15 @@ import TextAreaAutosize from 'react-textarea-autosize'
 
 import Download from './Download'
 
+import s from './scrape.css'
+
 const RecipeArea = ({ handleChange, recipe, title, sourceSite }) => (
   <div>
     <TextAreaAutosize
+      className={s.recipeTextarea}
       name="recipe"
       onChange={handleChange}
       value={recipe}
-      id="recipe-textarea"
     />
     <Download
       title={title}

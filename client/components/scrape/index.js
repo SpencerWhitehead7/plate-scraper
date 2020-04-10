@@ -7,6 +7,9 @@ import SupportedSites from './SupportedSites'
 import UrlForm from './UrlForm'
 import Warning from './Warning'
 
+import ss from '../../index.css'
+import s from './scrape.css'
+
 class Scrape extends React.Component {
   constructor() {
     super()
@@ -67,15 +70,15 @@ class Scrape extends React.Component {
 
   render() {
     return (
-      <div id="whole-page">
-        <h1 id="title">Plate Scraper!</h1>
+      <div className={s.wholePage}>
+        <h1 className={ss.textCenter}>Plate Scraper!</h1>
         <SupportedSites />
         <UrlForm
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
           url={this.state.url}
         />
-        {this.state.isLoading && <div className="loading" />}
+        {this.state.isLoading && <div className={s.loading} />}
         {
           this.state.recipe !== `` && (
             <RecipeArea

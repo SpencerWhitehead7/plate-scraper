@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-import s from './recipe.css'
+import ss from '../../index.css'
 
 const DispMode = ({ recipe }) => (
   <>
@@ -17,7 +17,7 @@ const DispMode = ({ recipe }) => (
         </NavLink>
       ))
       : `none`}
-    <div className={s.recipeText}>
+    <div className={ss.newlineSplit}>
       {recipe.text}
     </div>
   </>

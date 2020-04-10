@@ -20,11 +20,8 @@ const pageFailure = ({ type }) => {
 
   return (
     <div className={ss.centerContainer}>
-      <h1 className={ss.centerText}>
-        {title}
-        <br />
-        {subtitle}
-      </h1>
+      <h1 className={ss.centerText}>{title}</h1>
+      <h2 className={ss.centerText}>{subtitle}</h2>
     </div>
   )
 }

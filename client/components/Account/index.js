@@ -37,12 +37,7 @@ const Account = ({ me, location }) => {
           </button>
         )}
         {showSettings && <Settings />}
-        {user.recipes && user.recipes.map(recipe => (
-          <RecipeRow
-            key={recipe.id}
-            recipe={recipe}
-          />
-        ))}
+        {user.recipes && user.recipes.map(recipe => <RecipeRow key={recipe.id} {...recipe} />)}
       </main>
     )
       :

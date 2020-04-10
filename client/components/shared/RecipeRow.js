@@ -1,31 +1,43 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import classnames from 'classnames'
+
+import ss from '../../index.css'
 
 const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, userId }) => (
-  <div>
-    <NavLink to={`/recipe/${id}`}>
-      {`${id} : ${title} : ${sourceSite}`}
-    </NavLink>
-    {tags.length
-      ? tags.map(tag => (
-        <NavLink
-          key={tag.id}
-          to="/"
-          // TODO add "to" for search page for that tag
-        >
-          {`${tag.name} `}
-        </NavLink>
-      ))
-      : <span>No Tags</span>}
-    <NavLink to={`/user/${createdBy}`}>
-      {`CreatedBy: ${createdBy}`}
-    </NavLink>
-    <NavLink to={`/user/${userId}`}>
-      {`OwnerId: ${userId}`}
-    </NavLink>
-    <span>{`Forked ${forkedCount} times`}</span>
-    <span>{`${text.slice(0, 140)}...`}</span>
+  <div className={`${ss.border} ${ss.p}`}>
+    <Link to={`/recipe/${id}`}>
+      {title}
+    </Link>
+    &nbsp;-&nbsp;
+    {sourceSite}
+    <div>
+      Created By:&nbsp;
+      <Link className={ss.pR} to={`/user/${createdBy}`}>
+        {createdBy}
+      </Link>
+      OwnerId:&nbsp;
+      <Link to={`/user/${userId}`}>
+        {userId}
+      </Link>
 
+    </div>
+    <div>
+      {tags.length
+        ? tags.map(tag => (
+          <Link
+            className={ss.pR}
+            key={tag.id}
+            to="/"
+            // TODO add "to" for search page for that tag
+          >
+            {`${tag.name} `}
+          </Link>
+        ))
+        : <span>No Tags</span>}
+    </div>
+    <div>{`Forked ${forkedCount} times`}</div>
+    <div className={classnames(ss.borderT, ss.newlineSplit)}>{`${text.slice(0, 280)}...`}</div>
   </div>
 )
 

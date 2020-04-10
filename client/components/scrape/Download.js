@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import s from './scrape.css'
+
 const Download = ({ recipe, sourceSite, title }) => {
   const [fileName, setFileName] = useState(`${sourceSite.slice(0, -4)} ${title}`)
 
@@ -19,7 +21,7 @@ const Download = ({ recipe, sourceSite, title }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} id="download">
+    <form onSubmit={handleSubmit} className={s.download}>
       <label htmlFor="fileName">Filename:</label>
       <input name="fileName" onChange={evt => setFileName(evt.target.value)} value={fileName} />
       <button type="submit">Download Recipe</button>

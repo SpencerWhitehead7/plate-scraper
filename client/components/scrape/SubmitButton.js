@@ -1,5 +1,7 @@
 import React from 'react'
 
+import s from './scrape.css'
+
 const SubmitButton = ({ url }) => (
   <button
     type="submit"
@@ -18,10 +20,10 @@ const SubmitButton = ({ url }) => (
       !url.includes(`jamieoliver.com`) &&
       !url.includes(`myrecipes.com`) &&
       !url.includes(`seriouseats.com/recipes`) &&
-      !url.includes(`simplyrecipes.com`) &&
+      !url.includes(`simplyrecipes.com`) // &&
       // !url.includes(`thekitchn.com`)
     }
-    id="sub-btn"
+    className={s.scrapeBtn}
   >
     Scrape!
   </button>
