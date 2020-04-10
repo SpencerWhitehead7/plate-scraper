@@ -7,8 +7,10 @@
     "test": "NODE_ENV='test' mocha --timeout 10000 --exit -- test/*",
     "lint": "eslint . --ext .js,.jsx --ignore-pattern /public/*",
     "lint-fix": "eslint . --ext .js,.jsx --fix --ignore-pattern /public/*",
-    "start": "node server",
-    "start-dev": "webpack -wd & nodemon server.js",
+    "start": "webpack -p & node server",
+    "dev:be": "webpack -p & nodemon server --watch server",
+    "dev:fe": "webpack-dev-server -d & node server",
+    "dev": "webpack-dev-server -d & nodemon server --watch server",
     "heroku-postbuild": "webpack -p"
   },
   "author": "spencer",
@@ -63,6 +65,7 @@
     "supertest": "^4.0.2",
     "volleyball": "^1.5.1",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   }
 }

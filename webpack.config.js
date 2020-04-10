@@ -52,6 +52,13 @@ module.exports = (env, argv) => {
       },
     },
     devtool: isDev ? `eval-source-map` : `source-map`,
+    devServer: {
+      contentBase: outputPath,
+      writeToDisk: true,
+      proxy: {
+        '/': `http://localhost:1337`,
+      },
+    },
     plugins: [
       new CleanWebpackPlugin({
         cleanAfterEveryBuildPatterns: [`**/*`, `!index.html`],
