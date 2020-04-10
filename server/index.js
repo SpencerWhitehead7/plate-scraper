@@ -62,6 +62,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Static file serving middleware
+app.use(express.static(path.join(__dirname, `../dist`)))
 app.use(express.static(path.join(__dirname, `../public`)))
 
 // Plug in sub-routers
@@ -72,7 +73,7 @@ app.use(`/auth`, auth)
 
 // All other requests
 app.get(`*`, (req, res) => {
-  res.sendFile(path.join(__dirname, `../public/index.html`))
+  res.sendFile(path.join(__dirname, `../dist/index.html`))
 })
 
 // 404 response

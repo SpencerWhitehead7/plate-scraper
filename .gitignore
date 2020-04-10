@@ -1,9 +1,8 @@
-# Ignore all node_modules
+# all node_modules
 node_modules/*
 
-# Compiled JS
-public/bundle.js
-public/bundle.js.map
+# Compiled output
+dist/*
 
 # NPM errors
 npm-debug.log
@@ -11,8 +10,5 @@ npm-debug.log
 # Secrets
 secrets.js
 
-# Files being stored in firebase
-firebase-resources
-
-# Personal notefile
+# notes
 ___.txt
