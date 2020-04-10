@@ -18,7 +18,24 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/,
+        test: /\.scss$/i,
+        use: [
+          `style-loader`,
+          {
+            loader: `css-loader`,
+            options: {
+              modules: {
+                localIdentName: `[path][name]_[local]---[hash:base64:5]`,
+              },
+              sourceMap: true,
+              esModule: true,
+            },
+          },
+          `sass-loader`,
+        ],
+      },
+      {
+        test: /\.css$/i,
         use: [
           `style-loader`,
           {
@@ -27,6 +44,8 @@ module.exports = {
               modules: {
                 localIdentName: `[path][name]_[local]-[hash:base64:5]`,
               },
+              sourceMap: true,
+              esModule: true,
             },
           },
         ],

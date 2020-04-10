@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 
 import hc from '../../helperClasses.css'
-import s from './Tags.css'
+import s from './Tags.scss'
 
 const Tag = ({ name }) => (
   <Link
