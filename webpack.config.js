@@ -32,11 +32,11 @@ module.exports = (env, argv) => {
   ]
 
   return {
-    entry: srcPath,
+    entry: [`react-hot-loader/patch`, srcPath],
     output: {
       path: outputPath,
       publicPath: `/`,
-      filename: `[name].[contenthash].js`,
+      filename: isDev ? `[name].bundle.js` : `[name].[contenthash].js`,
     },
     optimization: {
       moduleIds: `hashed`,
@@ -54,6 +54,7 @@ module.exports = (env, argv) => {
     devtool: isDev ? `eval-source-map` : `source-map`,
     devServer: {
       contentBase: outputPath,
+      hot: true,
       writeToDisk: true,
       proxy: {
         '/': `http://localhost:1337`,
@@ -96,6 +97,7 @@ module.exports = (env, argv) => {
                 `@babel/preset-react`,
               ],
               plugins: [
+                `react-hot-loader/babel`,
                 [
                   `@babel/plugin-transform-runtime`,
                   {

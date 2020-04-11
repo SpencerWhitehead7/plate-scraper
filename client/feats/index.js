@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
 
 import NavBar from './NavBar'
@@ -14,6 +15,7 @@ const Main = ({ checkUser }) => {
   useEffect(() => {
     checkUser()
   })
+  if (module.hot) module.hot.accept()
 
   return (
     <BrowserRouter>
@@ -34,4 +36,4 @@ const mdtp = dispatch => ({
 })
 
 
-export default connect(null, mdtp)(Main)
+export default hot(connect(null, mdtp)(Main))

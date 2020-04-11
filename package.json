@@ -9,8 +9,8 @@
     "lint-fix": "eslint . --ext .js,.jsx --fix --ignore-pattern /public/*",
     "start": "webpack -p & node server",
     "dev:be": "webpack -p & nodemon server --watch server",
-    "dev:fe": "webpack-dev-server -d & node server",
-    "dev": "webpack-dev-server -d & nodemon server --watch server",
+    "dev:fe": "webpack-dev-server -d --hot & node server",
+    "dev": "webpack-dev-server -d --hot & nodemon server --watch server",
     "heroku-postbuild": "webpack -p"
   },
   "author": "spencer",
@@ -33,6 +33,7 @@
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^3.0.2",
     "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.12.20",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-tag-input": "^6.4.2",
