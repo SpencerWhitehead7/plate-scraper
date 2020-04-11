@@ -1,7 +1,7 @@
 import React from 'react'
 
 import hc from '../../helperClasses.css'
-import s from './scrape.css'
+import s from './Scrape.scss'
 
 const SupportedSites = () => (
   <div>

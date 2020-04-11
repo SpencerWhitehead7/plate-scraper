@@ -1,6 +1,6 @@
 import React from 'react'
 
-import s from './scrape.css'
+import s from './Scrape.scss'
 
 const Warning = ({ err }) => (
   <span className={s.warning}>

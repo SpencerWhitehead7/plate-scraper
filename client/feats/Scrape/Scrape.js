@@ -7,8 +7,7 @@ import SupportedSites from './SupportedSites'
 import UrlForm from './UrlForm'
 import Warning from './Warning'
 
-import hc from '../../helperClasses.css'
-import s from './scrape.css'
+import s from './Scrape.scss'
 
 class Scrape extends React.Component {
   constructor() {
@@ -71,7 +70,7 @@ class Scrape extends React.Component {
   render() {
     return (
       <div className={s.wholePage}>
-        <h1 className={hc.textCenter}>Plate Scraper!</h1>
+        <h1>Plate Scraper!</h1>
         <SupportedSites />
         <UrlForm
           handleChange={this.handleChange}

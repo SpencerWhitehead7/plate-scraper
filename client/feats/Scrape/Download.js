@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import s from './scrape.css'
+import s from './Scrape.scss'
 
 const Download = ({ recipe, sourceSite, title }) => {
   const [fileName, setFileName] = useState(`${sourceSite.slice(0, -4)} ${title}`)

@@ -2,7 +2,7 @@
   &:after {
     content: ",";
   }
-  &:last-of-type:after{
+  &:last-of-type:after {
     content: "";
   }
 }

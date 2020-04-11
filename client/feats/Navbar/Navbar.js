@@ -6,7 +6,7 @@ import Modal from './Modal'
 
 import { logout } from '../../redux'
 
-import s from './Navbar.css'
+import s from './Navbar.scss'
 
 const Navbar = ({ logout, user }) => {
   const [showModal, setShowModal] = useState(false)

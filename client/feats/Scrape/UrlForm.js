@@ -3,7 +3,7 @@ import React from 'react'
 import SubmitButton from './SubmitButton'
 import Warning from './Warning'
 
-import s from './scrape.css'
+import s from './Scrape.scss'
 
 const UrlForm = ({ handleSubmit, handleChange, url }) => (
   <>
