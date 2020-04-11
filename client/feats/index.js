@@ -21,11 +21,18 @@ const Main = ({ checkUser }) => {
     <BrowserRouter>
       <NavBar />
       <Switch>
-        <Route exact path="/" component={Scrape} />
-        <Route exact path="/me" component={Account} />
-        <Route exact path="/user/:userId" component={Account} />
-        <Route exact path="/recipe/:recipeId" component={Recipe} />
-        <Route render={() => <PageFailure type="404" />} />
+        <Route exact path="/">
+          <Scrape />
+        </Route>
+        <Route exact path="/user/:userId">
+          <Account />
+        </Route>
+        <Route exact path="/recipe/:recipeId">
+          <Recipe />
+        </Route>
+        <Route>
+          <PageFailure type="404" />
+        </Route>
       </Switch>
     </BrowserRouter>
   )
