@@ -38,11 +38,6 @@ module.exports = (env, argv) => {
         'react-dom': `@hot-loader/react-dom`,
       },
     },
-    output: {
-      path: outputPath,
-      publicPath: `/`,
-      filename: isDev ? `[name].bundle.js` : `[name].[contenthash].js`,
-    },
     optimization: {
       moduleIds: `hashed`,
       runtimeChunk: `single`,
@@ -56,7 +51,14 @@ module.exports = (env, argv) => {
         },
       },
     },
+    output: {
+      path: outputPath,
+      publicPath: `/`,
+      filename: isDev ? `[name].bundle.js` : `[name].[contenthash].js`,
+    },
+
     devtool: isDev ? `eval-source-map` : `source-map`,
+
     devServer: {
       contentBase: outputPath,
       hot: true,
@@ -65,6 +67,7 @@ module.exports = (env, argv) => {
         '/': `http://localhost:1337`,
       },
     },
+
     plugins: [
       new CleanWebpackPlugin({
         cleanAfterEveryBuildPatterns: [`**/*`, `!index.html`],
