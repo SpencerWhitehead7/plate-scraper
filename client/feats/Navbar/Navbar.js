@@ -4,10 +4,9 @@ import { connect } from 'react-redux'
 
 import Modal from './Modal'
 
-import { logout } from '../../redux/rootReducer'
+import { logout } from '../../redux'
 
-import urls from '../../urls'
-import s from './NavBar.css'
+import s from './Navbar.css'
 
 const Navbar = ({ logout, user }) => {
   const [showModal, setShowModal] = useState(false)
@@ -19,7 +18,7 @@ const Navbar = ({ logout, user }) => {
       <nav className={s.navbar}>
         <div className={s.dropdown}>
           <NavLink exact to="/">
-            <img src={urls.logo} className={s.logo} />
+            <img src="" className={s.logo} />
           </NavLink>
           <NavLink exact to="/" className={s.link}>
             Add&nbsp;Recipe

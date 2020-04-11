@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 
-import s from './NavBar.css'
+import s from './Navbar.css'
 
 const Modal = ({ toggleModal, user }) => (
   <>
