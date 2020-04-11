@@ -17,6 +17,7 @@
   "license": "Unlicense",
   "dependencies": {
     "@babel/runtime": "^7.9.2",
+    "@hot-loader/react-dom": "^16.13.0",
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
     "classnames": "^2.2.6",
