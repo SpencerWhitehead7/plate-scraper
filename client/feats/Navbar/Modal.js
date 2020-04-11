@@ -4,17 +4,17 @@ import { connect } from 'react-redux'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 
-import s from './Navbar.scss'
+import s from './Modal.scss'
 
 const Modal = ({ toggleModal, user }) => (
   <>
     {user.id && toggleModal()}
     <div
-      className={s.modal}
+      className={s.modal__background}
       onClick={toggleModal}
     >
       <section
-        className={s.modalMain}
+        className={s.modal__content}
         onClick={event => { event.stopPropagation() }}
       >
         <LoginForm />

@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unused-state */
 import React from 'react'
 import axios from 'axios'
+import TextAreaAutosize from 'react-textarea-autosize'
 
-import RecipeArea from './RecipeArea'
+import DownloadForm from './DownloadForm'
 import SupportedSites from './SupportedSites'
 import UrlForm from './UrlForm'
 import Warning from './Warning'
@@ -69,8 +70,7 @@ class Scrape extends React.Component {
 
   render() {
     return (
-      <div className={s.wholePage}>
-        <h1>Plate Scraper!</h1>
+      <>
         <SupportedSites />
         <UrlForm
           handleChange={this.handleChange}
@@ -79,17 +79,24 @@ class Scrape extends React.Component {
         />
         {this.state.isLoading && <div className={s.loading} />}
         {
-          this.state.recipe !== `` && (
-            <RecipeArea
-              handleChange={this.handleChange}
-              recipe={this.state.recipe}
-              title={this.state.title}
-              sourceSite={this.state.sourceSite}
-            />
+          this.state.recipe && (
+            <>
+              <TextAreaAutosize
+                className={s.recipeTextarea}
+                name="recipe"
+                onChange={this.handleChange}
+                value={this.state.recipe}
+              />
+              <DownloadForm
+                title={this.state.title}
+                sourceSite={this.state.sourceSite}
+                recipe={this.state.recipe}
+              />
+            </>
           )
         }
         {Object.keys(this.state.err).length > 0 && <Warning err={this.state.err.message} />}
-      </div>
+      </>
     )
   }
 }

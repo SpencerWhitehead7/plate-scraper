@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-import s from './Scrape.scss'
+import s from './DownloadForm.scss'
 
-const Download = ({ recipe, sourceSite, title }) => {
-  const [fileName, setFileName] = useState(`${sourceSite.slice(0, -4)} ${title}`)
+const DownloadForm = ({ recipe, sourceSite, title }) => {
+  const [fileName, setFileName] = useState(`${sourceSite.split(`.`)[0]} ${title}`)
 
   const handleSubmit = evt => {
     evt.preventDefault()
@@ -21,12 +21,18 @@ const Download = ({ recipe, sourceSite, title }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={s.download}>
+    <form onSubmit={handleSubmit} className={s.downloadForm}>
       <label htmlFor="fileName">Filename:</label>
-      <input name="fileName" onChange={evt => setFileName(evt.target.value)} value={fileName} />
-      <button type="submit">Download Recipe</button>
+      <input
+        type="text"
+        name="fileName"
+        className={s.downloadForm__input}
+        onChange={evt => setFileName(evt.target.value)}
+        value={fileName}
+      />
+      <button type="submit">Download!</button>
     </form>
   )
 }
 
-export default Download
+export default DownloadForm

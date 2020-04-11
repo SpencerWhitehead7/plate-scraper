@@ -16,50 +16,44 @@ const Navbar = ({ logout, user }) => {
     <>
 
       <nav className={s.navbar}>
-        <div className={s.dropdown}>
+        <img src="/logo.svg" className={s.navbar__logo} />
+        <span className={s.navbar__title}>
+          Plate Scraper!
+        </span>
+        <div className={s.navbar__dropdown}>
           <NavLink exact to="/">
-            <img src="" className={s.logo} />
-          </NavLink>
-          <NavLink exact to="/" className={s.link}>
             Add&nbsp;Recipe
           </NavLink>
-          <div className={s.dropdownContent}>
-            <NavLink exact to="/" className={s.link}>
+          <div className={s.navbar__dropdownContent}>
+            <NavLink exact to="/">
               Scrape
             </NavLink>
-            <NavLink exact to="/upload" className={s.link}>
+            <NavLink exact to="/upload">
               Upload
             </NavLink>
           </div>
         </div>
 
-        <NavLink exact to="/search" className={s.link}>
+        <NavLink exact to="/search">
           Search
         </NavLink>
 
         {user.id ? (
-          <div className={s.dropdown}>
-            <NavLink exact to={`/user/${user.id}`} className={s.link}>
+          <div className={s.navbar__dropdown}>
+            <NavLink exact to={`/user/${user.id}`}>
               My&nbsp;Account
             </NavLink>
-            <div className={s.dropdownContent}>
-              <div
-                className={s.link}
-                onClick={logout}
-                // maybe logout should also redirect you if you're on a private page
-              >
+            <div className={s.navbar__dropdownContent}>
+              <button type="button" onClick={logout}>
                 Logout
-              </div>
+              </button>
             </div>
           </div>
         )
           : (
-            <div
-              className={s.link}
-              onClick={toggleModal}
-            >
+            <button type="button" onClick={toggleModal}>
               Signup&nbsp;/&nbsp;Login
-            </div>
+            </button>
           )}
       </nav>
 
