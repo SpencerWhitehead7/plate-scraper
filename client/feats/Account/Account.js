@@ -5,6 +5,8 @@ import axios from 'axios'
 
 import { logout } from '../../redux'
 
+import Card, { CardTitle } from '../../comps/Card'
+
 import Settings from './AccountSettings'
 import RecipeRow from '../../comps/RecipeRow'
 import PageFailure from '../PageFailure'
@@ -28,8 +30,8 @@ const Account = ({ me, location, logout }) => {
 
   return (
     user ? (
-      <>
-        <h2>{user.userName}</h2>
+      <Card>
+        <CardTitle>{user.userName}</CardTitle>
         {isMyPage && (
           <button
             type="button"
@@ -45,7 +47,7 @@ const Account = ({ me, location, logout }) => {
             Log out
           </button>
         )}
-      </>
+      </Card>
     )
       :
       <PageFailure type="404" />

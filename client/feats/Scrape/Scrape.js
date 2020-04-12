@@ -3,6 +3,7 @@ import React from 'react'
 import axios from 'axios'
 import TextAreaAutosize from 'react-textarea-autosize'
 
+import Card from '../../comps/Card'
 import LoadingIndicator from '../../comps/LoadingIndicator'
 
 import DownloadForm from './DownloadForm'
@@ -72,7 +73,7 @@ class Scrape extends React.Component {
 
   render() {
     return (
-      <>
+      <Card>
         <SupportedSites />
         <UrlForm
           handleChange={this.handleChange}
@@ -98,7 +99,7 @@ class Scrape extends React.Component {
           )
         }
         {Object.keys(this.state.err).length > 0 && <Warning err={this.state.err.message} />}
-      </>
+      </Card>
     )
   }
 }

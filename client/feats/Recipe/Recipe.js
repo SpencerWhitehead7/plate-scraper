@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
+import Card, { CardTitle } from '../../comps/Card'
+
 import DispMode from './DispMode'
 import EditMode from './EditMode'
 import PageFailure from '../PageFailure'
@@ -26,8 +28,8 @@ const Account = ({ me, location }) => {
   useEffect(() => { setIsMyRecipe(recipe.userId === me.id) }, [recipe, me])
   return (
     recipe ? (
-      <>
-        <h2>{recipe.title}</h2>
+      <Card>
+        <CardTitle>{recipe.title}</CardTitle>
         {isMyRecipe && (
           <button
             type="button"
@@ -47,7 +49,7 @@ const Account = ({ me, location }) => {
           ) :
             <DispMode recipe={recipe} />
         }
-      </>
+      </Card>
     )
       :
       <PageFailure type="404" />

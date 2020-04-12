@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Card from '../../comps/Card'
+
 import sg from '../../styles/main.scss'
 
 const pageFailure = ({ type }) => {
@@ -19,10 +21,10 @@ const pageFailure = ({ type }) => {
   }
 
   return (
-    <div>
+    <Card>
       <h2 className={sg.textCenter}>{title}</h2>
       <h3 className={sg.textCenter}>{subtitle}</h3>
-    </div>
+    </Card>
   )
 }
 

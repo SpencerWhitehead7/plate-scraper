@@ -1,0 +1,20 @@
+@import "../../styles/main.scss";
+
+.card {
+  background-color: $color-element;
+  border: 1px solid $color-highlight;
+  border-radius: $radius;
+  padding: $space-within;
+
+  & + & {
+    margin-top: $space-between;
+  }
+
+  & &__title {
+    border-bottom: 1px solid $color-highlight;
+  }
+
+  & &__subtitle {
+    border-bottom: 1px solid $color-highlight;
+  }
+}
