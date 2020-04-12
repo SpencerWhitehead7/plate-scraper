@@ -3,9 +3,8 @@ import React from 'react'
 import axios from 'axios'
 import TextAreaAutosize from 'react-textarea-autosize'
 
-import Card from '../../comps/Card'
-import LoadingIndicator from '../../comps/LoadingIndicator'
-
+import Card from 'comps/Card'
+import LoadingIndicator from 'comps/LoadingIndicator'
 import DownloadForm from './DownloadForm'
 import SupportedSites from './SupportedSites'
 import UrlForm from './UrlForm'

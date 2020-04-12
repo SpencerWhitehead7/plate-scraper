@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
-import { login } from '../../redux/rootReducer'
+import { login } from 'reducers'
 
 const LoginForm = ({ login, loginError }) => {
   const [email, setEmail] = useState(``)

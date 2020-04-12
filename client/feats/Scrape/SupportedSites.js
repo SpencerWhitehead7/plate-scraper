@@ -1,9 +1,8 @@
 import React from 'react'
 import classnames from 'classnames'
 
-import sg from '../../styles/main.scss'
-import skele from '../../skeleton.css'
-
+import skele from 'skeleton.css'
+import sg from 'styles/index.scss'
 import s from './SupportedSites.scss'
 
 const SupportedSites = () => (

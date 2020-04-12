@@ -3,11 +3,10 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
-import Card, { CardTitle } from '../../comps/Card'
-
+import Card, { CardTitle } from 'comps/Card'
+import PageFailure from 'feats/PageFailure'
 import DispMode from './DispMode'
 import EditMode from './EditMode'
-import PageFailure from '../PageFailure'
 
 const Account = ({ me, location }) => {
   const id = location.pathname.split(`/`).pop()

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import Tags from '../Tags'
+import Tags from 'comps/Tags'
 
-import sg from '../../styles/main.scss'
+import sg from 'styles/index.scss'
 
 const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, userId }) => (
   <div className={sg.p_m}>

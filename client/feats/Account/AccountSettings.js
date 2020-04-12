@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 
-import { me } from '../../redux/rootReducer'
+import { me } from 'reducers'
 
 const LoginForm = props => {
   const [authentication, setAuthentication] = useState(``)

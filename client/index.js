@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom'
 import { hot } from 'react-hot-loader/root'
 import { Provider, connect } from 'react-redux'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-
-import NavBar from './feats/Navbar'
-import Scrape from './feats/Scrape'
-import Account from './feats/Account'
-import Recipe from './feats/Recipe'
-import PageFailure from './feats/PageFailure'
-
-import store, { me } from './redux'
-
 import 'normalize.css'
-import './skeleton.css'
+
+import store, { me } from 'reducers'
+import NavBar from 'feats/Navbar'
+import Scrape from 'feats/Scrape'
+import Account from 'feats/Account'
+import Recipe from 'feats/Recipe'
+import PageFailure from 'feats/PageFailure'
+
+import 'skeleton.css'
+import 'styles/index.scss'
 import s from './App.scss'
 
 const Main = ({ checkUser }) => {

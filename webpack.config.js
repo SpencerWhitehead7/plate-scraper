@@ -33,7 +33,9 @@ module.exports = (env, argv) => {
 
   return {
     entry: [`react-hot-loader/patch`, srcPath],
+    context: srcPath,
     resolve: {
+      modules: [srcPath, `node_modules`],
       alias: {
         'react-dom': `@hot-loader/react-dom`,
       },

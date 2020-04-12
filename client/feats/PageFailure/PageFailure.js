@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Card from '../../comps/Card'
+import Card from 'comps/Card'
 
-import sg from '../../styles/main.scss'
+import sg from 'styles/index.scss'
 
 const pageFailure = ({ type }) => {
   let title = ``

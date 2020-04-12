@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Tags from '../../comps/Tags'
+import Tags from 'comps/Tags'
 
-import sg from '../../styles/main.scss'
+import sg from 'styles/index.scss'
 
 const DispMode = ({ recipe }) => (
   <>

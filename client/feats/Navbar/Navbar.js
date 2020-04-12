@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import Modal from './Modal'
 
-import skele from '../../skeleton.css'
+import skele from 'skeleton.css'
 import s from './Navbar.scss'
 
 const Navbar = ({ user }) => {

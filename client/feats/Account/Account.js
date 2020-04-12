@@ -3,13 +3,11 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
-import { logout } from '../../redux'
-
-import Card, { CardTitle } from '../../comps/Card'
-
+import { logout } from 'reducers'
+import Card, { CardTitle } from 'comps/Card'
+import RecipeRow from 'comps/RecipeRow'
+import PageFailure from 'feats/PageFailure'
 import Settings from './AccountSettings'
-import RecipeRow from '../../comps/RecipeRow'
-import PageFailure from '../PageFailure'
 
 const Account = ({ me, location, logout }) => {
   const id = location.pathname.split(`/`).pop()
