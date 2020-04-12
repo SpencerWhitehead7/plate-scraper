@@ -14,6 +14,7 @@ import store, { me } from './redux'
 
 import 'normalize.css'
 import './skeleton.css'
+import s from './App.scss'
 
 const Main = ({ checkUser }) => {
   useEffect(() => {
@@ -24,20 +25,28 @@ const Main = ({ checkUser }) => {
   return (
     <BrowserRouter>
       <NavBar />
-      <Switch>
-        <Route exact path="/">
-          <Scrape />
-        </Route>
-        <Route exact path="/user/:userId">
-          <Account />
-        </Route>
-        <Route exact path="/recipe/:recipeId">
-          <Recipe />
-        </Route>
-        <Route>
-          <PageFailure type="404" />
-        </Route>
-      </Switch>
+      <main className={s.main}>
+        <div className={s.content}>
+          <Switch>
+            <Route exact path="/">
+              <Scrape />
+            </Route>
+            <Route exact path="/scrape/:scrapeMethod">
+              <Scrape />
+            </Route>
+
+            <Route exact path="/user/:userId">
+              <Account />
+            </Route>
+            <Route exact path="/recipe/:recipeId">
+              <Recipe />
+            </Route>
+            <Route>
+              <PageFailure type="404" />
+            </Route>
+          </Switch>
+        </div>
+      </main>
     </BrowserRouter>
   )
 }

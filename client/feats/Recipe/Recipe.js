@@ -26,8 +26,8 @@ const Account = ({ me, location }) => {
   useEffect(() => { setIsMyRecipe(recipe.userId === me.id) }, [recipe, me])
   return (
     recipe ? (
-      <main>
-        <h1>{recipe.title}</h1>
+      <>
+        <h2>{recipe.title}</h2>
         {isMyRecipe && (
           <button
             type="button"
@@ -47,7 +47,7 @@ const Account = ({ me, location }) => {
           ) :
             <DispMode recipe={recipe} />
         }
-      </main>
+      </>
     )
       :
       <PageFailure type="404" />

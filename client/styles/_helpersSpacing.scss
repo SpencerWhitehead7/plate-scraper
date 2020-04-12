@@ -1,0 +1,81 @@
+@import "_variables";
+
+$properties: (
+  "p": "padding",
+  "m": "margin",
+);
+
+$directions: (
+  null: null,
+  "t": "-top",
+  "r": "-right",
+  "b": "-bottom",
+  "l": "-left",
+  "h": "-left" "-right",
+  "v": "-top" "-bottom",
+);
+
+$sizes: (
+  "0": (
+    "0",
+    0,
+  ),
+  "auto": (
+    "auto",
+    auto,
+  ),
+  "smallest": (
+    "sest",
+    $space-smallest,
+  ),
+  "smaller": (
+    "ser",
+    $space-smaller,
+  ),
+  "small": (
+    "s",
+    $space-small,
+  ),
+  "medium": (
+    "m",
+    $space-medium,
+  ),
+  "large": (
+    "l",
+    $space-large,
+  ),
+  "larger": (
+    "ler",
+    $space-larger,
+  ),
+  "largest": (
+    "lest",
+    $space-largest,
+  ),
+);
+
+@each $property-namespace, $property in $properties {
+  @each $direction-namespace, $direction in $directions {
+    @each $id, $values in $sizes {
+      $suffix: nth($values, 1);
+      $spacing: nth($values, 2);
+
+      #{if($suffix != '0' and $suffix != 'auto', ".#{$property-namespace}#{$direction-namespace}_#{$suffix},", '')}
+        .#{$property-namespace}#{$direction-namespace}_#{$id} {
+        @each $inddirection in $direction {
+          #{$property}#{$inddirection}: $spacing !important;
+        }
+      }
+      @if ($property == "margin" and $id != "auto" and $id != "0") {
+        .-#{$property-namespace}#{$direction-namespace}_#{$suffix},
+        .-#{$property-namespace}#{$direction-namespace}_#{$id} {
+          @each $inddirection in $direction {
+            #{$property}#{$inddirection}: -#{$spacing} !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+// add responsive spacings someday?

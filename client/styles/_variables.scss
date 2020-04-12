@@ -1,0 +1,45 @@
+//---Colors
+// I owe everything here to coolors.co's excellent color exploration tool
+/* Coolors Exported Palette - coolors.co/f2e9b8-fcfceb-32c3ef-d33c34-000000 */
+// site backgroud - ui background - positive - negative - black to make valid url
+$color-site: #f2e9b8;
+$color-element: #fcfceb;
+// these two are just color-element with the brightness turned down 20 notches per step
+$color-element-darker: #c9c9bb;
+$color-element-darkest: #96968b;
+$color-good: #32c3ef; // matches skeleton primary button color
+$color-bad: #d33c34;
+//misc
+$color-white: white;
+
+//---Breakpoints
+// $bp-xs: 360px; in an ideal world, but I will never care about css this much
+$bp-sm: 480px;
+$bp-md: 855px;
+$bp-lg: 1280px;
+// $bp-xl: 1920px; in an ideal world, but I will never care about css this much
+
+//---Spacings
+// special cases
+$space-femto: 1px;
+$space-nano: 2px;
+// standard
+$space-smallest: 4px;
+$space-smaller: 8px;
+$space-small: 12px;
+$space-medium: 16px;
+$space-large: 20px;
+$space-larger: 24px;
+$space-largest: 28px;
+
+//-----Use these instead of the above for consistency/composability where ever viable
+
+//---Radii
+$radius: $space-smallest;
+
+//---Applied spacings
+$space-between: $space-larger;
+$space-within: $space-medium;
+
+//---color aliases
+$color-highlight: $color-good;

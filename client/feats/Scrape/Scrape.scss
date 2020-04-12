@@ -1,10 +1,11 @@
+@import "../../styles/main.scss";
+
 .loading {
-  border: 16px solid white;
-  border-top: 16px solid rgba(128, 223, 255, 1);
+  border: $space-medium solid $color-white;
+  border-top: $space-medium solid $color-highlight;
   border-radius: 50%;
-  width: 20vh;
-  height: 20vh;
-  margin-top: 10vh;
+  width: $space-largest;
+  height: $space-largest;
   animation: spin 1s ease-in-out infinite;
 }
 
@@ -16,5 +17,5 @@
 
 .recipeTextarea {
   width: 100%;
-  border-radius: 4px;
+  border-radius: $radius;
 }

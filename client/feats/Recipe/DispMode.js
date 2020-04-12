@@ -2,12 +2,12 @@ import React from 'react'
 
 import Tags from '../../comps/Tags'
 
-import hc from '../../helperClasses.css'
+import sg from '../../styles/main.scss'
 
 const DispMode = ({ recipe }) => (
   <>
     <Tags tags={recipe.tags} />
-    <div className={hc.newlineSplit}>
+    <div className={sg.textShowBreaks}>
       {recipe.text}
     </div>
   </>

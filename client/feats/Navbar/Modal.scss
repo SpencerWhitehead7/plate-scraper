@@ -1,3 +1,5 @@
+@import "../../styles/main.scss";
+
 .modal {
   &__background {
     position: fixed;
@@ -11,7 +13,7 @@
 
   &__content {
     position: fixed;
-    background: white;
+    background: $color-white;
     height: 80vh;
     width: 80vw;
   }

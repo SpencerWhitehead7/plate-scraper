@@ -3,11 +3,13 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
+import { logout } from '../../redux'
+
 import Settings from './AccountSettings'
 import RecipeRow from '../../comps/RecipeRow'
 import PageFailure from '../PageFailure'
 
-const Account = ({ me, location }) => {
+const Account = ({ me, location, logout }) => {
   const id = location.pathname.split(`/`).pop()
   const isMyPage = Number(id) === me.id
   const [showSettings, setShowSettings] = useState(false)
@@ -26,8 +28,8 @@ const Account = ({ me, location }) => {
 
   return (
     user ? (
-      <main>
-        <h1>{user.userName}</h1>
+      <>
+        <h2>{user.userName}</h2>
         {isMyPage && (
           <button
             type="button"
@@ -38,7 +40,12 @@ const Account = ({ me, location }) => {
         )}
         {showSettings && <Settings />}
         {user.recipes && user.recipes.map(recipe => <RecipeRow key={recipe.id} {...recipe} />)}
-      </main>
+        {isMyPage && (
+          <button type="button" onClick={logout}>
+            Log out
+          </button>
+        )}
+      </>
     )
       :
       <PageFailure type="404" />
@@ -49,4 +56,8 @@ const mstp = state => ({
   me: state.user,
 })
 
-export default connect(mstp, null)(withRouter(Account))
+const mdtp = dispatch => ({
+  logout: () => dispatch(logout()),
+})
+
+export default connect(mstp, mdtp)(withRouter(Account))

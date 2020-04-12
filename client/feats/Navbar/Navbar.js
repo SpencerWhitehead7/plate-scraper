@@ -4,11 +4,10 @@ import { connect } from 'react-redux'
 
 import Modal from './Modal'
 
-import { logout } from '../../redux'
-
+import skele from '../../skeleton.css'
 import s from './Navbar.scss'
 
-const Navbar = ({ logout, user }) => {
+const Navbar = ({ user }) => {
   const [showModal, setShowModal] = useState(false)
   const toggleModal = () => { setShowModal(!showModal) }
 
@@ -16,42 +15,36 @@ const Navbar = ({ logout, user }) => {
     <>
 
       <nav className={s.navbar}>
-        <img src="/logo.svg" className={s.navbar__logo} />
-        <span className={s.navbar__title}>
-          Plate Scraper!
-        </span>
-        <div className={s.navbar__dropdown}>
-          <NavLink exact to="/">
-            Add&nbsp;Recipe
+        <span className={s.navbar__logoTitleArea}>
+          <NavLink to="/">
+            <img src="/logo.svg" className={s.navbar__logo} />
           </NavLink>
-          <div className={s.navbar__dropdownContent}>
-            <NavLink exact to="/">
-              Scrape
-            </NavLink>
-            <NavLink exact to="/upload">
-              Upload
-            </NavLink>
-          </div>
-        </div>
+          <span className={s.navbar__title}>
+            <b>Plate Scraper!</b>
+          </span>
+        </span>
+
+        <NavLink exact to="/scrape/website">
+          <b>Scrape from website</b>
+        </NavLink>
+        <NavLink exact to="/scrape/photo">
+          <b>Scrape from photo</b>
+        </NavLink>
+        <NavLink exact to="/scrape/manual">
+          <b>Enter manually</b>
+        </NavLink>
 
         <NavLink exact to="/search">
-          Search
+          <b>Search</b>
         </NavLink>
 
         {user.id ? (
-          <div className={s.navbar__dropdown}>
-            <NavLink exact to={`/user/${user.id}`}>
-              My&nbsp;Account
-            </NavLink>
-            <div className={s.navbar__dropdownContent}>
-              <button type="button" onClick={logout}>
-                Logout
-              </button>
-            </div>
-          </div>
+          <NavLink exact to={`/user/${user.id}`}>
+            <b>My Account</b>
+          </NavLink>
         )
           : (
-            <button type="button" onClick={toggleModal}>
+            <button type="button" className={skele[`button-primary`]} onClick={toggleModal}>
               Signup&nbsp;/&nbsp;Login
             </button>
           )}
@@ -67,8 +60,4 @@ const mstp = state => ({
   user: state.user,
 })
 
-const mdtp = dispatch => ({
-  logout: () => dispatch(logout()),
-})
-
-export default connect(mstp, mdtp)(Navbar)
+export default connect(mstp, null)(Navbar)

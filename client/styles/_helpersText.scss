@@ -1,0 +1,16 @@
+//---Alignment
+.textCenter {
+  text-align: center !important;
+}
+
+//---Wrapping
+.textShowBreaks {
+  white-space: pre-wrap !important;
+  word-break: break-word;
+}
+.textEllipsis {
+  width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}

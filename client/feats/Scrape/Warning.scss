@@ -1,5 +1,7 @@
+@import "../../styles/main.scss";
+
 .warning {
+  color: $color-bad;
+  padding: $space-smallest;
   text-align: center;
-  color: red;
-  padding: 4px;
 }

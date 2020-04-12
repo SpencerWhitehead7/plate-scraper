@@ -1,0 +1,24 @@
+@import "./styles/main";
+
+html {
+  background-color: $color-site;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(rgba(50, 195, 239, 0.6), rgba(50, 195, 239, 0)); // $color-good as an rbga
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: $space-small;
+  max-width: $bp-md - $space-between * 2;
+  flex: 1;
+  @include sm-screen {
+    padding: $space-between;
+  }
+}

@@ -1,8 +1,13 @@
+@import "../../styles/main.scss";
+
 .tag {
+  padding-right: $space-smallest;
+
   &:after {
     content: ",";
   }
   &:last-of-type:after {
     content: "";
+    padding-right: 0;
   }
 }
