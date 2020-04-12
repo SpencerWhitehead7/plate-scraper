@@ -3,6 +3,8 @@ import React from 'react'
 import axios from 'axios'
 import TextAreaAutosize from 'react-textarea-autosize'
 
+import LoadingIndicator from '../../comps/LoadingIndicator'
+
 import DownloadForm from './DownloadForm'
 import SupportedSites from './SupportedSites'
 import UrlForm from './UrlForm'
@@ -77,7 +79,7 @@ class Scrape extends React.Component {
           handleSubmit={this.handleSubmit}
           url={this.state.url}
         />
-        {this.state.isLoading && <div className={s.loading} />}
+        {this.state.isLoading && <LoadingIndicator />}
         {
           this.state.recipe && (
             <>

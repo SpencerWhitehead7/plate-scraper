@@ -1,0 +1,22 @@
+@import "../../styles/main.scss";
+
+.loadingIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__spinner {
+    border: $space-medium solid $color-white;
+    border-top: $space-medium solid $color-highlight;
+    border-radius: 50%;
+    width: $space-largest * 2;
+    height: $space-largest * 2;
+    animation: spin 1s ease-in-out infinite;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}

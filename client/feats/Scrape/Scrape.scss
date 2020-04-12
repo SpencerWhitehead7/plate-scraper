@@ -1,20 +1,5 @@
 @import "../../styles/main.scss";
 
-.loading {
-  border: $space-medium solid $color-white;
-  border-top: $space-medium solid $color-highlight;
-  border-radius: 50%;
-  width: $space-largest;
-  height: $space-largest;
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 .recipeTextarea {
   width: 100%;
   border-radius: $radius;
