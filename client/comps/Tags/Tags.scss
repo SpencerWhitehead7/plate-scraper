@@ -1,13 +1,18 @@
 @import "styles";
 
-.tag {
-  padding-right: $space-smallest;
+.tags {
+  display: flex;
+  flex-wrap: wrap;
 
-  &:after {
-    content: ",";
-  }
-  &:last-of-type:after {
-    content: "";
-    padding-right: 0;
+  &__tag {
+    padding-right: $space-smallest;
+
+    &:after {
+      content: ",";
+    }
+    &:last-of-type:after {
+      content: "";
+      padding-right: 0;
+    }
   }
 }

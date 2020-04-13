@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
-import { logout } from 'reducers'
-import Card, { CardTitle } from 'comps/Card'
-import RecipeRow from 'comps/RecipeRow'
+import { logout as logoutAction } from 'reducers'
+import Card, { CardTitle, CardSubtitle } from 'comps/Card'
+import RecipeRows from 'comps/RecipeRows'
 import PageFailure from 'feats/PageFailure'
 import Settings from './AccountSettings'
 
@@ -39,7 +39,8 @@ const Account = ({ me, location, logout }) => {
           </button>
         )}
         {showSettings && <Settings />}
-        {user.recipes && user.recipes.map(recipe => <RecipeRow key={recipe.id} {...recipe} />)}
+        <CardSubtitle>Recipes</CardSubtitle>
+        {user.recipes && <RecipeRows recipes={user.recipes} />}
         {isMyPage && (
           <button type="button" onClick={logout}>
             Log out
@@ -57,7 +58,7 @@ const mstp = state => ({
 })
 
 const mdtp = dispatch => ({
-  logout: () => dispatch(logout()),
+  logout: () => dispatch(logoutAction()),
 })
 
 export default connect(mstp, mdtp)(withRouter(Account))

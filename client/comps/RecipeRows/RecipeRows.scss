@@ -1,0 +1,17 @@
+@import "styles";
+
+.recipeRow {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: $space-within;
+
+  & + & {
+    padding-top: $space-within;
+    border-top: 1px solid $color-highlight;
+  }
+
+  &__food {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
