@@ -2,9 +2,9 @@ import React from 'react'
 
 import s from './Warning.scss'
 
-const Warning = ({ err }) => (
+const Warning = ({ message }) => (
   <span className={s.warning}>
-    {err}
+    {message}
   </span>
 )
 

@@ -1,5 +1,9 @@
 .urlForm {
+  &__inputBar {
+    display: flex;
+  }
+
   &__input {
-    width: 46vw;
+    flex: 1;
   }
 }

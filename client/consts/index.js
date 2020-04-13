@@ -1,0 +1,18 @@
+export const SUPPORTED_SITES = [
+  `allrecipes.com`,
+  `bettycrocker.com`,
+  `bonappetit.com`,
+  `chowhound.com`,
+  `cookinglight.com`,
+  `eatingwell.com`,
+  `epicurious.com`,
+  `food.com`,
+  // `food52.com`,
+  `foodandwine.com`,
+  `foodnetwork.com`,
+  `jamieoliver.com`,
+  `myrecipes.com`,
+  `seriouseats.com/recipes`,
+  `simplyrecipes.com`,
+  // `thekitchn.com`,
+]

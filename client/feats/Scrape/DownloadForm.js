@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import skele from 'skeleton.css'
 import s from './DownloadForm.scss'
 
 const DownloadForm = ({ recipe, sourceSite, title }) => {
@@ -22,15 +23,23 @@ const DownloadForm = ({ recipe, sourceSite, title }) => {
 
   return (
     <form onSubmit={handleSubmit} className={s.downloadForm}>
-      <label htmlFor="fileName">Filename:</label>
-      <input
-        type="text"
-        name="fileName"
-        className={s.downloadForm__input}
-        onChange={evt => setFileName(evt.target.value)}
-        value={fileName}
-      />
-      <button type="submit">Download!</button>
+      <label htmlFor="fileName">Filename</label>
+      <div className={s.downloadForm__inputBar}>
+        <input
+          id="fileName"
+          type="text"
+          name="fileName"
+          value={fileName}
+          onChange={evt => setFileName(evt.target.value)}
+          className={s.downloadForm__input}
+        />
+        <button
+          type="submit"
+          className={skele[`button-primary`]}
+        >
+          Download!
+        </button>
+      </div>
     </form>
   )
 }

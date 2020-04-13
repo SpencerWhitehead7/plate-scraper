@@ -1,7 +1,6 @@
 @import "styles";
 
 .warning {
+  padding-left: $space-smaller;
   color: $color-bad;
-  padding: $space-smallest;
-  text-align: center;
 }
