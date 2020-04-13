@@ -1,6 +1,7 @@
 @import "styles";
 
-.recipeTextarea {
+.autosizingTextArea {
+  resize: vertical;
   width: 100%;
   border-radius: $radius;
 }

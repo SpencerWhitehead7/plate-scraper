@@ -1,16 +1,14 @@
 /* eslint-disable react/no-unused-state */
 import React from 'react'
 import axios from 'axios'
-import TextAreaAutosize from 'react-textarea-autosize'
 
+import AutosizingTextarea from 'comps/AutosizingTextarea'
 import Card from 'comps/Card'
 import LoadingIndicator from 'comps/LoadingIndicator'
 import DownloadForm from './DownloadForm'
 import SupportedSites from './SupportedSites'
 import UrlForm from './UrlForm'
 import Warning from './Warning'
-
-import s from './Scrape.scss'
 
 class Scrape extends React.Component {
   constructor() {
@@ -83,11 +81,10 @@ class Scrape extends React.Component {
         {
           this.state.recipe && (
             <>
-              <TextAreaAutosize
-                className={s.recipeTextarea}
+              <AutosizingTextarea
                 name="recipe"
-                onChange={this.handleChange}
                 value={this.state.recipe}
+                onChange={this.handleChange}
               />
               <DownloadForm
                 title={this.state.title}

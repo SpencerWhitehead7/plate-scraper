@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import TextAreaAutosize from 'react-textarea-autosize'
 
+import AutosizingTextarea from 'comps/AutosizingTextarea'
 import EditTags from './EditTags'
 
 const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
@@ -66,8 +66,7 @@ const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
       <label>
         Recipe:
         {` `}
-        <TextAreaAutosize
-          type="text"
+        <AutosizingTextarea
           name="text"
           value={text}
           onChange={evt => setText(evt.target.value)}
