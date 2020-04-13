@@ -56,7 +56,7 @@ const Account = ({ me, location }) => {
 }
 
 const mstp = state => ({
-  me: state.user,
+  me: state.auth.user,
 })
 
 export default connect(mstp, null)(withRouter(Account))

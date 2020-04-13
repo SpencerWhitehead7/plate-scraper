@@ -53,7 +53,7 @@ const Account = ({ me, location, logout }) => {
 }
 
 const mstp = state => ({
-  me: state.user,
+  me: state.auth.user,
 })
 
 const mdtp = dispatch => ({

@@ -1,2 +1,2 @@
 export { default } from './store'
-export { me, signup, login, logout } from './rootReducer'
+export { me, signup, login, logout } from './authReducer'
