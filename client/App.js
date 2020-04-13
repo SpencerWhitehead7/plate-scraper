@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import { me } from 'reducers'
+import Modal from 'comps/Modal'
 import NavBar from 'feats/Navbar'
 import Scrape from 'feats/Scrape'
 import Account from 'feats/Account'
@@ -43,6 +44,7 @@ const Main = ({ checkUser }) => {
           </Switch>
         </div>
       </main>
+      <Modal />
     </BrowserRouter>
   )
 }

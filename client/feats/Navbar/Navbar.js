@@ -1,63 +1,59 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Modal from './Modal'
+import { MODAL_TYPES, openModal as openModalAction } from 'comps/Modal'
 
 import skele from 'skeleton.css'
 import s from './Navbar.scss'
 
-const Navbar = ({ user }) => {
-  const [showModal, setShowModal] = useState(false)
-  const toggleModal = () => { setShowModal(!showModal) }
+const Navbar = ({ user, openModal }) => (
+  <nav className={s.navbar}>
+    <span className={s.navbar__logoTitleArea}>
+      <NavLink to="/">
+        <img src="/logo.svg" className={s.navbar__logo} />
+      </NavLink>
+      <span className={s.navbar__title}>
+        <b>Plate Scraper!</b>
+      </span>
+    </span>
 
-  return (
-    <>
+    <NavLink exact to="/scrape/website">
+      <b>Scrape from website</b>
+    </NavLink>
+    <NavLink exact to="/scrape/photo">
+      <b>Scrape from photo</b>
+    </NavLink>
+    <NavLink exact to="/scrape/manual">
+      <b>Enter manually</b>
+    </NavLink>
 
-      <nav className={s.navbar}>
-        <span className={s.navbar__logoTitleArea}>
-          <NavLink to="/">
-            <img src="/logo.svg" className={s.navbar__logo} />
-          </NavLink>
-          <span className={s.navbar__title}>
-            <b>Plate Scraper!</b>
-          </span>
-        </span>
+    <NavLink exact to="/search">
+      <b>Search</b>
+    </NavLink>
 
-        <NavLink exact to="/scrape/website">
-          <b>Scrape from website</b>
-        </NavLink>
-        <NavLink exact to="/scrape/photo">
-          <b>Scrape from photo</b>
-        </NavLink>
-        <NavLink exact to="/scrape/manual">
-          <b>Enter manually</b>
-        </NavLink>
-
-        <NavLink exact to="/search">
-          <b>Search</b>
-        </NavLink>
-
-        {user.id ? (
-          <NavLink exact to={`/user/${user.id}`}>
-            <b>My Account</b>
-          </NavLink>
-        )
-          : (
-            <button type="button" className={skele[`button-primary`]} onClick={toggleModal}>
-              Signup&nbsp;/&nbsp;Login
-            </button>
-          )}
-      </nav>
-
-      {showModal && <Modal toggleModal={toggleModal} />}
-
-    </>
-  )
-}
+    {user.id ? (
+      <NavLink exact to={`/user/${user.id}`}>
+        <b>My Account</b>
+      </NavLink>
+    )
+      : (
+        <button
+          type="button"
+          className={skele[`button-primary`]}
+          onClick={openModal}
+        >
+          Signup&nbsp;/&nbsp;Login
+        </button>
+      )}
+  </nav>
+)
 
 const mstp = state => ({
-  user: state.user,
+  user: state.auth.user,
+})
+const mdtp = dispatch => ({
+  openModal: () => dispatch(openModalAction(MODAL_TYPES.AUTH)),
 })
 
-export default connect(mstp, null)(Navbar)
+export default connect(mstp, mdtp)(Navbar)
