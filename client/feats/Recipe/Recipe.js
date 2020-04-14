@@ -8,7 +8,7 @@ import PageFailure from 'feats/PageFailure'
 import DispMode from './DispMode'
 import EditMode from './EditMode'
 
-const Account = ({ me, location }) => {
+const Recipe = ({ me, location }) => {
   const id = location.pathname.split(`/`).pop()
   const [isMyRecipe, setIsMyRecipe] = useState(false)
   const [editMode, setEditMode] = useState(false)
@@ -25,6 +25,7 @@ const Account = ({ me, location }) => {
     fetchRecipe()
   }, [location, id])
   useEffect(() => { setIsMyRecipe(recipe.userId === me.id) }, [recipe, me])
+
   return (
     recipe ? (
       <Card>
@@ -51,7 +52,7 @@ const Account = ({ me, location }) => {
       </Card>
     )
       :
-      <PageFailure type="404" />
+      <PageFailure type="No such recipe" />
   )
 }
 
@@ -59,4 +60,4 @@ const mstp = state => ({
   me: state.auth.user,
 })
 
-export default connect(mstp, null)(withRouter(Account))
+export default connect(mstp, null)(withRouter(Recipe))

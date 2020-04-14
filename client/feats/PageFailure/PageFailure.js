@@ -20,6 +20,10 @@ const pageFailure = ({ type }) => {
       title = `This user does not exist`
       subtitle = `Try a different userId`
       break
+    case `No such recipe`:
+      title = `This recipe does not exist`
+      subtitle = `Try a different recipe`
+      break
     default:
       console.log(`unrecognized page failure`)
   }

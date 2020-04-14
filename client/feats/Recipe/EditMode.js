@@ -43,37 +43,38 @@ const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
   }
   return (
     <form onSubmit={handleSubmit}>
-      <label>
+      <label htmlFor="title">
         Title:
-        {` `}
-        <input
-          type="text"
-          name="title"
-          value={title}
-          onChange={evt => setTitle(evt.target.value)}
-        />
       </label>
-      <label>
-        Tags:
-        {` `}
-        <EditTags
-          tags={tags}
-          setTags={setTags}
-          originalTags={originalTags}
-          originalTagSet={originalTagSet}
-        />
+      <input
+        id="title"
+        type="text"
+        name="title"
+        value={title}
+        onChange={evt => setTitle(evt.target.value)}
+      />
+      <label htmlFor="tags">
+        Tags
       </label>
-      <label>
-        Recipe:
-        {` `}
-        <AutosizingTextarea
-          name="text"
-          value={text}
-          onChange={evt => setText(evt.target.value)}
-        />
+      <EditTags
+        id="tags"
+        tags={tags}
+        setTags={setTags}
+        originalTags={originalTags}
+        originalTagSet={originalTagSet}
+      />
+      <label htmlFor="text">
+        Recipe
       </label>
+      <AutosizingTextarea
+        id="text"
+        type="text"
+        name="text"
+        value={text}
+        onChange={evt => setText(evt.target.value)}
+      />
       <button type="submit">
-        Save Changes
+        Save
       </button>
     </form>
   )
