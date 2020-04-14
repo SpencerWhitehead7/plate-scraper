@@ -1,6 +1,6 @@
 const chai = require(`chai`)
 const chaiAsPromised = require(`chai-as-promised`)
-const Tag = require(`../../server/db`).model(`tag`)
+const Tag = require(`../tag`)
 
 chai.use(chaiAsPromised)
 const expect = chai.expect

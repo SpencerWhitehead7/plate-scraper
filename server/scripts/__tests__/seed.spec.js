@@ -1,9 +1,9 @@
 const { expect } = require(`chai`)
-const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
-const Recipe = require(`../../server/db`).model(`recipe`)
-const Tag = require(`../../server/db`).model(`tag`)
-const User = require(`../../server/db`).model(`user`)
-const seed = require(`../../server/scripts/seed`)
+const RecipeTraits = require(`../../db`).model(`recipeTraits`)
+const Recipe = require(`../../db`).model(`recipe`)
+const Tag = require(`../../db`).model(`tag`)
+const User = require(`../../db`).model(`user`)
+const seed = require(`../../scripts/seed`)
 
 describe(`Seed`, () => {
   let RecipeTraitsInDb = null

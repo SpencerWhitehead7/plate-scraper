@@ -4,7 +4,7 @@
   "description": "An app for collecting, editing, organizing, and storing recipes",
   "main": "server/index",
   "scripts": {
-    "test": "NODE_ENV='test' mocha --timeout 10000 --exit -- test/*",
+    "test-be": "NODE_ENV='test' mocha --timeout 10000 --exit -- 'server/**/*.spec.js'",
     "lint": "eslint . --ext .js,.jsx --ignore-pattern /public/*",
     "lint-fix": "eslint . --ext .js,.jsx --fix --ignore-pattern /public/*",
     "start": "webpack -p & node server",

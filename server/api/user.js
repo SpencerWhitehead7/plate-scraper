@@ -38,7 +38,7 @@ router.delete(
       const user = await User.findByPk(req.user.id)
       await user.destroy()
       req.logout()
-      req.session.destroy(err => (err ? next(err) : res.redirect(`/`)))
+      req.session.destroy(err => (err ? next(err) : res.sendStatus(200)))
     } catch (error) {
       next(error)
     }

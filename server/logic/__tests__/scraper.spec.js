@@ -2,7 +2,7 @@ const { expect } = require(`chai`)
 
 const expecteds = require(`./expectedResults`)
 
-const scrape = require(`../../server/logic`)
+const scrape = require(`../`)
 
 describe(`The parsers handle`, () => {
   let actuals = []

@@ -1,9 +1,9 @@
 const { expect } = require(`chai`)
 const request = require(`supertest`)
 
-const app = require(`../../server`)
-const Recipe = require(`../../server/db`).model(`recipe`)
-const User = require(`../../server/db`).model(`user`)
+const app = require(`../..`)
+const Recipe = require(`../../db`).model(`recipe`)
+const User = require(`../../db`).model(`user`)
 
 const agent1 = request.agent(app)
 const agent2 = request.agent(app)
@@ -143,9 +143,8 @@ describe(`API Route User: /api/user`, () => {
         expect(failedRes.status).to.equal(401)
         expect(failedRes.text).to.equal(`Not logged in`)
       })
-      it(`redirects the user to the main page`, () => {
-        expect(res.status).to.equal(302)
-        expect(res.header[`location`]).to.equal(`/`)
+      it(`returns a 200`, () => {
+        expect(res.status).to.equal(200)
       })
     })
   })

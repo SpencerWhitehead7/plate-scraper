@@ -1,8 +1,8 @@
 const { expect } = require(`chai`)
 const request = require(`supertest`)
 
-const app = require(`../../server`)
-const User = require(`../../server/db`).model(`user`)
+const app = require(`../..`)
+const User = require(`../../db`).model(`user`)
 
 const agent = request.agent(app)
 
@@ -39,10 +39,6 @@ describe(`Auth Route: /auth`, () => {
       it(`also logs that user into the app`, async () => {
         const res = await agent.get(`/auth/me`)
         expect(res.status).to.equal(200)
-      })
-      it(`strips any spaces from the userName`, async () => {
-        const res = await agent.get(`/auth/me`)
-        expect(res.body.userName).to.equal(`testUser`)
       })
       it(`returns a 409 if the user is already logged in`, async () => {
         const res = await agent.post(`/auth/signup`).send(userCred)
@@ -91,10 +87,9 @@ describe(`Auth Route: /auth`, () => {
         // const res = await agent.post(`/auth/logout`)
         // TODO figure out how to test this
       })
-      it(`redirects the user to the main page if the user is logged in`, async () => {
+      it(`returns a 204 if the user logged out successfully`, async () => {
         const res = await agent.post(`/auth/logout`)
-        expect(res.status).to.equal(302)
-        expect(res.header[`location`]).to.equal(`/`)
+        expect(res.status).to.equal(204)
       })
       it(`returns a 401 if the user is not logged in`, async () => {
         const res = await request(app).post(`/auth/logout`)

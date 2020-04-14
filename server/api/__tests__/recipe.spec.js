@@ -1,11 +1,11 @@
 const { expect } = require(`chai`)
 const request = require(`supertest`)
 
-const app = require(`../../server`)
-const Recipe = require(`../../server/db`).model(`recipe`)
-const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
-const Tag = require(`../../server/db`).model(`tag`)
-const User = require(`../../server/db`).model(`user`)
+const app = require(`../..`)
+const Recipe = require(`../../db`).model(`recipe`)
+const RecipeTraits = require(`../../db`).model(`recipeTraits`)
+const Tag = require(`../../db`).model(`tag`)
+const User = require(`../../db`).model(`user`)
 
 const agent1 = request.agent(app)
 const agent2 = request.agent(app)

@@ -1,7 +1,7 @@
 const { expect } = require(`chai`)
-const Recipe = require(`../../server/db`).model(`recipe`)
-const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
-const User = require(`../../server/db`).model(`user`)
+const Recipe = require(`../recipe`)
+const RecipeTraits = require(`../../`).model(`recipeTraits`)
+const User = require(`../user`)
 
 describe(`Relationships`, () => {
   let testUser = null

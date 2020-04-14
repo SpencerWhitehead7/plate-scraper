@@ -1,8 +1,8 @@
 const { expect } = require(`chai`)
-const RecipeTraits = require(`../../server/db`).model(`recipeTraits`)
-const Recipe = require(`../../server/db`).model(`recipe`)
-const Tag = require(`../../server/db`).model(`tag`)
-const cleanupOrphanedTags = require(`../../server/scripts/cleanupOrphanedTags`)
+const RecipeTraits = require(`../../db`).model(`recipeTraits`)
+const Recipe = require(`../../db`).model(`recipe`)
+const Tag = require(`../../db`).model(`tag`)
+const cleanupOrphanedTags = require(`../cleanupOrphanedTags`)
 
 describe(`CleanupOrphanedTags`, () => {
   before(async () => {

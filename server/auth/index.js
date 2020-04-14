@@ -47,7 +47,7 @@ router.post(
   isAuthenticated,
   (req, res, next) => {
     req.logout()
-    req.session.destroy(err => (err ? next(err) : res.redirect(`/`)))
+    req.session.destroy(err => (err ? next(err) : res.sendStatus(204)))
   },
 )
 
