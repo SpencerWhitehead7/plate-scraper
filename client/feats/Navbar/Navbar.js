@@ -21,7 +21,7 @@ const Navbar = ({ user, openModal }) => (
     <NavLink exact to="/scrape/website">
       <b>Scrape from website</b>
     </NavLink>
-    <NavLink exact to="/scrape/photo">
+    {/* <NavLink exact to="/scrape/photo">
       <b>Scrape from photo</b>
     </NavLink>
     <NavLink exact to="/scrape/manual">
@@ -30,7 +30,7 @@ const Navbar = ({ user, openModal }) => (
 
     <NavLink exact to="/search">
       <b>Search</b>
-    </NavLink>
+    </NavLink> */}
 
     {user.id ? (
       <NavLink exact to={`/user/${user.id}`}>
