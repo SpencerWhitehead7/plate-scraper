@@ -16,6 +16,10 @@ const pageFailure = ({ type }) => {
       title = `401 Unauthorized`
       subtitle = `You must log in to see this!`
       break
+    case `No such user`:
+      title = `This user does not exist`
+      subtitle = `Try a different userId`
+      break
     default:
       console.log(`unrecognized page failure`)
   }

@@ -28,28 +28,31 @@ const Account = ({ me, location, logout }) => {
 
   return (
     user ? (
-      <Card>
-        <CardTitle>{user.userName}</CardTitle>
+      <>
+        <Card>
+          <CardTitle>{user.userName}</CardTitle>
+          <CardSubtitle>Recipes</CardSubtitle>
+          {user.recipes && <RecipeRows recipes={user.recipes} />}
+        </Card>
+
         {isMyPage && (
-          <button
-            type="button"
-            onClick={() => setShowSettings(!showSettings)}
-          >
-            Settings
-          </button>
+          <Card>
+            <button
+              type="button"
+              onClick={() => setShowSettings(!showSettings)}
+            >
+              Settings
+            </button>
+            <button type="button" onClick={logout}>
+              Log out
+            </button>
+            {showSettings && <Settings />}
+          </Card>
         )}
-        {showSettings && <Settings />}
-        <CardSubtitle>Recipes</CardSubtitle>
-        {user.recipes && <RecipeRows recipes={user.recipes} />}
-        {isMyPage && (
-          <button type="button" onClick={logout}>
-            Log out
-          </button>
-        )}
-      </Card>
+      </>
     )
       :
-      <PageFailure type="404" />
+      <PageFailure type="No such user" />
   )
 }
 
