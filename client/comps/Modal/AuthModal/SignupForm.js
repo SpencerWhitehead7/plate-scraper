@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
-import { signup as signupAction } from 'reducers'
+import { authAsyncHandler } from 'reducers/asyncHandlers'
 import { CardTitle } from 'comps/Card'
 
 import skele from 'skeleton.css'
 import sg from 'styles/index.scss'
 
-const SignupForm = ({ className, signup, signupError }) => {
+const SignupForm = ({ className, signup }) => {
   const [email, setEmail] = useState(``)
   const [userName, setUserName] = useState(``)
   const [password, setPassword] = useState(``)
@@ -16,24 +16,15 @@ const SignupForm = ({ className, signup, signupError }) => {
   const handleSubmit = evt => {
     evt.preventDefault()
     if (!email || !password || !userName) {
-      setErr({ ...err, missingField: true })
+      setErr({ missingField: true })
     } else {
-      signup(email, userName, password)
+      signup(email, password, userName)
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className={className}>
       <CardTitle>Signup</CardTitle>
-      {/* this jank bs sets error states in conjunction with redux */}
-      {signupError.status !== err.status && setErr({ ...err, ...signupError })}
-      {err.status && (
-        <span>
-          {`Error: ${err.status} ${err.statusText}`}
-          <br />
-          {`${err.data}`}
-        </span>
-      )}
 
       <label>
         Email
@@ -77,12 +68,8 @@ const SignupForm = ({ className, signup, signupError }) => {
   )
 }
 
-const mstp = state => ({
-  signupError: state.auth.signupError,
-})
-
 const mdtp = dispatch => ({
-  signup: (email, userName, password) => dispatch(signupAction(email, userName, password)),
+  signup: (email, userName, password) => dispatch(authAsyncHandler.call({ email, userName, password })),
 })
 
-export default connect(mstp, mdtp)(SignupForm)
+export default connect(null, mdtp)(SignupForm)

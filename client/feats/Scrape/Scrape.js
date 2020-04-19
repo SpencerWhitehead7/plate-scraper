@@ -1,7 +1,7 @@
-/* eslint-disable react/no-unused-state */
-import React from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 
+import { scrapeAsyncHandler } from 'reducers/asyncHandlers'
 import AutosizingTextarea from 'comps/AutosizingTextarea'
 import Card from 'comps/Card'
 import LoadingIndicator from 'comps/LoadingIndicator'
@@ -10,94 +10,62 @@ import SupportedSites from './SupportedSites'
 import UrlForm from './UrlForm'
 import Warning from './Warning'
 
-class Scrape extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      url: ``,
-      sourceSite: ``,
-      sourceUrl: ``,
-      title: ``,
-      recipe: ``,
-      err: {},
-      isLoading: false,
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+const Scrape = ({ error, isLoading, data: initialRecipe, scrape }) => {
+  const [url, setUrl] = useState(``)
+  const [recipe, setRecipe] = useState(initialRecipe)
+
+  const handleChangeUrl = evt => {
+    setUrl(evt.target.value)
+  }
+  const handleSubmit = evt => {
+    evt.preventDefault()
+    scrape(url)
   }
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
+  useEffect(() => {
+    setRecipe(initialRecipe)
+  }, [initialRecipe])
+
+  const handleChangeRecipeText = evt => {
+    setRecipe({
+      ...recipe,
+      recipe: evt.target.value,
     })
   }
 
-  handleSubmit(event) {
-    event.preventDefault()
-    this.setState({
-      sourceSite: ``,
-      sourceUrl: ``,
-      title: ``,
-      recipe: ``,
-      err: {},
-      isLoading: true,
-    }, async () => {
-      try {
-        const { data } = await axios.post(`/api/scrape`, { url: this.state.url })
-        console.log(data)
-        if (data.message && data.name &&
-          !data.sourceSite && !data.sourceUrl && !data.title && !data.recipe) { // duck typing to check for errors
-          this.setState({ err: data, isLoading: false })
-        } else {
-          this.setState({
-            sourceSite: data.sourceSite,
-            sourceUrl: data.sourceUrl,
-            title: data.title,
-            recipe: data.recipe,
-            err: {},
-            isLoading: false,
-          })
-        }
-      } catch (err) {
-        console.log(err)
-        this.setState({
-          err,
-          isLoading: false,
-        })
+  return (
+    <Card>
+      <SupportedSites />
+      <UrlForm
+        handleChange={handleChangeUrl}
+        handleSubmit={handleSubmit}
+        url={url}
+      />
+      {isLoading && <LoadingIndicator />}
+      {
+        !isLoading && recipe && Object.entries(recipe).length && (
+          <>
+            <AutosizingTextarea
+              name="recipe"
+              value={recipe.recipe || ``}
+              onChange={handleChangeRecipeText}
+            />
+            <DownloadForm {...recipe} />
+          </>
+        )
       }
-    })
-  }
-
-  render() {
-    return (
-      <Card>
-        <SupportedSites />
-        <UrlForm
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
-          url={this.state.url}
-        />
-        {this.state.isLoading && <LoadingIndicator />}
-        {
-          this.state.recipe && (
-            <>
-              <AutosizingTextarea
-                name="recipe"
-                value={this.state.recipe}
-                onChange={this.handleChange}
-              />
-              <DownloadForm
-                title={this.state.title}
-                sourceSite={this.state.sourceSite}
-                recipe={this.state.recipe}
-              />
-            </>
-          )
-        }
-        {Object.keys(this.state.err).length > 0 && <Warning err={this.state.err.message} />}
-      </Card>
-    )
-  }
+      {error && <Warning error={error} />}
+    </Card>
+  )
 }
 
-export default Scrape
+const mstp = state => ({
+  ...scrapeAsyncHandler.select(state),
+})
+
+
+const mdtp = dispatch => ({
+  scrape: url => dispatch(scrapeAsyncHandler.call(url)),
+})
+
+export default connect(mstp, mdtp)(Scrape)

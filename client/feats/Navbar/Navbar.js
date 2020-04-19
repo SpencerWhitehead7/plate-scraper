@@ -2,12 +2,13 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import { authAsyncHandler } from 'reducers/asyncHandlers'
 import { MODAL_TYPES, openModal as openModalAction } from 'comps/Modal'
 
 import skele from 'skeleton.css'
 import s from './Navbar.scss'
 
-const Navbar = ({ user, openModal }) => (
+const Navbar = ({ me, openModal }) => (
   <nav className={s.navbar}>
     <span className={s.navbar__logoTitleArea}>
       <NavLink to="/">
@@ -32,8 +33,8 @@ const Navbar = ({ user, openModal }) => (
       <b>Search</b>
     </NavLink> */}
 
-    {user.id ? (
-      <NavLink exact to={`/user/${user.id}`}>
+    {me.data && me.data.id ? (
+      <NavLink exact to={`/user/${me.data.id}`}>
         <b>My Account</b>
       </NavLink>
     )
@@ -50,7 +51,7 @@ const Navbar = ({ user, openModal }) => (
 )
 
 const mstp = state => ({
-  user: state.auth.user,
+  me: authAsyncHandler.select(state),
 })
 const mdtp = dispatch => ({
   openModal: () => dispatch(openModalAction(MODAL_TYPES.AUTH)),
