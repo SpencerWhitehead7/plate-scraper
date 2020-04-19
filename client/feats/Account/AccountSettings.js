@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 
-import { me } from 'reducers'
+import { authAsyncHandler } from 'reducers/asyncHandlers'
 
-const LoginForm = props => {
+const AccountSettings = ({ fetchMe }) => {
   const [auth, setAuth] = useState(``)
   const [email, setEmail] = useState(``)
   const [userName, setUserName] = useState(``)
@@ -23,7 +23,7 @@ const LoginForm = props => {
         password: auth,
       }
       await axios.put(`/api/user`, body)
-      await props.me()
+      await fetchMe()
     } catch (err) {
       console.log(err)
     }
@@ -104,7 +104,7 @@ const LoginForm = props => {
 }
 
 const mdtp = dispatch => ({
-  me: () => dispatch(me()),
+  fetchMe: () => dispatch(authAsyncHandler.call()),
 })
 
-export default connect(null, mdtp)(LoginForm)
+export default connect(null, mdtp)(AccountSettings)

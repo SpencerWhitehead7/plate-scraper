@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-import { me } from 'reducers'
+import { authAsyncHandler } from 'reducers/asyncHandlers'
 import Modal from 'comps/Modal'
 import NavBar from 'feats/Navbar'
 import Scrape from 'feats/Scrape'
@@ -13,10 +13,10 @@ import PageFailure from 'feats/PageFailure'
 
 import s from './App.scss'
 
-const Main = ({ checkUser }) => {
+const Main = ({ fetchMe }) => {
   useEffect(() => {
-    checkUser()
-  })
+    fetchMe()
+  }, [fetchMe])
   if (module.hot) module.hot.accept()
 
   return (
@@ -31,7 +31,6 @@ const Main = ({ checkUser }) => {
             <Route exact path="/scrape/:scrapeMethod">
               <Scrape />
             </Route>
-
             <Route exact path="/user/:userId">
               <Account />
             </Route>
@@ -50,7 +49,7 @@ const Main = ({ checkUser }) => {
 }
 
 const mdtp = dispatch => ({
-  checkUser: () => dispatch(me()),
+  fetchMe: () => dispatch(authAsyncHandler.callIfNeeded()),
 })
 
 export default hot(connect(null, mdtp)(Main))

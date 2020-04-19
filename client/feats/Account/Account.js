@@ -1,38 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import axios from 'axios'
+import { compose } from 'redux'
 
-import { logout as logoutAction } from 'reducers'
+import { authAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
 import Card, { CardTitle, CardSubtitle } from 'comps/Card'
 import RecipeRows from 'comps/RecipeRows'
 import PageFailure from 'feats/PageFailure'
 import Settings from './AccountSettings'
 
-const Account = ({ me, location, logout }) => {
-  const id = location.pathname.split(`/`).pop()
-  const isMyPage = Number(id) === me.id
+const Account = ({ fetchUser, isMyPage, logout, user, userId }) => {
   const [showSettings, setShowSettings] = useState(false)
-  const [user, setUser] = useState({})
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await axios.get(`/api/user/${id}`)
-        setUser(data)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetchUser()
-  }, [me, id])
+    fetchUser(userId)
+  }, [userId, fetchUser])
 
   return (
     user ? (
       <>
         <Card>
-          <CardTitle>{user.userName}</CardTitle>
+          <CardTitle>{user && user.userName}</CardTitle>
           <CardSubtitle>Recipes</CardSubtitle>
-          {user.recipes && <RecipeRows recipes={user.recipes} />}
+          {user && user.recipes && <RecipeRows recipes={user.recipes} />}
         </Card>
 
         {isMyPage && (
@@ -56,12 +45,23 @@ const Account = ({ me, location, logout }) => {
   )
 }
 
-const mstp = state => ({
-  me: state.auth.user,
-})
+const mstp = (state, ownProps) => {
+  const { userId: userIdStr } = ownProps.match.params
+  const userId = Number(userIdStr)
+  const { data: me } = authAsyncHandler.select(state)
+  const { data: user } = userAsyncHandler.select(state, userId)
+  const isMyPage = userId === (me ? me.id : me)
+
+  return {
+    isMyPage,
+    user,
+    userId,
+  }
+}
 
 const mdtp = dispatch => ({
-  logout: () => dispatch(logoutAction()),
+  fetchUser: id => dispatch(userAsyncHandler.callIfNeeded(id)),
+  logout: () => dispatch(authAsyncHandler.call({ isLogout: true })),
 })
 
-export default connect(mstp, mdtp)(withRouter(Account))
+export default compose(withRouter, connect(mstp, mdtp))(Account)
