@@ -7,10 +7,12 @@ import { authAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
 import Card, { CardTitle, CardSubtitle } from 'comps/Card'
 import RecipeRows from 'comps/RecipeRows'
 import PageFailure from 'feats/PageFailure'
-import Settings from './AccountSettings'
+import DestroyAccount from './DestroyAccount'
+import EditAccount from './EditAccount'
 
 const Account = ({ fetchUser, isMyPage, logout, user, userId }) => {
-  const [showSettings, setShowSettings] = useState(false)
+  const [showEditAccount, setShowEditAccount] = useState(false)
+  const [showDestroyAccont, setShowDestroyAccount] = useState(false)
   useEffect(() => {
     fetchUser(userId)
   }, [userId, fetchUser])
@@ -28,14 +30,21 @@ const Account = ({ fetchUser, isMyPage, logout, user, userId }) => {
           <Card>
             <button
               type="button"
-              onClick={() => setShowSettings(!showSettings)}
+              onClick={() => setShowEditAccount(!showEditAccount)}
             >
               Settings
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowDestroyAccount(!showDestroyAccont)}
+            >
+              Destroy Account
             </button>
             <button type="button" onClick={logout}>
               Log out
             </button>
-            {showSettings && <Settings />}
+            {showEditAccount && <EditAccount />}
+            {showDestroyAccont && <DestroyAccount />}
           </Card>
         )}
       </>
