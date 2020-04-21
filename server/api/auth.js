@@ -1,12 +1,12 @@
 const router = require(`express`).Router()
 
-const User = require(`../db/models/user`)
+const { Recipe, Tag, User } = require(`../db/models`)
 
 const { isAuthenticated, isAlreadyAuthenticated } = require(`../authenticationLogic`)
 
 // GET /api/auth
 router.get(`/`, (req, res, next) => {
-  res.json(req.user)
+  res.json(req.user || null)
 })
 
 // PUT /api/auth
@@ -61,7 +61,15 @@ router.post(
   isAlreadyAuthenticated,
   async (req, res, next) => {
     try {
-      const user = await User.findOne({ where: { email: req.body.email } })
+      const user = await User.findOne({
+        where: { email: req.body.email },
+        include: [
+          {
+            model: Recipe,
+            include: [Tag],
+          },
+        ],
+      })
       if (!user || !user.correctPassword(req.body.password)) {
         const err = new Error(`Wrong username or password`)
         err.status = 401
