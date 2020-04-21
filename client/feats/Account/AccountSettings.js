@@ -1,29 +1,27 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
 
-const AccountSettings = ({ fetchMe }) => {
-  const [auth, setAuth] = useState(``)
-  const [email, setEmail] = useState(``)
-  const [userName, setUserName] = useState(``)
+const AccountSettings = ({ editMe }) => {
   const [password, setPassword] = useState(``)
-  const [passwordConfirm, setPasswordConfirm] = useState(``)
+  const [newEmail, setNewEmail] = useState(``)
+  const [newUserName, setNewUserName] = useState(``)
+  const [newPassword, setNewPassword] = useState(``)
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState(``)
 
   const handleSubmit = async evt => {
     try {
       evt.preventDefault()
-      const newInfo = {}
-      if (email) newInfo.email = email
-      if (userName) newInfo.userName = userName
-      if (password) newInfo.password = password
-      const body = {
-        newInfo,
-        password: auth,
-      }
-      await axios.put(`/api/user`, body)
-      await fetchMe()
+      const submitEmail = newEmail || undefined
+      const submitUserName = newUserName || undefined
+      const submitNewPassword = newPassword || undefined
+      await editMe(submitEmail, submitUserName, submitNewPassword, password)
+      setPassword(``)
+      setNewEmail(``)
+      setNewUserName(``)
+      setNewPassword(``)
+      setNewPasswordConfirm(``)
     } catch (err) {
       console.log(err)
     }
@@ -38,8 +36,8 @@ const AccountSettings = ({ fetchMe }) => {
         id="email"
         type="text"
         name="email"
-        value={email}
-        onChange={evt => setEmail(evt.target.value)}
+        value={newEmail}
+        onChange={evt => { setNewEmail(evt.target.value) }}
       />
 
       <label htmlFor="userName">
@@ -50,8 +48,8 @@ const AccountSettings = ({ fetchMe }) => {
         type="text"
         name="userName"
         autoComplete="off"
-        value={userName}
-        onChange={evt => setUserName(evt.target.value)}
+        value={newUserName}
+        onChange={evt => { setNewUserName(evt.target.value) }}
       />
 
       <label htmlFor="password">
@@ -62,10 +60,8 @@ const AccountSettings = ({ fetchMe }) => {
         type="password"
         name="password"
         autoComplete="new-password"
-        value={password}
-        onChange={evt => {
-          setPassword(evt.target.value)
-        }}
+        value={newPassword}
+        onChange={evt => { setNewPassword(evt.target.value) }}
       />
 
       <label htmlFor="passwordConfirm">
@@ -76,10 +72,10 @@ const AccountSettings = ({ fetchMe }) => {
         type="password"
         name="passwordConfirm"
         autoComplete="new-password"
-        value={passwordConfirm}
-        onChange={evt => setPasswordConfirm(evt.target.value)}
+        value={newPasswordConfirm}
+        onChange={evt => { setNewPasswordConfirm(evt.target.value) }}
       />
-      {password !== passwordConfirm && <span>Passwords do not match</span>}
+      {newPassword !== newPasswordConfirm && <span>Passwords do not match</span>}
 
       <label htmlFor="auth">
         Authenticate with current password (Required)
@@ -89,13 +85,13 @@ const AccountSettings = ({ fetchMe }) => {
         type="password"
         name="auth"
         autoComplete="off"
-        value={auth}
-        onChange={evt => setAuth(evt.target.value)}
+        value={password}
+        onChange={evt => { setPassword(evt.target.value) }}
       />
 
       <button
         type="submit"
-        disabled={!auth || password !== passwordConfirm}
+        disabled={!password || newPassword !== newPasswordConfirm}
       >
         Save
       </button>
@@ -104,7 +100,7 @@ const AccountSettings = ({ fetchMe }) => {
 }
 
 const mdtp = dispatch => ({
-  fetchMe: () => dispatch(authAsyncHandler.call()),
+  editMe: (newEmail, newUserName, newPassword, password) => dispatch(authAsyncHandler.call({ newEmail, newUserName, newPassword, password })),
 })
 
 export default connect(null, mdtp)(AccountSettings)
