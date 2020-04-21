@@ -78,25 +78,6 @@ describe(`Auth Route: /auth`, () => {
         expect(res.text).to.equal(`Not logged in`)
       })
     })
-
-    describe(`DELETE`, () => {
-      it(`deletes the logged in user `, async () => {
-        const res = await agent.delete(`/auth`)
-        const user = await User.findByPk(1)
-        expect(res.status).to.equal(200)
-        expect(user).to.be.null
-      })
-      it(`logs out the logged in user`, async () => {
-        await agent.delete(`/auth`)
-        const res = await agent.get(`/auth`)
-        expect(res.body).to.equal(``)
-      })
-      it(`returns a 401 if the user is not logged in`, async () => {
-        const res = await request(app).delete(`/auth`)
-        expect(res.status).to.equal(401)
-        expect(res.text).to.equal(`Not logged in`)
-      })
-    })
   })
 
   describe(`/signup`, () => {
@@ -165,6 +146,34 @@ describe(`Auth Route: /auth`, () => {
       })
       it(`returns a 401 if the user is not logged in`, async () => {
         const res = await request(app).post(`/auth/logout`)
+        expect(res.status).to.equal(401)
+        expect(res.text).to.equal(`Not logged in`)
+      })
+    })
+  })
+
+  describe(`/destroy`, () => {
+    describe(`POST`, () => {
+      it(`deletes the logged in user `, async () => {
+        const res = await agent.post(`/auth/destroy`).send({ password: userCred.password })
+        const user = await User.findByPk(1)
+        expect(res.status).to.equal(200)
+        expect(user).to.be.null
+      })
+      it(`logs out the logged in user`, async () => {
+        await agent.post(`/auth/destroy`).send({ password: userCred.password })
+        const res = await agent.get(`/auth`)
+        expect(res.body).to.equal(``)
+      })
+      it(`returns a 401 and does not delete the user if the user sends the wrong confirmation password`, async () => {
+        const res = await agent.post(`/auth/destroy`).send({ password: `wrongpw` })
+        const user = await User.findByPk(1)
+        expect(user).to.exist
+        expect(res.status).to.equal(401)
+        expect(res.text).to.equal(`Unauthorized`)
+      })
+      it(`returns a 401 if the user is not logged in`, async () => {
+        const res = await request(app).post(`/auth/destroy`).send({ password: userCred.password })
         expect(res.status).to.equal(401)
         expect(res.text).to.equal(`Not logged in`)
       })

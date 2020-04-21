@@ -38,22 +38,6 @@ router.put(
   },
 )
 
-// DELETE /auth
-router.delete(
-  `/`,
-  isAuthenticated,
-  async (req, res, next) => {
-    try {
-      const { user } = req
-      await user.destroy()
-      req.logout()
-      req.session.destroy(err => (err ? next(err) : res.sendStatus(200)))
-    } catch (error) {
-      next(error)
-    }
-  },
-)
-
 // POST /auth/signup
 router.post(
   `/signup`,
@@ -102,3 +86,24 @@ router.post(
 )
 
 module.exports = router
+
+// POST /auth/destroy
+router.post(
+  `/destroy`,
+  isAuthenticated,
+  async (req, res, next) => {
+    try {
+      const { user, body } = req
+      const { password } = body
+      if (user.correctPassword(password)) {
+        await user.destroy()
+        req.logout()
+        req.session.destroy(err => (err ? next(err) : res.sendStatus(200)))
+      } else {
+        res.sendStatus(401)
+      }
+    } catch (error) {
+      next(error)
+    }
+  },
+)
