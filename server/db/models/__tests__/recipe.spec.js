@@ -104,14 +104,14 @@ describe(`The Recipe model`, () => {
       })
       it(`accepts only integers`, () => {
         const nonInteger = () => Recipe.create({ text: `recipe`, title: `title`, createdBy: `str` })
-        return expect(nonInteger()).to.be.rejectedWith(`invalid input syntax for integer: "str"`)
+        return expect(nonInteger()).to.be.rejectedWith(`invalid input syntax for type integer: "str"`)
       })
     })
 
     describe(`ForkedCount`, () => {
       it(`accepts only integers`, () => {
         const nonInteger = () => Recipe.create({ text: `recipe`, title: `title`, createdBy: 1, forkedCount: `str` })
-        return expect(nonInteger()).to.be.rejectedWith(`invalid input syntax for integer: "str"`)
+        return expect(nonInteger()).to.be.rejectedWith(`invalid input syntax for type integer: "str"`)
       })
       it(`forkedCount field defaults to 0`, () => {
         expect(testRecipe.forkedCount).to.equal(0)
