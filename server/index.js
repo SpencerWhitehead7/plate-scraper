@@ -7,6 +7,7 @@ const path = require(`path`)
 
 // Database
 const db = require(`./db`)
+const { Recipe, Tag } = require(`./db/models`)
 
 // Sub-routers
 const api = require(`./api`)
@@ -18,7 +19,14 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await db.models.user.findByPk(id)
+    const user = await db.models.user.findByPk(id, {
+      include: [
+        {
+          model: Recipe,
+          include: [Tag],
+        },
+      ],
+    })
     done(null, user)
   } catch (err) {
     done(err)

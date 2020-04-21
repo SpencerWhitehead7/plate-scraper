@@ -35,7 +35,7 @@ describe(`Auth Route: /api/auth`, () => {
       it(`if the user is not logged in, it returns 200 with no body`, async () => {
         const res = await request(app).get(`/api/auth`)
         expect(res.status).to.equal(200)
-        expect(res.body).to.equal(``)
+        expect(res.body).to.be.null
       })
       it(`if the user is logged in, it returns 200 with the user's information`, async () => {
         const res = await agent.get(`/api/auth`)
@@ -109,11 +109,21 @@ describe(`Auth Route: /api/auth`, () => {
 
   describe(`/login`, () => {
     describe(`POST`, () => {
-      it(`logs the user in if they provide correct credentials`, async () => {
+      it(`logs the user in if they provide correct credentials and returns the user with recipes and tags`, async () => {
+        await agent.post(`/api/recipe`).send({
+          text: `text1`,
+          title: `title1`,
+        })
+        await agent.post(`/api/tag`).send({
+          name: `testtag`,
+          recipeId: 1,
+        })
         await agent.post(`/api/auth/logout`)
         const res = await agent.post(`/api/auth/login`).send(userCred)
         expect(res.status).to.equal(200)
         expect(res.body.id).to.equal(1)
+        expect(res.body.recipes).to.have.lengthOf(1)
+        expect(res.body.recipes[0].tags).to.have.lengthOf(1)
       })
       it(`returns a 401 if the user provides incorrect credentials`, async () => {
         await agent.post(`/api/auth/logout`)
@@ -134,7 +144,7 @@ describe(`Auth Route: /api/auth`, () => {
       it(`logs the user out if the user is logged in`, async () => {
         await agent.post(`/api/auth/logout`)
         const res = await agent.get(`/api/auth`)
-        expect(res.body).to.equal(``)
+        expect(res.body).to.be.null
       })
       xit(`destroy's the user's session if the user is logged in`, async () => {
         // const res = await agent.post(`/api/auth/logout`)
@@ -163,7 +173,7 @@ describe(`Auth Route: /api/auth`, () => {
       it(`logs out the logged in user`, async () => {
         await agent.post(`/api/auth/destroy`).send({ password: userCred.password })
         const res = await agent.get(`/api/auth`)
-        expect(res.body).to.equal(``)
+        expect(res.body).to.be.null
       })
       it(`returns a 401 and does not delete the user if the user sends the wrong confirmation password`, async () => {
         const res = await agent.post(`/api/auth/destroy`).send({ password: `wrongpw` })
