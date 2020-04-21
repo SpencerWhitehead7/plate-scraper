@@ -4,12 +4,12 @@ const User = require(`../db/models/user`)
 
 const { isAuthenticated, isAlreadyAuthenticated } = require(`../authenticationLogic`)
 
-// GET /auth
+// GET /api/auth
 router.get(`/`, (req, res, next) => {
   res.json(req.user)
 })
 
-// PUT /auth
+// PUT /api/auth
 router.put(
   `/`,
   isAuthenticated,
@@ -38,7 +38,7 @@ router.put(
   },
 )
 
-// POST /auth/signup
+// POST /api/auth/signup
 router.post(
   `/signup`,
   isAlreadyAuthenticated,
@@ -55,7 +55,7 @@ router.post(
   },
 )
 
-// POST /auth/login/
+// POST /api/auth/login/
 router.post(
   `/login`,
   isAlreadyAuthenticated,
@@ -75,7 +75,7 @@ router.post(
   },
 )
 
-// POST /auth/logout
+// POST /api/auth/logout
 router.post(
   `/logout`,
   isAuthenticated,
@@ -87,7 +87,7 @@ router.post(
 
 module.exports = router
 
-// POST /auth/destroy
+// POST /api/auth/destroy
 router.post(
   `/destroy`,
   isAuthenticated,

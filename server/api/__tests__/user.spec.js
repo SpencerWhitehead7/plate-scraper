@@ -18,7 +18,7 @@ describe(`API Route User: /api/user`, () => {
     try {
       await Recipe.sync({ force: true })
       await User.sync({ force: true })
-      await agent1.post(`/auth/signup`).send(userCred)
+      await agent1.post(`/api/auth/signup`).send(userCred)
       await agent1.post(`/api/recipe`).send({
         text: `text1`,
         title: `title1`,
@@ -30,7 +30,7 @@ describe(`API Route User: /api/user`, () => {
   })
   after(async () => {
     try {
-      await agent1.post(`/auth/logout`)
+      await agent1.post(`/api/auth/logout`)
       await Recipe.sync({ force: true })
       await User.sync({ force: true })
     } catch (err) {

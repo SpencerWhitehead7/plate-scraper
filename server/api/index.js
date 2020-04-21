@@ -1,21 +1,25 @@
 const router = require(`express`).Router()
 
-const scrape = require(`./scrape`)
-const user = require(`./user`)
+const auth = require(`./auth`)
 const recipe = require(`./recipe`)
+const scrape = require(`./scrape`)
 const tag = require(`./tag`)
+const user = require(`./user`)
 
-// /api/scrape
-router.use(`/scrape`, scrape)
-
-// /api/user
-router.use(`/user`, user)
+// /api/auth
+router.use(`/auth`, auth)
 
 // /api/recipe
 router.use(`/recipe`, recipe)
 
-// /api/recipe
+// /api/scrape
+router.use(`/scrape`, scrape)
+
+// /api/tag
 router.use(`/tag`, tag)
+
+// /api/user
+router.use(`/user`, user)
 
 // error handling
 router.use((req, res, next) => {

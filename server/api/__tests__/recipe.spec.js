@@ -28,8 +28,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
       await RecipeTraits.sync({ force: true })
       await Tag.sync({ force: true })
       await User.sync({ force: true })
-      await agent1.post(`/auth/signup`).send(userCred)
-      await agent2.post(`/auth/signup`).send(user2Cred)
+      await agent1.post(`/api/auth/signup`).send(userCred)
+      await agent2.post(`/api/auth/signup`).send(user2Cred)
       await agent1.post(`/api/recipe`).send({
         text: `text1`,
         title: `title1`,
@@ -45,8 +45,8 @@ describe(`API Route Recipe: /api/recipe`, () => {
   after(async () => {
     try {
       await Promise.all([
-        agent1.post(`/auth/logout`),
-        agent2.post(`/auth/logout`),
+        agent1.post(`/api/auth/logout`),
+        agent2.post(`/api/auth/logout`),
       ])
       await Recipe.sync({ force: true })
       await RecipeTraits.sync({ force: true })

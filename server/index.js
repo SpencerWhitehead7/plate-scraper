@@ -10,7 +10,6 @@ const db = require(`./db`)
 
 // Sub-routers
 const api = require(`./api`)
-const auth = require(`./auth`)
 
 // Passport serialization/deserialization instructions
 passport.serializeUser((user, done) => {
@@ -66,10 +65,7 @@ app.use(express.static(path.join(__dirname, `../dist`)))
 app.use(express.static(path.join(__dirname, `../public`)))
 
 // Plug in sub-routers
-// API requests
 app.use(`/api`, api)
-// Auth requests
-app.use(`/auth`, auth)
 
 // All other requests
 app.get(`*`, (req, res) => {
