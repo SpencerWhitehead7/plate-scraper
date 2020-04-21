@@ -5,12 +5,13 @@ import { compose } from 'redux'
 
 import { authAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
 import Card, { CardTitle, CardSubtitle } from 'comps/Card'
+import LoadingIndicator from 'comps/LoadingIndicator'
 import RecipeRows from 'comps/RecipeRows'
 import PageFailure from 'feats/PageFailure'
 import DestroyAccount from './DestroyAccount'
 import EditAccount from './EditAccount'
 
-const Account = ({ fetchUser, isMyPage, logout, user, userId }) => {
+const Account = ({ dataToDisplay, fetchUser, isLoading, isMyPage, logout, userId }) => {
   const [showEditAccount, setShowEditAccount] = useState(false)
   const [showDestroyAccont, setShowDestroyAccount] = useState(false)
   useEffect(() => {
@@ -18,52 +19,57 @@ const Account = ({ fetchUser, isMyPage, logout, user, userId }) => {
   }, [userId, fetchUser])
 
   return (
-    user ? (
-      <>
-        <Card>
-          <CardTitle>{user && user.userName}</CardTitle>
-          <CardSubtitle>Recipes</CardSubtitle>
-          {user && user.recipes && <RecipeRows recipes={user.recipes} />}
-        </Card>
-
-        {isMyPage && (
+    isLoading
+      ? <LoadingIndicator /> :
+      dataToDisplay ? (
+        <>
           <Card>
-            <button
-              type="button"
-              onClick={() => setShowEditAccount(!showEditAccount)}
-            >
-              Settings
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowDestroyAccount(!showDestroyAccont)}
-            >
-              Destroy Account
-            </button>
-            <button type="button" onClick={logout}>
-              Log out
-            </button>
-            {showEditAccount && <EditAccount />}
-            {showDestroyAccont && <DestroyAccount />}
+            <CardTitle>{dataToDisplay.userName}</CardTitle>
+            <CardSubtitle>Recipes</CardSubtitle>
+            <RecipeRows recipes={dataToDisplay.recipes} />
           </Card>
-        )}
-      </>
-    )
-      :
-      <PageFailure type="No such user" />
+
+          {isMyPage && (
+            <Card>
+              <button
+                type="button"
+                onClick={() => setShowEditAccount(!showEditAccount)}
+              >
+                Settings
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowDestroyAccount(!showDestroyAccont)}
+              >
+                Destroy Account
+              </button>
+              <button type="button" onClick={logout}>
+                Log out
+              </button>
+              {showEditAccount && <EditAccount />}
+              {showDestroyAccont && <DestroyAccount />}
+            </Card>
+          )}
+        </>
+      )
+        :
+        <PageFailure type="No such user" />
   )
 }
 
 const mstp = (state, ownProps) => {
   const { userId: userIdStr } = ownProps.match.params
   const userId = Number(userIdStr)
-  const { data: me } = authAsyncHandler.select(state)
-  const { data: user } = userAsyncHandler.select(state, userId)
+  const { data: me, isLoading: meIsLoading } = authAsyncHandler.select(state)
+  const { data: user, isLoading: userIsLoading } = userAsyncHandler.select(state, userId)
+  const isLoading = meIsLoading || userIsLoading
   const isMyPage = userId === (me ? me.id : me)
+  const dataToDisplay = isMyPage ? me : user
 
   return {
+    dataToDisplay,
+    isLoading,
     isMyPage,
-    user,
     userId,
   }
 }
