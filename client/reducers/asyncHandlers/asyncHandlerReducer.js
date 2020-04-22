@@ -31,7 +31,7 @@ const reducer = (state = initialState, { type, name, key, data, error }) => {
             [key]: null,
           },
           isLoading: {
-            ...state[name].loading,
+            ...state[name].isLoading,
             [key]: true,
           },
         },
@@ -50,11 +50,11 @@ const reducer = (state = initialState, { type, name, key, data, error }) => {
             [key]: null,
           },
           isLoaded: {
-            ...state[name].loaded,
+            ...state[name].isLoaded,
             [key]: true,
           },
           isLoading: {
-            ...state[name].loading,
+            ...state[name].isLoading,
             [key]: false,
           },
         },
