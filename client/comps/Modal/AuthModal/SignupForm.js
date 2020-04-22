@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
 import { CardTitle } from 'comps/Card'
+import { handleCloseModal } from '../modalReducer'
 
 import skele from 'skeleton.css'
 import sg from 'styles/index.scss'
@@ -68,8 +69,12 @@ const SignupForm = ({ className, signup }) => {
   )
 }
 
+const modalSubmitThunk = (email, userName, password, dispatch) => {
+  dispatch(authAsyncHandler.call({ email, userName, password }))
+}
+
 const mdtp = dispatch => ({
-  signup: (email, userName, password) => dispatch(authAsyncHandler.call({ email, userName, password })),
+  signup: (email, userName, password) => dispatch(handleCloseModal(modalSubmitThunk.bind(null, email, userName, password))),
 })
 
 export default connect(null, mdtp)(SignupForm)

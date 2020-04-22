@@ -5,6 +5,12 @@ const A = {
 
 export const openModal = modalType => ({ type: A.OPEN_MODAL, modalType })
 export const closeModal = () => ({ type: A.CLOSE_MODAL })
+export const handleCloseModal = modalSubmitThunk => async dispatch => {
+  if (modalSubmitThunk) {
+    await modalSubmitThunk(dispatch)
+  }
+  dispatch(closeModal())
+}
 
 const initialState = {
   modalType: null,
