@@ -16,10 +16,10 @@ const SignupForm = ({ className, signup }) => {
 
   const handleSubmit = evt => {
     evt.preventDefault()
-    if (!email || !password || !userName) {
+    if (!email || !userName || !password) {
       setErr({ missingField: true })
     } else {
-      signup(email, password, userName)
+      signup(email, userName, password)
     }
   }
 
