@@ -1,8 +1,10 @@
-# all node_modules
+# Node_modules
 node_modules/*
 
-# Compiled output
+# Compiled FE output
 dist/*
+# Compiled BE output
+built/*
 
 # NPM errors
 npm-debug.log
