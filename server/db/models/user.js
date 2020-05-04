@@ -1,7 +1,7 @@
 const Sequelize = require(`sequelize`)
 const crypto = require(`crypto`)
 
-const db = require(`../database`)
+const db = require(`../`)
 const Recipe = require(`./recipe`)
 
 const User = db.define(`user`, {
