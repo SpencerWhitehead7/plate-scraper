@@ -40,7 +40,6 @@
     "normalize.css": "^8.0.1",
     "passport": "^0.4.1",
     "pg": "^8.1.0",
-    "pg-hstore": "^2.3.3",
     "react": "^16.13.1",
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^3.0.2",
@@ -53,7 +52,6 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.2",
-    "sequelize": "^5.21.6",
     "typeorm": "^0.2.24",
     "typescript": "^3.9.2"
   },
