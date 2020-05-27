@@ -7,6 +7,7 @@ import {
   User,
   UserSubscriber,
 } from "./db/entities";
+import { Session } from "./logic/auth";
 const boot = require("./index");
 
 export const generateConnectionOptions = (): ConnectionOptions => {
@@ -19,7 +20,7 @@ export const generateConnectionOptions = (): ConnectionOptions => {
     username: "spencer",
     password: "",
     database: `plate-scraper${isTest ? `-test` : ``}`,
-    entities: [Recipe, Tag, User],
+    entities: [Recipe, Tag, User, Session],
     subscribers: [RecipeSubscriber, TagSubscriber, UserSubscriber],
     synchronize: isTest,
     dropSchema: isTest,
