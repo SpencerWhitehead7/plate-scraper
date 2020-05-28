@@ -19,7 +19,7 @@ const asyncFnToHandle = async ({ email, password, userName, newEmail, newPasswor
   }
 
   if (isDestroy && password) {
-    await axios.post(`/api/auth/destroy`, { password })
+    await axios.delete(`/api/auth`, { data: { password } })
     return null
   }
 
