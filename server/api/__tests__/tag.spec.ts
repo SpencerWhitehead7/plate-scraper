@@ -19,7 +19,7 @@ describe("API Route User: /api/tag", () => {
     try {
       await syncDB();
       agent = request.agent(app);
-      await agent.post("/api/auth/signup").send(userCred);
+      await agent.post("/api/auth").send(userCred);
       const user = await connection.manager.findOneOrFail(User, 1);
       const recipe = await connection.manager.save(factoryRecipe({ user }));
       await connection.manager.save(
@@ -72,7 +72,7 @@ describe("API Route User: /api/tag", () => {
       });
       it("rejects attempts of users who are not the recipe's owner", async () => {
         const agent2 = request.agent(app);
-        await agent2.post("/api/auth/signup").send(user2Cred);
+        await agent2.post("/api/auth").send(user2Cred);
         const recipeBefore = await connection.manager.findOneOrFail(Recipe, 1, {
           relations: ["tags"],
         });
@@ -163,7 +163,7 @@ describe("API Route User: /api/tag", () => {
       });
       it("rejects attempts of users who are not the recipe's owner", async () => {
         const agent2 = request.agent(app);
-        await agent2.post("/api/auth/signup").send(user2Cred);
+        await agent2.post("/api/auth").send(user2Cred);
         const recipeBefore = await connection.manager.findOneOrFail(Recipe, 1, {
           relations: ["tags"],
         });
