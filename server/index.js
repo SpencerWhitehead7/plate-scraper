@@ -96,6 +96,6 @@ const boot = async () => {
   }
 }
 
-if (ENV !== `test` && ENV !== `seed`) boot()
+if (ENV !== `test` && ENV !== `script`) boot()
 
 module.exports = boot // for testing
