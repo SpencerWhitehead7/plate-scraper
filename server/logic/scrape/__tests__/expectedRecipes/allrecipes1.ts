@@ -4,16 +4,16 @@ Fabulous Homemade Bread
 
 Ingredients
 
-1/2 cup warm water
+½ cup warm water
 3 (.25 ounce) packages active dry yeast
-1/4 cup bread flour
+¼ cup bread flour
 1 tablespoon white sugar
 2 cups quick cooking oats
 2 cups whole wheat flour
-4 1/2 cups warm water
-1 1/2 tablespoons salt
-2/3 cup brown sugar
-2/3 cup vegetable oil
+4 ½ cups warm water
+1 ½ tablespoons salt
+⅔ cup brown sugar
+⅔ cup vegetable oil
 10 cups bread flour
 
 Instructions
