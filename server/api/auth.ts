@@ -9,6 +9,19 @@ authRouter.get(`/`, (req, res) => {
   res.json(req.user || null);
 });
 
+// POST /api/auth
+authRouter.post(`/`, isNotAlreadyAuthenticated, async (req, res, next) => {
+  try {
+    const user = await userRepository.insert(req.body);
+    req.login(user!, (err) => (err ? next(err) : res.json(user)));
+  } catch (err) {
+    if (err.name === `QueryFailedError`) {
+      res.status(409);
+    }
+    next(err);
+  }
+});
+
 // PUT /api/auth
 authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
   try {
@@ -33,24 +46,6 @@ authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
-
-// TODO: change this to a post request to /
-// POST /api/auth/signup
-authRouter.post(
-  `/signup`,
-  isNotAlreadyAuthenticated,
-  async (req, res, next) => {
-    try {
-      const user = await userRepository.insert(req.body);
-      req.login(user!, (err) => (err ? next(err) : res.json(user)));
-    } catch (err) {
-      if (err.name === `QueryFailedError`) {
-        res.status(409);
-      }
-      next(err);
-    }
-  }
-);
 
 // POST /api/auth/login/
 authRouter.post(`/login`, isNotAlreadyAuthenticated, async (req, res, next) => {

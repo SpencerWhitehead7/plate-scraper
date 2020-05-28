@@ -28,7 +28,7 @@ describe("Auth Route: /api/auth", () => {
     try {
       await syncDB();
       agent = request.agent(app);
-      await agent.post(`${route}/signup`).send(userCred);
+      await agent.post(route).send(userCred);
     } catch (err) {
       console.log(err);
     }
@@ -53,6 +53,30 @@ describe("Auth Route: /api/auth", () => {
         const res = await agent.get(route);
         expect(res.status).to.equal(200);
         expect(res.body.id).to.equal(1);
+      });
+    });
+
+    describe("POST", () => {
+      it("creates a user with the correct credentials in the database", async () => {
+        const user = await getUserWithAuth();
+        expect(user!.email).to.equal(userCred.email);
+        expect(user!.userName).to.equal(userCred.userName);
+        expect(user!.checkPassword(userCred.password)).to.be.true;
+      });
+      it("also logs that user into the app", async () => {
+        const res = await agent.get(route);
+        expect(res.body.id).to.equal(1);
+        expect(res.body.email).to.equal(userCred.email);
+        expect(res.body.userName).to.equal(userCred.userName);
+      });
+      it("returns a 409 if the user is already logged in", async () => {
+        const res = await agent.post(route).send(userCred);
+        expect(res.status).to.equal(409);
+        expect(res.text).to.equal("Already logged in to an account");
+      });
+      it("returns a 409 if the user already exists", async () => {
+        const res = await request(app).post(route).send(userCred);
+        expect(res.status).to.equal(409);
       });
     });
 
@@ -96,32 +120,6 @@ describe("Auth Route: /api/auth", () => {
           .send({ newEmail: "new@example.com", password: "pw" });
         expect(res.status).to.equal(401);
         expect(res.text).to.equal("Not logged in");
-      });
-    });
-  });
-
-  describe("/signup", () => {
-    describe("POST", () => {
-      it("creates a user with the correct credentials in the database", async () => {
-        const user = await getUserWithAuth();
-        expect(user!.email).to.equal(userCred.email);
-        expect(user!.userName).to.equal(userCred.userName);
-        expect(user!.checkPassword(userCred.password)).to.be.true;
-      });
-      it("also logs that user into the app", async () => {
-        const res = await agent.get(route);
-        expect(res.body.id).to.equal(1);
-        expect(res.body.email).to.equal(userCred.email);
-        expect(res.body.userName).to.equal(userCred.userName);
-      });
-      it("returns a 409 if the user is already logged in", async () => {
-        const res = await agent.post(`${route}/signup`).send(userCred);
-        expect(res.status).to.equal(409);
-        expect(res.text).to.equal("Already logged in to an account");
-      });
-      it("returns a 409 if the user already exists", async () => {
-        const res = await request(app).post(`${route}/signup`).send(userCred);
-        expect(res.status).to.equal(409);
       });
     });
   });
