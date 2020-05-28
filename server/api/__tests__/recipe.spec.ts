@@ -20,7 +20,7 @@ describe("API Route Recipe: /api/recipe", () => {
     try {
       await syncDB();
       agent = request.agent(app);
-      await agent.post("/api/auth/signup").send(userCred);
+      await agent.post("/api/auth").send(userCred);
       user = await connection.manager.findOneOrFail(User, 1);
     } catch (err) {
       console.log(err);
@@ -150,7 +150,7 @@ describe("API Route Recipe: /api/recipe", () => {
       let agent2: any;
       beforeEach(async () => {
         agent2 = request.agent(app);
-        await agent2.post("/api/auth/signup").send(user2Cred);
+        await agent2.post("/api/auth").send(user2Cred);
         await agent.post(route).send(factoryRecipe());
       });
       afterEach(async () => {
@@ -234,7 +234,7 @@ describe("API Route Recipe: /api/recipe", () => {
       it("rejects attempts to edit a recipe the user does not own", async () => {
         await agent.post(route).send(factoryRecipe());
         const agent2 = request.agent(app);
-        await agent2.post("/api/auth/signup").send(user2Cred);
+        await agent2.post("/api/auth").send(user2Cred);
         const recipeBefore = await connection.manager.findOneOrFail(Recipe, 1);
         const failedRes = await agent2
           .put(`${route}/1`)
@@ -310,7 +310,7 @@ describe("API Route Recipe: /api/recipe", () => {
       it("rejects attempts to edit a recipe the user does not own", async () => {
         await agent.post(route).send(factoryRecipe());
         const agent2 = request.agent(app);
-        await agent2.post("/api/auth/signup").send(user2Cred);
+        await agent2.post("/api/auth").send(user2Cred);
 
         const failedRes = await agent2.delete(`${route}/1`);
         const recipe = await connection.manager.findOneOrFail(Recipe, 1);
