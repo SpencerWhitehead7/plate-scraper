@@ -47,6 +47,22 @@ authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
   }
 });
 
+// DELETE /api/auth
+authRouter.delete(`/`, isAuthenticated, async (req, res, next) => {
+  try {
+    const authUser = await userRepository.getByIdWithAuth((req.user as any).id);
+    if (authUser && authUser.checkPassword(req.body.password)) {
+      req.logout();
+      await userRepository.delete(authUser);
+      req!.session!.destroy((err) => (err ? next(err) : res.sendStatus(200)));
+    } else {
+      res.sendStatus(401);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 // POST /api/auth/login/
 authRouter.post(`/login`, isNotAlreadyAuthenticated, async (req, res, next) => {
   try {
@@ -68,23 +84,6 @@ authRouter.post(`/login`, isNotAlreadyAuthenticated, async (req, res, next) => {
 authRouter.post(`/logout`, isAuthenticated, (req, res, next) => {
   req.logout();
   req!.session!.destroy((err) => (err ? next(err) : res.sendStatus(204)));
-});
-
-// TODO: change this to a delete request to /
-// POST /api/auth/destroy
-authRouter.post(`/destroy`, isAuthenticated, async (req, res, next) => {
-  try {
-    const authUser = await userRepository.getByIdWithAuth((req.user as any).id);
-    if (authUser && authUser.checkPassword(req.body.password)) {
-      await userRepository.delete(authUser);
-      req.logout();
-      req!.session!.destroy((err) => (err ? next(err) : res.sendStatus(200)));
-    } else {
-      res.sendStatus(401);
-    }
-  } catch (error) {
-    next(error);
-  }
 });
 
 export default authRouter;

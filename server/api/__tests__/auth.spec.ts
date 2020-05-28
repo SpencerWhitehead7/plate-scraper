@@ -122,6 +122,36 @@ describe("Auth Route: /api/auth", () => {
         expect(res.text).to.equal("Not logged in");
       });
     });
+
+    describe("DELETE", () => {
+      it("deletes the logged in user ", async () => {
+        const res = await agent
+          .delete(route)
+          .send({ password: userCred.password });
+        const user = await connection.manager.findOne(User, 1);
+        expect(res.status).to.equal(200);
+        expect(user).not.to.exist;
+      });
+      it("logs out the logged in user", async () => {
+        await agent.delete(route).send({ password: userCred.password });
+        const res = await agent.get(route);
+        expect(res.body).to.be.null;
+      });
+      it("returns a 401 and does not delete the user if the user sends the wrong confirmation password", async () => {
+        const res = await agent.delete(route).send({ password: "wrongpw" });
+        const user = await connection.manager.findOne(User, 1);
+        expect(user).to.exist;
+        expect(res.status).to.equal(401);
+        expect(res.text).to.equal("Unauthorized");
+      });
+      it("returns a 401 if the user is not logged in", async () => {
+        const res = await request(app)
+          .delete(route)
+          .send({ password: userCred.password });
+        expect(res.status).to.equal(401);
+        expect(res.text).to.equal("Not logged in");
+      });
+    });
   });
 
   describe("/login", () => {
@@ -172,42 +202,6 @@ describe("Auth Route: /api/auth", () => {
       });
       it("returns a 401 if the user is not logged in", async () => {
         const res = await request(app).post(`${route}/logout`);
-        expect(res.status).to.equal(401);
-        expect(res.text).to.equal("Not logged in");
-      });
-    });
-  });
-
-  describe("/destroy", () => {
-    describe("POST", () => {
-      it("deletes the logged in user ", async () => {
-        const res = await agent
-          .post(`${route}/destroy`)
-          .send({ password: userCred.password });
-        const user = await connection.manager.findOne(User, 1);
-        expect(res.status).to.equal(200);
-        expect(user).to.be.undefined;
-      });
-      it("logs out the logged in user", async () => {
-        await agent
-          .post(`${route}/destroy`)
-          .send({ password: userCred.password });
-        const res = await agent.get(route);
-        expect(res.body).to.be.null;
-      });
-      it("returns a 401 and does not delete the user if the user sends the wrong confirmation password", async () => {
-        const res = await agent
-          .post(`${route}/destroy`)
-          .send({ password: "wrongpw" });
-        const user = await connection.manager.findOne(User, 1);
-        expect(user).to.exist;
-        expect(res.status).to.equal(401);
-        expect(res.text).to.equal("Unauthorized");
-      });
-      it("returns a 401 if the user is not logged in", async () => {
-        const res = await request(app)
-          .post(`${route}/destroy`)
-          .send({ password: userCred.password });
         expect(res.status).to.equal(401);
         expect(res.text).to.equal("Not logged in");
       });
