@@ -7,7 +7,7 @@ const seed = async () => {
   let recipeRepo: Repository<Recipe>;
   let tagRepo: Repository<Tag>;
   let userRepo: Repository<User>;
-  if (process.env.NODE_ENV === "seed") {
+  if (process.env.NODE_ENV === "script") {
     // create your own connection if running independently
     ({ connection, recipeRepo, tagRepo, userRepo } = await generateUtils());
   } else {
