@@ -1,12 +1,19 @@
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import axios from 'axios'
 
-import AutosizingTextarea from 'comps/AutosizingTextarea'
+import { FormInput, FormAutosizingTextarea, Submit } from 'comps/Form'
 import EditTags from './EditTags'
 
 const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
-  const [title, setTitle] = useState(recipe.title)
-  const [text, setText] = useState(recipe.text)
+  const { errors, formState, handleSubmit, register, watch } = useForm({
+    mode: `onChange`,
+    defaultValues: {
+      title: recipe.title,
+      text: recipe.text,
+    },
+  })
+
   const [tags, setTags] = useState(recipe.tags.map(tag => {
     tag.id = String(tag.id)
     return tag
@@ -14,8 +21,7 @@ const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
   // this horrible mapping bs is because the editTags comp requires string IDs
   const originalTags = recipe.tags.slice()
   const originalTagSet = new Set(originalTags.map(tag => tag.name))
-  const handleSubmit = async evt => {
-    evt.preventDefault()
+  const onSubmit = async ({ title, text }) => {
     const tagSet = new Set(tags.map(tag => tag.name))
     try {
       await Promise.all([
@@ -42,16 +48,12 @@ const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
     }
   }
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="title">
-        Title:
-      </label>
-      <input
-        id="title"
-        type="text"
-        name="title"
-        value={title}
-        onChange={evt => setTitle(evt.target.value)}
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <FormInput
+        identifier="title"
+        labelText="Title"
+        register={register({ required: true })}
+        errors={errors}
       />
       <label htmlFor="tags">
         Tags
@@ -63,19 +65,15 @@ const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
         originalTags={originalTags}
         originalTagSet={originalTagSet}
       />
-      <label htmlFor="text">
-        Recipe
-      </label>
-      <AutosizingTextarea
-        id="text"
-        type="text"
-        name="text"
-        value={text}
-        onChange={evt => setText(evt.target.value)}
+      <FormAutosizingTextarea
+        identifier="text"
+        labelText="Recipe"
+        register={register}
+        registerOptions={{ required: true }}
+        watch={watch}
+        errors={errors}
       />
-      <button type="submit">
-        Save
-      </button>
+      <Submit value="Save" formState={formState} />
     </form>
   )
 }
