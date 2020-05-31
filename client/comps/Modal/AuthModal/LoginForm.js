@@ -1,59 +1,36 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
 import { CardTitle } from 'comps/Card'
+import { FormInput, Submit } from 'comps/Form'
 import { handleCloseModal } from '../modalReducer'
 
-import skele from 'skeleton.css'
-import sg from 'styles/index.scss'
-
 const LoginForm = ({ className, login }) => {
-  const [email, setEmail] = useState(``)
-  const [password, setPassword] = useState(``)
-  const [err, setErr] = useState({})
+  const { errors, formState, handleSubmit, register } = useForm({ mode: `onChange` })
 
-  const handleSubmit = evt => {
-    evt.preventDefault()
-    if (!email || !password) {
-      setErr({ missingField: true })
-    } else {
-      login(email, password)
-    }
+  const onSubmit = ({ loginEmail, loginPassword }) => {
+    login(loginEmail, loginPassword)
   }
 
   return (
-    <form onSubmit={handleSubmit} className={className}>
+    <form onSubmit={handleSubmit(onSubmit)} className={className}>
       <CardTitle>Login</CardTitle>
-
-      <label htmlFor="email">
-        Email
-        {err.missingField && !email && <span className={sg.pl_ser}>Email Required</span>}
-      </label>
-      <input
-        type="text"
-        autoComplete="username"
-        name="email"
-        id="email"
-        value={email}
-        onChange={evt => setEmail(evt.target.value)}
+      <FormInput
+        identifier="loginEmail"
+        labelText="Email"
+        register={register({ required: true })}
+        errors={errors}
       />
-
-      <label>
-        Password
-        {err.missingField && !password && <span className={sg.pl_ser}>Password Required</span>}
-      </label>
-      <input
+      <FormInput
+        identifier="loginPassword"
+        labelText="Password"
         type="password"
-        autoComplete="current-password"
-        name="password"
-        value={password}
-        onChange={evt => setPassword(evt.target.value)}
+        register={register({ required: true })}
+        errors={errors}
       />
-
-      <button type="submit" className={skele[`button-primary`]}>
-        Login
-      </button>
+      <Submit formState={formState} value="Login" />
     </form>
   )
 }
