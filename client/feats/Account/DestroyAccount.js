@@ -1,40 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
+import { FormInput, Submit } from 'comps/Form'
 
 const AccountSettings = ({ destroyMe }) => {
-  const [password, setPassword] = useState(``)
-
-  const handleSubmit = async evt => {
-    try {
-      evt.preventDefault()
-      await destroyMe(password)
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  const { errors, formState, handleSubmit, register } = useForm({ mode: `onChange` })
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="auth">
-        Authenticate with current password (Required)
-      </label>
-      <input
-        id="auth"
+    <form onSubmit={handleSubmit(({ password }) => { destroyMe(password) })}>
+      <FormInput
+        identifier="password"
+        labelText="Confirm with password"
         type="password"
-        name="auth"
-        autoComplete="off"
-        value={password}
-        onChange={evt => { setPassword(evt.target.value) }}
+        register={register({ required: true })}
+        errors={errors}
       />
-
-      <button
-        type="submit"
-        disabled={!password}
-      >
-        Destroy (Are you sure? This cannot be undone)
-      </button>
+      <Submit formState={formState} value="Destroy (Are you sure? This cannot be undone!)" />
     </form>
   )
 }
