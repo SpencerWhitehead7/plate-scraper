@@ -11,9 +11,10 @@ import PageFailure from 'feats/PageFailure'
 import DestroyAccount from './DestroyAccount'
 import EditAccount from './EditAccount'
 
+import s from './Account.scss'
+
 const Account = ({ dataToDisplay, fetchUser, isLoading, isMyPage, logout, userId }) => {
-  const [showEditAccount, setShowEditAccount] = useState(false)
-  const [showDestroyAccont, setShowDestroyAccount] = useState(false)
+  const [section, setSection] = useState(``)
   useEffect(() => {
     fetchUser(userId)
   }, [userId, fetchUser])
@@ -31,23 +32,29 @@ const Account = ({ dataToDisplay, fetchUser, isLoading, isMyPage, logout, userId
 
           {isMyPage && (
             <Card>
-              <button
-                type="button"
-                onClick={() => setShowEditAccount(!showEditAccount)}
-              >
-                Settings
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowDestroyAccount(!showDestroyAccont)}
-              >
-                Destroy Account
-              </button>
-              <button type="button" onClick={logout}>
-                Log out
-              </button>
-              {showEditAccount && <EditAccount />}
-              {showDestroyAccont && <DestroyAccount />}
+              <CardTitle>Settings</CardTitle>
+              <div className={s.settings}>
+                <button
+                  type="button"
+                  onClick={() => setSection(section === `edit` ? `` : `edit`)}
+                >
+                  Edit Account
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSection(section === `destroy` ? `` : `destroy`)}
+                >
+                  Destroy Account
+                </button>
+                <button
+                  type="button"
+                  onClick={logout}
+                >
+                  Log out
+                </button>
+              </div>
+              {section === `edit` && <EditAccount />}
+              {section === `destroy` && <DestroyAccount />}
             </Card>
           )}
         </>
