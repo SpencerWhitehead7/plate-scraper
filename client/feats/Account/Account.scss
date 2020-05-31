@@ -1,0 +1,11 @@
+@import "styles";
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  @include sm-screen {
+    flex-direction: row;
+  }
+}

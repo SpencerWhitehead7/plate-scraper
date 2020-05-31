@@ -1,100 +1,61 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
+import { FormInput, Submit } from 'comps/Form'
+
+import skele from 'skeleton.css'
 
 const AccountSettings = ({ editMe }) => {
-  const [password, setPassword] = useState(``)
-  const [newEmail, setNewEmail] = useState(``)
-  const [newUserName, setNewUserName] = useState(``)
-  const [newPassword, setNewPassword] = useState(``)
-  const [newPasswordConfirm, setNewPasswordConfirm] = useState(``)
+  const { errors, formState, handleSubmit, register, watch } = useForm({ mode: `onChange` })
 
-  const handleSubmit = async evt => {
-    try {
-      evt.preventDefault()
-      const submitEmail = newEmail || undefined
-      const submitUserName = newUserName || undefined
-      const submitNewPassword = newPassword || undefined
-      await editMe(submitEmail, submitUserName, submitNewPassword, password)
-      setPassword(``)
-      setNewEmail(``)
-      setNewUserName(``)
-      setNewPassword(``)
-      setNewPasswordConfirm(``)
-    } catch (err) {
-      console.log(err)
-    }
+  const onSubmit = ({ email, userName, password, passwordAuth }) => {
+    editMe(email, userName, password, passwordAuth)
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="email">
-        New email
-      </label>
-      <input
-        id="email"
-        type="text"
-        name="email"
-        value={newEmail}
-        onChange={evt => { setNewEmail(evt.target.value) }}
-      />
-
-      <label htmlFor="userName">
-        New username
-      </label>
-      <input
-        id="userName"
-        type="text"
-        name="userName"
-        autoComplete="off"
-        value={newUserName}
-        onChange={evt => { setNewUserName(evt.target.value) }}
-      />
-
-      <label htmlFor="password">
-        New password
-      </label>
-      <input
-        id="password"
-        type="password"
-        name="password"
-        autoComplete="new-password"
-        value={newPassword}
-        onChange={evt => { setNewPassword(evt.target.value) }}
-      />
-
-      <label htmlFor="passwordConfirm">
-        Confirm new password
-      </label>
-      <input
-        id="passwordConfirm"
-        type="password"
-        name="passwordConfirm"
-        autoComplete="new-password"
-        value={newPasswordConfirm}
-        onChange={evt => { setNewPasswordConfirm(evt.target.value) }}
-      />
-      {newPassword !== newPasswordConfirm && <span>Passwords do not match</span>}
-
-      <label htmlFor="auth">
-        Authenticate with current password (Required)
-      </label>
-      <input
-        id="auth"
-        type="password"
-        name="auth"
-        autoComplete="off"
-        value={password}
-        onChange={evt => { setPassword(evt.target.value) }}
-      />
-
-      <button
-        type="submit"
-        disabled={!password || newPassword !== newPasswordConfirm}
-      >
-        Save
-      </button>
+    <form onSubmit={handleSubmit(onSubmit)} className={skele.column}>
+      <div className={skele.row}>
+        <FormInput
+          identifier="email"
+          labelText="New email"
+          register={register({ maxLength: 255 })}
+          errors={errors}
+        />
+        <FormInput
+          identifier="userName"
+          labelText="New username"
+          register={register({ maxLength: 32 })}
+          errors={errors}
+        />
+        <FormInput
+          identifier="password"
+          labelText="New password"
+          type="password"
+          register={register({ maxLength: 128 })}
+          errors={errors}
+        />
+        <FormInput
+          identifier="passwordConfirm"
+          labelText="Confirm new password"
+          type="password"
+          register={register({
+            validate: {
+              matches: value => value === watch(`password`) || `Passwords must match`,
+            },
+          })}
+          errors={errors}
+        />
+        <FormInput
+          identifier="passwordAuth"
+          labelText="Authenticate with current password"
+          type="password"
+          register={register({ required: true })}
+          errors={errors}
+        />
+      </div>
+      <Submit formState={formState} value="Save" />
     </form>
   )
 }
