@@ -1,70 +1,55 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
 import { CardTitle } from 'comps/Card'
+import { FormInput, Submit } from 'comps/Form'
 import { handleCloseModal } from '../modalReducer'
 
-import skele from 'skeleton.css'
-import sg from 'styles/index.scss'
-
 const SignupForm = ({ className, signup }) => {
-  const [email, setEmail] = useState(``)
-  const [userName, setUserName] = useState(``)
-  const [password, setPassword] = useState(``)
-  const [err, setErr] = useState({})
+  const { errors, formState, handleSubmit, register, watch } = useForm({ mode: `onChange` })
 
-  const handleSubmit = evt => {
-    evt.preventDefault()
-    if (!email || !userName || !password) {
-      setErr({ missingField: true })
-    } else {
-      signup(email, userName, password)
-    }
+  const onSubmit = ({ signupEmail, signupUserName, signupPassword }) => {
+    signup(signupEmail, signupUserName, signupPassword)
   }
 
   return (
-    <form onSubmit={handleSubmit} className={className}>
+    <form onSubmit={handleSubmit(onSubmit)} className={className}>
       <CardTitle>Signup</CardTitle>
-
-      <label>
-        Email
-        {err.missingField && !email && <span className={sg.pl_ser}>Email Required</span>}
-      </label>
-      <input
-        type="text"
-        name="email"
-        value={email}
-        onChange={evt => setEmail(evt.target.value)}
+      <FormInput
+        identifier="signupEmail"
+        labelText="Email"
+        register={register({ required: true, maxLength: 255 })}
+        errors={errors}
       />
-
-      <label>
-        UserName
-        {err.missingField && !userName && <span className={sg.pl_ser}>UserName Required</span>}
-      </label>
-      <input
-        type="text"
-        name="userName"
+      <FormInput
+        identifier="signupUserName"
+        labelText="UserName"
+        register={register({ required: true, maxLength: 32 })}
+        errors={errors}
         autoComplete="off"
-        value={userName}
-        onChange={evt => setUserName(evt.target.value)}
       />
-
-      <label>
-        Password
-        {err.missingField && !password && <span className={sg.pl_ser}>Password Required</span>}
-      </label>
-      <input
+      <FormInput
+        identifier="signupPassword"
+        labelText="Password"
         type="password"
-        name="password"
-        autoComplete="off"
-        value={password}
-        onChange={evt => setPassword(evt.target.value)}
+        register={register({ required: true, maxLength: 128 })}
+        errors={errors}
       />
-
-      <button type="submit" className={skele[`button-primary`]}>
-        Signup
-      </button>
+      <FormInput
+        identifier="signupPasswordConfirm"
+        labelText="Confirm password"
+        type="password"
+        register={register({
+          required: `required`,
+          validate: {
+            matches: value => value === watch(`signupPassword`) || `Passwords must match`,
+          },
+        })}
+        errors={errors}
+      />
+      <Submit formState={formState} value="Signup" />
     </form>
   )
 }
