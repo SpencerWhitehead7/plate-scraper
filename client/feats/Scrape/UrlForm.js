@@ -1,43 +1,48 @@
 import React from 'react'
-import classnames from 'classnames'
+import { useForm } from 'react-hook-form'
+import { connect } from 'react-redux'
 
+import { scrapeAsyncHandler } from 'reducers/asyncHandlers'
 import { SUPPORTED_SITES } from 'consts'
-import Warning from './Warning'
+import { Submit, Warning } from 'comps/Form'
 
-import skele from 'skeleton.css'
 import s from './UrlForm.scss'
 
-const UrlForm = ({ handleSubmit, handleChange, url }) => {
-  const disabled = !SUPPORTED_SITES.some(site => url.includes(site))
+const UrlForm = ({ scrape }) => {
+  const { errors, formState, handleSubmit, register } = useForm({ mode: `onBlur` })
 
   return (
-    <form onSubmit={handleSubmit} className={s.urlForm}>
+    <form onSubmit={handleSubmit(({ url }) => { scrape(url) })} className={s.urlForm}>
       <label htmlFor="url">
         Recipe url
-        {url.toLowerCase().includes(`seriouseats.com`) &&
-        !url.toLowerCase().includes(`seriouseats.com/recipes`) &&
-          <Warning message="Make sure your url is from seriouseats.com/recipes, not just seriouseats.com" />}
+        <Warning rhfError={errors.url} />
       </label>
       <div className={s.urlForm__inputBar}>
         <input
           id="url"
-          type="text"
           name="url"
-          value={url}
-          onChange={handleChange}
-          placeholder="https://www.allrecipes.com/recipe/22918/pop-cake/"
+          type="text"
+          ref={register({
+            required: `required`,
+            validate: {
+              correctSeriousEats: value => (!value.toLowerCase().includes(`seriouseats.com`) || value.toLowerCase().includes(`seriouseats.com/recipes`)) || `Make sure your url is from seriouseats.com/recipes, not just seriouseats.com`,
+              siteSupported: value => SUPPORTED_SITES.some(site => value.toLowerCase().includes(site)) || `Site is not supported`,
+            },
+          })}
           className={s.urlForm__input}
+          placeholder="https://www.allrecipes.com/recipe/22918/pop-cake/"
         />
-        <button
-          type="submit"
-          disabled={disabled}
-          className={classnames({ [skele[`button-primary`]]: !disabled })}
-        >
-          Scrape!
-        </button>
+        <Submit
+          formState={formState}
+          value="Scrape!"
+        />
       </div>
     </form>
   )
 }
 
-export default UrlForm
+const mdtp = dispatch => ({
+  scrape: url => dispatch(scrapeAsyncHandler.call(url)),
+})
+
+export default connect(null, mdtp)(UrlForm)
