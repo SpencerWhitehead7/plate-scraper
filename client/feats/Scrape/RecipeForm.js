@@ -36,7 +36,7 @@ const RecipeForm = ({ data, error, isLoaded, isLoading }) => {
             registerOptions={{ required: true }}
             watch={watch}
             errors={errors}
-            defaultValue={isLoaded ? data.recipe : ``}
+            defaultValue={isLoaded ? data.text : ``}
           />
 
           <label htmlFor="title">
