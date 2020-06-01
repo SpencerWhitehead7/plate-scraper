@@ -10,4 +10,20 @@
     width: 100%;
     border-radius: $radius;
   }
+
+  &__tag {
+    margin-right: $space-smaller;
+    margin-bottom: $space-smaller;
+    display: inline-block;
+    padding: $space-smallest;
+    border: 1px solid $color-highlight;
+    border-radius: $radius;
+    color: $color-highlight;
+  }
+
+  &__tagX {
+    all: unset;
+    color: $color-bad;
+    padding-left: $space-smallest;
+  }
 }
