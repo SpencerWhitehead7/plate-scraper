@@ -13,8 +13,8 @@ const chowhound = ($: CheerioStatic, url: string) => {
   return {
     sourceSite: `chowhound.com`,
     sourceUrl: url,
+    text: getRecipe(url, title, ingredients, instructions),
     title: title[0],
-    recipe: getRecipe(url, title, ingredients, instructions),
   };
 };
 

@@ -8,8 +8,8 @@ const foodnetwork = ($: CheerioStatic, url: string) => {
   return {
     sourceSite: `foodnetwork.com`,
     sourceUrl: url,
+    text: getRecipe(url, title, ingredients, instructions),
     title: title[0],
-    recipe: getRecipe(url, title, ingredients, instructions),
   };
 };
 

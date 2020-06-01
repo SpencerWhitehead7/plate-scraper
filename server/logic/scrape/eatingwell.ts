@@ -18,8 +18,8 @@ const eatingwell = ($: CheerioStatic, url: string) => {
   return {
     sourceSite: `eatingwell.com`,
     sourceUrl: url,
+    text: getRecipe(url, title, ingredients, instructions),
     title: title[0],
-    recipe: getRecipe(url, title, ingredients, instructions),
   };
 };
 

@@ -8,8 +8,8 @@ describe(`The parsers handle`, () => {
   let actuals: ({
     sourceSite: string;
     sourceUrl: string;
+    text: string;
     title: string;
-    recipe: string;
   } | null)[] = [];
   let i = 0;
 
@@ -20,8 +20,8 @@ describe(`The parsers handle`, () => {
           (testItem: {
             sourceSite: string;
             sourceUrl: string;
+            text: string;
             title: string;
-            recipe: string;
           }) => scrape(testItem.sourceUrl)
         )
       );
