@@ -3,28 +3,40 @@ import {
   AbstractRepository,
   getCustomRepository,
 } from "typeorm";
-import { Recipe } from "../entities";
+import { Recipe, Tag, User } from "../entities";
 
 @EntityRepository(Recipe)
 class RecipeRepository extends AbstractRepository<Recipe> {
   private select = () =>
     this.createQueryBuilder("recipe").leftJoinAndSelect("recipe.tags", "tag");
 
-  async insert(recipe: Recipe) {
+  async insert(recipeData: {
+    text: string;
+    title: string;
+    sourceSite?: string;
+    sourceUrl?: string;
+    createdBy: number;
+    forkedCount: number;
+    user: User;
+    tags?: Tag[];
+  }) {
+    const { tags } = recipeData;
+    delete recipeData.tags;
+
     const {
       raw: [createdRecipe],
     } = await this.createQueryBuilder("recipe")
       .insert()
       .into(Recipe)
-      .values(recipe)
+      .values(recipeData)
       .returning("*")
       .execute();
 
-    if (recipe.tags) {
+    if (tags) {
       await this.createQueryBuilder("recipe")
         .relation(Recipe, "tags")
-        .of(recipe)
-        .add(recipe.tags);
+        .of(createdRecipe)
+        .add(tags);
     }
 
     return this.getById(createdRecipe.id);
@@ -32,18 +44,49 @@ class RecipeRepository extends AbstractRepository<Recipe> {
 
   async update(
     id: number,
-    newValues: { text?: string; title?: string; forkedCount?: number }
+    updatedValues: {
+      text?: string;
+      title?: string;
+      tags?: Tag[];
+      forkedCount?: number;
+    }
   ) {
-    const {
-      raw: [updatedRecipe],
-    } = await this.createQueryBuilder("recipe")
+    const { tags } = updatedValues;
+    delete updatedValues.tags;
+
+    await this.createQueryBuilder("recipe")
       .update(Recipe)
-      .set(newValues)
+      .set(updatedValues)
       .where("id = :id", { id })
-      .returning("*")
       .execute();
 
-    return this.getById(updatedRecipe.id);
+    if (tags) {
+      const updatedRecipe = await this.getById(id);
+
+      const newTagsSet = new Set(updatedValues.tags);
+      // remove all the recipe's tags that updatedValues.tags doesn't have
+      await this.createQueryBuilder("recipe")
+        .relation(Recipe, "tags")
+        .of(updatedRecipe)
+        .remove(updatedRecipe!.tags.filter((tag) => !newTagsSet.has(tag)));
+
+      // add all the tags in updatedValues.tags that the recipe doesn't already have
+      const currentTagsSet = new Set(updatedRecipe!.tags);
+      await this.createQueryBuilder("recipe")
+        .relation(Recipe, "tags")
+        .of(updatedRecipe)
+        .add(tags.filter((tag) => !currentTagsSet.has(tag)));
+    }
+
+    return this.getById(id);
+    // // all this BS is because createQueryBuilder doesn't support joining for updates
+    // // ironically, there's a much simpler way to do this with the ORM API, but I was like
+    // // "No I want to use the query builder for everything to practice sql" and
+    // // have ended up using their crappy abstraction instead of their good one
+    // // because they don't support what I need in the sql query builder
+    // const originalRecipe = await this.getById(id);
+    // const updatedRecipe = { ...originalRecipe, ...updatedValues };
+    // return this.repository.save(updatedRecipe);
   }
 
   delete(id: number) {

@@ -11,30 +11,27 @@ import s from './Form.scss'
 // space: 32
 // // tab: 9
 
-const FormEditTags = ({ updatedTags, setUpdatedTags, originalTags, originalTagNamesSet }) => {
-  const tagNamesSet = new Set(updatedTags.map(tag => tag.name))
+const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) => {
   const [newTag, setNewTag] = useState(``)
 
   const handleAdd = () => {
-    if (newTag && !tagNamesSet.has(newTag)) { // prevent duplication
-      if (originalTagNamesSet.has(newTag)) { // simplify reconciliation
-        setUpdatedTags([...updatedTags, ...originalTags.filter(originalTag => originalTag.name === newTag)])
-      } else {
-        setUpdatedTags([...updatedTags, { name: newTag }])
-      }
+    if (newTag && !updatedTagsSet.has(newTag)) {
+      setUpdatedTags([...updatedTags, newTag])
       setNewTag(``)
     }
   }
 
-  const handleRemove = tagName => { setUpdatedTags(updatedTags.filter(({ name }) => name !== tagName)) }
+  const handleRemove = name => {
+    setUpdatedTags(updatedTags.filter(tagName => tagName !== name))
+  }
 
-  const FormTag = ({ tagName }) => (
+  const FormTag = ({ name }) => (
     <span className={s.form__tag}>
-      {tagName}
+      {name}
       <button
         type="button"
         className={s.form__tagX}
-        onClick={() => handleRemove(tagName)}
+        onClick={() => handleRemove(name)}
       >
         X
       </button>
@@ -47,7 +44,7 @@ const FormEditTags = ({ updatedTags, setUpdatedTags, originalTags, originalTagNa
         Tags
       </label>
       <div className={classnames(sg.mt_m, sg.mb_ser)}>
-        {updatedTags.map(({ name }) => <FormTag key={name} tagName={name} />)}
+        {updatedTags.map(name => <FormTag key={name} name={name} />)}
       </div>
       <input
         id="tags"
@@ -60,7 +57,7 @@ const FormEditTags = ({ updatedTags, setUpdatedTags, originalTags, originalTagNa
       />
       <button
         type="button"
-        className={classnames({ [skele[`button-primary`]]: newTag && !tagNamesSet.has(newTag) })}
+        className={classnames({ [skele[`button-primary`]]: newTag && !updatedTagsSet.has(newTag) })}
         onClick={handleAdd}
       >
         Add

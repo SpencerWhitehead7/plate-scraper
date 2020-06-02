@@ -9,7 +9,7 @@ import {
   userCred,
   user2Cred,
 } from "../../mochaSetup";
-import { Recipe, User } from "../../db/entities";
+import { Recipe, Tag, User } from "../../db/entities";
 
 describe("API Route Recipe: /api/recipe", () => {
   const route = "/api/recipe";
@@ -49,10 +49,25 @@ describe("API Route Recipe: /api/recipe", () => {
     });
 
     describe("POST", () => {
-      it("creates a recipe", async () => {
-        await agent.post(route).send(factoryRecipe());
-        const recipe = await connection.manager.findOneOrFail(Recipe, 1);
+      it("creates a recipe, assigning and creating new tags if necessary", async () => {
+        await connection.manager.save(factoryTag({ name: "tone" }));
+        await agent.post(route).send({
+          ...factoryRecipe(),
+          tags: ["tone", "ttwo"],
+        });
+        const recipe = await connection.manager.findOneOrFail(Recipe, 1, {
+          relations: ["tags"],
+        });
         expect(recipe).to.exist;
+        expect(recipe.tags).to.have.lengthOf(2);
+      });
+      it("sanitizes tags", async () => {
+        await agent.post(route).send({
+          ...factoryRecipe(),
+          tags: ["T1 one"],
+        });
+        const tag = await connection.manager.findOneOrFail(Tag, "tone");
+        expect(tag).to.exist;
       });
       it("rejects unauthenticated users' attempts", async () => {
         const failedRes = await request(app).post(route).send(factoryRecipe());
@@ -76,7 +91,7 @@ describe("API Route Recipe: /api/recipe", () => {
         const recipe = await connection.manager.findOneOrFail(Recipe, 1);
         expect(recipe.userId).to.equal(1);
       });
-      it("returns the recipe", async () => {
+      it("returns the recipe, including tags", async () => {
         const res = await agent.post(route).send(factoryRecipe());
         expect(res.status).to.equal(200);
         expect(res.body.id).to.equal(1);
@@ -86,6 +101,7 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(res.body.sourceUrl).to.equal("upload");
         expect(res.body.createdBy).to.equal(1);
         expect(res.body.forkedCount).to.equal(0);
+        expect(res.body.tags).to.exist;
       });
     });
   });
@@ -209,15 +225,36 @@ describe("API Route Recipe: /api/recipe", () => {
 
   describe("/:id", () => {
     describe("PUT", () => {
-      it("edits a recipe", async () => {
+      it("edits a recipe, including creating, setting, and unsetting tags", async () => {
         await agent.post(route).send(factoryRecipe());
-        await agent
-          .put(`${route}/1`)
-          .send({ text: "newText", title: "newTitle" });
-        const recipe = await connection.manager.findOneOrFail(Recipe, 1);
+        const original = await connection.manager.findOneOrFail(Recipe, 1);
+        await Promise.all(
+          [
+            factoryTag({ name: "tone", recipes: [original] }),
+            factoryTag({ name: "ttwo" }),
+          ].map((row) => connection.manager.save(row))
+        );
 
-        expect(recipe.text).to.equal("newText");
-        expect(recipe.title).to.equal("newTitle");
+        await agent.put(`${route}/1`).send({
+          text: "newText",
+          title: "newTitle",
+          tags: ["ttwo", "tthree"],
+        });
+        const edited = await connection.manager.findOneOrFail(Recipe, 1, {
+          relations: ["tags"],
+        });
+
+        expect(edited.text).to.equal("newText");
+        expect(edited.title).to.equal("newTitle");
+        expect(new Set(edited.tags.map(({ name }) => name))).to.deep.equal(
+          new Set(["ttwo", "tthree"])
+        );
+      });
+      it("sanitizes tags", async () => {
+        await agent.post(route).send(factoryRecipe());
+        await agent.put(`${route}/1`).send({ tags: ["T1 one"] });
+        const tag = await connection.manager.findOneOrFail(Tag, "tone");
+        expect(tag).to.exist;
       });
       it("rejects unauthenticated users' attempts", async () => {
         await agent.post(route).send(factoryRecipe());
@@ -245,13 +282,11 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(failedRes.text).to.equal("Permission denied");
         expect(recipeBefore).to.deep.equal(recipeAfter);
       });
-      it("allows users to edit only text and title, even if they attempt to edit other fields", async () => {
+      it("allows users to edit only text, title, and tags", async () => {
         await agent.post(route).send(factoryRecipe());
         const recipeBefore = await connection.manager.findOneOrFail(Recipe, 1);
         await agent.put(`${route}/1`).send({
           id: 10,
-          text: "newText",
-          title: "newTitle",
           sourceSite: "new site",
           sourceUrl: "new url",
           createdBy: 10,
@@ -260,14 +295,12 @@ describe("API Route Recipe: /api/recipe", () => {
         });
         const recipeAfter = await connection.manager.findOneOrFail(Recipe, 1);
 
-        expect(recipeAfter.text).to.equal("newText");
-        expect(recipeAfter.title).to.equal("newTitle");
-        expect(recipeBefore.text).not.to.equal(recipeAfter.text);
         expect(recipeBefore.id).to.equal(recipeAfter.id);
         expect(recipeBefore.sourceSite).to.equal(recipeAfter.sourceSite);
         expect(recipeBefore.sourceUrl).to.equal(recipeAfter.sourceUrl);
         expect(recipeBefore.createdBy).to.equal(recipeAfter.createdBy);
         expect(recipeBefore.forkedCount).to.equal(recipeAfter.forkedCount);
+        expect(recipeBefore.userId).to.equal(recipeAfter.userId);
       });
       it("returns the recipe, including tags", async () => {
         await agent.post(route).send(factoryRecipe());

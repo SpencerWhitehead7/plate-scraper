@@ -3,38 +3,21 @@ import {
   AbstractRepository,
   getCustomRepository,
 } from "typeorm";
-import { Tag, Recipe } from "../entities";
+import { Tag } from "../entities";
 
 @EntityRepository(Tag)
 class TagRepository extends AbstractRepository<Tag> {
-  async insert(name: string, recipes: Recipe[]) {
-    let tag = await this.createQueryBuilder("tag")
-      .select()
-      .where("name = :name", { name })
-      .getOne();
-
-    if (!tag) {
-      ({
-        raw: [tag],
-      } = await this.createQueryBuilder("tag")
-        .insert()
-        .into(Tag)
-        .values({ name, recipes })
-        .returning("*")
-        .execute());
-    }
-
+  async getOrInsert(tagNames: string[]) {
     await this.createQueryBuilder("tag")
-      .relation(Tag, "recipes")
-      .of(tag)
-      .add(recipes);
-  }
+      .insert()
+      .into(Tag)
+      .values(tagNames.map((name) => ({ name })))
+      .onConflict(`DO NOTHING`)
+      .execute();
 
-  remove(tagId: number, recipes: Recipe[]) {
     return this.createQueryBuilder("tag")
-      .relation(Tag, "recipes")
-      .of(tagId)
-      .remove(recipes);
+      .where("name IN (:...tagNames)", { tagNames })
+      .getMany();
   }
 }
 
