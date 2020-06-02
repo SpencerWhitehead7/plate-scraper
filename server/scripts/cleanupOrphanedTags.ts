@@ -14,11 +14,11 @@ const cleanupOrpanedTags = async () => {
   const [, tagsCount] = await connection.manager.query(
     `
     DELETE FROM tag
-    WHERE id IN 
+    WHERE name IN 
       (
-        SELECT tag.id FROM tag
-        LEFT OUTER JOIN recipe_tags_tag ON tag.id = recipe_tags_tag."tagId"
-        WHERE recipe_tags_tag."tagId" IS NULL
+        SELECT tag.name FROM tag
+        LEFT OUTER JOIN recipe_tags_tag ON tag.name = recipe_tags_tag."tagName"
+        WHERE recipe_tags_tag."tagName" IS NULL
       )
     `
   );
