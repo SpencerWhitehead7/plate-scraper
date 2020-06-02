@@ -1,10 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { isAuthenticated } from "../logic/auth";
-import {
-  recipeRepository,
-  tagRepository,
-  userRepository,
-} from "../db/repositories";
+import { recipeRepository, userRepository } from "../db/repositories";
 
 const recipeRouter = Router();
 
@@ -38,22 +34,11 @@ recipeRouter.get(`/`, async (_, res, next) => {
 // POST /api/recipe
 recipeRouter.post(`/`, isAuthenticated, async (req, res, next) => {
   try {
-    const { text, title, sourceSite, sourceUrl, tags } = req.body;
-    const recipe = await recipeRepository.insert({
-      text,
-      title,
-      sourceSite,
-      sourceUrl,
-      createdBy: (req.user as any).id,
-      forkedCount: 0,
-      user: req.user as any,
-      tags: tags
-        ? await tagRepository.getOrInsert(
-            // TODO serializers
-            tags.map((tag: string) => tag.toLowerCase().replace(/[^a-z]/gi, ``))
-          )
-        : undefined,
-    });
+    const { body, user } = req;
+    body.createdBy = (user as any).id;
+    body.user = user;
+    delete body.forkedCount;
+    const recipe = await recipeRepository.insert(body);
     res.json(recipe);
   } catch (error) {
     next(error);
@@ -114,17 +99,14 @@ recipeRouter.post(`/fork/:id`, isAuthenticated, async (req, res, next) => {
 // PUT /api/recipe/:id
 recipeRouter.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
   try {
-    const { text, title, tags } = req.body;
-    const recipe = await recipeRepository.update(Number(req.params.id), {
-      text,
-      title,
-      tags: tags
-        ? await tagRepository.getOrInsert(
-            // TODO serializers
-            tags.map((tag: string) => tag.toLowerCase().replace(/[^a-z]/gi, ``))
-          )
-        : undefined,
-    });
+    const { text, title } = req.body;
+    const newValues: { text?: string; title?: string } = {};
+    if (text) newValues.text = text;
+    if (title) newValues.title = title;
+    const recipe = await recipeRepository.update(
+      Number(req.params.id),
+      newValues
+    );
     res.json(recipe);
   } catch (error) {
     next(error);

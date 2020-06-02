@@ -12,15 +12,24 @@ const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
       text: recipe.text,
     },
   })
-  const [updatedTags, setUpdatedTags] = useState(recipe.tags.map(({ name }) => name))
+
+  const [updatedTags, setUpdatedTags] = useState(recipe.tags)
+  const originalTagNamesSet = new Set(recipe.tags.map(tag => tag.name))
 
   const onSubmit = async ({ title, text }) => {
+    const updatedTagsSet = new Set(updatedTags.map(tag => tag.name))
     try {
-      const { data } = await axios.put(`/api/recipe/${recipe.id}`, {
-        title,
-        text,
-        tags: updatedTags,
-      })
+      await Promise.all([
+        ...updatedTags.map(tag => (!originalTagNamesSet.has(tag.name)
+          ? axios.post(`/api/tag`, { recipeId: recipe.id, name: tag.name })
+          : undefined
+        )),
+        ...recipe.tags.map(tag => (!updatedTagsSet.has(tag.name)
+          ? axios.delete(`/api/tag/${recipe.id}/${tag.id}`)
+          : undefined
+        )),
+      ])
+      const { data } = await axios.put(`/api/recipe/${recipe.id}`, { title, text })
       setRecipe(data)
       setEditMode(!editMode)
     } catch (err) {
@@ -38,7 +47,8 @@ const EditMode = ({ recipe, setRecipe, editMode, setEditMode }) => {
       <FormEditTags
         updatedTags={updatedTags}
         setUpdatedTags={setUpdatedTags}
-        updatedTagsSet={new Set(updatedTags)}
+        originalTags={recipe.tags}
+        originalTagNamesSet={originalTagNamesSet}
       />
       <FormAutosizingTextarea
         identifier="text"
