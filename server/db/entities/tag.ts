@@ -1,10 +1,7 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  VersionColumn,
-  Column,
   ManyToMany,
   EntitySubscriberInterface,
   EventSubscriber,
@@ -22,13 +19,9 @@ import { Recipe } from "./recipe";
 
 @Entity()
 export class Tag {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({
+  @PrimaryColumn({
     type: "varchar",
     length: 32,
-    unique: true,
   })
   @IsNotEmpty()
   @IsAlpha()
@@ -37,12 +30,6 @@ export class Tag {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @VersionColumn()
-  version: number;
 
   @ManyToMany(() => Recipe, (recipe) => recipe.tags)
   recipes: Recipe[];

@@ -22,11 +22,11 @@ describe("API Route User: /api/tag", () => {
       await agent.post("/api/auth").send(userCred);
       const user = await connection.manager.findOneOrFail(User, 1);
       const recipe = await connection.manager.save(factoryRecipe({ user }));
-      await connection.manager.save(
-        factoryTag({ name: "tone", recipes: [recipe] })
-      );
-      await connection.manager.save(
-        factoryTag({ name: "ttwo", recipes: [recipe] })
+      await Promise.all(
+        [
+          factoryTag({ name: "tone", recipes: [recipe] }),
+          factoryTag({ name: "ttwo", recipes: [recipe] }),
+        ].map((row) => connection.manager.save(row))
       );
     } catch (err) {
       console.log(err);
@@ -136,7 +136,7 @@ describe("API Route User: /api/tag", () => {
         expect(res.status).to.equal(200);
         expect(res.body.id).to.equal(1);
         expect(res.body.tags).to.have.lengthOf(3);
-        expect(res.body.tags[res.body.tags.length - 1].id).to.equal(3);
+        expect(res.body.tags[res.body.tags.length - 1].name).to.equal("new");
       });
     });
   });
@@ -147,7 +147,7 @@ describe("API Route User: /api/tag", () => {
         const recipeBefore = await connection.manager.findOneOrFail(Recipe, 1, {
           relations: ["tags"],
         });
-        const failedRes = await request(app).delete(`${route}/1/2`);
+        const failedRes = await request(app).delete(`${route}/1/tone`);
         const recipeAfter = await connection.manager.findOneOrFail(Recipe, 1, {
           relations: ["tags"],
         });
@@ -157,7 +157,7 @@ describe("API Route User: /api/tag", () => {
         expect(recipeBefore.tags.length).to.equal(recipeAfter.tags.length);
       });
       it("rejects attempts to untag non-existant recipes", async () => {
-        const failedRes = await agent.delete(`${route}/2/2`);
+        const failedRes = await agent.delete(`${route}/2/tone`);
         expect(failedRes.status).to.equal(404);
         expect(failedRes.text).to.equal("Recipe not found");
       });
@@ -167,7 +167,7 @@ describe("API Route User: /api/tag", () => {
         const recipeBefore = await connection.manager.findOneOrFail(Recipe, 1, {
           relations: ["tags"],
         });
-        const failedRes = await agent2.delete(`${route}/1/2`);
+        const failedRes = await agent2.delete(`${route}/1/tone`);
         const recipeAfter = await connection.manager.findOneOrFail(Recipe, 1, {
           relations: ["tags"],
         });
@@ -177,12 +177,12 @@ describe("API Route User: /api/tag", () => {
         expect(recipeBefore.tags.length).to.equal(recipeAfter.tags.length);
       });
       it("it removes the tag from the recipe and returns the recipe with its tags", async () => {
-        const res = await agent.delete(`${route}/1/2`);
+        const res = await agent.delete(`${route}/1/ttwo`);
 
         expect(res.status).to.equal(200);
         expect(res.body.id).to.equal(1);
         expect(res.body.tags).to.have.lengthOf(1);
-        expect(res.body.tags[0].id).to.equal(1);
+        expect(res.body.tags[0].name).to.equal(`tone`);
       });
     });
   });

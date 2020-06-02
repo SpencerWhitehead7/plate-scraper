@@ -93,9 +93,9 @@ describe("Recipe Entity", () => {
       const tagsAfterDelete = await getAllRecipeTagJoinRows();
 
       expect(originalTags).to.have.lengthOf(2);
-      expect(originalTags.map(({ id }) => id)).to.include(tag1.id);
+      expect(originalTags.map(({ name }) => name)).to.include(tag1.name);
       expect(tagsAfterDelete).to.have.lengthOf(1);
-      expect(tagsAfterDelete.map(({ id }) => id)).not.to.include(tag1.id);
+      expect(tagsAfterDelete.map(({ name }) => name)).not.to.include(tag1.name);
     });
     xit("if a tag no longer applies to any recipes after a recipe is deleted, the tag is deleted", async () => {
       // implement if I ever figure out how to do this; it will probably require writing custom queries with the queryBuilder, which would be properly implemented and tested by the delete endpoint
@@ -119,9 +119,9 @@ describe("Recipe Entity", () => {
       const tagsAfterDelete = await getAllTags();
 
       expect(originalTags).to.have.lengthOf(2);
-      expect(originalTags.map(({ id }) => id)).to.include(tag1.id);
+      expect(originalTags.map(({ name }) => name)).to.include(tag1.name);
       expect(tagsAfterDelete).to.have.lengthOf(1);
-      expect(tagsAfterDelete.map(({ id }) => id)).not.to.include(tag1.id);
+      expect(tagsAfterDelete.map(({ name }) => name)).not.to.include(tag1.name);
     });
   });
 });

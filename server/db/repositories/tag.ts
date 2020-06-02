@@ -30,10 +30,10 @@ class TagRepository extends AbstractRepository<Tag> {
       .add(recipes);
   }
 
-  remove(tagId: number, recipes: Recipe[]) {
+  remove(tagName: string, recipes: Recipe[]) {
     return this.createQueryBuilder("tag")
       .relation(Tag, "recipes")
-      .of(tagId)
+      .of(tagName)
       .remove(recipes);
   }
 }

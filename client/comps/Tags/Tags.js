@@ -18,7 +18,7 @@ const Tags = ({ tags }) => (
     Tags&nbsp;
     {
       tags && tags.length
-        ? tags.map(tag => <Tag key={tag.id} {...tag} />)
+        ? tags.map(tag => <Tag key={tag.name} {...tag} />)
         : `none`
     }
   </div>

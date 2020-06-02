@@ -57,13 +57,13 @@ tagRouter.post(
 
 // DELETE /api/tag/:recipeId/:tagId
 tagRouter.delete(
-  `/:recipeId/:tagId`,
+  `/:recipeId/:tagName`,
   isAuthenticated,
   doesRecipeExist,
   isOwner,
   async (req, res, next) => {
     try {
-      await tagRepository.remove(Number(req.params.tagId), [req.body.recipe]);
+      await tagRepository.remove(req.params.tagName, [req.body.recipe]);
       const updatedRecipe = await recipeRepository.getById(
         Number(req.params.recipeId)
       );

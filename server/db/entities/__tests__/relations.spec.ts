@@ -77,8 +77,8 @@ describe("Relations", () => {
     });
     expect(recipes).to.have.lengthOf(2);
     recipes.forEach((recipe) => {
-      expect(new Set(recipe.tags.map(({ id }) => id))).to.deep.equal(
-        new Set([1, 2])
+      expect(new Set(recipe.tags.map(({ name }) => name))).to.deep.equal(
+        new Set(["abc", "def"])
       );
     });
   });
