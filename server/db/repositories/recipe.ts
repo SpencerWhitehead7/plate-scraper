@@ -3,28 +3,40 @@ import {
   AbstractRepository,
   getCustomRepository,
 } from "typeorm";
-import { Recipe } from "../entities";
+import { Recipe, Tag, User } from "../entities";
 
 @EntityRepository(Recipe)
 class RecipeRepository extends AbstractRepository<Recipe> {
   private select = () =>
     this.createQueryBuilder("recipe").leftJoinAndSelect("recipe.tags", "tag");
 
-  async insert(recipe: Recipe) {
+  async insert(recipeData: {
+    text: string;
+    title: string;
+    sourceSite?: string;
+    sourceUrl?: string;
+    createdBy: number;
+    forkedCount: number;
+    user: User;
+    tags: Tag[];
+  }) {
+    const { tags } = recipeData;
+    delete recipeData.tags;
+
     const {
       raw: [createdRecipe],
     } = await this.createQueryBuilder("recipe")
       .insert()
       .into(Recipe)
-      .values(recipe)
+      .values(recipeData)
       .returning("*")
       .execute();
 
-    if (recipe.tags) {
+    if (tags.length) {
       await this.createQueryBuilder("recipe")
         .relation(Recipe, "tags")
-        .of(recipe)
-        .add(recipe.tags);
+        .of(createdRecipe)
+        .add(tags);
     }
 
     return this.getById(createdRecipe.id);

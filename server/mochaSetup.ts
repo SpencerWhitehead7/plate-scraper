@@ -28,6 +28,7 @@ export const factoryRecipe = (values = {}) =>
     text: "text",
     title: "title",
     createdBy: 1,
+    tags: [],
     ...values,
   });
 
