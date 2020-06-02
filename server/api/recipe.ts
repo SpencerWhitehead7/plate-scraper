@@ -1,6 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { isAuthenticated } from "../logic/auth";
-import { recipeRepository, userRepository } from "../db/repositories";
+import {
+  recipeRepository,
+  tagRepository,
+  userRepository,
+} from "../db/repositories";
 
 const recipeRouter = Router();
 
@@ -34,11 +38,22 @@ recipeRouter.get(`/`, async (_, res, next) => {
 // POST /api/recipe
 recipeRouter.post(`/`, isAuthenticated, async (req, res, next) => {
   try {
-    const { body, user } = req;
-    body.createdBy = (user as any).id;
-    body.user = user;
-    delete body.forkedCount;
-    const recipe = await recipeRepository.insert(body);
+    const { text, title, sourceSite, sourceUrl, tags } = req.body;
+    const recipe = await recipeRepository.insert({
+      text,
+      title,
+      sourceSite,
+      sourceUrl,
+      createdBy: (req.user as any).id,
+      forkedCount: 0,
+      user: req.user as any,
+      tags: tags
+        ? await tagRepository.getOrInsert(
+            // TODO serializers
+            tags.map((tag: string) => tag.toLowerCase().replace(/[^a-z]/gi, ``))
+          )
+        : undefined,
+    });
     res.json(recipe);
   } catch (error) {
     next(error);

@@ -30,6 +30,19 @@ class TagRepository extends AbstractRepository<Tag> {
       .add(recipes);
   }
 
+  async getOrInsert(tagNames: string[]) {
+    await this.createQueryBuilder("tag")
+      .insert()
+      .into(Tag)
+      .values(tagNames.map((name) => ({ name })))
+      .onConflict(`DO NOTHING`)
+      .execute();
+
+    return this.createQueryBuilder("tag")
+      .where("name IN (:...tagNames)", { tagNames })
+      .getMany();
+  }
+
   remove(tagName: string, recipes: Recipe[]) {
     return this.createQueryBuilder("tag")
       .relation(Tag, "recipes")

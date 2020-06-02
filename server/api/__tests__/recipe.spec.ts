@@ -9,7 +9,7 @@ import {
   userCred,
   user2Cred,
 } from "../../mochaSetup";
-import { Recipe, User } from "../../db/entities";
+import { Recipe, Tag, User } from "../../db/entities";
 
 describe("API Route Recipe: /api/recipe", () => {
   const route = "/api/recipe";
@@ -49,10 +49,25 @@ describe("API Route Recipe: /api/recipe", () => {
     });
 
     describe("POST", () => {
-      it("creates a recipe", async () => {
-        await agent.post(route).send(factoryRecipe());
-        const recipe = await connection.manager.findOneOrFail(Recipe, 1);
+      it("creates a recipe, assigning and creating new tags if necessary", async () => {
+        await connection.manager.save(factoryTag({ name: "tone" }));
+        await agent.post(route).send({
+          ...factoryRecipe(),
+          tags: ["tone", "ttwo"],
+        });
+        const recipe = await connection.manager.findOneOrFail(Recipe, 1, {
+          relations: ["tags"],
+        });
         expect(recipe).to.exist;
+        expect(recipe.tags).to.have.lengthOf(2);
+      });
+      it("sanitizes tags", async () => {
+        await agent.post(route).send({
+          ...factoryRecipe(),
+          tags: ["T1 one"],
+        });
+        const tag = await connection.manager.findOneOrFail(Tag, "tone");
+        expect(tag).to.exist;
       });
       it("rejects unauthenticated users' attempts", async () => {
         const failedRes = await request(app).post(route).send(factoryRecipe());
@@ -76,7 +91,7 @@ describe("API Route Recipe: /api/recipe", () => {
         const recipe = await connection.manager.findOneOrFail(Recipe, 1);
         expect(recipe.userId).to.equal(1);
       });
-      it("returns the recipe", async () => {
+      it("returns the recipe, including tags", async () => {
         const res = await agent.post(route).send(factoryRecipe());
         expect(res.status).to.equal(200);
         expect(res.body.id).to.equal(1);
@@ -86,6 +101,7 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(res.body.sourceUrl).to.equal("upload");
         expect(res.body.createdBy).to.equal(1);
         expect(res.body.forkedCount).to.equal(0);
+        expect(res.body.tags).to.exist;
       });
     });
   });
