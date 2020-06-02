@@ -112,14 +112,15 @@ recipeRouter.post(`/fork/:id`, isAuthenticated, async (req, res, next) => {
 // PUT /api/recipe/:id
 recipeRouter.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
   try {
-    const { text, title } = req.body;
-    const newValues: { text?: string; title?: string } = {};
-    if (text) newValues.text = text;
-    if (title) newValues.title = title;
-    const recipe = await recipeRepository.update(
-      Number(req.params.id),
-      newValues
-    );
+    const { text, title, tags } = req.body;
+    const recipe = await recipeRepository.update(Number(req.params.id), {
+      text,
+      title,
+      tags: await tagRepository.getOrInsert(
+        // TODO serializers
+        tags.map((tag: string) => tag.toLowerCase().replace(/[^a-z]/gi, ``))
+      ),
+    });
     res.json(recipe);
   } catch (error) {
     next(error);
