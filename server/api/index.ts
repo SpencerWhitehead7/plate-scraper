@@ -3,7 +3,6 @@ import { Router } from "express";
 import authRouter from "./auth";
 import recipeRouter from "./recipe";
 import scrapeRouter from "./scrape";
-import tagRouter from "./tag";
 import userRouter from "./user";
 
 const apiRouter = Router();
@@ -16,9 +15,6 @@ apiRouter.use(`/recipe`, recipeRouter);
 
 // /api/scrape
 apiRouter.use(`/scrape`, scrapeRouter);
-
-// /api/tag
-apiRouter.use(`/tag`, tagRouter);
 
 // /api/user
 apiRouter.use(`/user`, userRouter);
