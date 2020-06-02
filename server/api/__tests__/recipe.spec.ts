@@ -225,15 +225,36 @@ describe("API Route Recipe: /api/recipe", () => {
 
   describe("/:id", () => {
     describe("PUT", () => {
-      it("edits a recipe", async () => {
+      it("edits a recipe, including creating, setting, and unsetting tags", async () => {
         await agent.post(route).send(factoryRecipe());
-        await agent
-          .put(`${route}/1`)
-          .send({ text: "newText", title: "newTitle" });
-        const recipe = await connection.manager.findOneOrFail(Recipe, 1);
+        const original = await connection.manager.findOneOrFail(Recipe, 1);
+        await Promise.all(
+          [
+            factoryTag({ name: "tone", recipes: [original] }),
+            factoryTag({ name: "ttwo" }),
+          ].map((row) => connection.manager.save(row))
+        );
 
-        expect(recipe.text).to.equal("newText");
-        expect(recipe.title).to.equal("newTitle");
+        await agent.put(`${route}/1`).send({
+          text: "newText",
+          title: "newTitle",
+          tags: ["ttwo", "tthree"],
+        });
+        const edited = await connection.manager.findOneOrFail(Recipe, 1, {
+          relations: ["tags"],
+        });
+
+        expect(edited.text).to.equal("newText");
+        expect(edited.title).to.equal("newTitle");
+        expect(new Set(edited.tags.map(({ name }) => name))).to.deep.equal(
+          new Set(["ttwo", "tthree"])
+        );
+      });
+      it("sanitizes tags", async () => {
+        await agent.post(route).send(factoryRecipe());
+        await agent.put(`${route}/1`).send({ tags: ["T1 one"] });
+        const tag = await connection.manager.findOneOrFail(Tag, "tone");
+        expect(tag).to.exist;
       });
       it("rejects unauthenticated users' attempts", async () => {
         await agent.post(route).send(factoryRecipe());
@@ -261,13 +282,11 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(failedRes.text).to.equal("Permission denied");
         expect(recipeBefore).to.deep.equal(recipeAfter);
       });
-      it("allows users to edit only text and title, even if they attempt to edit other fields", async () => {
+      it("allows users to edit only text, title, and tags", async () => {
         await agent.post(route).send(factoryRecipe());
         const recipeBefore = await connection.manager.findOneOrFail(Recipe, 1);
         await agent.put(`${route}/1`).send({
           id: 10,
-          text: "newText",
-          title: "newTitle",
           sourceSite: "new site",
           sourceUrl: "new url",
           createdBy: 10,
@@ -276,14 +295,12 @@ describe("API Route Recipe: /api/recipe", () => {
         });
         const recipeAfter = await connection.manager.findOneOrFail(Recipe, 1);
 
-        expect(recipeAfter.text).to.equal("newText");
-        expect(recipeAfter.title).to.equal("newTitle");
-        expect(recipeBefore.text).not.to.equal(recipeAfter.text);
         expect(recipeBefore.id).to.equal(recipeAfter.id);
         expect(recipeBefore.sourceSite).to.equal(recipeAfter.sourceSite);
         expect(recipeBefore.sourceUrl).to.equal(recipeAfter.sourceUrl);
         expect(recipeBefore.createdBy).to.equal(recipeAfter.createdBy);
         expect(recipeBefore.forkedCount).to.equal(recipeAfter.forkedCount);
+        expect(recipeBefore.userId).to.equal(recipeAfter.userId);
       });
       it("returns the recipe, including tags", async () => {
         await agent.post(route).send(factoryRecipe());
