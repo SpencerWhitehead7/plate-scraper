@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
+import { PATH } from 'consts'
 import { authAsyncHandler } from 'reducers/asyncHandlers'
 import Modal from 'comps/Modal'
 import NavBar from 'feats/Navbar'
@@ -25,16 +26,16 @@ const Main = ({ fetchMe }) => {
       <main className={s.main}>
         <div className={s.content}>
           <Switch>
-            <Route exact path="/">
+            <Route exact path={PATH.base}>
               <Scrape />
             </Route>
-            <Route exact path="/scrape/:scrapeMethod">
+            <Route exact path={PATH.scrape}>
               <Scrape />
             </Route>
-            <Route exact path="/user/:userId">
+            <Route exact path={PATH.user}>
               <Account />
             </Route>
-            <Route exact path="/recipe/:recipeId">
+            <Route exact path={PATH.recipe}>
               <Recipe />
             </Route>
             <Route>

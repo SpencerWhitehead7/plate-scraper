@@ -67,3 +67,9 @@ export const URL = {
   recipe: recipeId => `/recipe/${recipeId}`,
 }
 
+export const PATH = {
+  base: `/`,
+  scrape: `/scrape/:scrapeMethod`,
+  user: `/user/:userId`,
+  recipe: `/recipe/:recipeId`,
+}
