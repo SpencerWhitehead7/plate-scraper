@@ -1,8 +1,9 @@
-import axios from "axios"
 import buildAsyncHandler from './asyncHandlerBuilder'
 
-const asyncFnToHandle = async id => {
-  const { data } = await axios.get(`/api/user/${id}`)
+import { API } from 'consts'
+
+const asyncFnToHandle = async userId => {
+  const { data } = await API.user(userId)
 
   return data
 }

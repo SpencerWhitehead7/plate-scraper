@@ -1,8 +1,9 @@
-import axios from "axios"
 import buildAsyncHandler from './asyncHandlerBuilder'
 
+import { API } from 'consts'
+
 const asyncFnToHandle = async url => {
-  const { data } = await axios.post(`/api/scrape`, { url })
+  const { data } = await API.scrape(url)
 
   return data
 }

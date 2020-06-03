@@ -1,8 +1,9 @@
-import axios from "axios"
 import buildAsyncHandler from './asyncHandlerBuilder'
 
-const asyncFnToHandle = async id => {
-  const { data } = await axios.get(`/api/recipe/byid/${id}`)
+import { API } from 'consts'
+
+const asyncFnToHandle = async recipeId => {
+  const { data } = await API.recipe.get(recipeId)
 
   return data
 }

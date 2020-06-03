@@ -1,25 +1,26 @@
-import axios from "axios"
 import buildAsyncHandler from './asyncHandlerBuilder'
+
+import { API } from 'consts'
 
 const asyncFnToHandle = async ({ email, password, userName, newEmail, newPassword, newUserName, isLogout, isDestroy } = {}) => {
   let data
   if (email && userName && password) {
-    ({ data } = await axios.post(`/api/auth`, { email, userName, password }))
+    ({ data } = await API.auth.signup(email, userName, password))
   } else if (email && password) {
-    ({ data } = await axios.post(`/api/auth/login`, { email, password }))
+    ({ data } = await API.auth.login(email, password))
   } else if (password && (newEmail || newUserName || newPassword)) {
-    ({ data } = await axios.put(`/api/auth`, { password, newEmail, newUserName, newPassword }))
+    ({ data } = await API.auth.editMe(password, newEmail, newUserName, newPassword))
   } else if (!isLogout && !isDestroy) {
-    ({ data } = await axios.get(`/api/auth`))
+    ({ data } = await API.auth.getMe())
   }
 
   if (isLogout) {
-    await axios.post(`/api/auth/logout`)
+    await API.auth.logout()
     return null
   }
 
   if (isDestroy && password) {
-    await axios.delete(`/api/auth`, { data: { password } })
+    await API.auth.deleteMe(password)
     return null
   }
 
