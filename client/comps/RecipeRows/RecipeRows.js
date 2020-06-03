@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import { URL } from 'consts'
 import Tags from 'comps/Tags'
 
 import sg from 'styles/index.scss'
@@ -10,7 +11,7 @@ const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, title, userId
   <div className={s.recipeRow}>
     <div>
       <div>
-        <Link to={`/recipe/${id}`}>
+        <Link to={URL.recipe(id)}>
           {title}
         </Link>
         {` - ${sourceSite}`}
@@ -23,13 +24,13 @@ const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, title, userId
       <div>
         <div>
           Created&nbsp;by&nbsp;
-          <Link className={sg.pr_m} to={`/user/${createdBy}`}>
+          <Link className={sg.pr_m} to={URL.user(createdBy)}>
             {createdBy}
           </Link>
         </div>
         <div>
           Owned&nbsp;by&nbsp;
-          <Link to={`/user/${userId}`}>
+          <Link to={URL.user(userId)}>
             {userId}
           </Link>
         </div>

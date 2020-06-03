@@ -59,3 +59,11 @@ export const API = {
   scrape: url => axios.post(`/api/scrape`, { url }),
   user: userId => axios.get(`/api/user/${userId}`),
 }
+
+export const URL = {
+  base: `/`,
+  scrape: `/scrape/website`,
+  user: userId => `/user/${userId}`,
+  recipe: recipeId => `/recipe/${recipeId}`,
+}
+
