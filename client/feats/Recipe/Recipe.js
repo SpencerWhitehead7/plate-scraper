@@ -9,12 +9,8 @@ import PageFailure from 'feats/PageFailure'
 import DispMode from './DispMode'
 import EditMode from './EditMode'
 
-const Recipe = ({ fetchRecipe, isMyRecipe, initialRecipe, recipeId }) => {
+const Recipe = ({ fetchRecipe, editRecipe, isMyRecipe, recipe, recipeId }) => {
   const [editMode, setEditMode] = useState(false)
-  const [recipe, setRecipe] = useState(initialRecipe)
-  useEffect(() => {
-    setRecipe(initialRecipe)
-  }, [initialRecipe])
   useEffect(() => {
     fetchRecipe(recipeId)
   }, [fetchRecipe, recipeId])
@@ -35,8 +31,7 @@ const Recipe = ({ fetchRecipe, isMyRecipe, initialRecipe, recipeId }) => {
           editMode && isMyRecipe ? ( // undoes edit mode if you log out while on page
             <EditMode
               recipe={recipe}
-              setRecipe={setRecipe}
-              editMode={editMode}
+              editRecipe={editRecipe}
               setEditMode={setEditMode}
             />
           ) :
@@ -54,16 +49,17 @@ const mstp = (state, ownProps) => {
   const recipeId = Number(recipeIdStr)
   const { data: me } = authAsyncHandler.select(state)
   const { data: recipe } = recipeAsyncHandler.select(state, recipeId)
-  const isMyRecipe = recipe && me ? recipe.userId === me.id : false
 
   return {
-    isMyRecipe,
-    initialRecipe: recipe,
+    isMyRecipe: recipe && me ? recipe.userId === me.id : false,
+    recipe,
     recipeId,
   }
 }
 
 const mdtp = dispatch => ({
+  deleteRecipe: recipeId => dispatch(recipeAsyncHandler.call(recipeId, { isDelete: true })),
+  editRecipe: (recipeId, newText, newTitle, newTags) => dispatch(recipeAsyncHandler.call(recipeId, { text: newText, title: newTitle, tags: newTags })),
   fetchRecipe: recipeId => dispatch(recipeAsyncHandler.callIfNeeded(recipeId)),
 })
 
