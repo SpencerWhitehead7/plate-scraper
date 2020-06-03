@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form'
 
 import { FormAutosizingTextarea, FormEditTags, FormInput, Submit } from 'comps/Form'
 
-const EditMode = ({ recipe, editRecipe, setEditMode }) => {
+import s from './EditMode.scss'
+
+const EditMode = ({ recipe, deleteRecipe, editRecipe, setEditMode }) => {
   const { errors, formState, handleSubmit, register, watch } = useForm({
     mode: `onChange`,
     defaultValues: {
@@ -19,7 +21,7 @@ const EditMode = ({ recipe, editRecipe, setEditMode }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className={s.editMode}>
       <FormInput
         identifier="title"
         labelText="Title"
@@ -39,7 +41,10 @@ const EditMode = ({ recipe, editRecipe, setEditMode }) => {
         watch={watch}
         errors={errors}
       />
-      <Submit value="Save" formState={formState} />
+      <div className={s.editMode__buttonSection}>
+        <button type="button" onClick={() => { deleteRecipe(recipe.id) }}>Delete recipe</button>
+        <Submit value="Save" formState={formState} />
+      </div>
     </form>
   )
 }

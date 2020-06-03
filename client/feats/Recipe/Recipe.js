@@ -9,7 +9,7 @@ import PageFailure from 'feats/PageFailure'
 import DispMode from './DispMode'
 import EditMode from './EditMode'
 
-const Recipe = ({ fetchRecipe, editRecipe, isMyRecipe, recipe, recipeId }) => {
+const Recipe = ({ fetchRecipe, deleteRecipe, editRecipe, isMyRecipe, recipe, recipeId }) => {
   const [editMode, setEditMode] = useState(false)
   useEffect(() => {
     fetchRecipe(recipeId)
@@ -31,6 +31,7 @@ const Recipe = ({ fetchRecipe, editRecipe, isMyRecipe, recipe, recipeId }) => {
           editMode && isMyRecipe ? ( // undoes edit mode if you log out while on page
             <EditMode
               recipe={recipe}
+              deleteRecipe={deleteRecipe}
               editRecipe={editRecipe}
               setEditMode={setEditMode}
             />
