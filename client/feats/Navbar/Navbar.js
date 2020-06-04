@@ -13,7 +13,7 @@ const Navbar = ({ data, openModal }) => (
   <nav className={s.navbar}>
     <span className={s.navbar__logoTitleArea}>
       <NavLink to={URL.base}>
-        <img src="/logo.svg" className={s.navbar__logo} />
+        <img src="/logo.svg" alt="plate scraper logo" className={s.navbar__logo} />
       </NavLink>
       <span className={s.navbar__title}>
         <b>Plate Scraper!</b>
