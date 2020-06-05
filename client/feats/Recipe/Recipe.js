@@ -1,62 +1,59 @@
 import React, { useState, useEffect } from 'react'
-import { withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { compose } from 'redux'
 
-import { authAsyncHandler, recipeAsyncHandler } from 'reducers/asyncHandlers'
+import { recipeAsyncHandler } from 'reducers/asyncHandlers'
 import Card, { CardTitle } from 'comps/Card'
+import LoadingIndicator from 'comps/LoadingIndicator'
 import PageFailure from 'feats/PageFailure'
+import { selectCurrentRecipe, selectCurrentRecipeIsMine } from './selectors'
 import DispMode from './DispMode'
 import EditMode from './EditMode'
 
-const Recipe = ({ fetchRecipe, deleteRecipe, editRecipe, isMyRecipe, recipe, recipeId }) => {
+const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, deleteRecipe, editRecipe, fetchRecipe }) => {
   const [editMode, setEditMode] = useState(false)
+
+  const { recipeId } = useParams()
   useEffect(() => {
     fetchRecipe(recipeId)
   }, [fetchRecipe, recipeId])
 
   return (
-    recipe ? (
-      <Card>
-        <CardTitle>{recipe.title}</CardTitle>
-        {isMyRecipe && (
-          <button
-            type="button"
-            onClick={() => setEditMode(!editMode)}
-          >
-            {editMode ? `Cancel` : `Edit`}
-          </button>
-        )}
-        {
-          editMode && isMyRecipe ? ( // undoes edit mode if you log out while on page
-            <EditMode
-              recipe={recipe}
-              deleteRecipe={deleteRecipe}
-              editRecipe={editRecipe}
-              setEditMode={setEditMode}
-            />
-          ) :
-            <DispMode recipe={recipe} />
-        }
-      </Card>
-    )
-      :
-      <PageFailure type="No such recipe" />
+    !isLoaded || isLoading
+      ? <LoadingIndicator />
+      : recipe ? (
+        <Card>
+          <CardTitle>{recipe.title}</CardTitle>
+          {isMine && (
+            <button
+              type="button"
+              onClick={() => setEditMode(!editMode)}
+            >
+              {editMode ? `Cancel` : `Edit`}
+            </button>
+          )}
+          {
+            editMode ? (
+              <EditMode
+                recipe={recipe}
+                deleteRecipe={deleteRecipe}
+                editRecipe={editRecipe}
+                setEditMode={setEditMode}
+              />
+            ) :
+              <DispMode recipe={recipe} />
+          }
+        </Card>
+      )
+        : <PageFailure type="No such recipe" />
   )
 }
 
-const mstp = (state, ownProps) => {
-  const { recipeId: recipeIdStr } = ownProps.match.params
-  const recipeId = Number(recipeIdStr)
-  const { data: me } = authAsyncHandler.select(state)
-  const { data: recipe } = recipeAsyncHandler.select(state, recipeId)
+const mstp = state => ({
+  isMine: selectCurrentRecipeIsMine(state),
+  ...selectCurrentRecipe(state),
+})
 
-  return {
-    isMyRecipe: recipe && me ? recipe.userId === me.id : false,
-    recipe,
-    recipeId,
-  }
-}
 
 const mdtp = dispatch => ({
   deleteRecipe: recipeId => dispatch(recipeAsyncHandler.call(recipeId, { isDelete: true })),
@@ -64,4 +61,4 @@ const mdtp = dispatch => ({
   fetchRecipe: recipeId => dispatch(recipeAsyncHandler.callIfNeeded(recipeId)),
 })
 
-export default compose(withRouter, connect(mstp, mdtp))(Recipe)
+export default connect(mstp, mdtp)(Recipe)
