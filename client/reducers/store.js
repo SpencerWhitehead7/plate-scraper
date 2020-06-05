@@ -3,11 +3,13 @@ import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 
 import { modalReducer } from 'comps/Modal'
+import { routeReducer } from 'comps/SyncedRoute'
 import asyncHandlerReducer from './asyncHandlers'
 
 const rootReducer = combineReducers({
   asyncHandler: asyncHandlerReducer,
   modal: modalReducer,
+  route: routeReducer,
 })
 
 // eslint-disable-next-line no-underscore-dangle

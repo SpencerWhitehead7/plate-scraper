@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Switch } from 'react-router-dom'
 
 import { PATH } from 'consts'
 import { authAsyncHandler } from 'reducers/asyncHandlers'
 import Modal from 'comps/Modal'
+import SyncedRoute from 'comps/SyncedRoute'
 import NavBar from 'feats/Navbar'
 import Scrape from 'feats/Scrape'
 import Account from 'feats/Account'
@@ -26,21 +27,21 @@ const Main = ({ fetchMe }) => {
       <main className={s.main}>
         <div className={s.content}>
           <Switch>
-            <Route exact path={PATH.base}>
+            <SyncedRoute exact path={PATH.base}>
               <Scrape />
-            </Route>
-            <Route exact path={PATH.scrape}>
+            </SyncedRoute>
+            <SyncedRoute exact path={PATH.scrape}>
               <Scrape />
-            </Route>
-            <Route exact path={PATH.user}>
+            </SyncedRoute>
+            <SyncedRoute exact path={PATH.user}>
               <Account />
-            </Route>
-            <Route exact path={PATH.recipe}>
+            </SyncedRoute>
+            <SyncedRoute exact path={PATH.recipe}>
               <Recipe />
-            </Route>
-            <Route>
+            </SyncedRoute>
+            <SyncedRoute>
               <PageFailure type="404" />
-            </Route>
+            </SyncedRoute>
           </Switch>
         </div>
       </main>
