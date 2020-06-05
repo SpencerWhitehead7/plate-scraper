@@ -1,36 +1,38 @@
 import React, { useState, useEffect } from 'react'
-import { withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { compose } from 'redux'
 
 import { authAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
 import Card, { CardTitle, CardSubtitle } from 'comps/Card'
 import LoadingIndicator from 'comps/LoadingIndicator'
 import RecipeRows from 'comps/RecipeRows'
 import PageFailure from 'feats/PageFailure'
+import { selectCurrentUser, selectCurrentUserIsMine } from './selectors'
 import DestroyAccount from './DestroyAccount'
 import EditAccount from './EditAccount'
 
 import s from './Account.scss'
 
-const Account = ({ dataToDisplay, fetchUser, isLoading, isMyPage, logout, userId }) => {
+const Account = ({ data: user, isLoaded, isLoading, isMine, fetchUser, logout }) => {
   const [section, setSection] = useState(``)
+
+  const { userId } = useParams()
   useEffect(() => {
     fetchUser(userId)
-  }, [userId, fetchUser])
+  }, [fetchUser, userId])
 
   return (
-    isLoading
-      ? <LoadingIndicator /> :
-      dataToDisplay ? (
+    !isLoaded || isLoading
+      ? <LoadingIndicator />
+      : user ? (
         <>
           <Card>
-            <CardTitle>{dataToDisplay.userName}</CardTitle>
+            <CardTitle>{user.userName}</CardTitle>
             <CardSubtitle>Recipes</CardSubtitle>
-            <RecipeRows recipes={dataToDisplay.recipes} />
+            <RecipeRows recipes={user.recipes} />
           </Card>
 
-          {isMyPage && (
+          {isMine && (
             <Card>
               <CardTitle>Settings</CardTitle>
               <div className={s.settings}>
@@ -59,31 +61,18 @@ const Account = ({ dataToDisplay, fetchUser, isLoading, isMyPage, logout, userId
           )}
         </>
       )
-        :
-        <PageFailure type="No such user" />
+        : <PageFailure type="No such user" />
   )
 }
 
-const mstp = (state, ownProps) => {
-  const { userId: userIdStr } = ownProps.match.params
-  const userId = Number(userIdStr)
-  const { data: me, isLoading: meIsLoading } = authAsyncHandler.select(state)
-  const { data: user, isLoading: userIsLoading } = userAsyncHandler.select(state, userId)
-  const isLoading = meIsLoading || userIsLoading
-  const isMyPage = userId === (me ? me.id : me)
-  const dataToDisplay = isMyPage ? me : user
-
-  return {
-    dataToDisplay,
-    isLoading,
-    isMyPage,
-    userId,
-  }
-}
+const mstp = state => ({
+  isMine: selectCurrentUserIsMine(state),
+  ...selectCurrentUser(state),
+})
 
 const mdtp = dispatch => ({
-  fetchUser: id => dispatch(userAsyncHandler.callIfNeeded(id)),
+  fetchUser: userId => dispatch(userAsyncHandler.callIfNeeded(userId)),
   logout: () => dispatch(authAsyncHandler.call({ isLogout: true })),
 })
 
-export default compose(withRouter, connect(mstp, mdtp))(Account)
+export default connect(mstp, mdtp)(Account)
