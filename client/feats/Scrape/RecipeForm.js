@@ -2,13 +2,13 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
-import { scrapeAsyncHandler } from 'reducers/asyncHandlers'
 import { FormAutosizingTextarea, Submit, Warning } from 'comps/Form'
 import LoadingIndicator from 'comps/LoadingIndicator'
+import { selectScrape } from './selectors'
 
 import s from './RecipeForm.scss'
 
-const RecipeForm = ({ data, error, isLoaded, isLoading }) => {
+const RecipeForm = ({ data: recipe, isLoaded, isLoading, error }) => {
   const { errors, formState, handleSubmit, register, watch } = useForm({ mode: `onChange` })
 
   const onSubmit = ({ text, title }) => {
@@ -27,7 +27,7 @@ const RecipeForm = ({ data, error, isLoaded, isLoading }) => {
   return (
     isLoading
       ? <LoadingIndicator />
-      : data ? (
+      : recipe ? (
         <form onSubmit={handleSubmit(onSubmit)} className={s.recipeForm}>
           <FormAutosizingTextarea
             identifier="text"
@@ -36,7 +36,7 @@ const RecipeForm = ({ data, error, isLoaded, isLoading }) => {
             registerOptions={{ required: true }}
             watch={watch}
             errors={errors}
-            defaultValue={isLoaded ? data.text : ``}
+            defaultValue={isLoaded ? recipe.text : ``}
           />
 
           <label htmlFor="title">
@@ -48,7 +48,7 @@ const RecipeForm = ({ data, error, isLoaded, isLoading }) => {
               id="title"
               name="title"
               type="text"
-              defaultValue={isLoaded ? data.title : ``}
+              defaultValue={isLoaded ? recipe.title : ``}
               className={s.recipeForm__input}
               ref={register({ required: true })}
             />
@@ -61,7 +61,7 @@ const RecipeForm = ({ data, error, isLoaded, isLoading }) => {
 }
 
 const mstp = state => ({
-  ...scrapeAsyncHandler.select(state),
+  ...selectScrape(state),
 })
 
 export default connect(mstp, null)(RecipeForm)
