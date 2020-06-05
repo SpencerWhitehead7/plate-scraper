@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { URL } from 'consts'
-import { authAsyncHandler } from 'reducers/asyncHandlers'
+import { selectMe } from 'selectors'
 import { MODAL_TYPES, openModal as openModalAction } from 'comps/Modal'
 
 import skele from 'skeleton.css'
@@ -52,7 +52,7 @@ const Navbar = ({ data, openModal }) => (
 )
 
 const mstp = state => ({
-  ...authAsyncHandler.select(state),
+  ...selectMe(state),
 })
 const mdtp = dispatch => ({
   openModal: () => dispatch(openModalAction(MODAL_TYPES.AUTH)),
