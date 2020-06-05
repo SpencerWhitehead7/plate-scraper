@@ -9,20 +9,16 @@ const pageFailure = ({ type }) => {
   let subtitle = ``
   switch (type) {
     case `404`:
-      title = `404 Page Not Found`
+      title = `404 Page Not Found.`
       subtitle = `Oh no, there's nothing here!`
       break
-    case `401`:
-      title = `401 Unauthorized`
-      subtitle = `You must log in to see this!`
-      break
     case `No such user`:
-      title = `This user does not exist`
-      subtitle = `Try a different userId`
+      title = `This user does not exist. It may have been deleted.`
+      subtitle = `Try a different userId?`
       break
     case `No such recipe`:
-      title = `This recipe does not exist`
-      subtitle = `Try a different recipe`
+      title = `This recipe does not exist. It may have been deleted.`
+      subtitle = `Try a different recipe?`
       break
     default:
       console.log(`unrecognized page failure`)
