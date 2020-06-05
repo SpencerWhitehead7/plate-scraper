@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { scrapeAsyncHandler } from 'reducers/asyncHandlers'
 import { SUPPORTED_SITES } from 'consts'
-import { Submit, Warning } from 'comps/Form'
+import { FormSubmit, Warning } from 'comps/Form'
 
 import s from './UrlForm.scss'
 
@@ -32,10 +32,7 @@ const UrlForm = ({ scrape }) => {
           className={s.urlForm__input}
           placeholder="https://www.allrecipes.com/recipe/22918/pop-cake/"
         />
-        <Submit
-          formState={formState}
-          value="Scrape!"
-        />
+        <FormSubmit formState={formState} value="Scrape!" />
       </div>
     </form>
   )

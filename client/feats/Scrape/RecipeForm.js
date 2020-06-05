@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
-import { FormAutosizingTextarea, Submit, Warning } from 'comps/Form'
+import { FormAutosizingTextarea, FormSubmit, Warning } from 'comps/Form'
 import LoadingIndicator from 'comps/LoadingIndicator'
 import { selectScrape } from './selectors'
 
@@ -52,7 +52,7 @@ const RecipeForm = ({ data: recipe, isLoaded, isLoading, error }) => {
               className={s.recipeForm__input}
               ref={register({ required: true })}
             />
-            <Submit value="Download!" formState={formState} />
+            <FormSubmit value="Download!" formState={formState} />
           </div>
         </form>
       )

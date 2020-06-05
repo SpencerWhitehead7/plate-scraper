@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
-import { FormInput, Submit } from 'comps/Form'
+import { FormInput, FormSubmit } from 'comps/Form'
 
 const AccountSettings = ({ destroyMe }) => {
   const { errors, formState, handleSubmit, register } = useForm({ mode: `onChange` })
@@ -17,7 +17,7 @@ const AccountSettings = ({ destroyMe }) => {
         register={register({ required: true })}
         errors={errors}
       />
-      <Submit formState={formState} value="Destroy (Are you sure? This cannot be undone!)" />
+      <FormSubmit formState={formState} value="Destroy (Are you sure? This cannot be undone!)" />
     </form>
   )
 }

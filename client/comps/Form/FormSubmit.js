@@ -3,7 +3,7 @@ import classnames from 'classnames'
 
 import skele from 'skeleton.css'
 
-const Submit = ({ formState, value = `Submit` }) => (
+const FormSubmit = ({ formState, value = `Submit` }) => (
   <input
     type="submit"
     className={classnames({ [skele[`button-primary`]]: formState.isValid })}
@@ -11,4 +11,4 @@ const Submit = ({ formState, value = `Submit` }) => (
   />
 )
 
-export default Submit
+export default FormSubmit

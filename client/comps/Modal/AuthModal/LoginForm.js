@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
 import { CardTitle } from 'comps/Card'
-import { FormInput, Submit } from 'comps/Form'
+import { FormInput, FormSubmit } from 'comps/Form'
 import { handleCloseModal } from '../modalReducer'
 
 const LoginForm = ({ className, login }) => {
@@ -30,7 +30,7 @@ const LoginForm = ({ className, login }) => {
         register={register({ required: true })}
         errors={errors}
       />
-      <Submit formState={formState} value="Login" />
+      <FormSubmit formState={formState} value="Login" />
     </form>
   )
 }

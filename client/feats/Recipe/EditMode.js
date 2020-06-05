@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { FormAutosizingTextarea, FormEditTags, FormInput, Submit } from 'comps/Form'
+import { FormAutosizingTextarea, FormEditTags, FormInput, FormSubmit } from 'comps/Form'
 
 import s from './EditMode.scss'
 
@@ -43,7 +43,7 @@ const EditMode = ({ recipe, deleteRecipe, editRecipe, setEditMode }) => {
       />
       <div className={s.editMode__buttonSection}>
         <button type="button" onClick={() => { deleteRecipe(recipe.id) }}>Delete recipe</button>
-        <Submit value="Save" formState={formState} />
+        <FormSubmit formState={formState} value="Save" />
       </div>
     </form>
   )

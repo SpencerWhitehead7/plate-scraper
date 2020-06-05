@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
 import { authAsyncHandler } from 'reducers/asyncHandlers'
-import { FormInput, Submit } from 'comps/Form'
+import { FormInput, FormSubmit } from 'comps/Form'
 
 import skele from 'skeleton.css'
 
@@ -55,7 +55,7 @@ const AccountSettings = ({ editMe }) => {
           errors={errors}
         />
       </div>
-      <Submit formState={formState} value="Save" />
+      <FormSubmit formState={formState} value="Save" />
     </form>
   )
 }
