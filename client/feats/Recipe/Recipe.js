@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
+import classnames from 'classnames'
 
 import { recipeAsyncHandler } from 'reducers/asyncHandlers'
 import Card, { CardTitle } from 'comps/Card'
+import { RecipeForm } from 'comps/Form'
 import LoadingIndicator from 'comps/LoadingIndicator'
+import Tags from 'comps/Tags'
 import PageFailure from 'feats/PageFailure'
 import { selectCurrentRecipe, selectCurrentRecipeIsMine } from './selectors'
-import DispMode from './DispMode'
-import EditMode from './EditMode'
 
-const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, deleteRecipe, editRecipe, fetchRecipe }) => {
+import sg from 'styles/index.scss'
+
+const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, fetchRecipe }) => {
   const [editMode, setEditMode] = useState(false)
 
   const { recipeId } = useParams()
@@ -33,15 +36,16 @@ const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, deleteRecipe, editR
             </button>
           )}
           {
-            editMode ? (
-              <EditMode
-                recipe={recipe}
-                deleteRecipe={deleteRecipe}
-                editRecipe={editRecipe}
-                setEditMode={setEditMode}
-              />
-            ) :
-              <DispMode recipe={recipe} />
+            editMode
+              ? <RecipeForm recipe={recipe} setEditMode={setEditMode} />
+              : (
+                <>
+                  <Tags tags={recipe.tags} />
+                  <div className={classnames(sg.textShowBreaks, sg.pt_m)}>
+                    {recipe.text}
+                  </div>
+                </>
+              )
           }
         </Card>
       )
@@ -56,8 +60,6 @@ const mstp = state => ({
 
 
 const mdtp = dispatch => ({
-  deleteRecipe: recipeId => dispatch(recipeAsyncHandler.call(recipeId, { isDelete: true })),
-  editRecipe: (recipeId, newText, newTitle, newTags) => dispatch(recipeAsyncHandler.call(recipeId, { text: newText, title: newTitle, tags: newTags })),
   fetchRecipe: recipeId => dispatch(recipeAsyncHandler.callIfNeeded(recipeId)),
 })
 

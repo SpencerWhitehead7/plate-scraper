@@ -10,15 +10,14 @@ Unfortunately, the site is not deployed live anywhere, as it is not feature comp
 
 ## Public roadmap (features)
 
-- Save recipes to accounts
 - Form to just type in a recipe, save it to your account with appropriate metadeta
 - Form to upload image, use a public API to OCR it and give you the recipe as text, as well as save it to account
 - Ability to "fork" another user's recipe, giving you a copy of it you own and can edit
+- Ability to download all a user's recipes (including your own)
 - Ability to view all recipes and search for recipes by tag, title, or maybe body text in general, limiting results to all recipes or any specific user's recipes, including your own
 - Ability to view all users and some interesting metadata (member since? Recipe count? Uploaded vs scraped vs forked?)
 - Add whatever that metadata ends up being to individual users' pages
 - Ability to create collections of your and others' recipes
-- Ability to download saved recipes as plaintext, both individually and by the batch
 - Ability to share recipes or collections (...somehow; I don't want to do a social media integration)
 - Figure out a way to scape websites that block server-requests for their pages (looking at you, food52 and thekitchn.com)
 - Add support for more websites
@@ -40,7 +39,7 @@ Unfortunately, the site is not deployed live anywhere, as it is not feature comp
 
 - Actual recipe scraper/editor/downloader
 - Account system, signup/login, view, edit, delete account
-- View, edit, delete saved recipes
+- Save, view, edit, delete, download scraped recipes
 - Set and unset recipe's tags
 - Fully functioning and optimized Webpack/Babel build pipeline with hot reloading
 - Solid first draft on SCSS design system
