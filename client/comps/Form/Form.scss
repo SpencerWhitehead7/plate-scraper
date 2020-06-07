@@ -11,6 +11,19 @@
     border-radius: $radius;
   }
 
+  &__inputButtonBarContainer {
+    display: flex;
+    flex-direction: column;
+
+    @include sm-screen {
+      flex-direction: row;
+    }
+  }
+
+  &__inputButtonBarInput {
+    flex: 1;
+  }
+
   &__tag {
     margin-right: $space-smaller;
     margin-bottom: $space-smaller;

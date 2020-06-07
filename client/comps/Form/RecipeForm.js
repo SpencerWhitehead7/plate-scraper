@@ -8,7 +8,7 @@ import { MODAL_TYPES, openModal as openModalAction } from 'comps/Modal'
 import FormAutosizingTextarea from './FormAutosizingTextarea'
 import FormButton from './FormButton'
 import FormEditTags from './FormEditTags'
-import FormInput from './FormInput'
+import FormInputButtonBar from './FormInputButtonBar'
 
 import skele from 'skeleton.css'
 import s from './Form.scss'
@@ -59,11 +59,19 @@ const RecipeForm = ({ recipe, isAuthed, openModal, createRecipe, deleteRecipe, e
           Signup or login to save recipes
         </button>
       )}
-      <FormInput
+      <FormInputButtonBar
         identifier="title"
         labelText="Title / Filename"
         register={register({ required: true })}
         errors={errors}
+        Button={(
+          <FormButton
+            formState={formState}
+            value="Download"
+            onClick={handleSubmit(download)}
+          />
+        )}
+        autoComplete="off"
       />
       {isAuthed && (
         <FormEditTags
@@ -89,11 +97,6 @@ const RecipeForm = ({ recipe, isAuthed, openModal, createRecipe, deleteRecipe, e
             Delete
           </button>
         )}
-        <FormButton
-          formState={formState}
-          value="Download"
-          onClick={handleSubmit(download)}
-        />
         {isAuthed && (
           <FormButton
             formState={formState}
