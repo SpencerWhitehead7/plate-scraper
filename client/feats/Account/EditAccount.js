@@ -61,7 +61,9 @@ const AccountSettings = ({ editMe }) => {
 }
 
 const mdtp = dispatch => ({
-  editMe: (newEmail, newUserName, newPassword, password) => dispatch(authAsyncHandler.call({ newEmail, newUserName, newPassword, password })),
+  editMe: (newEmail, newUserName, newPassword, password) => {
+    dispatch(authAsyncHandler.call({ newEmail, newUserName, newPassword, password }))
+  },
 })
 
 export default connect(null, mdtp)(AccountSettings)

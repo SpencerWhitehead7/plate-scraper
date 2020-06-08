@@ -23,7 +23,9 @@ const AccountSettings = ({ destroyMe }) => {
 }
 
 const mdtp = dispatch => ({
-  destroyMe: password => dispatch(authAsyncHandler.call({ password, isDestroy: true })),
+  destroyMe: password => {
+    dispatch(authAsyncHandler.call({ password, isDestroy: true }))
+  },
 })
 
 export default connect(null, mdtp)(AccountSettings)

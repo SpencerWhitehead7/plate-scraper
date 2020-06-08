@@ -30,7 +30,9 @@ const UrlForm = ({ scrape }) => {
 }
 
 const mdtp = dispatch => ({
-  scrape: url => dispatch(recipeAsyncHandler.call(`scrape`, { url })),
+  scrape: url => {
+    dispatch(recipeAsyncHandler.call(`scrape`, { url }))
+  },
 })
 
 export default connect(null, mdtp)(UrlForm)

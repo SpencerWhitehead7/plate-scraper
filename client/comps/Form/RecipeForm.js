@@ -112,7 +112,9 @@ const mstp = state => ({
 })
 
 const mdtp = dispatch => ({
-  openModal: () => dispatch(openModalAction(MODAL_TYPES.AUTH)),
+  openModal: () => {
+    dispatch(openModalAction(MODAL_TYPES.AUTH))
+  },
   createRecipe: async (manualKey, userId, text, title, sourceSite, sourceUrl, tags) => {
     await dispatch(recipeAsyncHandler.call(manualKey, { text, title, sourceSite, sourceUrl, tags }))
     await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])

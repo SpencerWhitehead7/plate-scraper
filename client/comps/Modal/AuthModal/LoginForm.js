@@ -35,12 +35,10 @@ const LoginForm = ({ className, login }) => {
   )
 }
 
-const modalSubmitThunk = (email, password, dispatch) => {
-  dispatch(authAsyncHandler.call({ email, password }))
-}
-
 const mdtp = dispatch => ({
-  login: (email, password) => dispatch(handleCloseModal(modalSubmitThunk.bind(null, email, password))),
+  login: (email, password) => {
+    dispatch(handleCloseModal(authAsyncHandler.call({ email, password })))
+  },
 })
 
 export default connect(null, mdtp)(LoginForm)

@@ -11,8 +11,7 @@ const asyncFnToHandle = async (recipeId, { text, title, sourceSite, sourceUrl, t
   } else if (recipeId && text && title && tags) {
     ({ data } = await API.recipe.edit(recipeId, text, title, tags))
   } else if (isDelete) {
-    await API.recipe.destroy(recipeId)
-    return null
+    ({ data } = await API.recipe.destroy(recipeId))
   } else {
     ({ data } = await API.recipe.get(recipeId))
   }

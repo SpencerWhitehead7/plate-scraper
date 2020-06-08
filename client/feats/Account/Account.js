@@ -72,8 +72,12 @@ const mstp = state => ({
 })
 
 const mdtp = dispatch => ({
-  fetchUser: userId => dispatch(userAsyncHandler.callIfNeeded(userId)),
-  logout: () => dispatch(authAsyncHandler.call({ isLogout: true })),
+  fetchUser: userId => {
+    dispatch(userAsyncHandler.callIfNeeded(userId))
+  },
+  logout: () => {
+    dispatch(authAsyncHandler.call({ isLogout: true }))
+  },
 })
 
 export default connect(mstp, mdtp)(Account)

@@ -55,7 +55,9 @@ const mstp = state => ({
   ...selectMe(state),
 })
 const mdtp = dispatch => ({
-  openModal: () => dispatch(openModalAction(MODAL_TYPES.AUTH)),
+  openModal: () => {
+    dispatch(openModalAction(MODAL_TYPES.AUTH))
+  },
 })
 
 export default connect(mstp, mdtp)(Navbar)

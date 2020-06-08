@@ -24,31 +24,32 @@ const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, fetchRecipe }) => {
   return (
     !isLoaded || isLoading
       ? <LoadingIndicator />
-      : recipe ? (
-        <Card>
-          <CardTitle>{recipe.title}</CardTitle>
-          {isMine && (
-            <button
-              type="button"
-              onClick={() => setEditMode(!editMode)}
-            >
-              {editMode ? `Cancel` : `Edit`}
-            </button>
-          )}
-          {
-            editMode
-              ? <RecipeForm recipe={recipe} setEditMode={setEditMode} />
-              : (
-                <>
-                  <Tags tags={recipe.tags} />
-                  <div className={classnames(sg.textShowBreaks, sg.pt_m)}>
-                    {recipe.text}
-                  </div>
-                </>
-              )
-          }
-        </Card>
-      )
+      : recipe
+        ? (
+          <Card>
+            <CardTitle>{recipe.title}</CardTitle>
+            {isMine && (
+              <button
+                type="button"
+                onClick={() => setEditMode(!editMode)}
+              >
+                {editMode ? `Cancel` : `Edit`}
+              </button>
+            )}
+            {
+              editMode
+                ? <RecipeForm recipe={recipe} />
+                : (
+                  <>
+                    <Tags tags={recipe.tags} />
+                    <div className={classnames(sg.textShowBreaks, sg.pt_m)}>
+                      {recipe.text}
+                    </div>
+                  </>
+                )
+            }
+          </Card>
+        )
         : <PageFailure type="No such recipe" />
   )
 }
@@ -60,7 +61,9 @@ const mstp = state => ({
 
 
 const mdtp = dispatch => ({
-  fetchRecipe: recipeId => dispatch(recipeAsyncHandler.callIfNeeded(recipeId)),
+  fetchRecipe: recipeId => {
+    dispatch(recipeAsyncHandler.callIfNeeded(recipeId))
+  },
 })
 
 export default connect(mstp, mdtp)(Recipe)

@@ -51,7 +51,9 @@ const Main = ({ fetchMe }) => {
 }
 
 const mdtp = dispatch => ({
-  fetchMe: () => dispatch(authAsyncHandler.callIfNeeded()),
+  fetchMe: () => {
+    dispatch(authAsyncHandler.callIfNeeded())
+  },
 })
 
 export default hot(connect(null, mdtp)(Main))
