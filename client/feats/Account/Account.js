@@ -7,7 +7,7 @@ import Card, { CardTitle, CardSubtitle } from 'comps/Card'
 import LoadingIndicator from 'comps/LoadingIndicator'
 import RecipeRows from 'comps/RecipeRows'
 import PageFailure from 'feats/PageFailure'
-import { selectCurrentUser, selectCurrentUserIsMine } from './selectors'
+import { selectMeOrCurrentUser, selectCurrentUserIsMine } from './selectors'
 import DestroyAccount from './DestroyAccount'
 import EditAccount from './EditAccount'
 
@@ -24,50 +24,51 @@ const Account = ({ data: user, isLoaded, isLoading, isMine, fetchUser, logout })
   return (
     !isLoaded || isLoading
       ? <LoadingIndicator />
-      : user ? (
-        <>
-          <Card>
-            <CardTitle>{user.userName}</CardTitle>
-            <CardSubtitle>Recipes</CardSubtitle>
-            <RecipeRows recipes={user.recipes} />
-          </Card>
-
-          {isMine && (
+      : user
+        ? (
+          <>
             <Card>
-              <CardTitle>Settings</CardTitle>
-              <div className={s.settings}>
-                <button
-                  type="button"
-                  onClick={() => setSection(section === `edit` ? `` : `edit`)}
-                >
-                  Edit Account
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSection(section === `destroy` ? `` : `destroy`)}
-                >
-                  Destroy Account
-                </button>
-                <button
-                  type="button"
-                  onClick={logout}
-                >
-                  Log out
-                </button>
-              </div>
-              {section === `edit` && <EditAccount />}
-              {section === `destroy` && <DestroyAccount />}
+              <CardTitle>{user.userName}</CardTitle>
+              <CardSubtitle>Recipes</CardSubtitle>
+              <RecipeRows recipes={user.recipes} />
             </Card>
-          )}
-        </>
-      )
+
+            {isMine && (
+              <Card isLoaded={!isLoading}>
+                <CardTitle>Settings</CardTitle>
+                <div className={s.settings}>
+                  <button
+                    type="button"
+                    onClick={() => setSection(section === `edit` ? `` : `edit`)}
+                  >
+                    Edit Account
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSection(section === `destroy` ? `` : `destroy`)}
+                  >
+                    Destroy Account
+                  </button>
+                  <button
+                    type="button"
+                    onClick={logout}
+                  >
+                    Log out
+                  </button>
+                </div>
+                {section === `edit` && <EditAccount />}
+                {section === `destroy` && <DestroyAccount />}
+              </Card>
+            )}
+          </>
+        )
         : <PageFailure type="No such user" />
   )
 }
 
 const mstp = state => ({
   isMine: selectCurrentUserIsMine(state),
-  ...selectCurrentUser(state),
+  ...selectMeOrCurrentUser(state),
 })
 
 const mdtp = dispatch => ({
