@@ -16,7 +16,7 @@ import s from './Form.scss'
 // set edit mode means it's on the edit recipe page; otherwise, it's the scrape/create page
 // isAuthed indicates where you're logged in; we can assume you're logged in if you're editing
 // so those don't need to be checked independently
-const RecipeForm = ({ recipe, isAuthed, openModal, createRecipe, deleteRecipe, editRecipe, setEditMode }) => {
+const RecipeForm = ({ recipe, isAuthed, openModal, clearRecipe, createRecipe, deleteRecipe, editRecipe, setEditMode }) => {
   const { errors, formState, handleSubmit, register, watch } = useForm({
     mode: `onChange`,
     defaultValues: {
@@ -39,12 +39,13 @@ const RecipeForm = ({ recipe, isAuthed, openModal, createRecipe, deleteRecipe, e
     alert(`Saved to your default download location`)
   }
 
-  const save = ({ title, text }) => {
+  const save = async ({ title, text }) => {
     if (setEditMode) {
       editRecipe(recipe.id, text, title, updatedTags)
       setEditMode(false)
     } else {
-      createRecipe(`new`, text, title, recipe.sourceSite, recipe.sourceUrl, updatedTags)
+      await createRecipe(`scrape`, text, title, recipe.sourceSite, recipe.sourceUrl, updatedTags)
+      clearRecipe(`scrape`)
     }
   }
 
@@ -115,6 +116,7 @@ const mstp = state => ({
 
 const mdtp = dispatch => ({
   openModal: () => dispatch(openModalAction(MODAL_TYPES.AUTH)),
+  clearRecipe: manualKey => dispatch(recipeAsyncHandler.clear(manualKey)),
   createRecipe: (manualKey, text, title, sourceSite, sourceUrl, tags) => dispatch(recipeAsyncHandler.call(manualKey, { text, title, sourceSite, sourceUrl, tags })),
   deleteRecipe: recipeId => dispatch(recipeAsyncHandler.call(recipeId, { isDelete: true })),
   editRecipe: (recipeId, newText, newTitle, newTags) => dispatch(recipeAsyncHandler.call(recipeId, { text: newText, title: newTitle, tags: newTags })),

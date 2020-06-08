@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
-import { scrapeAsyncHandler } from 'reducers/asyncHandlers'
+import { recipeAsyncHandler } from 'reducers/asyncHandlers'
 import { SUPPORTED_SITES } from 'consts'
 import { FormInputButtonBar, FormSubmit } from 'comps/Form'
 
@@ -30,7 +30,7 @@ const UrlForm = ({ scrape }) => {
 }
 
 const mdtp = dispatch => ({
-  scrape: url => dispatch(scrapeAsyncHandler.call(url)),
+  scrape: url => dispatch(recipeAsyncHandler.call(`scrape`, { url })),
 })
 
 export default connect(null, mdtp)(UrlForm)

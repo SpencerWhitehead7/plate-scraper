@@ -3,10 +3,12 @@ import store from '..'
 export const INIT = `asyncTracker/INIT`
 export const SUCCESS = `asyncTracker/SUCCESS`
 export const FAILURE = `asyncTracker/FAILURE`
+export const CLEAR = `asyncTracker/CLEAR`
 
 const init = (name, key) => ({ type: `${INIT}-${name}-${key}`, name, key })
 const success = (name, key, data) => ({ type: `${SUCCESS}-${name}-${key}`, name, key, data })
 const failure = (name, key, error) => ({ type: `${FAILURE}-${name}-${key}`, name, key, error })
+const clear = (name, key) => ({ type: `${CLEAR}-${name}-${key}`, name, key })
 
 const callAsync = (name, asyncFunction, getKey, ...restParams) => async dispatch => {
   const key = getKey(...restParams)
@@ -42,6 +44,11 @@ const callIfNeededAsync = (name, asyncFunction, getKey, ...restParams) => dispat
   }
 }
 
+const clearAsync = (name, getKey, ...restParams) => dispatch => {
+  const key = getKey(...restParams)
+  dispatch(clear(name, key))
+}
+
 const buildAsyncHandler = (name, asyncFunction, generateGetKey = () => `default`) => {
   let getKey
   if (Array.isArray(generateGetKey)) {
@@ -56,6 +63,7 @@ const buildAsyncHandler = (name, asyncFunction, generateGetKey = () => `default`
   return {
     call: callAsync.bind(null, name, asyncFunction, getKey),
     callIfNeeded: callIfNeededAsync.bind(null, name, asyncFunction, getKey),
+    clear: clearAsync.bind(null, name, getKey),
     select: selectAsync.bind(null, name, getKey),
   }
 }

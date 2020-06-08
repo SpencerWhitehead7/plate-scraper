@@ -1,3 +1,3 @@
-import { scrapeAsyncHandler } from 'reducers/asyncHandlers'
+import { recipeAsyncHandler } from 'reducers/asyncHandlers'
 
-export const selectScrape = state => scrapeAsyncHandler.select(state)
+export const selectScrape = state => recipeAsyncHandler.select(state, `scrape`)

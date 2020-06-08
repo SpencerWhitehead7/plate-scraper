@@ -1,13 +1,11 @@
-import { INIT, SUCCESS, FAILURE } from './asyncHandlerBuilder'
+import { INIT, SUCCESS, FAILURE, CLEAR } from './asyncHandlerBuilder'
 import { name as authName } from './auth'
 import { name as recipeName } from './recipe'
-import { name as scrapeName } from './scrape'
 import { name as userName } from './user'
 
 const initialState = [
   authName,
   recipeName,
-  scrapeName,
   userName,
 ].reduce((state, name) => {
   state[name] = {
@@ -80,6 +78,30 @@ const reducer = (state = initialState, { type, name, key, data, error }) => {
             ...state[name].isLoading,
             [key]: false,
           },
+        },
+      }
+    case CLEAR:
+      return {
+        ...state,
+        [name]: {
+          ...state[name],
+          data: {
+            ...state[name].data,
+            [key]: undefined,
+          } || {},
+          error: {
+            ...state[name].error,
+            [key]: undefined,
+          } || {},
+          isLoaded: {
+            ...state[name].isLoaded,
+            [key]: undefined,
+          } || {},
+          isLoading: {
+            ...state[name].isLoading,
+            [key]: undefined,
+          } || {},
+          // || {} to ensure shape if the only field in the handler is the one being cleared
         },
       }
     default:
