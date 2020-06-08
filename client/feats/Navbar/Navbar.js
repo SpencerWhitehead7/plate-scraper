@@ -28,11 +28,11 @@ const Navbar = ({ data, openModal }) => (
     </NavLink>
     <NavLink exact to="/scrape/manual">
       <b>Enter manually</b>
-    </NavLink>
+    </NavLink> */}
 
     <NavLink exact to="/search">
       <b>Search</b>
-    </NavLink> */}
+    </NavLink>
 
     {data && data.id ? (
       <NavLink exact to={URL.user(data.id)}>

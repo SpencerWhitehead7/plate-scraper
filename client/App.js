@@ -11,6 +11,7 @@ import NavBar from 'feats/Navbar'
 import Scrape from 'feats/Scrape'
 import Account from 'feats/Account'
 import Recipe from 'feats/Recipe'
+import Search from 'feats/Search'
 import PageFailure from 'feats/PageFailure'
 
 import s from './App.scss'
@@ -38,6 +39,9 @@ const Main = ({ fetchMe }) => {
             </SyncedRoute>
             <SyncedRoute exact path={PATH.recipe}>
               <Recipe />
+            </SyncedRoute>
+            <SyncedRoute exact path={PATH.search}>
+              <Search />
             </SyncedRoute>
             <SyncedRoute>
               <PageFailure type="404" />

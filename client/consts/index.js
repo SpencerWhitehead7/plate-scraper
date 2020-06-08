@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 
 export const SUPPORTED_SITES = [
   `allrecipes.com`,
@@ -47,7 +48,7 @@ export const API = {
       tags,
     }),
     get: recipeId => axios.get(`/api/recipe/byId/${recipeId}`),
-    // getByTag: tags => axios.get(`/api/recipe`), // something with qs
+    getByTag: tags => axios.get(`/api/recipe/byTag/${qs.stringify(tags, { addQueryPrefix: true })}`),
     fork: recipeId => axios.post(`/api/recipe/fork/${recipeId}`),
     edit: (recipeId, text, title, tags) => axios.put(`/api/recipe/${recipeId}`, {
       text,
@@ -65,6 +66,7 @@ export const URL = {
   scrape: `/scrape/website`,
   user: userId => `/user/${userId}`,
   recipe: recipeId => `/recipe/${recipeId}`,
+  search: `/search`,
 }
 
 export const PATH = {
@@ -72,4 +74,5 @@ export const PATH = {
   scrape: `/scrape/:scrapeMethod`,
   user: `/user/:userId`,
   recipe: `/recipe/:recipeId`,
+  search: `/search`,
 }
