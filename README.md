@@ -25,9 +25,6 @@ Unfortunately, the site is not deployed live anywhere, as it is not feature comp
 ## Public roadmap (technical improvements)
 
 - Once more comps are in a finished state, write FE tests with Jest [FE]
-- Robust system for handling API calls, tracking loading states [FE]
-  - Use system to implement consistent loading states
-  - Use system to replace current, extremely slapdash user, app-state, thunk situation
 - Deploy it live somewhere [Infra]
 - CI/CD system [Infra]
   - Activate Dependabot for the repo

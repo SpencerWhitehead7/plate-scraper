@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
-import { recipeAsyncHandler } from 'reducers/asyncHandlers'
-import { selectIsAuthed } from 'selectors'
+import { authAsyncHandler, recipeAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
+import { selectIsAuthed, selectMe } from 'selectors'
 import { MODAL_TYPES, openModal as openModalAction } from 'comps/Modal'
 import FormAutosizingTextarea from './FormAutosizingTextarea'
 import FormButton from './FormButton'
@@ -13,10 +13,7 @@ import FormInputButtonBar from './FormInputButtonBar'
 import skele from 'skeleton.css'
 import s from './Form.scss'
 
-// set edit mode means it's on the edit recipe page; otherwise, it's the scrape/create page
-// isAuthed indicates where you're logged in; we can assume you're logged in if you're editing
-// so those don't need to be checked independently
-const RecipeForm = ({ recipe, isAuthed, openModal, clearRecipe, createRecipe, deleteRecipe, editRecipe, setEditMode }) => {
+const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, deleteRecipe, editRecipe }) => {
   const { errors, formState, handleSubmit, register, watch } = useForm({
     mode: `onChange`,
     defaultValues: {
@@ -39,13 +36,12 @@ const RecipeForm = ({ recipe, isAuthed, openModal, clearRecipe, createRecipe, de
     alert(`Saved to your default download location`)
   }
 
-  const save = async ({ title, text }) => {
-    if (setEditMode) {
-      editRecipe(recipe.id, text, title, updatedTags)
-      setEditMode(false)
+  const save = ({ title, text }) => {
+    // if the recipe doesn't have an ID, it's being scraped/uploaded; otherwise, it's being edited
+    if (recipe.id) {
+      editRecipe(recipe.id, recipe.userId, text, title, updatedTags)
     } else {
-      await createRecipe(`scrape`, text, title, recipe.sourceSite, recipe.sourceUrl, updatedTags)
-      clearRecipe(`scrape`)
+      createRecipe(`scrape`, me.id, text, title, recipe.sourceSite, recipe.sourceUrl, updatedTags)
     }
   }
 
@@ -90,10 +86,10 @@ const RecipeForm = ({ recipe, isAuthed, openModal, clearRecipe, createRecipe, de
         errors={errors}
       />
       <div className={s.form__recipeButtonSection}>
-        {setEditMode && (
+        {recipe.id && (
           <button
             type="button"
-            onClick={() => { deleteRecipe(recipe.id) }}
+            onClick={() => { deleteRecipe(recipe.id, recipe.userId) }}
           >
             Delete
           </button>
@@ -111,15 +107,26 @@ const RecipeForm = ({ recipe, isAuthed, openModal, clearRecipe, createRecipe, de
 }
 
 const mstp = state => ({
+  ...selectMe(state),
   isAuthed: selectIsAuthed(state),
 })
 
 const mdtp = dispatch => ({
   openModal: () => dispatch(openModalAction(MODAL_TYPES.AUTH)),
-  clearRecipe: manualKey => dispatch(recipeAsyncHandler.clear(manualKey)),
-  createRecipe: (manualKey, text, title, sourceSite, sourceUrl, tags) => dispatch(recipeAsyncHandler.call(manualKey, { text, title, sourceSite, sourceUrl, tags })),
-  deleteRecipe: recipeId => dispatch(recipeAsyncHandler.call(recipeId, { isDelete: true })),
-  editRecipe: (recipeId, newText, newTitle, newTags) => dispatch(recipeAsyncHandler.call(recipeId, { text: newText, title: newTitle, tags: newTags })),
+  createRecipe: async (manualKey, userId, text, title, sourceSite, sourceUrl, tags) => {
+    await dispatch(recipeAsyncHandler.call(manualKey, { text, title, sourceSite, sourceUrl, tags }))
+    await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
+    dispatch(recipeAsyncHandler.clear(manualKey))
+  },
+
+  deleteRecipe: async (recipeId, userId) => {
+    await dispatch(recipeAsyncHandler.call(recipeId, { isDelete: true }))
+    await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
+  },
+  editRecipe: async (recipeId, userId, newText, newTitle, newTags) => {
+    await dispatch(recipeAsyncHandler.call(recipeId, { text: newText, title: newTitle, tags: newTags }))
+    await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
+  },
 })
 
 export default connect(mstp, mdtp)(RecipeForm)
