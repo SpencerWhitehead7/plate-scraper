@@ -1,34 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { connect } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import qs from 'qs'
 
-import { API } from 'consts'
+import { searchAsyncHandler } from 'reducers/asyncHandlers'
+import { selectRouteQuery } from 'selectors'
 import Card, { CardTitle } from 'comps/Card'
 import { FormInputButtonBar, FormSubmit } from 'comps/Form'
 import LoadingIndicator from 'comps/LoadingIndicator'
 import RecipeRows from 'comps/RecipeRows'
+import { selectSearch } from './selectors'
 
-const Search = () => {
-  const [recipes, setRecipes] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const { errors, formState, handleSubmit, register } = useForm({ mode: `onChange` })
+const Search = ({ queryParams, data: searchResults, isLoading, fetchResults }) => {
+  const history = useHistory()
+  const { errors, formState, handleSubmit, register, setValue } = useForm({ mode: `onChange` })
 
-  const onSubmit = async ({ searchTerms }) => {
-    try {
-      setIsLoading(true)
-      const tags = searchTerms
-        .toLowerCase()
-        .replace(/[^a-z\s]/gi, ``)
-        .replace(/\s\s+/g, ` `)
-        .trim()
-        .split(` `)
-
-      const { data } = await API.recipe.getByTag(tags)
-      setIsLoading(false)
-      setRecipes(data)
-    } catch (err) {
-      // could use some real handling
-      console.log(err)
+  useEffect(() => {
+    if (!formState.isSubmitted) {
+      const tags = Object.values(queryParams)
+      if (tags.length) {
+        setValue(`searchTerms`, tags.join(` `))
+        fetchResults(tags)
+      }
     }
+  }, [formState.isSubmitted, queryParams, setValue, fetchResults])
+
+  const onSubmit = ({ searchTerms }) => {
+    const tags = searchTerms
+      .toLowerCase()
+      .replace(/[^a-z\s]/gi, ``)
+      .replace(/\s\s+/g, ` `)
+      .trim()
+      .split(` `)
+
+    fetchResults(tags)
+    history.replace(`${location.pathname}${qs.stringify(tags, { addQueryPrefix: true })}`)
   }
 
   return (
@@ -38,7 +45,7 @@ const Search = () => {
         <FormInputButtonBar
           identifier="searchTerms"
           labelText="Search for recipes by tag"
-          register={register({ required: true })}
+          register={register()}
           errors={errors}
           Button={<FormSubmit formState={formState} value="Search!" />}
           autoComplete="off"
@@ -47,14 +54,25 @@ const Search = () => {
       </form>
       {isLoading
         ? <LoadingIndicator />
-        : formState.isSubmitted && (
+        : searchResults && (
           <>
-            <p>{`${recipes.length} recipes with these tags`}</p>
-            <RecipeRows recipes={recipes} />
+            <p>{`${searchResults.length} recipes with these tags`}</p>
+            <RecipeRows recipes={searchResults} />
           </>
         )}
     </Card>
   )
 }
 
-export default Search
+const mstp = state => ({
+  queryParams: selectRouteQuery(state),
+  ...selectSearch(state),
+})
+
+const mdtp = dispatch => ({
+  fetchResults: tags => {
+    dispatch(searchAsyncHandler.call(tags))
+  },
+})
+
+export default connect(mstp, mdtp)(Search)

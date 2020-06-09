@@ -1,11 +1,13 @@
 import { INIT, SUCCESS, FAILURE, CLEAR } from './asyncHandlerBuilder'
 import { name as authName } from './auth'
 import { name as recipeName } from './recipe'
+import { name as searchName } from './search'
 import { name as userName } from './user'
 
 const initialState = [
   authName,
   recipeName,
+  searchName,
   userName,
 ].reduce((state, name) => {
   state[name] = {
