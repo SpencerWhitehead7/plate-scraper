@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import classnames from 'classnames'
 
+import { Tag } from '../Tags'
+
 import skele from 'skeleton.css'
 import sg from 'styles/index.scss'
 import s from './Form.scss'
@@ -25,19 +27,6 @@ const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) => {
     setUpdatedTags(updatedTags.filter(tagName => tagName !== name))
   }
 
-  const FormTag = ({ name }) => (
-    <li className={s.form__tag}>
-      {name}
-      <button
-        type="button"
-        className={s.form__tagX}
-        onClick={() => handleRemove(name)}
-      >
-        X
-      </button>
-    </li>
-  )
-
   return (
     <div>
       <label htmlFor="tags">
@@ -45,7 +34,7 @@ const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) => {
       </label>
       {Boolean(updatedTags.length) && (
         <ul className={classnames(sg.mt_m, sg.mb_ser)}>
-          {updatedTags.map(name => <FormTag key={name} name={name} />)}
+          {updatedTags.map(name => <Tag key={name} name={name} handleRemove={handleRemove} />)}
         </ul>
       )}
       <input
