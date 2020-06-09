@@ -66,7 +66,9 @@ export const URL = {
   scrape: `/scrape/website`,
   user: userId => `/user/${userId}`,
   recipe: recipeId => `/recipe/${recipeId}`,
-  search: `/search`,
+  search: (tags = []) => (tags.length
+    ? `/search${qs.stringify(tags, { addQueryPrefix: true })}`
+    : `/search`),
 }
 
 export const PATH = {

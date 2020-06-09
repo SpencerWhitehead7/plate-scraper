@@ -1,18 +1,17 @@
 @import "styles";
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
+.tag {
+  margin-right: $space-smaller;
+  margin-bottom: $space-smaller;
+  display: inline-block;
+  padding: $space-smallest;
+  border: 1px solid $color-highlight;
+  border-radius: $radius;
+  color: $color-highlight;
 
-  &__tag {
-    padding-right: $space-smallest;
-
-    &:after {
-      content: ",";
-    }
-    &:last-of-type:after {
-      content: "";
-      padding-right: 0;
-    }
+  &__tagX {
+    all: unset;
+    color: $color-bad;
+    padding-left: $space-smallest;
   }
 }
