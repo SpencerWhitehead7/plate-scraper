@@ -2,7 +2,8 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
-import { authAsyncHandler } from 'reducers/asyncHandlers'
+import { authAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
+import { selectRouteParams } from 'selectors'
 import { FormInputButtonBar, FormSubmit } from 'comps/Form'
 
 const AccountSettings = ({ destroyMe }) => {
@@ -22,10 +23,25 @@ const AccountSettings = ({ destroyMe }) => {
   )
 }
 
+const mstp = state => ({
+  routeParams: selectRouteParams(state),
+})
+
 const mdtp = dispatch => ({
-  destroyMe: password => {
-    dispatch(authAsyncHandler.call({ password, isDestroy: true }))
+  destroyMe: async (userId, password) => {
+    await dispatch(authAsyncHandler.call({ password, isDestroy: true }))
+    await dispatch(userAsyncHandler.call(userId))
   },
 })
 
-export default connect(null, mdtp)(AccountSettings)
+const mergeProps = (sProps, dProps) => {
+  const { routeParams: { userId }, ...restSProps } = sProps
+  const { destroyMe, ...restDProps } = dProps
+  return {
+    destroyMe: destroyMe.bind(null, userId),
+    ...restSProps,
+    ...restDProps,
+  }
+}
+
+export default connect(mstp, mdtp, mergeProps)(AccountSettings)

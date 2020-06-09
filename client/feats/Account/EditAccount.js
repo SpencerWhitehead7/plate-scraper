@@ -2,7 +2,8 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
-import { authAsyncHandler } from 'reducers/asyncHandlers'
+import { authAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
+import { selectRouteParams } from 'selectors'
 import { FormInput, FormSubmit } from 'comps/Form'
 
 import skele from 'skeleton.css'
@@ -60,10 +61,25 @@ const AccountSettings = ({ editMe }) => {
   )
 }
 
+const mstp = state => ({
+  routeParams: selectRouteParams(state),
+})
+
 const mdtp = dispatch => ({
-  editMe: (newEmail, newUserName, newPassword, password) => {
-    dispatch(authAsyncHandler.call({ newEmail, newUserName, newPassword, password }))
+  editMe: async (userId, newEmail, newUserName, newPassword, password) => {
+    await dispatch(authAsyncHandler.call({ newEmail, newUserName, newPassword, password }))
+    await dispatch(userAsyncHandler.call(userId))
   },
 })
 
-export default connect(null, mdtp)(AccountSettings)
+const mergeProps = (sProps, dProps) => {
+  const { routeParams: { userId }, ...restSProps } = sProps
+  const { editMe, ...restDProps } = dProps
+  return {
+    editMe: editMe.bind(null, userId),
+    ...restSProps,
+    ...restDProps,
+  }
+}
+
+export default connect(mstp, mdtp, mergeProps)(AccountSettings)
