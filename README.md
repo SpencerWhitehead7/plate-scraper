@@ -14,7 +14,6 @@ Unfortunately, the site is not deployed live anywhere, as it is not feature comp
 - Form to upload image, use a public API to OCR it and give you the recipe as text, as well as save it to account
 - Ability to "fork" another user's recipe, giving you a copy of it you own and can edit
 - Ability to download all a user's recipes (including your own)
-- Ability to view all recipes and search for recipes by tag, title, or maybe body text in general, limiting results to all recipes or any specific user's recipes, including your own
 - Ability to view all users and some interesting metadata (member since? Recipe count? Uploaded vs scraped vs forked?)
 - Add whatever that metadata ends up being to individual users' pages
 - Ability to create collections of your and others' recipes
@@ -38,6 +37,7 @@ Unfortunately, the site is not deployed live anywhere, as it is not feature comp
 - Account system, signup/login, view, edit, delete account
 - Save, view, edit, delete, download scraped recipes
 - Set and unset recipe's tags
+- Search for recipes by tag
 - Fully functioning and optimized Webpack/Babel build pipeline with hot reloading
 - Solid first draft on SCSS design system
 - TypeScript backend using TypeORM
