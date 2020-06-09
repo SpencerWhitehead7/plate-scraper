@@ -52,7 +52,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "typeorm": "^0.2.25",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
