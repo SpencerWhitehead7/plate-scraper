@@ -27,7 +27,6 @@ Unfortunately, the site is not deployed live anywhere, as it is not feature comp
 - Deploy it live somewhere [Infra]
 - CI/CD system [Infra]
   - Activate Dependabot for the repo
-- Lint staged files on commit git hook
 - Create job to automatically run scraper tests once a week or once a month and email me if they fail [Infra]
 - Make a cute custom loading indicator that looks like a fork scraping a plate [FE]
 

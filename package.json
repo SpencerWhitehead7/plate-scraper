@@ -2,6 +2,8 @@
   "name": "plate-scraper",
   "version": "1.0.0",
   "description": "An app for collecting, editing, organizing, and storing recipes",
+  "author": "spencer",
+  "license": "Unlicense",
   "main": "server/index",
   "scripts": {
     "lint": "eslint .",
@@ -17,8 +19,18 @@
     "test:be": "NODE_ENV='test' mocha -r ts-node/register --file server/mochaSetup.ts --timeout 10000 --exit -- 'server/**/__tests__/*.spec.ts'",
     "heroku-postbuild": "webpack -p"
   },
-  "author": "spencer",
-  "license": "Unlicense",
+  "husky": {
+    "hooks": {
+      "pre-commit": [
+        "lint-staged"
+      ]
+    }
+  },
+  "lint-staged": {
+    "**.js": [
+      "eslint --fix --max-warnings=0"
+    ]
+  },
   "dependencies": {
     "@babel/runtime": "^7.10.2",
     "@hot-loader/react-dom": "^16.13.0",
@@ -72,6 +84,8 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.4",
     "html-webpack-plugin": "^4.3.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.9",
     "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^7.2.0",
     "node-sass": "^4.14.1",
