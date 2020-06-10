@@ -34,11 +34,12 @@ const Navbar = ({ data, openModal }) => (
       <b>Search</b>
     </NavLink>
 
-    {data && data.id ? (
-      <NavLink exact to={URL.user(data.id)}>
-        <b>My Account</b>
-      </NavLink>
-    )
+    {data && data.id
+      ? (
+        <NavLink exact to={URL.user(data.id)}>
+          <b>My Account</b>
+        </NavLink>
+      )
       : (
         <button
           type="button"

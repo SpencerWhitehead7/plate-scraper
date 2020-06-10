@@ -21,7 +21,8 @@ const pageFailure = ({ type }) => {
       subtitle = `Try a different recipe?`
       break
     default:
-      console.log(`unrecognized page failure`)
+      title = `Something went wrong.`
+      subtitle = `sorry`
   }
 
   return (

@@ -10,7 +10,8 @@ const Warning = ({ leftPadded = true, customError, rhfError }) => (
       <span className={classnames(s.form__warning, { [sg.pl_sest]: leftPadded })}>
         {customError ? customError : rhfError.message || rhfError.type}
       </span>
-    ) : null
+    )
+    : null
 )
 
 

@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable global-require */
 import * as express from "express"
 import * as expressSession from "express-session"
 import { createConnection } from 'typeorm'

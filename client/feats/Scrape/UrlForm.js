@@ -17,6 +17,7 @@ const UrlForm = ({ scrape }) => {
         register={register({
           required: `required`,
           validate: {
+            // eslint-disable-next-line no-extra-parens -- useful to indicate difference between conditional and warning message
             correctSeriousEats: value => (!value.toLowerCase().includes(`seriouseats.com`) || value.toLowerCase().includes(`seriouseats.com/recipes`)) || `Make sure your url is from seriouseats.com/recipes, not just seriouseats.com`,
             siteSupported: value => SUPPORTED_SITES.some(site => value.toLowerCase().includes(site)) || `Site is not supported`,
           },
