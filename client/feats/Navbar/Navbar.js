@@ -23,12 +23,9 @@ const Navbar = ({ data, openModal }) => (
     <NavLink exact to={URL.scrape}>
       <b>Scrape from website</b>
     </NavLink>
-    {/* <NavLink exact to="/scrape/photo">
-      <b>Scrape from photo</b>
+    <NavLink exact to={URL.upload}>
+      <b>Upload</b>
     </NavLink>
-    <NavLink exact to="/scrape/manual">
-      <b>Enter manually</b>
-    </NavLink> */}
 
     <NavLink exact to="/search">
       <b>Search</b>

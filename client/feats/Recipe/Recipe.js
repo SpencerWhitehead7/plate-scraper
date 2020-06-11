@@ -38,7 +38,7 @@ const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, fetchRecipe }) => {
             )}
             {
               editMode
-                ? <RecipeForm recipe={recipe} />
+                ? <RecipeForm recipe={recipe} setEditMode={setEditMode} />
                 : (
                   <>
                     <Tags tags={recipe.tags} />

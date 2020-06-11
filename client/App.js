@@ -9,6 +9,7 @@ import Modal from 'comps/Modal'
 import SyncedRoute from 'comps/SyncedRoute'
 import NavBar from 'feats/Navbar'
 import Scrape from 'feats/Scrape'
+import Upload from 'feats/Upload'
 import Account from 'feats/Account'
 import Recipe from 'feats/Recipe'
 import Search from 'feats/Search'
@@ -33,6 +34,9 @@ const Main = ({ fetchMe }) => {
             </SyncedRoute>
             <SyncedRoute exact path={PATH.scrape}>
               <Scrape />
+            </SyncedRoute>
+            <SyncedRoute exact path={PATH.upload}>
+              <Upload />
             </SyncedRoute>
             <SyncedRoute exact path={PATH.user}>
               <Account />

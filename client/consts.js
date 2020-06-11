@@ -63,7 +63,8 @@ export const API = {
 
 export const URL = {
   base: `/`,
-  scrape: `/scrape/website`,
+  scrape: `/scrape`,
+  upload: `/upload`,
   user: userId => `/user/${userId}`,
   recipe: recipeId => `/recipe/${recipeId}`,
   search: (tags = []) => (tags.length
@@ -73,7 +74,8 @@ export const URL = {
 
 export const PATH = {
   base: `/`,
-  scrape: `/scrape/:scrapeMethod`,
+  scrape: `/scrape`,
+  upload: `/upload`,
   user: `/user/:userId`,
   recipe: `/recipe/:recipeId`,
   search: `/search`,

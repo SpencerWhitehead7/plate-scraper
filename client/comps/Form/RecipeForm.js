@@ -13,8 +13,8 @@ import FormInputButtonBar from './FormInputButtonBar'
 import skele from 'skeleton.css'
 import s from './Form.scss'
 
-const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, deleteRecipe, editRecipe }) => {
-  const { errors, formState, handleSubmit, register, watch } = useForm({
+const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, deleteRecipe, editRecipe, setEditMode }) => {
+  const { errors, formState, handleSubmit, register, reset, watch } = useForm({
     mode: `onChange`,
     defaultValues: {
       title: recipe.title,
@@ -40,8 +40,13 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
     // if the recipe doesn't have an ID, it's being scraped/uploaded; otherwise, it's being edited
     if (recipe.id) {
       editRecipe(recipe.id, recipe.userId, text, title, updatedTags)
+      setEditMode(false)
     } else {
       createRecipe(`scrape`, me.id, text, title, recipe.sourceSite, recipe.sourceUrl, updatedTags)
+    }
+    if (recipe.sourceSite === `upload` && recipe.sourceUrl === `upload`) {
+      setUpdatedTags([])
+      reset()
     }
   }
 
@@ -117,8 +122,8 @@ const mdtp = dispatch => ({
   },
   createRecipe: async (manualKey, userId, text, title, sourceSite, sourceUrl, tags) => {
     await dispatch(recipeAsyncHandler.call(manualKey, { text, title, sourceSite, sourceUrl, tags }))
-    await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
     dispatch(recipeAsyncHandler.clear(manualKey))
+    await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
   },
 
   deleteRecipe: async (recipeId, userId) => {
