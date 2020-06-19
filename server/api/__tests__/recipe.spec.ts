@@ -220,6 +220,12 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(original.forkedCount).to.equal(0);
         expect(copy.forkedCount).to.equal(0);
       });
+      it("returns the forked recipe, including tags", async () => {
+        const res = await agent2.post(`${route}/fork/1`);
+        const copy = await connection.manager.findOneOrFail(Recipe, 2);
+        expect(res.body.id).to.equal(copy.id);
+        expect(res.body.tags).to.exist;
+      });
     });
   });
 

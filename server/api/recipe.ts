@@ -1,10 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { isAuthenticated } from "../logic/auth";
-import {
-  recipeRepository,
-  tagRepository,
-  userRepository,
-} from "../db/repositories";
+import { recipeRepository, tagRepository } from "../db/repositories";
 
 const recipeRouter = Router();
 
@@ -88,7 +84,7 @@ recipeRouter.post(`/fork/:id`, isAuthenticated, async (req, res, next) => {
     const { params, user } = req;
     const originalRecipe = await recipeRepository.getById(Number(params.id));
     if (originalRecipe) {
-      await recipeRepository.insert({
+      const recipe = await recipeRepository.insert({
         ...originalRecipe,
         user: user as any,
         forkedCount: 0,
@@ -98,8 +94,7 @@ recipeRouter.post(`/fork/:id`, isAuthenticated, async (req, res, next) => {
           forkedCount: originalRecipe.forkedCount + 1,
         });
       }
-      const updatedUser = await userRepository.getById((user as any).id);
-      res.json(updatedUser);
+      res.json(recipe);
     } else {
       res.status(404);
       throw new Error(`Recipe not found`);
