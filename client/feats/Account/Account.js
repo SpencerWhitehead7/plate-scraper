@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { authAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
+import { ButtonSection } from 'comps/Buttons'
 import Card, { CardTitle, CardSubtitle } from 'comps/Card'
 import LoadingIndicator from 'comps/LoadingIndicator'
 import RecipeRows from 'comps/RecipeRows'
@@ -10,8 +11,6 @@ import PageFailure from 'feats/PageFailure'
 import { selectMeOrCurrentUser, selectCurrentUserIsMine } from './selectors'
 import DestroyAccount from './DestroyAccount'
 import EditAccount from './EditAccount'
-
-import s from './Account.scss'
 
 const Account = ({ data: user, isLoaded, isLoading, isMine, fetchUser, logout }) => {
   const [section, setSection] = useState(``)
@@ -36,7 +35,7 @@ const Account = ({ data: user, isLoaded, isLoading, isMine, fetchUser, logout })
             {isMine && (
               <Card isLoaded={!isLoading}>
                 <CardTitle>Settings</CardTitle>
-                <div className={s.settings}>
+                <ButtonSection>
                   <button
                     type="button"
                     onClick={() => setSection(section === `edit` ? `` : `edit`)}
@@ -55,7 +54,7 @@ const Account = ({ data: user, isLoaded, isLoading, isMine, fetchUser, logout })
                   >
                     Log out
                   </button>
-                </div>
+                </ButtonSection>
                 {section === `edit` && <EditAccount />}
                 {section === `destroy` && <DestroyAccount />}
               </Card>

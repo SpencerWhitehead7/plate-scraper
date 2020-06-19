@@ -12,14 +12,4 @@
     display: flex;
     justify-content: space-between;
   }
-
-  &__actions {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    @include sm-screen {
-      flex-direction: row;
-    }
-  }
 }
