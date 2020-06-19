@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
+import { downloadRecipe } from 'helpers'
 import { authAsyncHandler, recipeAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
 import { selectIsAuthed, selectMe } from 'selectors'
 import { MODAL_TYPES, openModal as openModalAction } from 'comps/Modal'
@@ -23,18 +24,7 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
   })
   const [updatedTags, setUpdatedTags] = useState((recipe.tags || []).map(({ name }) => name))
 
-  const download = ({ text, title }) => {
-    const textAsBlob = new Blob([text], { type: `text/plain` })
-    const downloadLink = document.createElement(`a`)
-    downloadLink.download = title
-    downloadLink.href = window.URL.createObjectURL(textAsBlob)
-    downloadLink.onclick = evt => { document.body.removeChild(evt.target) }
-    downloadLink.style.display = `none`
-    document.body.appendChild(downloadLink)
-    downloadLink.click()
-    // eslint-disable-next-line no-alert
-    alert(`Saved to your default download location`)
-  }
+  const download = ({ text, title }) => { downloadRecipe(text, title) }
 
   const save = ({ title, text }) => {
     // if the recipe doesn't have an ID, it's being scraped/uploaded; otherwise, it's being edited

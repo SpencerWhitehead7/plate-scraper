@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 
 import { recipeAsyncHandler } from 'reducers/asyncHandlers'
+import { DownloadButton } from 'comps/Buttons'
 import Card, { CardTitle } from 'comps/Card'
 import { RecipeForm } from 'comps/Form'
 import LoadingIndicator from 'comps/LoadingIndicator'
@@ -41,6 +42,7 @@ const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, fetchRecipe }) => {
                 ? <RecipeForm recipe={recipe} setEditMode={setEditMode} />
                 : (
                   <>
+                    <DownloadButton text={recipe.text} title={recipe.title} />
                     <Tags tags={recipe.tags} />
                     <div className={classnames(sg.textShowBreaks, sg.pt_m)}>
                       {recipe.text}
@@ -58,7 +60,6 @@ const mstp = state => ({
   isMine: selectCurrentRecipeIsMine(state),
   ...selectCurrentRecipe(state),
 })
-
 
 const mdtp = dispatch => ({
   fetchRecipe: recipeId => {

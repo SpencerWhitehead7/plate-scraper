@@ -8,7 +8,6 @@ The site is not currently deployed live anywhere, as it's still a little rough a
 
 ## Public roadmap (features)
 
-- Ability to download other users' recipes
 - Ability to upload an image and have it OCRed for recipe text instead of typing the recipe manually on the recipe upload page
 - Ability to filter recipes by tag on a user's page
 - Ability to "fork" another user's recipe, giving you a copy of it you own and can edit
@@ -34,7 +33,7 @@ The site is not currently deployed live anywhere, as it's still a little rough a
 
 - Actual recipe scraper/editor/downloader
 - Account system, signup/login, view, edit, delete account
-- Save, view, edit, delete, download scraped recipes
+- Save, view, edit, delete, download scraped recipes, including the other users'
 - Set and unset recipe's tags
 - Search for recipes by tag
 - Fully functioning and optimized Webpack/Babel build pipeline with hot reloading

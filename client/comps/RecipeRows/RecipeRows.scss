@@ -1,8 +1,6 @@
 @import "styles";
 
 .recipeRow {
-  display: flex;
-  justify-content: space-between;
   padding-bottom: $space-within;
 
   & + & {
@@ -10,8 +8,8 @@
     border-top: 1px solid $color-highlight;
   }
 
-  &__food {
+  &__info {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
   }
 }
