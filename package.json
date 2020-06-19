@@ -11,6 +11,8 @@
     "clean": "rm -rf built dist node_modules && npm install",
     "seed": "NODE_ENV='script' npx ts-node server/scripts/seed.ts",
     "cleanupOrphanedTags": "NODE_ENV='script' npx ts-node server/scripts/cleanupOrphanedTags.ts",
+    "build:be": "npx tsc",
+    "build:fe": "webpack -p",
     "build": "npx tsc && webpack -p",
     "start": "node built",
     "dev:be": "ts-node-dev server",
