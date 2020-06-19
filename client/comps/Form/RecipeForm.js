@@ -32,7 +32,7 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
       editRecipe(recipe.id, recipe.userId, text, title, updatedTags)
       setEditMode(false)
     } else {
-      createRecipe(`scrape`, me.id, text, title, recipe.sourceSite, recipe.sourceUrl, updatedTags)
+      createRecipe(me.id, text, title, recipe.sourceSite, recipe.sourceUrl, updatedTags)
     }
     if (recipe.sourceSite === `upload` && recipe.sourceUrl === `upload`) {
       setUpdatedTags([])
@@ -110,9 +110,9 @@ const mdtp = dispatch => ({
   openModal: () => {
     dispatch(openModalAction(MODAL_TYPES.AUTH))
   },
-  createRecipe: async (manualKey, userId, text, title, sourceSite, sourceUrl, tags) => {
-    await dispatch(recipeAsyncHandler.call(manualKey, { text, title, sourceSite, sourceUrl, tags }))
-    dispatch(recipeAsyncHandler.clear(manualKey))
+  createRecipe: async (userId, text, title, sourceSite, sourceUrl, tags) => {
+    await dispatch(recipeAsyncHandler.call(`scrape`, { text, title, sourceSite, sourceUrl, tags }))
+    dispatch(recipeAsyncHandler.clear(`scrape`))
     await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
   },
 
