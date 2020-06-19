@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { URL } from 'consts'
-import { DownloadButton } from 'comps/Buttons'
+import { DownloadButton, ForkButton } from 'comps/Buttons'
 import Tags from 'comps/Tags'
 
 import sg from 'styles/index.scss'
@@ -41,7 +41,10 @@ const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, 
       </div>
     </div>
 
-    <DownloadButton text={text} title={title} />
+    <div className={s.recipeRow__actions}>
+      <DownloadButton text={text} title={title} />
+      <ForkButton recipeId={id} userId={userId} />
+    </div>
   </div>
 )
 

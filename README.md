@@ -10,7 +10,6 @@ The site is not currently deployed live anywhere, as it's still a little rough a
 
 - Ability to upload an image and have it OCRed for recipe text instead of typing the recipe manually on the recipe upload page
 - Ability to filter recipes by tag on a user's page
-- Ability to "fork" another user's recipe, giving you a copy of it you own and can edit
 - Ability to download all a user's recipes at once (including your own)
 - Ability to view all users and some interesting metadata (member since? Recipe count? Uploaded vs scraped vs forked?)
 - Add whatever that metadata ends up being to individual users' pages
@@ -35,6 +34,7 @@ The site is not currently deployed live anywhere, as it's still a little rough a
 - Account system, signup/login, view, edit, delete account
 - Save, view, edit, delete, download scraped recipes, including the other users'
 - Set and unset recipe's tags
+- "Fork" a recipe (yours or another user's), giving you an editable copy of it
 - Search for recipes by tag
 - Fully functioning and optimized Webpack/Babel build pipeline with hot reloading
 - Solid first draft on SCSS design system

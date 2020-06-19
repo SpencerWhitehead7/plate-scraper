@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 
 import { recipeAsyncHandler } from 'reducers/asyncHandlers'
-import { DownloadButton } from 'comps/Buttons'
+import { DownloadButton, ForkButton } from 'comps/Buttons'
 import Card, { CardTitle } from 'comps/Card'
 import { RecipeForm } from 'comps/Form'
 import LoadingIndicator from 'comps/LoadingIndicator'
@@ -13,6 +13,7 @@ import PageFailure from 'feats/PageFailure'
 import { selectCurrentRecipe, selectCurrentRecipeIsMine } from './selectors'
 
 import sg from 'styles/index.scss'
+import s from './Recipe.scss'
 
 const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, fetchRecipe }) => {
   const [editMode, setEditMode] = useState(false)
@@ -29,20 +30,23 @@ const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, fetchRecipe }) => {
         ? (
           <Card>
             <CardTitle>{recipe.title}</CardTitle>
-            {isMine && (
-              <button
-                type="button"
-                onClick={() => setEditMode(!editMode)}
-              >
-                {editMode ? `Cancel` : `Edit`}
-              </button>
-            )}
+            <div className={s.recipe__buttonSection}>
+              {isMine && (
+                <button
+                  type="button"
+                  onClick={() => setEditMode(!editMode)}
+                >
+                  {editMode ? `Cancel` : `Edit`}
+                </button>
+              )}
+              <ForkButton recipeId={recipe.id} userId={recipe.userId} />
+              {!editMode && <DownloadButton text={recipe.text} title={recipe.title} />}
+            </div>
             {
               editMode
                 ? <RecipeForm recipe={recipe} setEditMode={setEditMode} />
                 : (
                   <>
-                    <DownloadButton text={recipe.text} title={recipe.title} />
                     <Tags tags={recipe.tags} />
                     <div className={classnames(sg.textShowBreaks, sg.pt_m)}>
                       {recipe.text}
