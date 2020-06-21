@@ -26,7 +26,7 @@ export const getRecipe = (
   [
     `Source: ${url}`,
     "",
-    ...title,
+    title[0],
     "",
     "Ingredients",
     "",
