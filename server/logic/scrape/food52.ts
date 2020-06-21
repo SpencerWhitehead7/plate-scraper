@@ -2,7 +2,7 @@
 
 // const food52 = ($: CheerioStatic, url: string) => {
 //   const title = getCleanStrings($, `h1`);
-//   const ingredients = getCleanStrings($, `.recipe-list li`);
+//   const ingredients = getCleanStrings($, `.recipe__list--ingredients li`, `#recipeDirectionsRoot`);
 //   const instructions = getCleanStrings($, `.clearfix ol li`);
 
 //   return {
