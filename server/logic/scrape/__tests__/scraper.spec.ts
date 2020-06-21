@@ -34,10 +34,7 @@ describe(`The parsers handle`, () => {
     i++;
   });
 
-  it(`allrecipes html0 template pages`, () => {
-    expect(actuals[i]).to.deep.equal(expecteds[i]);
-  });
-  it(`allrecipes html1 template pages`, () => {
+  it(`allrecipes pages`, () => {
     expect(actuals[i]).to.deep.equal(expecteds[i]);
   });
   it(`bettycrocker pages`, () => {

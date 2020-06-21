@@ -1,5 +1,4 @@
-import allrecipes0Recipe from "./expectedRecipes/allrecipes0";
-import allrecipes1Recipe from "./expectedRecipes/allrecipes1";
+import allrecipesRecipe from "./expectedRecipes/allrecipes";
 import bettycrockerRecipe from "./expectedRecipes/bettycrocker";
 import bonappetitRecipe from "./expectedRecipes/bonappetit";
 import chowhoundRecipe from "./expectedRecipes/chowhound";
@@ -21,15 +20,8 @@ const expecteds = [
   {
     sourceSite: "allrecipes.com",
     sourceUrl: "https://www.allrecipes.com/recipe/22918/pop-cake/",
-    text: allrecipes0Recipe,
+    text: allrecipesRecipe,
     title: "Pop Cake",
-  },
-  {
-    sourceSite: "allrecipes.com",
-    sourceUrl:
-      "https://www.allrecipes.com/recipe/6700/fabulous-homemade-bread/",
-    text: allrecipes1Recipe,
-    title: "Fabulous Homemade Bread",
   },
   {
     sourceSite: "bettycrocker.com",
