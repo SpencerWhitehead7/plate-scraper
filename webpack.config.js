@@ -113,7 +113,7 @@ module.exports = (env, argv) => {
                   {
                     absoluteRuntime: true,
                     useESModules: true,
-                    version: `7.9.2`,
+                    version: `^7.11.2`,
                   },
                 ],
               ],
