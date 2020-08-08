@@ -100,7 +100,7 @@ module.exports = (env, argv) => {
                   {
                     bugfixes: true,
                     useBuiltIns: `usage`,
-                    corejs: `3`,
+                    corejs: 3,
                     targets: isDev ? `last 2 chrome versions` : `> 0.25%, not dead`,
                   },
                 ],
@@ -112,7 +112,6 @@ module.exports = (env, argv) => {
                   `@babel/plugin-transform-runtime`,
                   {
                     absoluteRuntime: true,
-                    corejs: 3,
                     useESModules: true,
                     version: `7.9.2`,
                   },
