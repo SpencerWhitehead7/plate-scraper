@@ -99,7 +99,7 @@ module.exports = (env, argv) => {
                   `@babel/preset-env`,
                   {
                     bugfixes: true,
-                    useBuiltIns: `usage`,
+                    useBuiltIns: `entry`,
                     corejs: 3,
                     targets: isDev ? `last 2 chrome versions` : `> 0.25%, not dead`,
                   },
