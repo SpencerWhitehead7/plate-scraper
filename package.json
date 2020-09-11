@@ -52,6 +52,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "focus-trap-react": "^6.0.0",
+    "helmet": "^4.2.0",
     "normalize.css": "^8.0.1",
     "passport": "^0.4.1",
     "pg": "^8.2.1",

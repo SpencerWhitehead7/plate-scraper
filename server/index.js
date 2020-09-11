@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import * as express from "express"
+import * as helmet from 'helmet'
 import * as compression from 'compression'
 import * as expressSession from "express-session"
 import { createConnection } from 'typeorm'
@@ -28,6 +29,11 @@ const boot = async () => {
     // Body parsing middleware
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
+
+    // Security
+    // its csp interferes with webpack-dev-server, which we need in dev mode
+    // don't ask how I know, but lets just say it cost ~12 hours of my life
+    if (ENV === `production`) app.use(helmet())
 
     // Compress responses
     app.use(compression())
