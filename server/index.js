@@ -1,10 +1,12 @@
 /* eslint-disable no-console */
 import * as express from "express"
+import * as compression from 'compression'
 import * as expressSession from "express-session"
 import { createConnection } from 'typeorm'
 import { TypeormStore } from 'connect-typeorm'
 import * as passport from "passport"
 import * as path from "path"
+
 import Session from './logic/auth/session'
 import { generateConnectionOptions } from './utils'
 
@@ -26,6 +28,9 @@ const boot = async () => {
     // Body parsing middleware
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
+
+    // Compress responses
+    app.use(compression())
 
     // Logging middleware for development environment
     if (ENV !== `production` && ENV !== `test`) app.use(require(`volleyball`))
