@@ -11,14 +11,7 @@ module.exports = (env, argv) => {
   const outputPath = path.resolve(__dirname, `dist`)
 
   const baseStyleLoaders = [
-    isDev
-      ? `style-loader`
-      : {
-        loader: MiniCssExtractPlugin.loader,
-        options: {
-          esModule: true,
-        },
-      },
+    isDev ? `style-loader` : MiniCssExtractPlugin.loader,
     {
       loader: `css-loader`,
       options: {
@@ -26,7 +19,6 @@ module.exports = (env, argv) => {
           localIdentName: isDev ? `[path][name]--[local]` : `[hash:base64]`,
         },
         sourceMap: true,
-        esModule: true,
       },
     },
   ]
@@ -41,11 +33,11 @@ module.exports = (env, argv) => {
       },
     },
     optimization: {
-      moduleIds: `hashed`,
+      moduleIds: `deterministic`,
       runtimeChunk: `single`,
       splitChunks: {
         cacheGroups: {
-          vendor: {
+          defaultVendors: {
             test: /[\\/]node_modules[\\/]/,
             name: `vendors`,
             chunks: `all`,
@@ -57,6 +49,13 @@ module.exports = (env, argv) => {
       path: outputPath,
       publicPath: `/`,
       filename: isDev ? `[name].bundle.js` : `[name].[contenthash].js`,
+    },
+
+    cache: {
+      type: `filesystem`,
+      buildDependencies: {
+        config: [__filename],
+      },
     },
 
     devtool: isDev ? `eval-source-map` : `source-map`,
@@ -113,7 +112,7 @@ module.exports = (env, argv) => {
                   {
                     absoluteRuntime: true,
                     useESModules: true,
-                    version: `^7.11.2`,
+                    version: `^7.12.10`,
                   },
                 ],
               ],
