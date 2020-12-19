@@ -43,12 +43,14 @@ const boot = async () => {
 
     app.use(expressSession({
       cookie: {
-        maxAge: 604800000, // a week
-        secure: ENV === `production`,
+        maxAge: 60 * 60 * 24 * 7 * 1000, // 1 week
+        secure: ENV !== `test`, // secure cookies interfere with superagent
+        httpOnly: true,
       },
       resave: false,
       saveUninitialized: false,
       secret: SECRET,
+      name: `sessionId`,
       store: new TypeormStore({
         cleanupLimit: 0, // default
         limitSubquery: true, // default
