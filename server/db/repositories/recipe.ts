@@ -20,15 +20,14 @@ class RecipeRepository extends AbstractRepository<Recipe> {
     user: User;
     tags: Tag[];
   }) {
-    const { tags } = recipeData;
-    delete recipeData.tags;
+    const { tags, ...santizedRecipeData } = recipeData;
 
     const {
       raw: [createdRecipe],
     } = await this.createQueryBuilder("recipe")
       .insert()
       .into(Recipe)
-      .values(recipeData)
+      .values(santizedRecipeData)
       .returning("*")
       .execute();
 

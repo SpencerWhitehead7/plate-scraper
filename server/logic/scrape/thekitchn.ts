@@ -1,6 +1,6 @@
 // const { getCleanStrings, getRecipe } = require(`./helpers`);
 
-// const thekitchn = ($: CheerioStatic, url: string) => {
+// const thekitchn = ($: cheerio.Root, url: string) => {
 //   const title = getCleanStrings($, `.Recipe__title`);
 //   const ingredients = getCleanStrings($, `.Recipe__ingredient`);
 //   const instructions = getCleanStrings($, `.Recipe__instructionStep`);

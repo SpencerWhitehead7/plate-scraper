@@ -1,6 +1,6 @@
 import { getCleanStrings, getRecipe } from "./helpers";
 
-const jamieoliver = ($: CheerioStatic, url: string) => {
+const jamieoliver = ($: cheerio.Root, url: string) => {
   const title = getCleanStrings($, `h1`);
   const ingredients = getCleanStrings($, `.ingred-list li`);
   const instructions = getCleanStrings($, `.recipeSteps li`);

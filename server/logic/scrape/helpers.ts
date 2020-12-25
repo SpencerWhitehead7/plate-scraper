@@ -1,5 +1,5 @@
 export const getCleanStrings = (
-  $: CheerioStatic,
+  $: cheerio.Root,
   selector: string,
   context: string | null = null,
   additionalCleaners: [RegExp, string?][] = []
