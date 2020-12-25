@@ -19,7 +19,6 @@ describe("User Entity", () => {
     expect(User).to.exist;
     expect(user.email).to.exist;
     expect(user.password).to.exist;
-    expect(user.salt).to.exist;
     expect(user.userName).to.exist;
   });
 
@@ -44,12 +43,11 @@ describe("User Entity", () => {
       const user = factoryUser({ userName: "userName!" });
       return expect(connection.manager.save(user)).to.be.rejected;
     });
+    it("rejects passwords >64 chars", async () => {
+      let user = factoryUser({ password: new Array(65).fill("a").join("") })
+      return expect(connection.manager.save(user)).to.be.rejected;
+    })
     it("password is hidden from selects", async () => {
-      await connection.manager.save(factoryUser());
-      const user = await connection.manager.findOneOrFail(User, 1);
-      expect(user.password).not.to.exist;
-    });
-    it("salt is hidden from selects", async () => {
       await connection.manager.save(factoryUser());
       const user = await connection.manager.findOneOrFail(User, 1);
       expect(user.password).not.to.exist;
@@ -69,18 +67,16 @@ describe("User Entity", () => {
 
       expect(user1.password).not.to.equal(samePassword);
       expect(user2.password).not.to.equal(samePassword);
-      expect(user1.salt).not.to.equal(user2.salt);
       expect(user1.password).not.to.equal(user2.password);
     });
-    it("salt is randomly regenerated and password is reencrypted when password updates", async () => {
+    it("password is re-encrypted when it updates", async () => {
       let user = await connection.manager.save(factoryUser());
-      const { password: originalPassword, salt: originalSalt } = user;
-      // this in fact updates everything, including password
-      user = await connection.manager.save(user);
-      const { password: newPassword, salt: newSalt } = user;
+      const { password: originalPassword } = user;
+      // "updates" the values in the db row to their current values
+      // which triggers re-encryption, changing value of password
+      const { password: newPassword } = await connection.manager.save(user);
 
       expect(originalPassword).not.to.equal(newPassword);
-      expect(originalSalt).not.to.equal(newSalt);
     });
   });
 
@@ -118,8 +114,8 @@ describe("User Entity", () => {
       const userData = factoryUser();
       const { password } = userData;
       const user = await connection.manager.save(userData);
-      expect(user.checkPassword(password)).to.be.true;
-      expect(user.checkPassword(password + "a")).to.be.false;
+      expect(await user.checkPassword(password)).to.be.true;
+      expect(await user.checkPassword(password + "a")).to.be.false;
     });
   });
 });

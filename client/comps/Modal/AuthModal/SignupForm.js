@@ -34,7 +34,7 @@ const SignupForm = ({ className, signup }) => {
         identifier="signupPassword"
         labelText="Password"
         type="password"
-        register={register({ required: true, maxLength: 128 })}
+        register={register({ required: true, maxLength: 64 })}
         errors={errors}
       />
       <FormInput

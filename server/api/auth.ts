@@ -28,7 +28,7 @@ authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
     const { user, body } = req;
     const authUser = await userRepository.getByIdWithAuth((user as any)!.id);
     const { newEmail, newUserName, newPassword, password } = body;
-    if (authUser && authUser.checkPassword(password)) {
+    if (authUser && await authUser.checkPassword(password)) {
       const newValues: {
         email?: string;
         userName?: string;
@@ -51,7 +51,7 @@ authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
 authRouter.delete(`/`, isAuthenticated, async (req, res, next) => {
   try {
     const authUser = await userRepository.getByIdWithAuth((req.user as any).id);
-    if (authUser && authUser.checkPassword(req.body.password)) {
+    if (authUser && await authUser.checkPassword(req.body.password)) {
       req.logout();
       await userRepository.delete(authUser);
       req!.session!.destroy((err) => (err ? next(err) : res.sendStatus(200)));
@@ -67,10 +67,9 @@ authRouter.delete(`/`, isAuthenticated, async (req, res, next) => {
 authRouter.post(`/login`, isNotAlreadyAuthenticated, async (req, res, next) => {
   try {
     const authUser = await userRepository.getByEmailWithAuth(req.body.email);
-    if (authUser && authUser.checkPassword(req.body.password)) {
-      delete authUser.password;
-      delete authUser.salt;
-      req.login(authUser, (err) => (err ? next(err) : res.json(authUser)));
+    if (authUser && await authUser.checkPassword(req.body.password)) {
+      const {password, ...sanitizedUser} = authUser;
+      req.login(authUser, (err) => (err ? next(err) : res.json(sanitizedUser)));
     } else {
       res.status(401);
       throw new Error(`Wrong username or password`);

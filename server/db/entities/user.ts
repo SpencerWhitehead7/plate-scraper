@@ -1,4 +1,4 @@
-import { randomBytes, createHash } from "crypto";
+import {hash, compare} from "bcrypt";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -15,6 +15,7 @@ import {
 import {
   IsEmail,
   IsAlphanumeric,
+  MaxLength,
   NotEquals,
   validateOrReject,
 } from "class-validator";
@@ -45,17 +46,22 @@ export class User {
 
   @Column({
     type: "varchar",
-    length: 128,
+    // bcrypt ouputs salted hashed pws that are exactly 60 char long
+    length: 60,
     select: false,
   })
-  password: string;
+  // bcrypt only uses the first 72 chars
+  // using 64 instead because it's nice and round and makes it less obvious I'm using bcrypt
 
-  @Column({
-    type: "varchar",
-    length: 64,
-    select: false,
-  })
-  salt: string;
+  // validating here because the actual DB column only ever gets the 60 char bcrypt result
+  // don't want users to have a >72 char password and then realize that as
+  // long as they get the first 72 right they'll be able to log in even
+  // if the rest is wrong, which would be pretty weird/unsettling
+
+  // also prevents DDOS via people just submitting huge passwords
+  // because the validator runs before the password is hashed
+  @MaxLength(64)
+  password: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -69,15 +75,12 @@ export class User {
   @OneToMany(() => Recipe, (recipe) => recipe.user, { onDelete: "CASCADE" })
   recipes: Recipe[];
 
-  static encryptPassword(plainTextPassword: string, salt: string) {
-    return createHash("RSA-SHA256")
-      .update(plainTextPassword)
-      .update(salt)
-      .digest("hex");
+  static encryptPassword(plainTextPassword: string) {
+    return hash(plainTextPassword, 10)
   }
-
+  
   checkPassword(passwordAttempt: string) {
-    return User.encryptPassword(passwordAttempt, this.salt) === this.password;
+    return compare(passwordAttempt, this.password);
   }
 }
 
@@ -91,8 +94,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     const { entity } = event;
     await validateOrReject(entity);
 
-    entity.salt = randomBytes(32).toString("base64");
-    entity.password = User.encryptPassword(entity.password, entity.salt);
+    entity.password = await User.encryptPassword(entity.password)
   }
 
   async beforeUpdate(event: UpdateEvent<User>) {
@@ -101,8 +103,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 
     // indicates user changed their PW
     if (entity.password) {
-      entity.salt = randomBytes(32).toString("base64");
-      entity.password = User.encryptPassword(entity.password, entity.salt);
+      entity.password = await User.encryptPassword(entity.password)
     }
   }
 }

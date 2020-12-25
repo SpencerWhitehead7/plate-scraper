@@ -20,7 +20,6 @@ describe("Auth Route: /api/auth", () => {
       .select("user")
       .from(User, "user")
       .addSelect("user.password")
-      .addSelect("user.salt")
       .where("id = :id", { id: 1 })
       .getOne();
 
@@ -61,7 +60,7 @@ describe("Auth Route: /api/auth", () => {
         const user = await getUserWithAuth();
         expect(user!.email).to.equal(userCred.email);
         expect(user!.userName).to.equal(userCred.userName);
-        expect(user!.checkPassword(userCred.password)).to.be.true;
+        expect(await user!.checkPassword(userCred.password)).to.be.true;
       });
       it("also logs that user into the app", async () => {
         const res = await agent.get(route);
@@ -99,7 +98,7 @@ describe("Auth Route: /api/auth", () => {
         expect(editedUser!.password).not.to.equal(oldUser!.password);
         expect(editedUser!.email).to.equal(newEmail);
         expect(editedUser!.userName).to.equal(newUserName);
-        expect(editedUser!.checkPassword(newPassword)).to.be.true;
+        expect(await editedUser!.checkPassword(newPassword)).to.be.true;
         expect(res.body.email).to.equal(newEmail);
         expect(res.body.userName).to.equal(newUserName);
         expect(res.body.password).not.to.exist;

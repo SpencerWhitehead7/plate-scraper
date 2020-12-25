@@ -13,7 +13,7 @@ class UserRepository extends AbstractRepository<User> {
       .leftJoinAndSelect("recipe.tags", "tag");
 
   private selectWithAuth = () =>
-    this.select().addSelect("user.password").addSelect("user.salt");
+    this.select().addSelect("user.password");
 
   async insert(user: User) {
     const {

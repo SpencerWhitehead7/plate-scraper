@@ -34,7 +34,7 @@ const AccountSettings = ({ editMe }) => {
           identifier="password"
           labelText="New password"
           type="password"
-          register={register({ maxLength: 128 })}
+          register={register({ maxLength: 64 })}
           errors={errors}
         />
         <FormInput
