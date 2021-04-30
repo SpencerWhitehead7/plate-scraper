@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router, RequestHandler} from "express";
 import { isAuthenticated } from "../logic/auth";
 import { recipeRepository, tagRepository } from "../db/repositories";
 
@@ -6,11 +6,11 @@ const recipeRouter = Router();
 
 // TODO: add middleware to validate that recipe exists for deletes, edits, etc
 // or maybe it should be part of serializer
-const isOwner = async (req: Request, res: Response, next: NextFunction) => {
+const isOwner: RequestHandler = async (req, res, next) => {
   try {
     const { params, user } = req;
     const recipe = await recipeRepository.getById(Number(params.id));
-    if (recipe!.userId !== (user as any).id) {
+    if (recipe!.userId !== user!.id) {
       res.status(401);
       throw new Error(`Permission denied`);
     } else {
@@ -40,9 +40,9 @@ recipeRouter.post(`/`, isAuthenticated, async (req, res, next) => {
       title,
       sourceSite,
       sourceUrl,
-      createdBy: (req.user as any).id,
+      createdBy: req.user!.id,
       forkedCount: 0,
-      user: req.user as any,
+      userId: req.user!.id,
       tags: await tagRepository.getOrInsert(
         // TODO serializers
         tags.map((tag: string) => tag.toLowerCase().replace(/[^a-z]/gi, ``))
@@ -84,12 +84,13 @@ recipeRouter.post(`/fork/:id`, isAuthenticated, async (req, res, next) => {
     const { params, user } = req;
     const originalRecipe = await recipeRepository.getById(Number(params.id));
     if (originalRecipe) {
+      // TODO: this should be a sql transaction 
       const recipe = await recipeRepository.insert({
         ...originalRecipe,
-        user: user as any,
+        userId: user!.id,
         forkedCount: 0,
       });
-      if (originalRecipe.userId !== (user as any).id) {
+      if (originalRecipe.userId !== user!.id) {
         await recipeRepository.update(originalRecipe.id, {
           forkedCount: originalRecipe.forkedCount + 1,
         });

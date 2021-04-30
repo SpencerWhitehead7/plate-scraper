@@ -49,6 +49,10 @@ class UserRepository extends AbstractRepository<User> {
       .execute();
   }
 
+  getReqUser(id: number) {
+    return this.createQueryBuilder("user").select().where("user.id = :id", { id }).getOne();
+  }
+
   getById(id: number) {
     return this.select().where("user.id = :id", { id }).getOne();
   }

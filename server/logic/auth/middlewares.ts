@@ -1,10 +1,6 @@
-import { Request, Response, NextFunction } from "express";
+import { RequestHandler } from "express";
 
-export const isAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const isAuthenticated: RequestHandler = (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
   } else {
@@ -14,11 +10,7 @@ export const isAuthenticated = (
   }
 };
 
-export const isNotAlreadyAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const isNotAlreadyAuthenticated: RequestHandler = (req, res, next) => {
   if (req.isAuthenticated()) {
     const err = new Error(`Already logged in to an account`);
     res.status(409);

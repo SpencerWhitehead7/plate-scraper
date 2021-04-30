@@ -3,7 +3,7 @@ import {
   AbstractRepository,
   getCustomRepository,
 } from "typeorm";
-import { Recipe, Tag, User } from "../entities";
+import { Recipe, Tag } from "../entities";
 
 @EntityRepository(Recipe)
 class RecipeRepository extends AbstractRepository<Recipe> {
@@ -17,7 +17,7 @@ class RecipeRepository extends AbstractRepository<Recipe> {
     sourceUrl?: string;
     createdBy: number;
     forkedCount: number;
-    user: User;
+    userId: number;
     tags: Tag[];
   }) {
     const { tags, ...santizedRecipeData } = recipeData;
@@ -43,26 +43,25 @@ class RecipeRepository extends AbstractRepository<Recipe> {
 
   async update(
     id: number,
-    updatedValues: {
+    updatedRecipeData: {
       text?: string;
       title?: string;
       tags?: Tag[];
       forkedCount?: number;
     }
   ) {
-    const { tags } = updatedValues;
-    delete updatedValues.tags;
+    const { tags, ...santizedUpdatedRecipeData } = updatedRecipeData;
 
     await this.createQueryBuilder("recipe")
       .update(Recipe)
-      .set(updatedValues)
+      .set(santizedUpdatedRecipeData)
       .where("id = :id", { id })
       .execute();
 
     if (tags) {
       const updatedRecipe = await this.getById(id);
 
-      const newTagsSet = new Set(updatedValues.tags);
+      const newTagsSet = new Set(tags);
       // remove all the recipe's tags that updatedValues.tags doesn't have
       await this.createQueryBuilder("recipe")
         .relation(Recipe, "tags")

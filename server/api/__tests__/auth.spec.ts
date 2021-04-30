@@ -13,7 +13,7 @@ import { User } from "../../db/entities";
 
 describe("Auth Route: /api/auth", () => {
   const route = "/api/auth";
-  let agent: any;
+  let agent: request.SuperAgentTest;
   const getUserWithAuth = async () =>
     await connection.manager
       .createQueryBuilder()

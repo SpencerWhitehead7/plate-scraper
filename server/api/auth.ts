@@ -5,15 +5,20 @@ import { userRepository } from "../db/repositories";
 const authRouter = Router();
 
 // GET /api/auth
-authRouter.get(`/`, (req, res) => {
-  res.json(req.user || null);
+authRouter.get(`/`, async (req, res, next) => {
+  try{
+    let user = req.isAuthenticated() ? await userRepository.getById(req.user!.id) : null
+    res.json(user);
+  } catch (err) {
+    next(err)
+  }
 });
 
 // POST /api/auth
 authRouter.post(`/`, isNotAlreadyAuthenticated, async (req, res, next) => {
   try {
     const user = await userRepository.insert(req.body);
-    req.login(user!, (err) => (err ? next(err) : res.json(user)));
+    req.login(user!, err => { err ? next(err) : res.json(user) });
   } catch (err) {
     if (err.name === `QueryFailedError`) {
       res.status(409);
@@ -26,7 +31,7 @@ authRouter.post(`/`, isNotAlreadyAuthenticated, async (req, res, next) => {
 authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
   try {
     const { user, body } = req;
-    const authUser = await userRepository.getByIdWithAuth((user as any)!.id);
+    const authUser = await userRepository.getByIdWithAuth(user!.id);
     const { newEmail, newUserName, newPassword, password } = body;
     if (authUser && await authUser.checkPassword(password)) {
       const newValues: {
@@ -50,11 +55,11 @@ authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
 // DELETE /api/auth
 authRouter.delete(`/`, isAuthenticated, async (req, res, next) => {
   try {
-    const authUser = await userRepository.getByIdWithAuth((req.user as any).id);
+    const authUser = await userRepository.getByIdWithAuth(req.user!.id);
     if (authUser && await authUser.checkPassword(req.body.password)) {
       req.logout();
       await userRepository.delete(authUser);
-      req!.session!.destroy((err) => (err ? next(err) : res.sendStatus(200)));
+      req!.session!.destroy(err => { err ? next(err) : res.sendStatus(200) });
     } else {
       res.sendStatus(401);
     }
@@ -69,7 +74,7 @@ authRouter.post(`/login`, isNotAlreadyAuthenticated, async (req, res, next) => {
     const authUser = await userRepository.getByEmailWithAuth(req.body.email);
     if (authUser && await authUser.checkPassword(req.body.password)) {
       const {password, ...sanitizedUser} = authUser;
-      req.login(authUser, (err) => (err ? next(err) : res.json(sanitizedUser)));
+      req.login(authUser, err => { err ? next(err) : res.json(sanitizedUser) });
     } else {
       res.status(401);
       throw new Error(`Wrong username or password`);
@@ -82,7 +87,7 @@ authRouter.post(`/login`, isNotAlreadyAuthenticated, async (req, res, next) => {
 // POST /api/auth/logout
 authRouter.post(`/logout`, isAuthenticated, (req, res, next) => {
   req.logout();
-  req!.session!.destroy((err) => (err ? next(err) : res.sendStatus(204)));
+  req!.session!.destroy(err => { err ? next(err) : res.sendStatus(204) });
 });
 
 export default authRouter;

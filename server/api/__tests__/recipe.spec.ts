@@ -13,7 +13,7 @@ import { Recipe, Tag, User } from "../../db/entities";
 
 describe("API Route Recipe: /api/recipe", () => {
   const route = "/api/recipe";
-  let agent: any;
+  let agent: request.SuperAgentTest;
   let user: User;
 
   beforeEach(async () => {
@@ -163,7 +163,7 @@ describe("API Route Recipe: /api/recipe", () => {
 
   describe("/fork/:id", () => {
     describe("POST", () => {
-      let agent2: any;
+      let agent2: request.SuperAgentTest;
       beforeEach(async () => {
         agent2 = request.agent(app);
         await agent2.post("/api/auth").send(user2Cred);
