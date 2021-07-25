@@ -1,4 +1,5 @@
-import { Router, RequestHandler} from "express";
+import { Router, RequestHandler } from "express";
+
 import { isAuthenticated } from "../logic/auth";
 import { recipeRepository, tagRepository } from "../db/repositories";
 
@@ -124,18 +125,13 @@ recipeRouter.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
 });
 
 // DELETE /api/recipe/:id
-recipeRouter.delete(
-  `/:id`,
-  isAuthenticated,
-  isOwner,
-  async (req, res, next) => {
-    try {
-      await recipeRepository.delete(Number(req.params.id));
-      res.end();
-    } catch (error) {
-      next(error);
-    }
+recipeRouter.delete(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
+  try {
+    await recipeRepository.delete(Number(req.params.id));
+    res.end();
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 export default recipeRouter;

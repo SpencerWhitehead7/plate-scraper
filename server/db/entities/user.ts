@@ -1,4 +1,4 @@
-import {hash, compare} from "bcrypt";
+import { hash, compare } from "bcrypt";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -78,7 +78,7 @@ export class User {
   static encryptPassword(plainTextPassword: string) {
     return hash(plainTextPassword, 10)
   }
-  
+
   checkPassword(passwordAttempt: string) {
     return compare(passwordAttempt, this.password);
   }

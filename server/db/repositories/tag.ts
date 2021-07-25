@@ -13,7 +13,7 @@ class TagRepository extends AbstractRepository<Tag> {
         .insert()
         .into(Tag)
         .values(tagNames.map((name) => ({ name })))
-        .onConflict(`DO NOTHING`)
+        .onConflict("DO NOTHING")
         .execute();
 
       return this.createQueryBuilder("tag")

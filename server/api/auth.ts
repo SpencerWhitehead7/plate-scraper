@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import { isAuthenticated, isNotAlreadyAuthenticated } from "../logic/auth";
 import { userRepository } from "../db/repositories";
 
@@ -6,7 +7,7 @@ const authRouter = Router();
 
 // GET /api/auth
 authRouter.get(`/`, async (req, res, next) => {
-  try{
+  try {
     let user = req.isAuthenticated() ? await userRepository.getById(req.user!.id) : null
     res.json(user);
   } catch (err) {
@@ -73,7 +74,7 @@ authRouter.post(`/login`, isNotAlreadyAuthenticated, async (req, res, next) => {
   try {
     const authUser = await userRepository.getByEmailWithAuth(req.body.email);
     if (authUser && await authUser.checkPassword(req.body.password)) {
-      const {password, ...sanitizedUser} = authUser;
+      const { password, ...sanitizedUser } = authUser;
       req.login(authUser, err => { err ? next(err) : res.json(sanitizedUser) });
     } else {
       res.status(401);

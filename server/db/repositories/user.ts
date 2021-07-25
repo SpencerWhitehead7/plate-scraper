@@ -3,6 +3,7 @@ import {
   AbstractRepository,
   getCustomRepository,
 } from "typeorm";
+
 import { User } from "../entities";
 
 @EntityRepository(User)
@@ -13,7 +14,8 @@ class UserRepository extends AbstractRepository<User> {
       .leftJoinAndSelect("recipe.tags", "tag");
 
   private selectWithAuth = () =>
-    this.select().addSelect("user.password");
+    this.select()
+      .addSelect("user.password");
 
   async insert(user: User) {
     const {
@@ -50,19 +52,28 @@ class UserRepository extends AbstractRepository<User> {
   }
 
   getReqUser(id: number) {
-    return this.createQueryBuilder("user").select().where("user.id = :id", { id }).getOne();
+    return this.createQueryBuilder("user")
+      .select()
+      .where("user.id = :id", { id })
+      .getOne();
   }
 
   getById(id: number) {
-    return this.select().where("user.id = :id", { id }).getOne();
+    return this.select()
+      .where("user.id = :id", { id })
+      .getOne();
   }
 
   getByIdWithAuth(id: number) {
-    return this.selectWithAuth().where("user.id = :id", { id }).getOne();
+    return this.selectWithAuth()
+      .where("user.id = :id", { id })
+      .getOne();
   }
 
   getByEmail(email: string) {
-    return this.select().where("user.email = :email", { email }).getOne();
+    return this.select()
+      .where("user.email = :email", { email })
+      .getOne();
   }
 
   getByEmailWithAuth(email: string) {

@@ -8,7 +8,8 @@ import { Recipe, Tag } from "../entities";
 @EntityRepository(Recipe)
 class RecipeRepository extends AbstractRepository<Recipe> {
   private select = () =>
-    this.createQueryBuilder("recipe").leftJoinAndSelect("recipe.tags", "tag");
+    this.createQueryBuilder("recipe")
+      .leftJoinAndSelect("recipe.tags", "tag");
 
   async insert(recipeData: {
     text: string;
@@ -96,7 +97,9 @@ class RecipeRepository extends AbstractRepository<Recipe> {
   }
 
   getById(id: number) {
-    return this.select().where("recipe.id = :id", { id }).getOne();
+    return this.select()
+      .where("recipe.id = :id", { id })
+      .getOne();
   }
 
   getByTagNames(tagNames: string[]) {
@@ -106,7 +109,8 @@ class RecipeRepository extends AbstractRepository<Recipe> {
   }
 
   getAll() {
-    return this.select().getMany();
+    return this.select()
+      .getMany();
   }
 }
 

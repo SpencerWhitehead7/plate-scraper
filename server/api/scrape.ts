@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import scrape from "../logic/scrape";
 
 const scrapeRouter = Router();

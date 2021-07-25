@@ -61,8 +61,8 @@ const scrape = async (url: string) => {
   } catch (err) {
     throw err.isAxiosError
       ? new Error(
-          "Scrape failed: valid site, but invalid url or request failed"
-        )
+        "Scrape failed: valid site, but invalid url or request failed"
+      )
       : err;
   }
 };

@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
 import * as express from "express"
-import * as helmet from 'helmet'
-import * as compression from 'compression'
+import * as helmet from "helmet"
+import * as compression from "compression"
 import * as expressSession from "express-session"
-import { createConnection } from 'typeorm'
-import { TypeormStore } from 'connect-typeorm'
+import { createConnection } from "typeorm"
+import { TypeormStore } from "connect-typeorm"
 import * as passport from "passport"
 import * as path from "path"
 
-import Session from './logic/auth/session'
-import { generateConnectionOptions } from './utils'
+import { Session } from "./logic/auth"
+import { generateConnectionOptions } from "./utils"
 
 const ENV = process.env.NODE_ENV
 const SECRET = process.env.SESSION_SECRET || `a perhaps worst-practices secret`
