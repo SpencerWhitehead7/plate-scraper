@@ -31,6 +31,11 @@ describe("API Route User: /api/user", () => {
         expect(res.body.recipes).to.have.lengthOf(1);
         expect(res.body.recipes[0].tags).to.have.lengthOf(1);
       });
+      it("returns 404 if the user cannot be found", async () => {
+        const res = await request(app).get(`${route}/1`);
+
+        expect(res.status).to.equal(404);
+      })
     });
   });
 });

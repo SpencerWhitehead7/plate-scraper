@@ -1,34 +1,38 @@
 import { Router, RequestHandler } from "express";
 
 import { isAuthenticated } from "../logic/auth";
+import { permDeniedErr, notFoundRecipeErr } from "../logic/errors";
 import { recipeRepository, tagRepository } from "../db/repositories";
 
 const recipeRouter = Router();
 
-// TODO: add middleware to validate that recipe exists for deletes, edits, etc
-// or maybe it should be part of serializer
-const isOwner: RequestHandler = async (req, res, next) => {
+const recipeExists: RequestHandler = async (req, __, next) => {
   try {
-    const { params, user } = req;
-    const recipe = await recipeRepository.getById(Number(params.id));
-    if (recipe!.userId !== user!.id) {
-      res.status(401);
-      throw new Error(`Permission denied`);
-    } else {
-      next();
-    }
-  } catch (error) {
-    next(error);
+    const recipe = await recipeRepository.getById(Number(req.params.id));
+    if (!recipe) throw notFoundRecipeErr;
+
+    (req as any).recipe = recipe;
+    next();
+  } catch (err) {
+    next(err);
   }
-};
+}
+
+const userOwnsRecipe: RequestHandler = (req, __, next) => {
+  (req as any).recipe.userId === req.user!.id ? next() : next(permDeniedErr);
+}
+
+const canAlterRecipe = [isAuthenticated, recipeExists, userOwnsRecipe]
+
+const canForkRecipe = [isAuthenticated, recipeExists]
 
 // GET /api/recipe
 recipeRouter.get(`/`, async (_, res, next) => {
   try {
     const recipes = await recipeRepository.getAll();
     res.json(recipes);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 
@@ -50,8 +54,8 @@ recipeRouter.post(`/`, isAuthenticated, async (req, res, next) => {
       ),
     });
     res.json(recipe);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 
@@ -59,9 +63,11 @@ recipeRouter.post(`/`, isAuthenticated, async (req, res, next) => {
 recipeRouter.get(`/byid/:id`, async (req, res, next) => {
   try {
     const recipe = await recipeRepository.getById(Number(req.params.id));
+    if (!recipe) throw notFoundRecipeErr
+
     res.json(recipe);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 
@@ -74,40 +80,35 @@ recipeRouter.get(`/bytag`, async (req, res, next) => {
       )
     );
     res.json(recipes);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 
 // POST /api/recipe/fork/:id
-recipeRouter.post(`/fork/:id`, isAuthenticated, async (req, res, next) => {
+recipeRouter.post(`/fork/:id`, ...canForkRecipe, async (req, res, next) => {
   try {
-    const { params, user } = req;
-    const originalRecipe = await recipeRepository.getById(Number(params.id));
-    if (originalRecipe) {
-      // TODO: this should be a sql transaction 
-      const recipe = await recipeRepository.insert({
-        ...originalRecipe,
-        userId: user!.id,
-        forkedCount: 0,
+    const { user, recipe: originalRecipe } = req as any;
+
+    // TODO: this should be a sql transaction
+    const recipe = await recipeRepository.insert({
+      ...originalRecipe,
+      userId: user.id,
+      forkedCount: 0,
+    });
+    if (originalRecipe.userId !== user.id) {
+      await recipeRepository.update(originalRecipe.id, {
+        forkedCount: originalRecipe.forkedCount + 1,
       });
-      if (originalRecipe.userId !== user!.id) {
-        await recipeRepository.update(originalRecipe.id, {
-          forkedCount: originalRecipe.forkedCount + 1,
-        });
-      }
-      res.json(recipe);
-    } else {
-      res.status(404);
-      throw new Error(`Recipe not found`);
     }
-  } catch (error) {
-    next(error);
+    res.json(recipe);
+  } catch (err) {
+    next(err);
   }
 });
 
 // PUT /api/recipe/:id
-recipeRouter.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
+recipeRouter.put(`/:id`, ...canAlterRecipe, async (req, res, next) => {
   try {
     const { text, title, tags } = req.body;
     const recipe = await recipeRepository.update(Number(req.params.id), {
@@ -119,18 +120,18 @@ recipeRouter.put(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
       ),
     });
     res.json(recipe);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 
 // DELETE /api/recipe/:id
-recipeRouter.delete(`/:id`, isAuthenticated, isOwner, async (req, res, next) => {
+recipeRouter.delete(`/:id`, ...canAlterRecipe, async (req, res, next) => {
   try {
     await recipeRepository.delete(Number(req.params.id));
     res.end();
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 

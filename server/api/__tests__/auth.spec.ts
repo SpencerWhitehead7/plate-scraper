@@ -72,11 +72,10 @@ describe("Auth Route: /api/auth", () => {
       it("returns a 409 if the user is already logged in", async () => {
         const res = await agent.post(route).send(userCred);
         expect(res.status).to.equal(409);
-        expect(res.text).to.equal("Already logged in to an account");
       });
-      it("returns a 409 if the user already exists", async () => {
+      it("returns a 500 if the user already exists", async () => {
         const res = await request(app).post(route).send(userCred);
-        expect(res.status).to.equal(409);
+        expect(res.status).to.equal(500);
       });
     });
 
@@ -112,14 +111,12 @@ describe("Auth Route: /api/auth", () => {
         const user = await connection.manager.findOneOrFail(User, 1);
         expect(user.email).not.to.equal(newEmail);
         expect(res.status).to.equal(401);
-        expect(res.text).to.equal("Unauthorized");
       });
       it("returns a 401 if the user is not logged in", async () => {
         const res = await request(app)
           .put(route)
           .send({ newEmail: "new@example.com", password: "pw" });
         expect(res.status).to.equal(401);
-        expect(res.text).to.equal("Not logged in");
       });
     });
 
@@ -142,14 +139,12 @@ describe("Auth Route: /api/auth", () => {
         const user = await connection.manager.findOne(User, 1);
         expect(user).to.exist;
         expect(res.status).to.equal(401);
-        expect(res.text).to.equal("Unauthorized");
       });
       it("returns a 401 if the user is not logged in", async () => {
         const res = await request(app)
           .delete(route)
           .send({ password: userCred.password });
         expect(res.status).to.equal(401);
-        expect(res.text).to.equal("Not logged in");
       });
     });
   });
@@ -174,12 +169,10 @@ describe("Auth Route: /api/auth", () => {
           .post(`${route}/login`)
           .send({ ...userCred, password: "wrongpw" });
         expect(res.status).to.equal(401);
-        expect(res.text).to.equal("Wrong username or password");
       });
       it("returns a 409 if the user is already logged in", async () => {
         const res = await agent.post(`${route}/login`).send(userCred);
         expect(res.status).to.equal(409);
-        expect(res.text).to.equal("Already logged in to an account");
       });
     });
   });
@@ -203,7 +196,6 @@ describe("Auth Route: /api/auth", () => {
       it("returns a 401 if the user is not logged in", async () => {
         const res = await request(app).post(`${route}/logout`);
         expect(res.status).to.equal(401);
-        expect(res.text).to.equal("Not logged in");
       });
     });
   });

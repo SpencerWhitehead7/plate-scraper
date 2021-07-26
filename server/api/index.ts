@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+import { notFoundRouteErr } from "../logic/errors";
+
 import authRouter from "./auth";
 import recipeRouter from "./recipe";
 import scrapeRouter from "./scrape";
@@ -20,9 +22,6 @@ apiRouter.use(`/scrape`, scrapeRouter);
 apiRouter.use(`/user`, userRouter);
 
 // error handling
-apiRouter.use((_, res, next) => {
-  res.status(404);
-  next(new Error(`Route not found`));
-});
+apiRouter.use(() => { throw notFoundRouteErr });
 
 module.exports = apiRouter;

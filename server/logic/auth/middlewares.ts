@@ -1,21 +1,11 @@
 import { RequestHandler } from "express";
 
-export const isAuthenticated: RequestHandler = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    const err = new Error(`Not logged in`);
-    res.status(401);
-    next(err);
-  }
+import { alreadyLoggedInErr, notLoggedInErr } from '../errors'
+
+export const isAuthenticated: RequestHandler = (req, __, next) => {
+  req.isAuthenticated() ? next() : next(notLoggedInErr);
 };
 
-export const isNotAlreadyAuthenticated: RequestHandler = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    const err = new Error(`Already logged in to an account`);
-    res.status(409);
-    next(err);
-  } else {
-    next();
-  }
+export const isNotAlreadyAuthenticated: RequestHandler = (req, __, next) => {
+  !req.isAuthenticated() ? next() : next(alreadyLoggedInErr);
 };

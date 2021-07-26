@@ -1,6 +1,8 @@
 import axios from "axios";
 import { load } from "cheerio";
 
+import { scrapeFailedErr, siteInvalidErr } from "../errors";
+
 import allrecipes from "./allrecipes";
 import bettycrocker from "./bettycrocker";
 import bonappetit from "./bonappetit";
@@ -19,52 +21,51 @@ import simplyrecipes from "./simplyrecipes";
 // import thekitchn from "./thekitchn"; // uncomment if I ever get it working
 
 const scrape = async (url: string) => {
-  try {
-    const { data } = await axios.get(url);
-    const $ = load(data);
+  const { data } = await axios.get(url);
+  const $ = load(data);
+  let recipe
 
-    if (url.includes("allrecipes.com")) {
-      return allrecipes($, url);
-    } else if (url.includes("bettycrocker.com")) {
-      return bettycrocker($, url);
-    } else if (url.includes("bonappetit.com")) {
-      return bonappetit($, url);
-    } else if (url.includes("chowhound.com")) {
-      return chowhound($, url);
-    } else if (url.includes("cookinglight.com")) {
-      return cookinglight($, url);
-    } else if (url.includes("eatingwell.com")) {
-      return eatingwell($, url);
-    } else if (url.includes("epicurious.com")) {
-      return epicurious($, url);
-    } else if (url.includes("food.com")) {
-      return food($, url);
-      // } else if (url.includes("food52.com")) { // uncomment if I ever get it working
-      //   return food52($, url)
-    } else if (url.includes("foodandwine.com")) {
-      return foodandwine($, url);
-    } else if (url.includes("foodnetwork.com")) {
-      return foodnetwork($, url);
-    } else if (url.includes("jamieoliver.com")) {
-      return jamieoliver($, url);
-    } else if (url.includes("myrecipes.com")) {
-      return myrecipes($, url);
-    } else if (url.includes("seriouseats.com/recipes")) {
-      return seriousEats($, url);
-    } else if (url.includes("simplyrecipes.com")) {
-      return simplyrecipes($, url);
-      // } else if (url.includes("thekitchn.com")) { // uncomment if I ever get it working
-      //   return thekitchn($, url)
-    } else {
-      throw new Error("Scrape failed: invalid site");
-    }
-  } catch (err) {
-    throw err.isAxiosError
-      ? new Error(
-        "Scrape failed: valid site, but invalid url or request failed"
-      )
-      : err;
+  if (url.includes("allrecipes.com")) {
+    recipe = allrecipes($, url);
+  } else if (url.includes("bettycrocker.com")) {
+    recipe = bettycrocker($, url);
+  } else if (url.includes("bonappetit.com")) {
+    recipe = bonappetit($, url);
+  } else if (url.includes("chowhound.com")) {
+    recipe = chowhound($, url);
+  } else if (url.includes("cookinglight.com")) {
+    recipe = cookinglight($, url);
+  } else if (url.includes("eatingwell.com")) {
+    recipe = eatingwell($, url);
+  } else if (url.includes("epicurious.com")) {
+    recipe = epicurious($, url);
+  } else if (url.includes("food.com")) {
+    recipe = food($, url);
+    // } else if (url.includes("food52.com")) { // uncomment if I ever get it working
+    //   recipe = food52($, url)
+  } else if (url.includes("foodandwine.com")) {
+    recipe = foodandwine($, url);
+  } else if (url.includes("foodnetwork.com")) {
+    recipe = foodnetwork($, url);
+  } else if (url.includes("jamieoliver.com")) {
+    recipe = jamieoliver($, url);
+  } else if (url.includes("myrecipes.com")) {
+    recipe = myrecipes($, url);
+  } else if (url.includes("seriouseats.com/recipes")) {
+    recipe = seriousEats($, url);
+  } else if (url.includes("simplyrecipes.com")) {
+    recipe = simplyrecipes($, url);
+    // } else if (url.includes("thekitchn.com")) { // uncomment if I ever get it working
+    //   recipe = thekitchn($, url)
+  } else {
+    throw siteInvalidErr;
   }
+
+  // this doesn't cover all _nearly_ the ways the parser can be wrong
+  // but missing title or text is a sure sign _something's_ broken
+  if (!recipe.title || !recipe.text) throw scrapeFailedErr;
+
+  return recipe;
 };
 
 export default scrape;

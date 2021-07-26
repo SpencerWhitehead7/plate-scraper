@@ -74,7 +74,6 @@ describe("API Route Recipe: /api/recipe", () => {
         const failedRes = await request(app).post(route).send(factoryRecipe());
         const recipe = await connection.manager.findOne(Recipe, 1);
         expect(failedRes.status).to.equal(401);
-        expect(failedRes.text).to.equal("Not logged in");
         expect(recipe).not.to.exist;
       });
       it("sets createdBy to the user's ID, even with bad input", async () => {
@@ -117,6 +116,11 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(res.body.id).to.equal(1);
         expect(res.body.tags).to.exist;
       });
+      it("returns 404 if the recipe cannot be found", async () => {
+        const res = await request(app).get(`${route}/byid/1`);
+
+        expect(res.status).to.equal(404);
+      })
     });
   });
 
@@ -200,12 +204,10 @@ describe("API Route Recipe: /api/recipe", () => {
       it("rejects unauthenticated users", async () => {
         const failedRes = await request(app).post(`${route}/fork/1`);
         expect(failedRes.status).to.equal(401);
-        expect(failedRes.text).to.equal("Not logged in");
       });
       it("rejects attempts to fork non-existant recipes", async () => {
         const failedRes = await agent2.post(`${route}/fork/100`);
         expect(failedRes.status).to.equal(404);
-        expect(failedRes.text).to.equal("Recipe not found");
       });
       it("if the user is not the recipe's creator, it increments the recipe's forkedCount", async () => {
         await agent2.post(`${route}/fork/1`);
@@ -263,6 +265,12 @@ describe("API Route Recipe: /api/recipe", () => {
         const tag = await connection.manager.findOneOrFail(Tag, "tone");
         expect(tag).to.exist;
       });
+      it("rejects attempts to edit a recipe that does not exist", async () => {
+        const failedRes = await agent
+          .put(`${route}/1`)
+          .send({ text: "failedText", title: "failedTitle" });
+        expect(failedRes.status).to.equal(404);
+      });
       it("rejects unauthenticated users' attempts", async () => {
         await agent.post(route).send(factoryRecipe());
         const recipeBefore = await connection.manager.findOneOrFail(Recipe, 1);
@@ -272,7 +280,6 @@ describe("API Route Recipe: /api/recipe", () => {
         const recipeAfter = await connection.manager.findOneOrFail(Recipe, 1);
 
         expect(failedRes.status).to.equal(401);
-        expect(failedRes.text).to.equal("Not logged in");
         expect(recipeBefore).to.deep.equal(recipeAfter);
       });
       it("rejects attempts to edit a recipe the user does not own", async () => {
@@ -285,8 +292,7 @@ describe("API Route Recipe: /api/recipe", () => {
           .send({ text: "failedText", title: "failedTitle" });
         const recipeAfter = await connection.manager.findOneOrFail(Recipe, 1);
 
-        expect(failedRes.status).to.equal(401);
-        expect(failedRes.text).to.equal("Permission denied");
+        expect(failedRes.status).to.equal(403);
         expect(recipeBefore).to.deep.equal(recipeAfter);
       });
       it("allows users to edit only text, title, and tags", async () => {
@@ -344,10 +350,13 @@ describe("API Route Recipe: /api/recipe", () => {
         const failedRes = await request(app).delete(`${route}/1`);
         const recipe = await connection.manager.findOneOrFail(Recipe, 1);
         expect(failedRes.status).to.equal(401);
-        expect(failedRes.text).to.equal("Not logged in");
         expect(recipe).to.exist;
       });
-      it("rejects attempts to edit a recipe the user does not own", async () => {
+      it("rejects attempts to delete a recipe that does not exist", async () => {
+        const failedRes = await agent.delete(`${route}/1`);
+        expect(failedRes.status).to.equal(404);
+      });
+      it("rejects attempts to delete a recipe the user does not own", async () => {
         await agent.post(route).send(factoryRecipe());
         const agent2 = request.agent(app);
         await agent2.post("/api/auth").send(user2Cred);
@@ -357,8 +366,7 @@ describe("API Route Recipe: /api/recipe", () => {
 
         agent2.post("/api/auth/logout");
 
-        expect(failedRes.status).to.equal(401);
-        expect(failedRes.text).to.equal("Permission denied");
+        expect(failedRes.status).to.equal(403);
         expect(recipe).not.to.be.a("null");
       });
     });

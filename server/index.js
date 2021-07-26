@@ -81,23 +81,16 @@ const boot = async () => {
       res.sendFile(path.join(__dirname, `../dist/index.html`))
     })
 
-    // 404 response
-    app.use((req, res, next) => {
-      const err = new Error(`Page not found`)
-      err.status = 404
-      next(err)
-    })
-
     // Error handling endware
     app.use((err, req, res, next) => {
-      if (ENV !== `test`) {
-        console.error(err)
-      }
-      // needs actual handling for different types of errors, both code and message
-      // things that are nexted by async functions should get their code and message assigned by type of failure
-      // errors that are manually created and thrown should set their own status code before throwing and write their own messages (or maybe match their types to the default error type handling and let this set their codes and messages)
-      res.status(res.statusCode >= 200 && res.statusCode < 400 ? 500 : res.statusCode)
-      res.send(err.message || `Internal server error`)
+      if (ENV !== `test`) console.error(err)
+
+      res
+        .status(err.statusCode ?? 500)
+        .json({
+          error: err.name ?? `InternalServerErr`,
+          message: err.message,
+        })
     })
 
     app.listen(PORT, () => { console.log(`Partying hard on http://localhost:${PORT}`) })
