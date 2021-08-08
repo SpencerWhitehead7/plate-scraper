@@ -1,7 +1,7 @@
 import { Router, RequestHandler } from "express";
 
 import { isAuthenticated } from "../logic/auth";
-import { permDeniedErr, notFoundRecipeErr } from "../logic/errors";
+import { serializers, permDeniedErr, notFoundRecipeErr } from "../logic/errors";
 import { recipeRepository, tagRepository } from "../db/repositories";
 
 const recipeRouter = Router();
@@ -37,7 +37,7 @@ recipeRouter.get(`/`, async (_, res, next) => {
 });
 
 // POST /api/recipe
-recipeRouter.post(`/`, isAuthenticated, async (req, res, next) => {
+recipeRouter.post(`/`, isAuthenticated, ...serializers.recipe.post, async (req, res, next) => {
   try {
     const { text, title, sourceSite, sourceUrl, tags } = req.body;
     const recipe = await recipeRepository.insert({
@@ -48,10 +48,7 @@ recipeRouter.post(`/`, isAuthenticated, async (req, res, next) => {
       createdBy: req.user!.id,
       forkedCount: 0,
       userId: req.user!.id,
-      tags: await tagRepository.getOrInsert(
-        // TODO serializers
-        tags.map((tag: string) => tag.toLowerCase().replace(/[^a-z]/gi, ``))
-      ),
+      tags: await tagRepository.getOrInsert(tags)
     });
     res.json(recipe);
   } catch (err) {
@@ -60,7 +57,7 @@ recipeRouter.post(`/`, isAuthenticated, async (req, res, next) => {
 });
 
 // GET /api/recipe/byid/:id
-recipeRouter.get(`/byid/:id`, async (req, res, next) => {
+recipeRouter.get(`/byid/:id`, ...serializers.recipe.byid.get, async (req, res, next) => {
   try {
     const recipe = await recipeRepository.getById(Number(req.params.id));
     if (!recipe) throw notFoundRecipeErr
@@ -72,13 +69,9 @@ recipeRouter.get(`/byid/:id`, async (req, res, next) => {
 });
 
 // GET /api/recipe/bytag
-recipeRouter.get(`/bytag`, async (req, res, next) => {
+recipeRouter.get(`/bytag`, ...serializers.recipe.bytag.get, async (req, res, next) => {
   try {
-    const recipes = await recipeRepository.getByTagNames(
-      Object.values(req.query).map((tagName) =>
-        (tagName as string).toLowerCase().replace(/[^a-z]/gi, ``)
-      )
-    );
+    const recipes = await recipeRepository.getByTagNames(Object.values(req.query) as string[]);
     res.json(recipes);
   } catch (err) {
     next(err);
@@ -86,7 +79,7 @@ recipeRouter.get(`/bytag`, async (req, res, next) => {
 });
 
 // POST /api/recipe/fork/:id
-recipeRouter.post(`/fork/:id`, ...canForkRecipe, async (req, res, next) => {
+recipeRouter.post(`/fork/:id`, ...serializers.recipe.fork.id.post, ...canForkRecipe, async (req, res, next) => {
   try {
     const { user, recipe: originalRecipe } = req as any;
 
@@ -108,16 +101,13 @@ recipeRouter.post(`/fork/:id`, ...canForkRecipe, async (req, res, next) => {
 });
 
 // PUT /api/recipe/:id
-recipeRouter.put(`/:id`, ...canAlterRecipe, async (req, res, next) => {
+recipeRouter.put(`/:id`, ...serializers.recipe.id.put, ...canAlterRecipe, async (req, res, next) => {
   try {
     const { text, title, tags } = req.body;
     const recipe = await recipeRepository.update(Number(req.params.id), {
       text,
       title,
-      tags: await tagRepository.getOrInsert(
-        // TODO serializers
-        tags.map((tag: string) => tag.toLowerCase().replace(/[^a-z]/gi, ``))
-      ),
+      tags: await tagRepository.getOrInsert(tags),
     });
     res.json(recipe);
   } catch (err) {
@@ -126,7 +116,7 @@ recipeRouter.put(`/:id`, ...canAlterRecipe, async (req, res, next) => {
 });
 
 // DELETE /api/recipe/:id
-recipeRouter.delete(`/:id`, ...canAlterRecipe, async (req, res, next) => {
+recipeRouter.delete(`/:id`, ...serializers.recipe.id.delete, ...canAlterRecipe, async (req, res, next) => {
   try {
     await recipeRepository.delete(Number(req.params.id));
     res.end();

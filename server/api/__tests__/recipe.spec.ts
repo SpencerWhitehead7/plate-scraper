@@ -65,10 +65,12 @@ describe("API Route Recipe: /api/recipe", () => {
       it("sanitizes tags", async () => {
         await agent.post(route).send({
           ...factoryRecipe(),
-          tags: ["T1 one"],
+          tags: [" T1 one ", "T2 two_T3 three"],
         });
-        const tag = await connection.manager.findOneOrFail(Tag, "tone");
-        expect(tag).to.exist;
+        const tagOne = await connection.manager.findOneOrFail(Tag, "tone");
+        const tagTwo = await connection.manager.findOneOrFail(Tag, "ttwotthree");
+        expect(tagOne).to.exist;
+        expect(tagTwo).to.exist;
       });
       it("rejects unauthenticated users' attempts", async () => {
         const failedRes = await request(app).post(route).send(factoryRecipe());
@@ -146,6 +148,14 @@ describe("API Route Recipe: /api/recipe", () => {
     describe("GET", () => {
       it("returns all recipes which have a tag that matches a queried tag", async () => {
         const res = await request(app).get(`${route}/bytag?0=tone`);
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(2);
+        expect(new Set(res.body.map(({ id }: Recipe) => id))).to.deep.equal(
+          new Set([1, 2])
+        );
+      });
+      it("sanitizes tags", async () => {
+        const res = await request(app).get(`${route}/bytag?0=T1_one&1=T2_two`);
         expect(res.status).to.equal(200);
         expect(res.body.length).to.equal(2);
         expect(new Set(res.body.map(({ id }: Recipe) => id))).to.deep.equal(
@@ -261,9 +271,11 @@ describe("API Route Recipe: /api/recipe", () => {
       });
       it("sanitizes tags", async () => {
         await agent.post(route).send(factoryRecipe());
-        await agent.put(`${route}/1`).send({ tags: ["T1 one"] });
-        const tag = await connection.manager.findOneOrFail(Tag, "tone");
-        expect(tag).to.exist;
+        await agent.put(`${route}/1`).send({ tags: [" T1 one ", "T2 two_T3 three"] });
+        const tagOne = await connection.manager.findOneOrFail(Tag, "tone");
+        const tagTwo = await connection.manager.findOneOrFail(Tag, "ttwotthree");
+        expect(tagOne).to.exist;
+        expect(tagTwo).to.exist;
       });
       it("rejects attempts to edit a recipe that does not exist", async () => {
         const failedRes = await agent

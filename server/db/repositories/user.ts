@@ -17,13 +17,17 @@ class UserRepository extends AbstractRepository<User> {
     this.select()
       .addSelect("user.password");
 
-  async insert(user: User) {
+  async insert(userData: {
+    email: string,
+    userName: string,
+    password: string,
+  }) {
     const {
       raw: [createdUser],
     } = await this.createQueryBuilder("user")
       .insert()
       .into(User)
-      .values(user)
+      .values(userData)
       .returning("*")
       .execute();
 

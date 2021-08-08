@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { isAuthenticated, isNotAlreadyAuthenticated } from "../logic/auth";
-import { incorrectCredsErr } from "../logic/errors";
+import { serializers, incorrectCredsErr } from "../logic/errors";
 import { userRepository } from "../db/repositories";
 
 const authRouter = Router();
@@ -17,9 +17,14 @@ authRouter.get(`/`, async (req, res, next) => {
 });
 
 // POST /api/auth
-authRouter.post(`/`, isNotAlreadyAuthenticated, async (req, res, next) => {
+authRouter.post(`/`, isNotAlreadyAuthenticated, ...serializers.auth.post, async (req, res, next) => {
   try {
-    const user = await userRepository.insert(req.body);
+    const { email, userName, password, } = req.body
+    const user = await userRepository.insert({
+      email,
+      userName,
+      password,
+    });
     req.login(user!, err => { err ? next(err) : res.json(user) });
   } catch (err) {
     next(err);
@@ -27,11 +32,10 @@ authRouter.post(`/`, isNotAlreadyAuthenticated, async (req, res, next) => {
 });
 
 // PUT /api/auth
-authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
+authRouter.put(`/`, isAuthenticated, ...serializers.auth.put, async (req, res, next) => {
   try {
-    const { user, body } = req;
-    const { newEmail, newUserName, newPassword, password } = body;
-    const authUser = await userRepository.getByIdWithAuth(user!.id);
+    const { newEmail, newUserName, newPassword, password } = req.body;
+    const authUser = await userRepository.getByIdWithAuth(req.user!.id);
     if (!authUser || !(await authUser.checkPassword(password))) throw incorrectCredsErr;
 
     const updatedUser = await userRepository.update(authUser.id, {
@@ -46,10 +50,11 @@ authRouter.put(`/`, isAuthenticated, async (req, res, next) => {
 });
 
 // DELETE /api/auth
-authRouter.delete(`/`, isAuthenticated, async (req, res, next) => {
+authRouter.delete(`/`, isAuthenticated, ...serializers.auth.delete, async (req, res, next) => {
   try {
+    const { password } = req.body;
     const authUser = await userRepository.getByIdWithAuth(req.user!.id);
-    if (!authUser || !(await authUser.checkPassword(req.body.password))) throw incorrectCredsErr;
+    if (!authUser || !(await authUser.checkPassword(password))) throw incorrectCredsErr;
 
     req.logout();
     await userRepository.delete(authUser);
@@ -60,12 +65,13 @@ authRouter.delete(`/`, isAuthenticated, async (req, res, next) => {
 });
 
 // POST /api/auth/login/
-authRouter.post(`/login`, isNotAlreadyAuthenticated, async (req, res, next) => {
+authRouter.post(`/login`, isNotAlreadyAuthenticated, ...serializers.auth.login.post, async (req, res, next) => {
   try {
-    const authUser = await userRepository.getByEmailWithAuth(req.body.email);
-    if (!authUser || !(await authUser.checkPassword(req.body.password))) throw incorrectCredsErr;
+    const { email, password } = req.body;
+    const authUser = await userRepository.getByEmailWithAuth(email);
+    if (!authUser || !(await authUser.checkPassword(password))) throw incorrectCredsErr;
 
-    const { password, ...sanitizedUser } = authUser;
+    const { password: removedPassword, ...sanitizedUser } = authUser;
     req.login(authUser, err => { err ? next(err) : res.json(sanitizedUser) });
   } catch (err) {
     next(err);
