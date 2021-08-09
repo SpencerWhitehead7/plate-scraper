@@ -38,14 +38,62 @@ describe("API Route Recipe: /api/recipe", () => {
 
   describe("/", () => {
     describe("GET", () => {
-      it("returns all recipes, including tags", async () => {
-        const recipe = await connection.manager.save(factoryRecipe({ user }));
-        await connection.manager.save(factoryTag({ recipes: [recipe] }));
+      let recipe1: Recipe
+      let recipe2: Recipe
+      let recipe3: Recipe
+      let recipe4: Recipe
+      beforeEach(async () => {
+        try {
+          [recipe1, recipe2, recipe3, recipe4] = await Promise.all(
+            [
+              factoryRecipe({ user }),
+              factoryRecipe({ user }),
+              factoryRecipe({ user }),
+              factoryRecipe({ user }),
+              factoryRecipe({ user }),
+            ].map((row) => connection.manager.save(row))
+          );
+          await Promise.all(
+            [
+              factoryTag({ name: "tone", recipes: [recipe1, recipe2] }),
+              factoryTag({ name: "ttwo", recipes: [recipe2] }),
+              factoryTag({ name: "tthree", recipes: [recipe3] }),
+              factoryTag({ name: "tfour", recipes: [recipe4] }),
+            ].map((row) => connection.manager.save(row))
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      });
 
+      it("returns all recipes, including tags, if no recipes are queried by tag", async () => {
         const res = await request(app).get(route);
         expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(1);
+        expect(res.body.length).to.equal(5);
         expect(res.body[0].tags).to.exist;
+      });
+      it("returns all recipes, including tags, which have a tag that matches a queried tag", async () => {
+        const res = await request(app).get(`${route}?0=tone&1=tthree`);
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(3);
+        expect(new Set(res.body.map(({ id }: Recipe) => id))).to.deep.equal(new Set([recipe1.id, recipe2.id, recipe3.id]));
+      });
+      it("sanitizes tags", async () => {
+        const res = await request(app).get(`${route}?0=T1_one&1=T3_three`);
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(3);
+        expect(new Set(res.body.map(({ id }: Recipe) => id))).to.deep.equal(new Set([recipe1.id, recipe2.id, recipe3.id]));
+      });
+      it("does not return duplicate recipes", async () => {
+        const res = await request(app).get(`${route}?0=tone&1=ttwo`);
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(2);
+        expect(res.body[0].id).not.to.equal(res.body[1].id);
+      });
+      it("handles searching for tags that do not exist", async () => {
+        const res = await request(app).get(`${route}?0=nonexistant`);
+        expect(res.status).to.equal(200);
+        expect(res.body).to.be.empty;
       });
     });
 
@@ -104,74 +152,6 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(res.body.createdBy).to.equal(1);
         expect(res.body.forkedCount).to.equal(0);
         expect(res.body.tags).to.exist;
-      });
-    });
-  });
-
-  describe("/byid", () => {
-    describe("GET", () => {
-      it("returns the recipe with the matching ID, including tags", async () => {
-        await connection.manager.save(factoryRecipe({ user }));
-
-        const res = await request(app).get(`${route}/byid/1`);
-        expect(res.status).to.equal(200);
-        expect(res.body.id).to.equal(1);
-        expect(res.body.tags).to.exist;
-      });
-      it("returns 404 if the recipe cannot be found", async () => {
-        const res = await request(app).get(`${route}/byid/1`);
-
-        expect(res.status).to.equal(404);
-      })
-    });
-  });
-
-  describe("/bytag?", () => {
-    beforeEach(async () => {
-      try {
-        const [recipe1, recipe2] = await Promise.all(
-          [factoryRecipe({ user }), factoryRecipe({ user })].map((row) =>
-            connection.manager.save(row)
-          )
-        );
-        await Promise.all(
-          [
-            factoryTag({ name: "tone", recipes: [recipe1, recipe2] }),
-            factoryTag({ name: "ttwo", recipes: [recipe1] }),
-          ].map((row) => connection.manager.save(row))
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    });
-
-    describe("GET", () => {
-      it("returns all recipes which have a tag that matches a queried tag", async () => {
-        const res = await request(app).get(`${route}/bytag?0=tone`);
-        expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(2);
-        expect(new Set(res.body.map(({ id }: Recipe) => id))).to.deep.equal(
-          new Set([1, 2])
-        );
-      });
-      it("sanitizes tags", async () => {
-        const res = await request(app).get(`${route}/bytag?0=T1_one&1=T2_two`);
-        expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(2);
-        expect(new Set(res.body.map(({ id }: Recipe) => id))).to.deep.equal(
-          new Set([1, 2])
-        );
-      });
-      it("does not return any duplicate recipes", async () => {
-        const res = await request(app).get(`${route}/bytag?0=tone&1=ttwo`);
-        expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(2);
-        expect(res.body[0].id).not.to.equal(res.body[1].id);
-      });
-      it("handles searching for tags that do not exist", async () => {
-        const res = await request(app).get(`${route}/bytag?0=nonexistant`);
-        expect(res.status).to.equal(200);
-        expect(res.body).to.be.empty;
       });
     });
   });
@@ -243,6 +223,22 @@ describe("API Route Recipe: /api/recipe", () => {
   });
 
   describe("/:id", () => {
+    describe("GET", () => {
+      it("returns the recipe with the matching ID, including tags", async () => {
+        await connection.manager.save(factoryRecipe({ user }));
+
+        const res = await request(app).get(`${route}/1`);
+        expect(res.status).to.equal(200);
+        expect(res.body.id).to.equal(1);
+        expect(res.body.tags).to.exist;
+      });
+      it("returns 404 if the recipe cannot be found", async () => {
+        const res = await request(app).get(`${route}/1`);
+
+        expect(res.status).to.equal(404);
+      })
+    });
+
     describe("PUT", () => {
       it("edits a recipe, including creating, setting, and unsetting tags", async () => {
         await agent.post(route).send(factoryRecipe());

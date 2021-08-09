@@ -90,7 +90,8 @@ const queryTags = query('*')
   .whitelist('abcdefghijklmnopqrstuvwxyz')
   .isString()
   .notEmpty()
-  .isLength({ min: 0, max: 32 });
+  .isLength({ min: 0, max: 32 })
+  .optional();
 
 export const serializers = {
   auth: {
@@ -105,19 +106,15 @@ export const serializers = {
     middleware: {
       canAlterRecipe: [paramId, serializationErrorMiddleware],
     },
+    get: [queryTags, serializationErrorMiddleware],
     post: [bodyText, bodyTitle, bodySourceSite, bodySourceUrl, bodyTags, serializationErrorMiddleware],
-    byid: {
-      get: [paramId, serializationErrorMiddleware],
-    },
-    bytag: {
-      get: [queryTags, serializationErrorMiddleware],
-    },
     fork: {
       id: {
         post: [paramId, serializationErrorMiddleware],
       }
     },
     id: {
+      get: [paramId, serializationErrorMiddleware],
       put: [paramId, bodyNewText, bodyNewTitle, bodyTags, serializationErrorMiddleware],
       delete: [paramId, serializationErrorMiddleware],
     },

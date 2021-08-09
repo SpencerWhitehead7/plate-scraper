@@ -27,9 +27,15 @@ const canAlterRecipe = [isAuthenticated, recipeExists, userOwnsRecipe]
 const canForkRecipe = [isAuthenticated, recipeExists]
 
 // GET /api/recipe
-recipeRouter.get(`/`, async (_, res, next) => {
+recipeRouter.get(`/`, ...serializers.recipe.get, async (req, res, next) => {
   try {
-    const recipes = await recipeRepository.getAll();
+    const tags = Object.values(req.query) as string[];
+    const recipes = await (
+      tags.length
+        ? recipeRepository.getByTagNames(tags)
+        : recipeRepository.getAll()
+    );
+
     res.json(recipes);
   } catch (err) {
     next(err);
@@ -56,28 +62,6 @@ recipeRouter.post(`/`, isAuthenticated, ...serializers.recipe.post, async (req, 
   }
 });
 
-// GET /api/recipe/byid/:id
-recipeRouter.get(`/byid/:id`, ...serializers.recipe.byid.get, async (req, res, next) => {
-  try {
-    const recipe = await recipeRepository.getById(Number(req.params.id));
-    if (!recipe) throw notFoundRecipeErr
-
-    res.json(recipe);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// GET /api/recipe/bytag
-recipeRouter.get(`/bytag`, ...serializers.recipe.bytag.get, async (req, res, next) => {
-  try {
-    const recipes = await recipeRepository.getByTagNames(Object.values(req.query) as string[]);
-    res.json(recipes);
-  } catch (err) {
-    next(err);
-  }
-});
-
 // POST /api/recipe/fork/:id
 recipeRouter.post(`/fork/:id`, ...serializers.recipe.fork.id.post, ...canForkRecipe, async (req, res, next) => {
   try {
@@ -94,6 +78,18 @@ recipeRouter.post(`/fork/:id`, ...serializers.recipe.fork.id.post, ...canForkRec
         forkedCount: originalRecipe.forkedCount + 1,
       });
     }
+    res.json(recipe);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /api/recipe/:id
+recipeRouter.get(`/:id`, ...serializers.recipe.id.get, async (req, res, next) => {
+  try {
+    const recipe = await recipeRepository.getById(Number(req.params.id));
+    if (!recipe) throw notFoundRecipeErr
+
     res.json(recipe);
   } catch (err) {
     next(err);

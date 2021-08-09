@@ -47,8 +47,8 @@ export const API = {
       sourceUrl,
       tags,
     }),
-    get: recipeId => axios.get(`/api/recipe/byId/${recipeId}`),
-    getByTag: tags => axios.get(`/api/recipe/byTag/${qs.stringify(tags, { addQueryPrefix: true })}`),
+    get: recipeId => axios.get(`/api/recipe/${recipeId}`),
+    getByTag: tags => axios.get(`/api/recipe${qs.stringify(tags, { addQueryPrefix: true })}`),
     fork: recipeId => axios.post(`/api/recipe/fork/${recipeId}`),
     edit: (recipeId, text, title, tags) => axios.put(`/api/recipe/${recipeId}`, {
       text,
