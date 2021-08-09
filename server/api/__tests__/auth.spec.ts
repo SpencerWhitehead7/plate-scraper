@@ -103,6 +103,24 @@ describe("Auth Route: /api/auth", () => {
         expect(res.body.userName).to.equal(newUserName);
         expect(res.body.password).not.to.exist;
       });
+      it("handles partial updates", async () => {
+        const oldUser = await getUserWithAuth();
+        const newEmail = "new@example.com";
+        const res = await agent.put(route).send({
+          newEmail,
+          password: userCred.password,
+        });
+
+        const editedUser = await getUserWithAuth();
+        expect(editedUser!.email).not.to.equal(oldUser!.email);
+        expect(editedUser!.userName).to.equal(oldUser!.userName);
+        expect(editedUser!.password).to.equal(oldUser!.password);
+        expect(editedUser!.email).to.equal(newEmail);
+        expect(await editedUser!.checkPassword(userCred.password)).to.be.true;
+        expect(res.body.email).to.equal(newEmail);
+        expect(res.body.userName).to.equal(oldUser!.userName);
+        expect(res.body.password).not.to.exist;
+      });
       it("returns a 401 and does not edit the user if the user sends the wrong confirmation password", async () => {
         const newEmail = "new@example.com";
         const res = await agent

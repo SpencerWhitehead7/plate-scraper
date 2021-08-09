@@ -38,11 +38,12 @@ authRouter.put(`/`, isAuthenticated, ...serializers.auth.put, async (req, res, n
     const authUser = await userRepository.getByIdWithAuth(req.user!.id);
     if (!authUser || !(await authUser.checkPassword(password))) throw incorrectCredsErr;
 
-    const updatedUser = await userRepository.update(authUser.id, {
-      email: newEmail,
-      userName: newUserName,
-      password: newPassword,
-    });
+    const updatedUserData: { email?: string; userName?: string; password?: string } = {};
+    if (newEmail) updatedUserData.email = newEmail;
+    if (newUserName) updatedUserData.userName = newUserName;
+    if (newPassword) updatedUserData.password = newPassword;
+
+    const updatedUser = await userRepository.update(authUser.id, updatedUserData);
     res.json(updatedUser);
   } catch (err) {
     next(err);

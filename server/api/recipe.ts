@@ -2,6 +2,7 @@ import { Router, RequestHandler } from "express";
 
 import { isAuthenticated } from "../logic/auth";
 import { serializers, permDeniedErr, notFoundRecipeErr } from "../logic/errors";
+import { Tag } from "../db/entities";
 import { recipeRepository, tagRepository } from "../db/repositories";
 
 const recipeRouter = Router();
@@ -100,12 +101,13 @@ recipeRouter.get(`/:id`, ...serializers.recipe.id.get, async (req, res, next) =>
 recipeRouter.put(`/:id`, ...serializers.recipe.id.put, ...canAlterRecipe, async (req, res, next) => {
   try {
     const { text, title, tags } = req.body;
-    const recipe = await recipeRepository.update(Number(req.params.id), {
-      text,
-      title,
-      tags: await tagRepository.getOrInsert(tags),
-    });
-    res.json(recipe);
+    const updatedRecipeData: { text?: string; title?: string; tags?: Tag[] } = {};
+    if (text) updatedRecipeData.text = text;
+    if (title) updatedRecipeData.title = title;
+    if (tags) updatedRecipeData.tags = await tagRepository.getOrInsert(tags);
+
+    const updatedRecipe = await recipeRepository.update(Number(req.params.id), updatedRecipeData);
+    res.json(updatedRecipe);
   } catch (err) {
     next(err);
   }

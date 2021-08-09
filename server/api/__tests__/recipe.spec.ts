@@ -265,6 +265,16 @@ describe("API Route Recipe: /api/recipe", () => {
           new Set(["ttwo", "tthree"])
         );
       });
+      it("handles partial updates", async () => {
+        await agent.post(route).send(factoryRecipe());
+        const original = await connection.manager.findOneOrFail(Recipe, 1);
+
+        await agent.put(`${route}/1`).send({ text: "newText" });
+        const edited = await connection.manager.findOneOrFail(Recipe, 1);
+
+        expect(edited.text).to.equal("newText");
+        expect(edited.title).to.equal(original.title);
+      });
       it("sanitizes tags", async () => {
         await agent.post(route).send(factoryRecipe());
         await agent.put(`${route}/1`).send({ tags: [" T1 one ", "T2 two_T3 three"] });
