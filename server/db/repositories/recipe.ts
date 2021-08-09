@@ -1,89 +1,161 @@
 import {
+  EntityManager,
   EntityRepository,
   AbstractRepository,
+  getConnection,
   getCustomRepository,
 } from "typeorm";
 import { Recipe, Tag } from "../entities";
 
 @EntityRepository(Recipe)
 class RecipeRepository extends AbstractRepository<Recipe> {
-  private select = () =>
-    this.createQueryBuilder("recipe")
+  private getTx = (cb: (tx: EntityManager) => Promise<Recipe | undefined>) =>
+    getConnection()
+      .transaction("SERIALIZABLE", cb);
+
+  private select = (tx?: EntityManager) =>
+    (tx
+      ? tx.createQueryBuilder(Recipe, "recipe")
+      : this.createQueryBuilder("recipe")
+    )
       .leftJoinAndSelect("recipe.tags", "tag");
 
-  async insert(recipeData: {
-    text: string;
-    title: string;
-    sourceSite?: string;
-    sourceUrl?: string;
-    createdBy: number;
-    forkedCount: number;
-    userId: number;
-    tags: Tag[];
-  }) {
+  private insertTags = (tx: EntityManager, tagNames: string[] = []) => {
+    return tx.createQueryBuilder(Tag, "tag")
+      .insert()
+      .into(Tag)
+      .values(tagNames.map((name) => ({ name })))
+      .onConflict("DO NOTHING")
+      .execute();
+  };
+
+  private insertCb = async (
+    tx: EntityManager,
+    recipeData: {
+      text: string;
+      title: string;
+      sourceSite?: string;
+      sourceUrl?: string;
+      createdBy: number;
+      userId: number;
+      tags?: string[];
+    }) => {
     const { tags, ...santizedRecipeData } = recipeData;
 
-    const createdRecipe = await this.createQueryBuilder("recipe")
-      .insert()
-      .into(Recipe)
-      .values(santizedRecipeData)
-      .returning("*")
-      .execute();
+    const [createdRecipe] = await Promise.all([
+      tx.createQueryBuilder(Recipe, "recipe")
+        .insert()
+        .into(Recipe)
+        .values(santizedRecipeData)
+        .returning("*")
+        .execute(),
+      this.insertTags(tx, tags),
+    ]);
 
-    if (tags.length) {
-      await this.createQueryBuilder("recipe")
+    if (tags) {
+      await tx.createQueryBuilder(Recipe, "recipe")
         .relation(Recipe, "tags")
         .of(createdRecipe.generatedMaps[0])
         .add(tags);
-    }
+    };
 
-    return this.getById(createdRecipe.identifiers[0].id);
+    return this.getById(createdRecipe.identifiers[0].id, tx);
   }
 
-  async update(
+  private updateCb = async (
+    tx: EntityManager,
     id: number,
     updatedRecipeData: {
       text?: string;
       title?: string;
-      tags?: Tag[];
+      tags?: string[];
       forkedCount?: number;
-    }
-  ) {
+    }) => {
     const { tags, ...santizedUpdatedRecipeData } = updatedRecipeData;
 
-    await this.createQueryBuilder("recipe")
-      .update(Recipe)
-      .set(santizedUpdatedRecipeData)
-      .where("id = :id", { id })
-      .execute();
+    await Promise.all([
+      tx.createQueryBuilder(Recipe, "recipe")
+        .update(Recipe)
+        .set(santizedUpdatedRecipeData)
+        .where("id = :id", { id })
+        .execute(),
+      this.insertTags(tx, tags)
+    ]);
 
     if (tags) {
-      const updatedRecipe = await this.getById(id);
+      const updatedRecipe = await this.getById(id, tx);
 
       const newTagsSet = new Set(tags);
       // remove all the recipe's tags that updatedValues.tags doesn't have
-      await this.createQueryBuilder("recipe")
+      await tx.createQueryBuilder(Recipe, "recipe")
         .relation(Recipe, "tags")
         .of(updatedRecipe)
-        .remove(updatedRecipe!.tags.filter((tag) => !newTagsSet.has(tag)));
+        .remove(updatedRecipe!.tags.filter((tag) => !newTagsSet.has(tag.name)));
 
       // add all the tags in updatedValues.tags that the recipe doesn't already have
-      const currentTagsSet = new Set(updatedRecipe!.tags);
-      await this.createQueryBuilder("recipe")
+      const currentTagsSet = new Set(updatedRecipe!.tags.map(({ name }) => name));
+      await tx.createQueryBuilder(Recipe, "recipe")
         .relation(Recipe, "tags")
         .of(updatedRecipe)
-        .add(tags.filter((tag) => !currentTagsSet.has(tag)));
-    }
+        .add(tags.filter((tagName) => !currentTagsSet.has(tagName)));
 
-    return this.getById(id);
-    // // all this BS is because createQueryBuilder doesn't support joining for updates
-    // // ironically, there's a much simpler way to do this with the ORM API, but I was like
-    // // "No I want to use the query builder for everything to practice sql" and
-    // // have ended up using their crappy abstraction instead of their good one
-    // // because they don't support what I need in the sql query builder
-    // const originalRecipe = await this.getById(id);
-    // const updatedRecipe = { ...originalRecipe, ...updatedValues };
-    // return this.repository.save(updatedRecipe);
+      // // all this BS is because createQueryBuilder doesn't support joining for updates
+      // // ironically, there's a much simpler way to do this with the ORM API, but I was like
+      // // "No I want to use the query builder for everything to practice sql" and
+      // // have ended up using their crappy abstraction instead of their good one
+      // // because they don't support what I need in the sql query builder
+      // const originalRecipe = await this.getById(id);
+      // const updatedRecipe = { ...originalRecipe, ...updatedValues };
+      // return this.repository.save(updatedRecipe);
+    };
+
+    return this.getById(id, tx);
+  }
+
+  insert(
+    recipeData: {
+      text: string;
+      title: string;
+      sourceSite?: string;
+      sourceUrl?: string;
+      createdBy: number;
+      userId: number;
+      tags?: string[];
+    },
+    tx?: EntityManager,
+  ) {
+    return tx
+      ? this.insertCb(tx, recipeData)
+      : this.getTx(tx => this.insertCb(tx, recipeData));
+  }
+
+  update(
+    id: number,
+    updatedRecipeData: {
+      text?: string;
+      title?: string;
+      tags?: string[];
+      forkedCount?: number;
+    },
+    tx?: EntityManager,
+  ) {
+    return tx
+      ? this.updateCb(tx, id, updatedRecipeData)
+      : this.getTx(tx => this.updateCb(tx, id, updatedRecipeData));
+  }
+
+  fork(originalRecipe: Recipe, userId: number) {
+    return this.getTx(async tx => {
+      const recipe = await this.insert({
+        ...originalRecipe,
+        tags: originalRecipe.tags.map(({ name }) => name),
+        userId,
+      }, tx);
+      if (originalRecipe.userId !== userId) {
+        await this.update(originalRecipe.id, { forkedCount: originalRecipe.forkedCount + 1 }, tx);
+      }
+      return recipe
+    })
   }
 
   delete(id: number) {
@@ -94,8 +166,8 @@ class RecipeRepository extends AbstractRepository<Recipe> {
       .execute();
   }
 
-  getById(id: number) {
-    return this.select()
+  getById(id: number, tx?: EntityManager) {
+    return this.select(tx)
       .where("recipe.id = :id", { id })
       .getOne();
   }
