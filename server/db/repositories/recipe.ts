@@ -23,9 +23,7 @@ class RecipeRepository extends AbstractRepository<Recipe> {
   }) {
     const { tags, ...santizedRecipeData } = recipeData;
 
-    const {
-      raw: [createdRecipe],
-    } = await this.createQueryBuilder("recipe")
+    const createdRecipe = await this.createQueryBuilder("recipe")
       .insert()
       .into(Recipe)
       .values(santizedRecipeData)
@@ -35,11 +33,11 @@ class RecipeRepository extends AbstractRepository<Recipe> {
     if (tags.length) {
       await this.createQueryBuilder("recipe")
         .relation(Recipe, "tags")
-        .of(createdRecipe)
+        .of(createdRecipe.generatedMaps[0])
         .add(tags);
     }
 
-    return this.getById(createdRecipe.id);
+    return this.getById(createdRecipe.identifiers[0].id);
   }
 
   async update(

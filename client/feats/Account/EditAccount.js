@@ -26,7 +26,7 @@ const AccountSettings = ({ editMe }) => {
         />
         <FormInput
           identifier="userName"
-          labelText="New username"
+          labelText="New userName"
           register={register({ maxLength: 32 })}
           errors={errors}
         />

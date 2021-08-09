@@ -22,25 +22,27 @@ class UserRepository extends AbstractRepository<User> {
     userName: string,
     password: string,
   }) {
-    const {
-      raw: [createdUser],
-    } = await this.createQueryBuilder("user")
+    const createdUser = await this.createQueryBuilder("user")
       .insert()
       .into(User)
       .values(userData)
       .returning("*")
       .execute();
 
-    return this.getById(createdUser.id);
+    return this.getById(createdUser.identifiers[0].id);
   }
 
   async update(
     id: number,
-    newValues: { email?: string; userName?: string; password?: string }
+    updatedUserData: {
+      email?: string;
+      userName?: string;
+      password?: string;
+    }
   ) {
     await this.createQueryBuilder("user")
       .update(User)
-      .set(newValues)
+      .set(updatedUserData)
       .where("id = :id", { id })
       .execute();
 

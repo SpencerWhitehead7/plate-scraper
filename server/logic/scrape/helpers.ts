@@ -15,7 +15,7 @@ export const getCleanStrings = (
       return res;
     })
     .get()
-    .filter((string) => Boolean(string));
+    .filter(Boolean);
 
 export const getRecipe = (
   url: string,
@@ -25,18 +25,9 @@ export const getRecipe = (
 ) =>
   [
     `Source: ${url}`,
-    "",
     title[0],
-    "",
     "Ingredients",
-    "",
-    ...ingredients,
-    "",
+    ingredients.join('\n'),
     "Instructions",
-    "",
-    ...instructions.reduce((formattedInstructions: string[], instruction) => {
-      formattedInstructions.push(instruction);
-      formattedInstructions.push("");
-      return formattedInstructions;
-    }, []), // each instruction with a line break between
-  ].join(`\n`);
+    ...instructions,
+  ].join(`\n\n`) + '\n';

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
 
 import { recipeAsyncHandler } from 'reducers/asyncHandlers'
 import { ButtonSection, DownloadButton, ForkButton } from 'comps/Buttons'
@@ -47,7 +46,7 @@ const Recipe = ({ data: recipe, isLoaded, isLoading, isMine, fetchRecipe }) => {
                 : (
                   <>
                     <Tags tags={recipe.tags} />
-                    <div className={classnames(sg.textShowBreaks, sg.pt_m)}>
+                    <div className={sg.textShowBreaks}>
                       {recipe.text}
                     </div>
                   </>
