@@ -5,6 +5,10 @@
   "author": "spencer",
   "license": "Unlicense",
   "main": "server/index",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpencerWhitehead7/plate-scraper.git"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
