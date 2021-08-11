@@ -1,14 +1,15 @@
 const path = require(`path`)
-const MiniCssExtractPlugin = require(`mini-css-extract-plugin`)
+
 const HtmlWebpackPlugin = require(`html-webpack-plugin`)
-const { CleanWebpackPlugin } = require(`clean-webpack-plugin`)
+const MiniCssExtractPlugin = require(`mini-css-extract-plugin`)
+const ReactRefreshWebpackPlugin = require(`@pmmmwh/react-refresh-webpack-plugin`)
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (env, argv) => {
   const isDev = argv.mode === `development`
 
   const srcPath = path.resolve(__dirname, `client`)
-  const outputPath = path.resolve(__dirname, `dist`)
+  const outputPath = path.resolve(__dirname, `built_client`)
 
   const baseStyleLoaders = [
     isDev ? `style-loader` : MiniCssExtractPlugin.loader,
@@ -18,19 +19,15 @@ module.exports = (env, argv) => {
         modules: {
           localIdentName: isDev ? `[path][name]--[local]` : `[hash:base64]`,
         },
-        sourceMap: true,
       },
     },
   ]
 
   return {
-    entry: [`react-hot-loader/patch`, srcPath],
+    entry: srcPath,
     context: srcPath,
     resolve: {
       modules: [srcPath, `node_modules`],
-      alias: {
-        'react-dom': `@hot-loader/react-dom`,
-      },
     },
     optimization: {
       moduleIds: `deterministic`,
@@ -61,28 +58,25 @@ module.exports = (env, argv) => {
     devtool: isDev ? `eval-source-map` : `source-map`,
 
     devServer: {
-      contentBase: outputPath,
+      contentBase: path.join(__dirname, `public`),
+      historyApiFallback: true,
       hot: true,
-      writeToDisk: true,
       proxy: {
-        '/': `http://localhost:1337`,
+        '/api': `http://localhost:1337`,
       },
     },
 
     plugins: [
-      new CleanWebpackPlugin({
-        cleanAfterEveryBuildPatterns: [`**/*`, `!index.html`],
-      }),
       new HtmlWebpackPlugin({
         filename: path.resolve(outputPath, `index.html`),
         template: path.resolve(srcPath, `template.html`),
-        scriptLoading: `defer`,
       }),
       new MiniCssExtractPlugin({
         filename: `[name].[contenthash].css`,
         chunkFilename: `[id].[contenthash].css`,
       }),
-    ],
+      isDev && new ReactRefreshWebpackPlugin(),
+    ].filter(Boolean),
 
     module: {
       rules: [
@@ -99,23 +93,22 @@ module.exports = (env, argv) => {
                   {
                     bugfixes: true,
                     useBuiltIns: `entry`,
-                    corejs: 3,
+                    corejs: `3.16.1`,
                     targets: isDev ? `last 2 chrome versions` : `> 0.25%, not dead`,
                   },
                 ],
-                `@babel/preset-react`,
-              ],
-              plugins: [
-                `react-hot-loader/babel`,
                 [
-                  `@babel/plugin-transform-runtime`,
-                  {
-                    absoluteRuntime: true,
-                    useESModules: true,
-                    version: `^7.12.10`,
-                  },
+                  `@babel/preset-react`,
+                  { development: isDev },
                 ],
               ],
+              plugins: [
+                [
+                  `@babel/plugin-transform-runtime`,
+                  { version: `^7.15.3` },
+                ],
+                isDev && `react-refresh/babel`,
+              ].filter(Boolean),
             },
           },
         },

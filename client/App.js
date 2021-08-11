@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
 import { BrowserRouter, Switch } from 'react-router-dom'
 
@@ -21,7 +20,6 @@ const Main = ({ fetchMe }) => {
   useEffect(() => {
     fetchMe()
   }, [fetchMe])
-  if (module.hot) module.hot.accept()
 
   return (
     <BrowserRouter>
@@ -64,4 +62,4 @@ const mdtp = dispatch => ({
   },
 })
 
-export default hot(connect(null, mdtp)(Main))
+export default connect(null, mdtp)(Main)

@@ -11,9 +11,13 @@ import * as path from "path"
 import { Session } from "./logic/auth"
 import { generateConnectionOptions } from "./utils"
 
-const ENV = process.env.NODE_ENV
 const SECRET = process.env.SESSION_SECRET || `a perhaps worst-practices secret`
 const PORT = process.env.PORT || 1337
+const ENV = process.env.NODE_ENV
+const IS_PROD = ENV === `prod`
+const IS_SCRIPT = ENV === `script`
+const IS_TEST = ENV === `test`
+const IS_DEV = !IS_PROD && !IS_SCRIPT && !IS_TEST
 
 const boot = async () => {
   try {
@@ -33,18 +37,18 @@ const boot = async () => {
     // Security
     // its csp interferes with webpack-dev-server, which we need in dev mode
     // don't ask how I know, but lets just say it cost ~12 hours of my life
-    if (ENV === `production`) app.use(helmet())
+    if (IS_PROD) app.use(helmet())
 
     // Compress responses
     app.use(compression())
 
     // Logging middleware for development environment
-    if (ENV !== `production` && ENV !== `test`) app.use(require(`volleyball`))
+    if (IS_DEV) app.use(require(`volleyball`))
 
     app.use(expressSession({
       cookie: {
         maxAge: 60 * 60 * 24 * 7 * 1000, // 1 week
-        secure: ENV !== `test`, // secure cookies interfere with superagent
+        secure: IS_PROD, // secure cookies interfere with superagent
         httpOnly: true,
       },
       resave: false,
@@ -70,7 +74,7 @@ const boot = async () => {
     app.use(passport.session())
 
     // Static file serving middleware
-    app.use(express.static(path.join(__dirname, `../dist`)))
+    app.use(express.static(path.join(__dirname, `../built_client`)))
     app.use(express.static(path.join(__dirname, `../public`)))
 
     // Sub-routers
@@ -78,12 +82,12 @@ const boot = async () => {
 
     // All other requests
     app.get(`*`, (req, res) => {
-      res.sendFile(path.join(__dirname, `../dist/index.html`))
+      res.sendFile(path.join(__dirname, `../built_client/index.html`))
     })
 
     // Error handling endware
     app.use((err, req, res, next) => {
-      if (ENV !== `test`) console.error(err)
+      if (!IS_TEST) console.error(err)
 
       res
         .status(err.statusCode ?? 500)
@@ -101,6 +105,6 @@ const boot = async () => {
   }
 }
 
-if (ENV !== `test` && ENV !== `script`) boot()
+if (IS_PROD || IS_DEV) boot()
 
 module.exports = boot // for testing
