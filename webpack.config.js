@@ -24,9 +24,10 @@ module.exports = (env, argv) => {
   ]
 
   return {
-    entry: srcPath,
+    entry: path.resolve(srcPath, `index.jsx`),
     context: srcPath,
     resolve: {
+      extensions: [`.js`, `.jsx`],
       modules: [srcPath, `node_modules`],
     },
     optimization: {
@@ -81,7 +82,7 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.jsx?$/,
           exclude: /node_modules/,
           use: {
             loader: `babel-loader`,
