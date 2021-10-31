@@ -93,6 +93,9 @@ export class RecipeSubscriber implements EntitySubscriberInterface<Recipe> {
   }
 
   async beforeUpdate(event: UpdateEvent<Recipe>) {
-    await validateOrReject(event.entity);
+    const { entity } = event
+    if (entity) {
+      await validateOrReject(entity);
+    }
   }
 }

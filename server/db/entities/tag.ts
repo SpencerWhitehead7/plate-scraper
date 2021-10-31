@@ -46,6 +46,9 @@ export class TagSubscriber implements EntitySubscriberInterface<Tag> {
   }
 
   async beforeUpdate(event: UpdateEvent<Tag>) {
-    await validateOrReject(event.entity);
+    const { entity } = event
+    if (entity) {
+      await validateOrReject(entity);
+    }
   }
 }

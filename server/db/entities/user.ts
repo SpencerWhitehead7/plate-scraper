@@ -99,11 +99,14 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 
   async beforeUpdate(event: UpdateEvent<User>) {
     const { entity } = event;
-    await validateOrReject(entity);
+    if (entity) {
 
-    // indicates user changed their PW
-    if (entity.password) {
-      entity.password = await User.encryptPassword(entity.password)
+      await validateOrReject(entity);
+
+      // indicates user changed their PW
+      if (entity.password) {
+        entity.password = await User.encryptPassword(entity.password)
+      }
     }
   }
 }
