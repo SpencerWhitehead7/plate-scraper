@@ -2,7 +2,7 @@
   "name": "plate-scraper",
   "version": "1.0.0",
   "description": "An app for collecting, editing, organizing, and storing recipes",
-  "author": "spencer",
+  "author": "Spencer Whitehead",
   "license": "Unlicense",
   "main": "server/index",
   "repository": {
