@@ -59,7 +59,6 @@ module.exports = (env, argv) => {
     devtool: isDev ? `eval-source-map` : `source-map`,
 
     devServer: {
-      contentBase: path.join(__dirname, `public`),
       historyApiFallback: true,
       hot: true,
       proxy: {
@@ -94,7 +93,7 @@ module.exports = (env, argv) => {
                   {
                     bugfixes: true,
                     useBuiltIns: `entry`,
-                    corejs: `3.16.1`,
+                    corejs: `3.19.0`, // of core-js
                     targets: isDev ? `last 2 chrome versions` : `> 0.25%, not dead`,
                   },
                 ],
@@ -106,7 +105,7 @@ module.exports = (env, argv) => {
               plugins: [
                 [
                   `@babel/plugin-transform-runtime`,
-                  { version: `^7.15.3` },
+                  { version: `^7.16.0` }, // of @babel/runtime
                 ],
                 isDev && `react-refresh/babel`,
               ].filter(Boolean),

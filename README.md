@@ -6,7 +6,7 @@ A minimal version which can only scrape, edit and download is also available as 
 
 ## Seeing it
 
-The site is not currently deployed live anywhere, as it's still a little rough and not quite feature complete. However, if you have a relatively recent version of PostgreSQL, Node and NPM installed, you should be able to run it locally. You will need to create an PostgreSQL database with the appropriate name, git clone the repo, then run `npm install`, `npm run build`, `npm run start` in your terminal from within the folder and open localhost:1337 in a browser.
+The site is not currently deployed live anywhere, as it's still a little rough and not quite feature complete. However, if you have a relatively recent version of PostgreSQL, Node and NPM installed, you should be able to run it locally. You will need to create an PostgreSQL database with the appropriate name, git clone the repo, then run `npm install`, `npm run build`, `npm run start` in your terminal from within the folder and open localhost:8080 in a browser.
 
 ## Public roadmap (features)
 
