@@ -1,4 +1,4 @@
-// c/p from https://github.com/SpencerWhitehead7/eslint-config v0.1.0
+// c/p from https://github.com/SpencerWhitehead7/eslint-config v0.1.1
 
 module.exports = {
   extends: [`plugin:react-hooks/recommended`],
@@ -338,13 +338,7 @@ module.exports = {
     'sort-keys': 0,
     'sort-vars': 0,
     'space-before-blocks': 1,
-    'space-before-function-paren': [
-      1, {
-        anonymous: `never`,
-        named: `never`,
-        asyncArrow: `always`,
-      },
-    ],
+    'space-before-function-paren': [1, `always`],
     'space-in-parens': 1,
     'space-infix-ops': 1,
     'space-unary-ops': [
