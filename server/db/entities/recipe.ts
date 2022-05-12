@@ -77,7 +77,6 @@ export class Recipe {
 
   @ManyToMany(() => Tag, (tag) => tag.recipes)
   // the recipe's rows in the join table are automatically deleted on delete of recipe
-  // If possible, I'd like to delete any tags that are orphaned when a recipe is deleted, but this will probably involve a custom query, which should be implemented and tested as part of the delete recipe endpoint
   @JoinTable()
   tags: Tag[];
 }
@@ -93,7 +92,7 @@ export class RecipeSubscriber implements EntitySubscriberInterface<Recipe> {
   }
 
   async beforeUpdate(event: UpdateEvent<Recipe>) {
-    const { entity } = event
+    const { entity } = event;
     if (entity) {
       await validateOrReject(entity);
     }

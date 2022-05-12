@@ -74,15 +74,15 @@ const boot = async () => {
     app.use(passport.session())
 
     // Static file serving middleware
-    app.use(express.static(path.join(__dirname, `../built_client`)))
-    app.use(express.static(path.join(__dirname, `../public`)))
+    app.use(express.static(path.join(__dirname, `..`, `client`)))
+    app.use(express.static(path.join(__dirname, `..`, `..`, `public`)))
 
     // Sub-routers
     app.use(`/api`, api)
 
     // All other requests
     app.get(`*`, (req, res) => {
-      res.sendFile(path.join(__dirname, `../built_client/index.html`))
+      res.sendFile(path.join(__dirname, `..`, `client`, `index.html`))
     })
 
     // Error handling endware

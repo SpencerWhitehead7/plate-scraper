@@ -10,4 +10,3 @@ export const selectIsAuthed = createSelector(
   selectMe,
   ({ data }) => Boolean(data),
 )
-

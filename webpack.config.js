@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
   const isDev = argv.mode === `development`
 
   const srcPath = path.resolve(__dirname, `client`)
-  const outputPath = path.resolve(__dirname, `built_client`)
+  const outputPath = path.resolve(__dirname, `built`, `client`)
 
   const baseStyleLoaders = [
     isDev ? `style-loader` : MiniCssExtractPlugin.loader,
@@ -105,7 +105,7 @@ module.exports = (env, argv) => {
               plugins: [
                 [
                   `@babel/plugin-transform-runtime`,
-                  { version: `^7.16.0` }, // of @babel/runtime
+                  { version: `7.16.0` }, // of @babel/runtime
                 ],
                 isDev && `react-refresh/babel`,
               ].filter(Boolean),

@@ -11,14 +11,10 @@ import s from './Navbar.scss'
 
 const Navbar = ({ data, openModal }) => (
   <nav className={s.navbar}>
-    <span className={s.navbar__logoTitleArea}>
-      <NavLink to={URL.base}>
-        <img src="/logo.svg" alt="plate scraper logo" className={s.navbar__logo} />
-      </NavLink>
-      <span className={s.navbar__title}>
-        <b>Plate Scraper!</b>
-      </span>
-    </span>
+    <NavLink to={URL.base} className={s.navbar__logoTitle}>
+      <img src="/logo.svg" alt="plate scraper logo" className={s.navbar__logo} />
+      <b className={s.navbar__title}>Plate Scraper!</b>
+    </NavLink>
 
     <NavLink exact to={URL.scrape}>
       <b>Scrape from website</b>

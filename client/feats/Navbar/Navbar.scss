@@ -5,21 +5,26 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 0 $space-within $space-smallest;
+  padding-bottom: $space-within;
   border-bottom: 1px solid $color-highlight;
   background-color: $color-element;
   @include md-screen {
     flex-direction: row;
-    padding-bottom: 0;
+    padding: 0 $space-within;
   }
 
-  & > * {
-    padding: $space-nano 0;
+  > * {
+    margin: unset;
   }
 
-  &__logoTitleArea {
+  a {
+    text-decoration: none;
+  }
+
+  &__logoTitle {
     display: flex;
     align-items: center;
+    padding: $space-smallest 0;
   }
 
   &__logo {

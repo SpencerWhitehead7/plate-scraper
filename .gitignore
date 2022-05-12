@@ -1,14 +1,13 @@
-# Node_modules
+# js dependencies
 node_modules/*
 
-# Compiled output
-built_client
-built_server
+# compiled output
+built/*
 
-# NPM errors
+# npm errors
 npm-debug.log
 
-# Secrets
+# secrets
 secrets.js
 
 # notes
