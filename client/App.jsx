@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { PATH } from 'consts'
 import { authAsyncHandler } from 'reducers/asyncHandlers'
 import Modal from 'comps/Modal'
-import SyncedRoute from 'comps/SyncedRoute'
+import SyncRoute from 'comps/SyncedRoute'
 import NavBar from 'feats/Navbar'
 import Scrape from 'feats/Scrape'
 import Upload from 'feats/Upload'
@@ -26,29 +26,15 @@ const Main = ({ fetchMe }) => {
       <NavBar />
       <main className={s.main}>
         <div className={s.content}>
-          <Switch>
-            <SyncedRoute exact path={PATH.base}>
-              <Scrape />
-            </SyncedRoute>
-            <SyncedRoute exact path={PATH.scrape}>
-              <Scrape />
-            </SyncedRoute>
-            <SyncedRoute exact path={PATH.upload}>
-              <Upload />
-            </SyncedRoute>
-            <SyncedRoute exact path={PATH.user}>
-              <Account />
-            </SyncedRoute>
-            <SyncedRoute exact path={PATH.recipe}>
-              <Recipe />
-            </SyncedRoute>
-            <SyncedRoute exact path={PATH.search}>
-              <Search />
-            </SyncedRoute>
-            <SyncedRoute>
-              <PageFailure type="404" />
-            </SyncedRoute>
-          </Switch>
+          <Routes>
+            <Route path={PATH.base} element={<SyncRoute><Scrape /></SyncRoute>} />
+            <Route path={PATH.scrape} element={<SyncRoute><Scrape /></SyncRoute>} />
+            <Route path={PATH.upload} element={<SyncRoute><Upload /></SyncRoute>} />
+            <Route path={PATH.user} element={<SyncRoute><Account /></SyncRoute>} />
+            <Route path={PATH.recipe} element={<SyncRoute><Recipe /></SyncRoute>} />
+            <Route path={PATH.search} element={<SyncRoute><Search /></SyncRoute>} />
+            <Route path="*" element={<SyncRoute><PageFailure /></SyncRoute>} />
+          </Routes>
         </div>
       </main>
       <Modal />

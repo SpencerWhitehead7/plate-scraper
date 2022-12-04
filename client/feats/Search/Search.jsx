@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import qs from 'qs'
+import { useNavigate } from 'react-router-dom'
 
+import { URL } from 'consts'
 import { searchAsyncHandler } from 'reducers/asyncHandlers'
 import { selectRouteQuery } from 'selectors'
 import Card, { CardTitle } from 'comps/Card'
@@ -13,7 +13,7 @@ import RecipeRows from 'comps/RecipeRows'
 import { selectSearch } from './selectors'
 
 const Search = ({ queryParams, data: searchResults, isLoading, fetchResults }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { errors, formState, handleSubmit, register, setValue } = useForm({ mode: `onChange` })
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const Search = ({ queryParams, data: searchResults, isLoading, fetchResults }) =
       .split(` `)
 
     fetchResults(tags)
-    history.replace(`${location.pathname}${qs.stringify(tags, { addQueryPrefix: true })}`)
+    navigate(URL.search(tags), { replace: true })
   }
 
   return (

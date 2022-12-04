@@ -1,3 +1,3 @@
-export { default } from './SyncedRoute'
+export { default } from './RouteSyncer'
 
 export { default as routeReducer } from './routeReducer'

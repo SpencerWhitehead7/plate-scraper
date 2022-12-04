@@ -9,28 +9,56 @@ import { MODAL_TYPES, openModal as openModalAction } from 'comps/Modal'
 import skele from 'skeleton.css'
 import s from './Navbar.scss'
 
+// my scss module solution does not cooperate with their auto-applied "active" class
+const linkStyle = {
+  textDecoration: `none`,
+  fontWeight: 600,
+}
+
+const activeLinkStyle = {
+  ...linkStyle,
+  color: `black`,
+}
+
 const Navbar = ({ data, openModal }) => (
   <nav className={s.navbar}>
-    <NavLink to={URL.base} className={s.navbar__logoTitle}>
+    <NavLink
+      to={URL.base}
+      className={s.navbar__logoTitle}
+      style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+    >
       <img src="/logo.svg" alt="plate scraper logo" className={s.navbar__logo} />
-      <b className={s.navbar__title}>Plate Scraper!</b>
+      <span className={s.navbar__title}>Plate Scraper!</span>
     </NavLink>
-
-    <NavLink exact to={URL.scrape}>
-      <b>Scrape from website</b>
+    <NavLink
+      to={URL.scrape}
+      end
+      style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+    >
+      Scrape from website
     </NavLink>
-    <NavLink exact to={URL.upload}>
-      <b>Upload</b>
+    <NavLink
+      to={URL.upload}
+      end
+      style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+    >
+      Upload
     </NavLink>
-
-    <NavLink exact to="/search">
-      <b>Search</b>
+    <NavLink
+      to={URL.search()}
+      end
+      style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+    >
+      Search
     </NavLink>
-
     {data && data.id
       ? (
-        <NavLink exact to={URL.user(data.id)}>
-          <b>My Account</b>
+        <NavLink
+          to={URL.user(data.id)}
+          end
+          style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+        >
+          My Account
         </NavLink>
       )
       : (
