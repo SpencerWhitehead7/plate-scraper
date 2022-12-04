@@ -49,7 +49,7 @@ describe("User Entity", () => {
     })
     it("password is hidden from selects", async () => {
       await connection.manager.save(factoryUser());
-      const user = await connection.manager.findOneOrFail(User, 1);
+      const user = await connection.manager.findOneByOrFail(User, { id: 1 });
       expect(user.password).not.to.exist;
     });
   });

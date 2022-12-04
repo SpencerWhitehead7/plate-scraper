@@ -1,29 +1,22 @@
 // taken and (very lightly) adapted directly from connect-typeorm's docs
 // this should not ever need to be messed with or tested
 import { ISession } from "connect-typeorm";
-import { Column, Entity, Index, PrimaryColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, Index, PrimaryColumn } from "typeorm";
 
 @Entity()
 class Session implements ISession {
   @Index()
-  @Column({
-    type: "bigint",
-    default: Date.now(),
-  })
-  expiredAt: number;
+  @Column("bigint")
+  public expiredAt = Date.now();
 
-  @PrimaryColumn({
-    type: "varchar",
-    length: 255,
-    default: "",
-  })
-  id: string;
+  @PrimaryColumn("varchar", { length: 255 })
+  public id = "";
 
-  @Column({
-    type: "text",
-    default: "",
-  })
-  json: string;
+  @Column("text")
+  public json = "";
+
+  @DeleteDateColumn()
+  public destroyedAt?: Date;
 }
 
 export default Session;

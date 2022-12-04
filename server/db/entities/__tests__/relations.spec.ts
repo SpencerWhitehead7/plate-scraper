@@ -29,8 +29,9 @@ describe("Relations", () => {
       )
     );
 
-    const savedUser = await connection.manager.findOneOrFail(User, 1, {
-      relations: ["recipes"],
+    const savedUser = await connection.manager.findOneOrFail(User, {
+      where: { id: 1 },
+      relations: { recipes: true },
     });
 
     expect(savedUser.recipes.map(({ id }) => id)).to.deep.equal([1, 2]);

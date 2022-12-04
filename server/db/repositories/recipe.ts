@@ -20,14 +20,12 @@ class RecipeRepository extends AbstractRepository<Recipe> {
     )
       .leftJoinAndSelect("recipe.tags", "tag");
 
-  private insertTags = (tx: EntityManager, tagNames: string[] = []) => {
-    return tx.createQueryBuilder(Tag, "tag")
-      .insert()
-      .into(Tag)
-      .values(tagNames.map((name) => ({ name })))
-      .onConflict("DO NOTHING")
-      .execute();
-  };
+  private insertTags = (tx: EntityManager, tagNames: string[] = []) => tx.createQueryBuilder(Tag, "tag")
+    .insert()
+    .into(Tag)
+    .values(tagNames.map((name) => ({ name })))
+    .onConflict("DO NOTHING")
+    .execute();
 
   private insertCb = async (
     tx: EntityManager,
@@ -59,7 +57,7 @@ class RecipeRepository extends AbstractRepository<Recipe> {
         .add(tags);
     };
 
-    return this.getById(createdRecipe.identifiers[0].id, tx);
+    return await this.getById(createdRecipe.identifiers[0].id, tx) ?? undefined;
   }
 
   private updateCb = async (
@@ -109,7 +107,7 @@ class RecipeRepository extends AbstractRepository<Recipe> {
       // return this.repository.save(updatedRecipe);
     };
 
-    return this.getById(id, tx);
+    return await this.getById(id, tx) ?? undefined;
   }
 
   insert(
@@ -154,7 +152,7 @@ class RecipeRepository extends AbstractRepository<Recipe> {
       if (originalRecipe.userId !== userId) {
         await this.update(originalRecipe.id, { forkedCount: originalRecipe.forkedCount + 1 }, tx);
       }
-      return recipe
+      return recipe ?? undefined
     })
   }
 

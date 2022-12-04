@@ -15,7 +15,7 @@ describe("Scraper", () => {
     return expect(scrape("https://www.allrecipes.com")).to.be.rejectedWith(Error, "scrape failed");
   })
 
-  describe("The parsers handle", () => {
+  describe.skip("The parsers handle", () => {
     let actuals: ({
       sourceSite: string;
       sourceUrl: string;

@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import * as express from "express"
-import * as helmet from "helmet"
-import * as compression from "compression"
-import * as expressSession from "express-session"
+import express from "express"
+import helmet from "helmet"
+import compression from "compression"
+import expressSession from "express-session"
 import { createConnection } from "typeorm"
 import { TypeormStore } from "connect-typeorm"
-import * as passport from "passport"
-import * as path from "path"
+import passport from "passport"
+import path from "path"
 
 import { Session } from "./logic/auth"
 import { generateConnectionOptions } from "./utils"
@@ -48,7 +48,7 @@ const boot = async () => {
     app.use(expressSession({
       cookie: {
         maxAge: 60 * 60 * 24 * 7 * 1000, // 1 week
-        secure: IS_PROD, // secure cookies interfere with superagent
+        secure: IS_PROD, // secure cookies interfere with superagent and running on localhost - auth may be an issue in a real deployment too
         httpOnly: true,
       },
       resave: false,
@@ -59,6 +59,10 @@ const boot = async () => {
         cleanupLimit: 0, // default
         limitSubquery: true, // default
         ttl: undefined, // defaults to session.maxAge according to connect-typeorm's docs (presumably actually session.cookie.maxAge; express-session's docs don't mention a session.maxAge property)
+        // eslint-disable-next-line no-unused-vars
+        onError: (typeormStore, err) => {
+          console.error(err)
+        },
       }).connect(sessionRepository),
     }))
     passport.serializeUser((user, done) => { done(null, user.id) })

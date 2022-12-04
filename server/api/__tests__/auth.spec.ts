@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import * as request from "supertest";
+import request from "supertest";
 
 import {
   syncDB,
@@ -126,7 +126,7 @@ describe("Auth Route: /api/auth", () => {
         const res = await agent
           .put(route)
           .send({ newEmail, password: "wrongpw" });
-        const user = await connection.manager.findOneOrFail(User, 1);
+        const user = await connection.manager.findOneByOrFail(User, { id: 1 });
         expect(user.email).not.to.equal(newEmail);
         expect(res.status).to.equal(401);
       });
@@ -143,7 +143,7 @@ describe("Auth Route: /api/auth", () => {
         const res = await agent
           .delete(route)
           .send({ password: userCred.password });
-        const user = await connection.manager.findOne(User, 1);
+        const user = await connection.manager.findOneBy(User, { id: 1 });
         expect(res.status).to.equal(200);
         expect(user).not.to.exist;
       });
@@ -154,7 +154,7 @@ describe("Auth Route: /api/auth", () => {
       });
       it("returns a 401 and does not delete the user if the user sends the wrong confirmation password", async () => {
         const res = await agent.delete(route).send({ password: "wrongpw" });
-        const user = await connection.manager.findOne(User, 1);
+        const user = await connection.manager.findOneBy(User, { id: 1 });
         expect(user).to.exist;
         expect(res.status).to.equal(401);
       });
@@ -170,7 +170,7 @@ describe("Auth Route: /api/auth", () => {
   describe("/login", () => {
     describe("POST", () => {
       it("logs the user in if they provide correct credentials and returns the user with recipes and tags", async () => {
-        const user = await connection.manager.findOne(User, 1);
+        const user = await connection.manager.findOneBy(User, { id: 1 });
         const recipe = await connection.manager.save(factoryRecipe({ user }));
         await connection.manager.save(factoryTag({ recipes: [recipe] }));
         await agent.post(`${route}/logout`);
