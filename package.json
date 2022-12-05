@@ -25,18 +25,6 @@
     "dev": "ts-node-dev --project server/tsconfig.json server & webpack serve --mode=development",
     "test:be": "NODE_ENV='test' TS_NODE_PROJECT='./server/tsconfig.json' mocha -r ts-node/register --file server/mochaSetup.ts --timeout 10000 --exit -- 'server/**/__tests__/*.spec.ts'"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": [
-        "lint-staged"
-      ]
-    }
-  },
-  "lint-staged": {
-    "**.{jsx, jsx}": [
-      "npm run lint:fix -- --max-warnings=0"
-    ]
-  },
   "//": "passport and class-validator are bugged on the current versions - check back in on next update to see if they can be put back on ^latest",
   "dependencies": {
     "@babel/runtime": "^7.20.6",
@@ -95,8 +83,6 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^4.3.8",
-    "lint-staged": "^11.2.6",
     "mini-css-extract-plugin": "^2.7.1",
     "mocha": "^10.1.0",
     "react-refresh": "^0.14.0",
