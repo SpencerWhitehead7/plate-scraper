@@ -2,6 +2,7 @@ const path = require(`path`)
 
 const HtmlWebpackPlugin = require(`html-webpack-plugin`)
 const MiniCssExtractPlugin = require(`mini-css-extract-plugin`)
+const ForkTsCheckerWebpackPlugin = require(`fork-ts-checker-webpack-plugin`)
 const ReactRefreshWebpackPlugin = require(`@pmmmwh/react-refresh-webpack-plugin`)
 
 // eslint-disable-next-line no-unused-vars
@@ -24,10 +25,13 @@ module.exports = (env, argv) => {
   ]
 
   return {
-    entry: path.resolve(srcPath, `index.jsx`),
+    entry: path.resolve(srcPath, `index.tsx`),
     context: srcPath,
     resolve: {
-      extensions: [`.js`, `.jsx`],
+      extensions: [`.js`, `.jsx`, `.ts`, `.tsx`],
+      alias: {
+        '@': srcPath,
+      },
       modules: [srcPath, `node_modules`],
     },
     optimization: {
@@ -75,42 +79,57 @@ module.exports = (env, argv) => {
         filename: `[name].[contenthash].css`,
         chunkFilename: `[id].[contenthash].css`,
       }),
+      new ForkTsCheckerWebpackPlugin({
+        typescript: {
+          mode: `write-references`,
+        },
+      }),
       isDev && new ReactRefreshWebpackPlugin(),
     ].filter(Boolean),
 
     module: {
       rules: [
         {
-          test: /\.jsx?$/,
+          test: /\.[j|t]sx?$/,
           exclude: /node_modules/,
-          use: {
-            loader: `babel-loader`,
-            options: {
-              cacheDirectory: true,
-              presets: [
-                [
-                  `@babel/preset-env`,
-                  {
-                    bugfixes: true,
-                    useBuiltIns: `entry`,
-                    corejs: `3.19.0`, // of core-js
-                    targets: isDev ? `last 2 chrome versions` : `> 0.25%, not dead`,
-                  },
-                ],
-                [
-                  `@babel/preset-react`,
-                  { development: isDev },
-                ],
-              ],
-              plugins: [
-                [
-                  `@babel/plugin-transform-runtime`,
-                  { version: `7.16.0` }, // of @babel/runtime
-                ],
-                isDev && `react-refresh/babel`,
-              ].filter(Boolean),
+          use: [
+            {
+              loader: `ts-loader`,
+              options: {
+                configFile: path.resolve(srcPath, `tsconfig.json`),
+                onlyCompileBundledFiles: true,
+              },
             },
-          },
+            {
+              loader: `babel-loader`,
+              options: {
+                cacheDirectory: true,
+                presets: [
+                  [
+                    `@babel/preset-env`,
+                    {
+                      bugfixes: true,
+                      useBuiltIns: `entry`,
+                      corejs: `3.19.0`, // of core-js
+                      targets: isDev ? `last 2 chrome versions` : `> 0.25%, not dead`,
+                    },
+                  ],
+                  [
+                    `@babel/preset-react`,
+                    { development: isDev },
+                  ],
+                  `@babel/preset-typescript`,
+                ],
+                plugins: [
+                  [
+                    `@babel/plugin-transform-runtime`,
+                    { version: `7.16.0` }, // of @babel/runtime
+                  ],
+                  isDev && `react-refresh/babel`,
+                ].filter(Boolean),
+              },
+            },
+          ],
         },
         {
           test: /\.scss$/i,
