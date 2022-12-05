@@ -1,4 +1,3 @@
-import axios from "axios";
 import { load } from "cheerio";
 
 import { scrapeFailedErr, siteInvalidErr } from "../errors";
@@ -21,8 +20,9 @@ import simplyrecipes from "./simplyrecipes";
 // import thekitchn from "./thekitchn"; // uncomment if I ever get it working
 
 const scrape = async (url: string) => {
-  const { data } = await axios.get(url);
-  const $ = load(data);
+  const res = await fetch(url);
+  const html = await res.text()
+  const $ = load(html);
   let recipe
 
   if (url.includes("allrecipes.com")) {
@@ -62,8 +62,12 @@ const scrape = async (url: string) => {
   }
 
   // this doesn't cover all _nearly_ the ways the parser can be wrong
-  // but missing title or text is a sure sign _something's_ broken
-  if (!recipe.title || !recipe.text) throw scrapeFailedErr;
+  // but no title, no ingredients, or no instructions is a sure sign _something's_ broken
+  const compressedText = recipe.text.replace(/\s/g, "")
+  const hasNoTitle = !recipe.title
+  const hasNoIngredients = compressedText.includes("IngredientsInstructions")
+  const hasNoInstructions = compressedText.endsWith("Instructions")
+  if (hasNoTitle || hasNoIngredients || hasNoInstructions) throw scrapeFailedErr;
 
   return recipe;
 };

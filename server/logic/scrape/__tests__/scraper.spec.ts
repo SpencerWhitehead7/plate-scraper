@@ -26,15 +26,10 @@ describe("Scraper", () => {
 
     before(async () => {
       try {
-        actuals = await Promise.all(
-          expecteds.map(
-            (testItem: {
-              sourceSite: string;
-              sourceUrl: string;
-              text: string;
-              title: string;
-            }) => scrape(testItem.sourceUrl)
-          )
+        const reses = await Promise.allSettled(expecteds.map(({ sourceUrl }) => scrape(sourceUrl)))
+        actuals = reses.map((res) => res.status === "fulfilled"
+          ? res.value
+          : { sourceSite: "", sourceUrl: "", text: "", title: "" }
         );
       } catch (err) {
         console.log(err);

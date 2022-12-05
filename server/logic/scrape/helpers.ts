@@ -27,7 +27,7 @@ export const getRecipe = (
     `Source: ${url}`,
     title[0],
     "Ingredients",
-    ingredients.join('\n'),
+    ingredients.join("\n"),
     "Instructions",
     ...instructions,
-  ].join(`\n\n`) + '\n';
+  ].join("\n\n") + "\n";
