@@ -8,7 +8,7 @@ import { FormInput, FormSubmit } from 'comps/Form'
 import { handleCloseModal } from '../modalReducer'
 
 const LoginForm = ({ className, login }) => {
-  const { errors, formState, handleSubmit, register } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register } = useForm({ mode: `onChange` })
 
   const onSubmit = ({ loginEmail, loginPassword }) => {
     login(loginEmail, loginPassword)
@@ -20,15 +20,15 @@ const LoginForm = ({ className, login }) => {
       <FormInput
         identifier="loginEmail"
         labelText="Email"
-        register={register({ required: true })}
-        errors={errors}
+        register={register(`loginEmail`, { required: true })}
+        errors={formState.errors}
       />
       <FormInput
         identifier="loginPassword"
         labelText="Password"
         type="password"
-        register={register({ required: true })}
-        errors={errors}
+        register={register(`loginPassword`, { required: true })}
+        errors={formState.errors}
       />
       <FormSubmit formState={formState} value="Login" />
     </form>

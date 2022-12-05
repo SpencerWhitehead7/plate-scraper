@@ -7,7 +7,7 @@ import { selectRouteParams } from 'selectors'
 import { FormInputButtonBar, FormSubmit } from 'comps/Form'
 
 const AccountSettings = ({ destroyMe }) => {
-  const { errors, formState, handleSubmit, register } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register } = useForm({ mode: `onChange` })
 
   return (
     <form onSubmit={handleSubmit(({ password }) => { destroyMe(password) })}>
@@ -15,8 +15,8 @@ const AccountSettings = ({ destroyMe }) => {
         identifier="password"
         labelText="Confirm with password"
         type="password"
-        register={register({ required: true })}
-        errors={errors}
+        register={register(`password`, { required: true })}
+        errors={formState.errors}
         Button={<FormSubmit formState={formState} value="Destroy (Are you sure? This cannot be undone!)" />}
       />
     </form>

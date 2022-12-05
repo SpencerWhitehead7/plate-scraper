@@ -14,7 +14,7 @@ import { selectSearch } from './selectors'
 
 const Search = ({ queryParams, data: searchResults, isLoading, fetchResults }) => {
   const navigate = useNavigate()
-  const { errors, formState, handleSubmit, register, setValue } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register, setValue } = useForm({ mode: `onChange` })
 
   useEffect(() => {
     if (!formState.isSubmitted) {
@@ -45,8 +45,8 @@ const Search = ({ queryParams, data: searchResults, isLoading, fetchResults }) =
         <FormInputButtonBar
           identifier="searchTerms"
           labelText="Search for recipes by tag"
-          register={register()}
-          errors={errors}
+          register={register(`searchTerms`)}
+          errors={formState.errors}
           Button={<FormSubmit formState={formState} value="Search!" />}
           autoComplete="off"
           placeholder="fish entre cod"

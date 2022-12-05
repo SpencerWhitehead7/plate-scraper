@@ -15,7 +15,7 @@ import skele from 'skeleton.css'
 import s from './Form.scss'
 
 const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, deleteRecipe, editRecipe, setEditMode }) => {
-  const { errors, formState, handleSubmit, register, reset, watch } = useForm({
+  const { formState, handleSubmit, register, reset, watch } = useForm({
     mode: `onChange`,
     defaultValues: {
       title: recipe.title,
@@ -54,8 +54,8 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
       <FormInputButtonBar
         identifier="title"
         labelText="Title / Filename"
-        register={register({ required: true })}
-        errors={errors}
+        register={register(`title`, { required: true })}
+        errors={formState.errors}
         Button={(
           <FormButton
             formState={formState}
@@ -78,7 +78,7 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
         register={register}
         registerOptions={{ required: true }}
         watch={watch}
-        errors={errors}
+        errors={formState.errors}
       />
       <div className={s.form__recipeButtonSection}>
         {recipe.id && (

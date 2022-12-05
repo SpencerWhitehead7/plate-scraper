@@ -9,7 +9,7 @@ import { FormInput, FormSubmit } from 'comps/Form'
 import skele from 'skeleton.css'
 
 const AccountSettings = ({ editMe }) => {
-  const { errors, formState, handleSubmit, register, watch } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register, watch } = useForm({ mode: `onChange` })
 
   const onSubmit = ({ email, userName, password, passwordAuth }) => {
     editMe(email, userName, password, passwordAuth)
@@ -21,39 +21,39 @@ const AccountSettings = ({ editMe }) => {
         <FormInput
           identifier="email"
           labelText="New email"
-          register={register({ maxLength: 255 })}
-          errors={errors}
+          register={register(`email`, { maxLength: 255 })}
+          errors={formState.errors}
         />
         <FormInput
           identifier="userName"
           labelText="New userName"
-          register={register({ maxLength: 32 })}
-          errors={errors}
+          register={register(`userName`, { maxLength: 32 })}
+          errors={formState.errors}
         />
         <FormInput
           identifier="password"
           labelText="New password"
           type="password"
-          register={register({ maxLength: 64 })}
-          errors={errors}
+          register={register(`password`, { maxLength: 64 })}
+          errors={formState.errors}
         />
         <FormInput
           identifier="passwordConfirm"
           labelText="Confirm new password"
           type="password"
-          register={register({
+          register={register(`passwordConfirm`, {
             validate: {
               matches: value => value === watch(`password`) || `Passwords must match`,
             },
           })}
-          errors={errors}
+          errors={formState.errors}
         />
         <FormInput
           identifier="passwordAuth"
           labelText="Authenticate with current password"
           type="password"
-          register={register({ required: true })}
-          errors={errors}
+          register={register(`passwordAuth`, { required: true })}
+          errors={formState.errors}
         />
       </div>
       <FormSubmit formState={formState} value="Save" />

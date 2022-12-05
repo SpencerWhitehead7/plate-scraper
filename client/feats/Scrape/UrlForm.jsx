@@ -7,14 +7,14 @@ import { SUPPORTED_SITES } from 'consts'
 import { FormInputButtonBar, FormSubmit } from 'comps/Form'
 
 const UrlForm = ({ scrape }) => {
-  const { errors, formState, handleSubmit, register } = useForm({ mode: `onBlur` })
+  const { formState, handleSubmit, register } = useForm({ mode: `onBlur` })
 
   return (
     <form onSubmit={handleSubmit(({ url }) => { scrape(url) })}>
       <FormInputButtonBar
         identifier="url"
         labelText="Recipe url"
-        register={register({
+        register={register(`url`, {
           required: `required`,
           validate: {
             // eslint-disable-next-line no-extra-parens -- useful to indicate difference between conditional and warning message
@@ -22,7 +22,7 @@ const UrlForm = ({ scrape }) => {
             siteSupported: value => SUPPORTED_SITES.some(site => value.toLowerCase().includes(site)) || `Site is not supported`,
           },
         })}
-        errors={errors}
+        errors={formState.errors}
         Button={<FormSubmit formState={formState} value="Scrape!" />}
         placeholder="https://www.allrecipes.com/recipe/22918/pop-cake/"
       />

@@ -2,7 +2,7 @@ import "core-js/stable"
 import "regenerator-runtime/runtime"
 
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import 'normalize.css'
 
@@ -12,9 +12,10 @@ import App from './App'
 import 'skeleton.css'
 import 'styles/index.scss'
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById(`root`),
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
 )

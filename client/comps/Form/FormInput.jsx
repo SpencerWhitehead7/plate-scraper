@@ -20,7 +20,7 @@ const FormInput = ({
       id={identifier}
       name={identifier}
       type={type}
-      ref={register}
+      {...register}
     />
   </>
 )

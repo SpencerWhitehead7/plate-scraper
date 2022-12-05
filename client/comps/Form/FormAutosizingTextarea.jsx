@@ -15,6 +15,7 @@ const FormAutosizingTextarea = ({
 }) => {
   const eleRef = useRef(null)
   const currentValue = watch(identifier)
+  const { ref, ...restRegister } = register(identifier, registerOptions)
 
   useEffect(() => {
     const originalY = window.scrollY
@@ -37,9 +38,10 @@ const FormAutosizingTextarea = ({
         id={identifier}
         name={identifier}
         ref={ele => {
-          register(ele, registerOptions)
+          ref(ele)
           eleRef.current = ele
         }}
+        {...restRegister}
         className={s.form__autosizingTextarea}
       />
     </>

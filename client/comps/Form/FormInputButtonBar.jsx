@@ -24,13 +24,12 @@ const FormInputButtonBar = ({
         id={identifier}
         name={identifier}
         type={type}
-        ref={register}
+        {...register}
         className={s.form__inputButtonBarInput}
       />
       {Button}
     </div>
   </>
 )
-
 
 export default FormInputButtonBar
