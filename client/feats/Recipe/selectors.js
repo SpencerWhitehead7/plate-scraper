@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 
 import { recipeAsyncHandler } from 'reducers/asyncHandlers'
 import { selectMe, selectRouteParams } from 'selectors'

@@ -1,4 +1,4 @@
-import store from '..'
+import { store } from '..'
 
 export const INIT = `asyncTracker/INIT`
 export const SUCCESS = `asyncTracker/SUCCESS`

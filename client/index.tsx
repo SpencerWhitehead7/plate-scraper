@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import 'normalize.css'
 
-import store from './reducers'
+import { store } from './reducers'
 import App from './App'
 
 import 'skeleton.css'

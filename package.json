@@ -28,6 +28,7 @@
   "//": "passport and class-validator are bugged on the current versions - check back in on next update to see if they can be put back on ^latest",
   "dependencies": {
     "@babel/runtime": "^7.20.6",
+    "@reduxjs/toolkit": "^1.9.1",
     "axios": "^0.24.0",
     "bcrypt": "^5.1.0",
     "cheerio": "^1.0.0-rc.12",
@@ -50,11 +51,7 @@
     "react-hook-form": "^7.40.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.4",
-    "redux": "^4.1.2",
-    "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.4.2",
     "regenerator-runtime": "^0.13.11",
-    "reselect": "^4.1.7",
     "typeorm": "^0.3.11"
   },
   "devDependencies": {

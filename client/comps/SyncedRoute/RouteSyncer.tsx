@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useLocation, useParams, Location } from 'react-router-dom'
+
+import { useAppDispatch } from '@/reducers'
 
 import { setRouteData } from './routeReducer'
 
 // TODO: keep experimenting with this to make it bulletproof, ensure it gets all route state necessary, and make sure it handles being nested anywhere
-const SyncRoute = ({ children }) => {
-  const dispatch = useDispatch()
+export const SyncRoute = ({ children }) => {
+  const dispatch = useAppDispatch()
 
   const params = useParams()
   const location = useLocation()
 
-  const [currLocation, setCurrLocation] = useState({})
+  const [currLocation, setCurrLocation] = useState({} as Location)
 
   useEffect(() => {
     if (
@@ -21,12 +22,9 @@ const SyncRoute = ({ children }) => {
       location.pathname === window.location.pathname
     ) {
       setCurrLocation(location)
-      dispatch(setRouteData(params, location.search))
+      dispatch(setRouteData({ params, query: location.search }))
     }
   }, [location, currLocation, params, dispatch])
 
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{children}</>
 }
-
-export default SyncRoute
