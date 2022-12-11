@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { downloadRecipe } from 'helpers'
 import { authAsyncHandler, recipeAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
 import { selectIsAuthed, selectMe } from 'selectors'
-import { MODAL_TYPES, openModal as openModalAction } from 'comps/Modal'
+import { openAuthModal } from 'comps/Modal'
 import FormAutosizingTextarea from './FormAutosizingTextarea'
 import FormButton from './FormButton'
 import FormEditTags from './FormEditTags'
@@ -108,7 +108,7 @@ const mstp = state => ({
 
 const mdtp = dispatch => ({
   openModal: () => {
-    dispatch(openModalAction(MODAL_TYPES.AUTH))
+    dispatch(openAuthModal())
   },
   createRecipe: async (userId, text, title, sourceSite, sourceUrl, tags) => {
     await dispatch(recipeAsyncHandler.call(`scrape`, { text, title, sourceSite, sourceUrl, tags }))

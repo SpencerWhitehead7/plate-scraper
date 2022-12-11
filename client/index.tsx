@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import 'normalize.css'
 
 import { store } from './reducers'
-import App from './App'
+import { App } from './App'
 
 import 'skeleton.css'
 import 'styles/index.scss'

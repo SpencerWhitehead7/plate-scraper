@@ -1,4 +1,3 @@
-export { default } from './Modal'
+export { Modal } from './Modal'
 
-export { modalReducer, openModal } from './modalReducer'
-export { MODAL_TYPES } from './modalTypes'
+export { modalReducer, openAuthModal } from './modalReducer'
