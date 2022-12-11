@@ -16,7 +16,7 @@ import skele from '@/skeleton.css'
 
 import s from './Form.scss'
 
-export const RecipeForm = ({ recipe, setEditMode }) => {
+export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
   const navigate = useNavigate()
 
   const { data: dataMe } = useGetMeQuery()
