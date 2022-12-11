@@ -1,21 +1,26 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { connect } from 'react-redux'
 
-import { authAsyncHandler } from 'reducers/asyncHandlers'
-import { CardTitle } from 'comps/Card'
-import { FormInput, FormSubmit } from 'comps/Form'
-import { handleCloseModal } from '../modalReducer'
+import { CardTitle } from '@/comps/Card'
+import { FormInput, FormSubmit } from '@/comps/Form'
+import { useAppDispatch, useLoginMutation } from '@/reducers'
 
-const LoginForm = ({ className, login }) => {
+import { closeModal } from '../modalReducer'
+
+export const LoginForm = ({ className }) => {
+  const dispatch = useAppDispatch()
+
+  const [triggerLogin] = useLoginMutation()
+
   const { formState, handleSubmit, register } = useForm({ mode: `onChange` })
 
-  const onSubmit = ({ loginEmail, loginPassword }) => {
-    login(loginEmail, loginPassword)
-  }
+  const onSubmit = handleSubmit(async ({ loginEmail, loginPassword }) => {
+    await triggerLogin({ email: loginEmail, password: loginPassword })
+    dispatch(closeModal())
+  })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={className}>
+    <form onSubmit={onSubmit} className={className}>
       <CardTitle>Login</CardTitle>
       <FormInput
         identifier="loginEmail"
@@ -34,11 +39,3 @@ const LoginForm = ({ className, login }) => {
     </form>
   )
 }
-
-const mdtp = dispatch => ({
-  login: (email, password) => {
-    dispatch(handleCloseModal(authAsyncHandler.call({ email, password })))
-  },
-})
-
-export default connect(null, mdtp)(LoginForm)

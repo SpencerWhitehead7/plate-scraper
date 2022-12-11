@@ -1,21 +1,26 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { connect } from 'react-redux'
 
-import { authAsyncHandler } from 'reducers/asyncHandlers'
-import { CardTitle } from 'comps/Card'
-import { FormInput, FormSubmit } from 'comps/Form'
-import { handleCloseModal } from '../modalReducer'
+import { CardTitle } from '@/comps/Card'
+import { FormInput, FormSubmit } from '@/comps/Form'
+import { useAppDispatch, useSignupMutation } from '@/reducers'
 
-const SignupForm = ({ className, signup }) => {
+import { closeModal } from '../modalReducer'
+
+export const SignupForm = ({ className }) => {
+  const dispatch = useAppDispatch()
+
+  const [triggerSignup] = useSignupMutation()
+
   const { formState, handleSubmit, register, watch } = useForm({ mode: `onChange` })
 
-  const onSubmit = ({ signupEmail, signupUserName, signupPassword }) => {
-    signup(signupEmail, signupUserName, signupPassword)
-  }
+  const onSubmit = handleSubmit(async ({ signupEmail, signupUserName, signupPassword }) => {
+    await triggerSignup({ email: signupEmail, userName: signupUserName, password: signupPassword })
+    dispatch(closeModal())
+  })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={className}>
+    <form onSubmit={onSubmit} className={className}>
       <CardTitle>Signup</CardTitle>
       <FormInput
         identifier="signupEmail"
@@ -53,11 +58,3 @@ const SignupForm = ({ className, signup }) => {
     </form>
   )
 }
-
-const mdtp = dispatch => ({
-  signup: (email, userName, password) => {
-    dispatch(handleCloseModal(authAsyncHandler.call({ email, userName, password })))
-  },
-})
-
-export default connect(null, mdtp)(SignupForm)

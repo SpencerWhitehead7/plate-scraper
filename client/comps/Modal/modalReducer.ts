@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-import AuthModal from './AuthModal'
+import { AuthModal } from './AuthModal'
 
 export const MODAL_TYPES = {
   AUTH: 'modal_types/AUTH',
@@ -36,11 +36,5 @@ const { openModal } = modalSlice.actions
 export const openAuthModal = () => openModal({ modalType: MODAL_TYPES.AUTH })
 
 export const { closeModal } = modalSlice.actions
-export const handleCloseModal = modalSubmitThunk => async dispatch => {
-  if (modalSubmitThunk) {
-    await modalSubmitThunk(dispatch)
-  }
-  dispatch(closeModal())
-}
 
 export const modalReducer = modalSlice.reducer
