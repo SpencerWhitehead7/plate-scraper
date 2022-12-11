@@ -1,20 +1,34 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { connect } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-import { downloadRecipe } from 'helpers'
-import { authAsyncHandler, recipeAsyncHandler, userAsyncHandler } from 'reducers/asyncHandlers'
-import { selectIsAuthed, selectMe } from 'selectors'
-import { openAuthModal } from 'comps/Modal'
+import { openAuthModal as openAuthModalAction } from '@/comps/Modal'
+import { URL } from '@/consts'
+import { downloadRecipe } from '@/helpers'
+import { useAppDispatch, useCreateRecipeMutation, useDeleteRecipeMutation, useEditRecipeMutation, useGetMeQuery, useSelectIsAuthed } from '@/reducers'
+
 import FormAutosizingTextarea from './FormAutosizingTextarea'
 import FormButton from './FormButton'
 import FormEditTags from './FormEditTags'
 import FormInputButtonBar from './FormInputButtonBar'
 
-import skele from 'skeleton.css'
+import skele from '@/skeleton.css'
+
 import s from './Form.scss'
 
-const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, deleteRecipe, editRecipe, setEditMode }) => {
+export const RecipeForm = ({ recipe, setEditMode }) => {
+  const navigate = useNavigate()
+
+  const { data: dataMe } = useGetMeQuery()
+  const isAuthed = useSelectIsAuthed()
+
+  const dispatch = useAppDispatch()
+  const openAuthModal = () => { dispatch(openAuthModalAction()) }
+
+  const [triggerCreateRecipe] = useCreateRecipeMutation()
+  const [triggerDeleteRecipe] = useDeleteRecipeMutation()
+  const [triggerEditRecipe] = useEditRecipeMutation()
+
   const { formState, handleSubmit, register, reset, watch } = useForm({
     mode: `onChange`,
     defaultValues: {
@@ -22,17 +36,16 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
       text: recipe.text,
     },
   })
-  const [updatedTags, setUpdatedTags] = useState((recipe.tags || []).map(({ name }) => name))
-
-  const download = ({ text, title }) => { downloadRecipe(text, title) }
+  const [updatedTags, setUpdatedTags] = useState((recipe.tags ?? []).map(({ name }) => name))
 
   const save = ({ title, text }) => {
-    // if the recipe doesn't have an ID, it's being scraped/uploaded; otherwise, it's being edited
     if (recipe.id) {
-      editRecipe(recipe.id, recipe.userId, text, title, updatedTags)
+      // if the recipe has an ID, it must exist and it's being edited
+      triggerEditRecipe({ recipeId: recipe.id, userId: recipe.userId, text, title, tags: updatedTags })
       setEditMode(false)
     } else {
-      createRecipe(me.id, text, title, recipe.sourceSite, recipe.sourceUrl, updatedTags)
+      // otherwise, it must be being scraped/uploaded
+      triggerCreateRecipe({ userId: dataMe.id, text, title, sourceSite: recipe.sourceSite, sourceUrl: recipe.sourceUrl, tags: updatedTags })
     }
     if (recipe.sourceSite === `upload` && recipe.sourceUrl === `upload`) {
       setUpdatedTags([])
@@ -46,7 +59,7 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
         <button
           type="button"
           className={skele[`button-primary`]}
-          onClick={openModal}
+          onClick={openAuthModal}
         >
           Signup or login to save recipes
         </button>
@@ -60,7 +73,9 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
           <FormButton
             formState={formState}
             value="Download"
-            onClick={handleSubmit(download)}
+            onClick={handleSubmit(({ text, title }) => {
+              downloadRecipe(text, title)
+            })}
           />
         )}
         autoComplete="off"
@@ -84,7 +99,10 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
         {recipe.id && (
           <button
             type="button"
-            onClick={() => { deleteRecipe(recipe.id, recipe.userId) }}
+            onClick={() => {
+              triggerDeleteRecipe({ recipeId: recipe.id, userId: recipe.userId })
+              navigate(URL.search())
+            }}
           >
             Delete
           </button>
@@ -100,30 +118,3 @@ const RecipeForm = ({ recipe, data: me, isAuthed, openModal, createRecipe, delet
     </form>
   )
 }
-
-const mstp = state => ({
-  ...selectMe(state),
-  isAuthed: selectIsAuthed(state),
-})
-
-const mdtp = dispatch => ({
-  openModal: () => {
-    dispatch(openAuthModal())
-  },
-  createRecipe: async (userId, text, title, sourceSite, sourceUrl, tags) => {
-    await dispatch(recipeAsyncHandler.call(`scrape`, { text, title, sourceSite, sourceUrl, tags }))
-    dispatch(recipeAsyncHandler.clear(`scrape`))
-    await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
-  },
-
-  deleteRecipe: async (recipeId, userId) => {
-    await dispatch(recipeAsyncHandler.call(recipeId, { isDelete: true }))
-    await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
-  },
-  editRecipe: async (recipeId, userId, newText, newTitle, newTags) => {
-    await dispatch(recipeAsyncHandler.call(recipeId, { text: newText, title: newTitle, tags: newTags }))
-    await Promise.all([dispatch(authAsyncHandler.call()), dispatch(userAsyncHandler.call(userId))])
-  },
-})
-
-export default connect(mstp, mdtp)(RecipeForm)

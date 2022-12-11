@@ -3,4 +3,4 @@ export { default as FormInputButtonBar } from './FormInputButtonBar'
 export { default as FormSubmit } from './FormSubmit'
 export { default as Warning } from './Warning'
 
-export { default as RecipeForm } from './RecipeForm'
+export { RecipeForm } from './RecipeForm'
