@@ -1,16 +1,18 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { connect } from 'react-redux'
 
-import { recipeAsyncHandler } from 'reducers/asyncHandlers'
-import { SUPPORTED_SITES } from 'consts'
-import { FormInputButtonBar, FormSubmit } from 'comps/Form'
+import { SUPPORTED_SITES } from '@/consts'
+import { FormInputButtonBar, FormSubmit } from '@/comps/Form'
 
-const UrlForm = ({ scrape }) => {
+export const UrlForm = ({ triggerScrape }) => {
   const { formState, handleSubmit, register } = useForm({ mode: `onBlur` })
 
+  const onSubmit = handleSubmit(async ({ url }) => {
+    await triggerScrape({ url })
+  })
+
   return (
-    <form onSubmit={handleSubmit(({ url }) => { scrape(url) })}>
+    <form onSubmit={onSubmit}>
       <FormInputButtonBar
         identifier="url"
         labelText="Recipe url"
@@ -29,11 +31,3 @@ const UrlForm = ({ scrape }) => {
     </form>
   )
 }
-
-const mdtp = dispatch => ({
-  scrape: url => {
-    dispatch(recipeAsyncHandler.call(`scrape`, { url }))
-  },
-})
-
-export default connect(null, mdtp)(UrlForm)

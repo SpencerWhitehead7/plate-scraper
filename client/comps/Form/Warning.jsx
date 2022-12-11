@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import sg from 'styles/index.scss'
 import s from './Form.scss'
 
-const Warning = ({ leftPadded = true, customError, rhfError }) => (
+const Warning = ({ leftPadded = true, customError = undefined, rhfError = undefined }) => (
   customError || rhfError
     ? (
       <span className={classnames(s.form__warning, { [sg.pl_sest]: leftPadded })}>

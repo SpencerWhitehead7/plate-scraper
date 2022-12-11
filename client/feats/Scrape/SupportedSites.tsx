@@ -1,21 +1,27 @@
 import React from 'react'
 import classnames from 'classnames'
 
-import { SUPPORTED_SITES } from 'consts'
+import { SUPPORTED_SITES } from '@/consts'
 
-import skele from 'skeleton.css'
-import sg from 'styles/index.scss'
+import skele from '@/skeleton.css'
+import sg from '@/styles/index.scss'
 import s from './SupportedSites.scss'
-
-const Cell = ({ site }) => <a key={site} className={classnames(skele[`one-third`], skele.column, sg.textCenter)} href={`https://www.${site}`}>{site}</a>
 
 const Row = ({ row }) => (
   <div className="row">
-    {row.map(site => <Cell key={site} site={site} />)}
+    {row.map((site) => (
+      <a
+        key={site}
+        className={classnames(skele[`one-third`], skele.column, sg.textCenter)}
+        href={`https://www.${site}`}
+      >
+        {site}
+      </a>
+    ))}
   </div>
 )
 
-const SupportedSites = () => {
+export const SupportedSites = () => {
   const columnCount = 3
   const rowCount = Math.ceil(SUPPORTED_SITES.length / columnCount)
   const rows = SUPPORTED_SITES.reduce(
@@ -35,5 +41,3 @@ const SupportedSites = () => {
     </section>
   )
 }
-
-export default SupportedSites
