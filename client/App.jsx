@@ -9,7 +9,7 @@ import Scrape from 'feats/Scrape'
 import Upload from 'feats/Upload'
 import Account from 'feats/Account'
 import Recipe from 'feats/Recipe'
-import Search from 'feats/Search'
+import { Search } from './feats/Search'
 import { PageFailure } from './feats/PageFailure'
 
 import s from './App.scss'
@@ -25,8 +25,8 @@ export const App = () => (
           <Route path={PATH.upload} element={<SyncRoute><Upload /></SyncRoute>} />
           <Route path={PATH.user} element={<SyncRoute><Account /></SyncRoute>} />
           <Route path={PATH.recipe} element={<SyncRoute><Recipe /></SyncRoute>} />
-          <Route path={PATH.search} element={<SyncRoute><Search /></SyncRoute>} />
         */}
+          <Route path={PATH.search} element={<SyncRoute><Search /></SyncRoute>} />
           <Route path="*" element={<SyncRoute><PageFailure /></SyncRoute>} />
         </Routes>
       </div>

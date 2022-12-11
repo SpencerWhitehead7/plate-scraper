@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { URL } from 'consts'
-import { ButtonSection, DownloadButton, ForkButton } from 'comps/Buttons'
-import Tags from 'comps/Tags'
+import { URL } from '@/consts'
+import { ButtonSection, DownloadButton, ForkButton } from '@/comps/Buttons'
+import Tags from '@/comps/Tags'
 
-import sg from 'styles/index.scss'
+import sg from '@/styles/index.scss'
 import s from './RecipeRows.scss'
 
 const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, userId }) => (
@@ -48,6 +48,4 @@ const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, 
   </div>
 )
 
-const RecipeRows = ({ recipes }) => recipes && recipes.map(recipe => <RecipeRow key={recipe.id} {...recipe} />)
-
-export default RecipeRows
+export const RecipeRows = ({ recipes }) => recipes && recipes.map(recipe => <RecipeRow key={recipe.id} {...recipe} />)

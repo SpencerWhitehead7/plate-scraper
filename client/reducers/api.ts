@@ -132,4 +132,4 @@ export const api = createApi({
   }),
 })
 
-export const { useGetMeQuery, useSignupMutation, useEditMeMutation, useDeleteMeMutation, useLoginMutation, useLogoutMutation, useCreateRecipeMutation, useGetRecipeQuery, useGetRecipesByTagQuery, useEditRecipeMutation, useDeleteRecipeMutation, useForkRecipeMutation, useScrapeMutation, useGetUserQuery } = api
+export const { useGetMeQuery, useSignupMutation, useEditMeMutation, useDeleteMeMutation, useLoginMutation, useLogoutMutation, useCreateRecipeMutation, useGetRecipeQuery, useGetRecipesByTagQuery, useLazyGetRecipesByTagQuery, useEditRecipeMutation, useDeleteRecipeMutation, useForkRecipeMutation, useScrapeMutation, useGetUserQuery } = api
