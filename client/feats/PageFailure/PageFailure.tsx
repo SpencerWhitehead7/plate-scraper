@@ -1,10 +1,14 @@
 import React from 'react'
 
-import Card from 'comps/Card'
+import Card from '@/comps/Card'
 
-import sg from 'styles/index.scss'
+import sg from '@/styles/index.scss'
 
-const pageFailure = ({ type }) => {
+type Props = {
+  type?: `404` | `No such user` | `No such recipe` | ``
+}
+
+export const PageFailure: React.FC<Props> = ({ type = `` }) => {
   let title = ``
   let subtitle = ``
   switch (type) {
@@ -32,6 +36,3 @@ const pageFailure = ({ type }) => {
     </Card>
   )
 }
-
-
-export default pageFailure

@@ -8,7 +8,7 @@ import Card, { CardTitle } from 'comps/Card'
 import { RecipeForm } from 'comps/Form'
 import LoadingIndicator from 'comps/LoadingIndicator'
 import Tags from 'comps/Tags'
-import PageFailure from 'feats/PageFailure'
+import { PageFailure } from 'feats/PageFailure'
 import { selectCurrentRecipe, selectCurrentRecipeIsMine } from './selectors'
 
 import sg from 'styles/index.scss'
