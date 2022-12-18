@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Card from '@/comps/Card'
+import { Card } from '@/comps/Card'
 
 import sg from '@/styles/index.scss'
 

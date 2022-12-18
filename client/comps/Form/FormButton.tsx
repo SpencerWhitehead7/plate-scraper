@@ -1,9 +1,9 @@
 import React from 'react'
 import classnames from 'classnames'
 
-import skele from 'skeleton.css'
+import skele from '@/skeleton.css'
 
-const FormButton = ({ formState, onClick, value }) => (
+export const FormButton = ({ formState, onClick, value }) => (
   <button
     type="button"
     onClick={onClick}
@@ -12,5 +12,3 @@ const FormButton = ({ formState, onClick, value }) => (
     {value}
   </button>
 )
-
-export default FormButton

@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { ButtonSection, DownloadButton, ForkButton } from '@/comps/Buttons'
-import Card, { CardTitle } from '@/comps/Card'
+import { Card, CardTitle } from '@/comps/Card'
 import { RecipeForm } from '@/comps/Form'
-import LoadingIndicator from '@/comps/LoadingIndicator'
-import Tags from '@/comps/Tags'
+import { LoadingIndicator } from '@/comps/LoadingIndicator'
+import { Tags } from '@/comps/Tags'
 import { PageFailure } from '@/feats/PageFailure'
 import { useGetMeQuery, useGetRecipeQuery } from '@/reducers'
 

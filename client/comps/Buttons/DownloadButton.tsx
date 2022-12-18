@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { downloadRecipe } from 'helpers'
+import { downloadRecipe } from '@/helpers'
 
-import skele from 'skeleton.css'
+import skele from '@/skeleton.css'
 
-const DownloadButton = ({ text, title }) => (
+export const DownloadButton = ({ text, title }) => (
   <button
     type="button"
     onClick={() => downloadRecipe(text, title)}
@@ -13,5 +13,3 @@ const DownloadButton = ({ text, title }) => (
     Download
   </button>
 )
-
-export default DownloadButton

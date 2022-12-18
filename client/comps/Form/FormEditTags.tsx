@@ -3,8 +3,8 @@ import classnames from 'classnames'
 
 import { Tag } from '../Tags'
 
-import skele from 'skeleton.css'
-import sg from 'styles/index.scss'
+import skele from '@/skeleton.css'
+import sg from '@/styles/index.scss'
 
 // possible delimiters:
 // comma: 188
@@ -12,7 +12,7 @@ import sg from 'styles/index.scss'
 // space: 32
 // // tab: 9
 
-const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) => {
+export const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) => {
   const [newTag, setNewTag] = useState(``)
 
   const handleAdd = () => {
@@ -55,5 +55,3 @@ const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) => {
     </div>
   )
 }
-
-export default FormEditTags

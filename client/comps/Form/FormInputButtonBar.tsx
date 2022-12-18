@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { Warning } from 'comps/Form'
+import { Warning } from '@/comps/Form'
 
 import s from './Form.scss'
 
-const FormInputButtonBar = ({
+export const FormInputButtonBar = ({
   identifier,
   labelText,
   register,
@@ -31,5 +31,3 @@ const FormInputButtonBar = ({
     </div>
   </>
 )
-
-export default FormInputButtonBar

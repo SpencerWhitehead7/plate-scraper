@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Card, { CardTitle } from '@/comps/Card'
+import { Card, CardTitle } from '@/comps/Card'
 import { RecipeForm } from '@/comps/Form'
 
 export const Upload = () => (

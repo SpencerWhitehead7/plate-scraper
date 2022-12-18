@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { URL } from '@/consts'
 import { ButtonSection, DownloadButton, ForkButton } from '@/comps/Buttons'
-import Tags from '@/comps/Tags'
+import { Tags } from '@/comps/Tags'
 
 import sg from '@/styles/index.scss'
 import s from './RecipeRows.scss'

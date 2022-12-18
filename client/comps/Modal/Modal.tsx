@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import FocusTrap from 'focus-trap-react'
 
-import Card from '@/comps/Card'
+import { Card } from '@/comps/Card'
 import { useAppSelector, useAppDispatch } from '@/reducers'
 
 import { MODAL_MAP, closeModal as closeModalAction } from './modalReducer'

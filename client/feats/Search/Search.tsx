@@ -4,9 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import qs from 'qs'
 
 import { URL } from '@/consts'
-import Card, { CardTitle } from '@/comps/Card'
+import { Card, CardTitle } from '@/comps/Card'
 import { FormInputButtonBar, FormSubmit } from '@/comps/Form'
-import LoadingIndicator from '@/comps/LoadingIndicator'
+import { LoadingIndicator } from '@/comps/LoadingIndicator'
 import { RecipeRows } from '@/comps/RecipeRows'
 import { useLazyGetRecipesByTagQuery } from '@/reducers'
 

@@ -3,7 +3,7 @@ export const downloadRecipe = (text, title) => {
   const downloadLink = document.createElement(`a`)
   downloadLink.download = title
   downloadLink.href = window.URL.createObjectURL(textAsBlob)
-  downloadLink.onclick = evt => { document.body.removeChild(evt.target) }
+  downloadLink.onclick = evt => { document.body.removeChild(evt.target as Node) }
   downloadLink.style.display = `none`
   document.body.appendChild(downloadLink)
   downloadLink.click()

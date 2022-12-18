@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import { PATH } from 'consts'
+import { PATH } from './consts'
 import { Modal } from './comps/Modal'
 import { Navbar } from './feats/Navbar'
 import { Scrape } from './feats/Scrape'

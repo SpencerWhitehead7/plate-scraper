@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Tag from './Tag'
+import { Tag } from './Tag'
 
-const Tags = ({ tags }) => (
+export const Tags = ({ tags }) => (
   <ul>
     Tags&nbsp;
     {
@@ -12,5 +12,3 @@ const Tags = ({ tags }) => (
     }
   </ul>
 )
-
-export default Tags

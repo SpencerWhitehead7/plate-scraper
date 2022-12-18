@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Card from '@/comps/Card'
+import { Card } from '@/comps/Card'
 import { RecipeForm, Warning } from '@/comps/Form'
-import LoadingIndicator from '@/comps/LoadingIndicator'
+import { LoadingIndicator } from '@/comps/LoadingIndicator'
 import { useScrapeMutation } from '@/reducers'
 
 import { SupportedSites } from './SupportedSites'

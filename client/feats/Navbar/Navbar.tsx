@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { URL } from '@/consts'
-import LoadingIndicator from '@/comps/LoadingIndicator'
+import { LoadingIndicator } from '@/comps/LoadingIndicator'
 import { openAuthModal as openAuthModalAction } from '@/comps/Modal'
 import { useAppDispatch, useGetMeQuery } from '@/reducers'
 

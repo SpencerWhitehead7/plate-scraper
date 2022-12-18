@@ -7,10 +7,10 @@ import { URL } from '@/consts'
 import { downloadRecipe } from '@/helpers'
 import { useAppDispatch, useCreateRecipeMutation, useDeleteRecipeMutation, useEditRecipeMutation, useGetMeQuery, useSelectIsAuthed } from '@/reducers'
 
-import FormAutosizingTextarea from './FormAutosizingTextarea'
-import FormButton from './FormButton'
-import FormEditTags from './FormEditTags'
-import FormInputButtonBar from './FormInputButtonBar'
+import { FormAutosizingTextarea } from './FormAutosizingTextarea'
+import { FormButton } from './FormButton'
+import { FormEditTags } from './FormEditTags'
+import { FormInputButtonBar } from './FormInputButtonBar'
 
 import skele from '@/skeleton.css'
 
@@ -25,9 +25,9 @@ export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
   const dispatch = useAppDispatch()
   const openAuthModal = () => { dispatch(openAuthModalAction()) }
 
-  const [triggerCreateRecipe] = useCreateRecipeMutation()
-  const [triggerDeleteRecipe] = useDeleteRecipeMutation()
-  const [triggerEditRecipe] = useEditRecipeMutation()
+  const [triggerCreateRecipe, stateCreateRecipe] = useCreateRecipeMutation()
+  const [triggerDeleteRecipe, stateDeleteRecipe] = useDeleteRecipeMutation()
+  const [triggerEditRecipe, stateEditRecipe] = useEditRecipeMutation()
 
   const { formState, handleSubmit, register, reset, watch } = useForm({
     mode: `onChange`,
@@ -38,10 +38,10 @@ export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
   })
   const [updatedTags, setUpdatedTags] = useState((recipe.tags ?? []).map(({ name }) => name))
 
-  const save = ({ title, text }) => {
+  const save = async ({ title, text }) => {
     if (recipe.id) {
       // if the recipe has an ID, it must exist and it's being edited
-      triggerEditRecipe({ recipeId: recipe.id, userId: recipe.userId, text, title, tags: updatedTags })
+      await triggerEditRecipe({ recipeId: recipe.id, userId: recipe.userId, text, title, tags: updatedTags })
       setEditMode(false)
     } else {
       // otherwise, it must be being scraped/uploaded
@@ -99,9 +99,11 @@ export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
         {recipe.id && (
           <button
             type="button"
-            onClick={() => {
-              triggerDeleteRecipe({ recipeId: recipe.id, userId: recipe.userId })
-              navigate(URL.search())
+            onClick={async () => {
+              await triggerDeleteRecipe({ recipeId: recipe.id, userId: recipe.userId })
+              if (stateDeleteRecipe.isSuccess) {
+                navigate(URL.search())
+              }
             }}
           >
             Delete

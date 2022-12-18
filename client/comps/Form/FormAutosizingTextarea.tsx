@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 
-import Warning from './Warning'
+import { Warning } from './Warning'
 
 import s from './Form.scss'
 
-const FormAutosizingTextarea = ({
+export const FormAutosizingTextarea = ({
   identifier,
   labelText,
   register,
@@ -20,9 +20,9 @@ const FormAutosizingTextarea = ({
   useEffect(() => {
     const originalY = window.scrollY
     eleRef.current.style.height = `auto`
-    eleRef.current.style.height = `${eleRef.current.scrollHeight + 2}px` // enough to remove scrollbar
+    eleRef.current.style.height = `${eleRef.current.scrollHeight + 5}px` // enough to remove scrollbar
     eleRef.current.scrollTop = eleRef.current.scrollHeight
-    window.scrollTo(window.scrollLeft, originalY)
+    window.scrollTo(window.scrollX, originalY)
     // window scrolls down when you create a new line at bottom of text area
     // but not when you push the bottom down by adding lines in the middle
   }, [currentValue])
@@ -47,5 +47,3 @@ const FormAutosizingTextarea = ({
     </>
   )
 }
-
-export default FormAutosizingTextarea

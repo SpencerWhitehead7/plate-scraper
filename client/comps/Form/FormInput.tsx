@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Warning from './Warning'
+import { Warning } from './Warning'
 
-const FormInput = ({
+export const FormInput = ({
   identifier,
   labelText,
   register,
@@ -24,5 +24,3 @@ const FormInput = ({
     />
   </>
 )
-
-export default FormInput
