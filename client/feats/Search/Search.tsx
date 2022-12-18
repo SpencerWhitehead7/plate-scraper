@@ -1,18 +1,20 @@
 import React, { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import qs from 'qs'
 
 import { URL } from '@/consts'
 import Card, { CardTitle } from '@/comps/Card'
 import { FormInputButtonBar, FormSubmit } from '@/comps/Form'
 import LoadingIndicator from '@/comps/LoadingIndicator'
 import { RecipeRows } from '@/comps/RecipeRows'
-import { useAppSelector, useLazyGetRecipesByTagQuery } from '@/reducers'
+import { useLazyGetRecipesByTagQuery } from '@/reducers'
 
 export const Search = () => {
   const navigate = useNavigate()
 
-  const queryParams = useAppSelector(s => s.routeReducer.query)
+  const location = useLocation()
+  const queryParams = useMemo(() => qs.parse(location.search), [location.search])
   const tags = useMemo(() => Object.values(queryParams).map(String), [queryParams])
 
   const [getRecipeByTagTrigger, getRecipeByTagState] = useLazyGetRecipesByTagQuery()

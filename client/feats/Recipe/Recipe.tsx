@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { ButtonSection, DownloadButton, ForkButton } from '@/comps/Buttons'
 import Card, { CardTitle } from '@/comps/Card'
@@ -6,12 +7,12 @@ import { RecipeForm } from '@/comps/Form'
 import LoadingIndicator from '@/comps/LoadingIndicator'
 import Tags from '@/comps/Tags'
 import { PageFailure } from '@/feats/PageFailure'
-import { useAppSelector, useGetMeQuery, useGetRecipeQuery } from '@/reducers'
+import { useGetMeQuery, useGetRecipeQuery } from '@/reducers'
 
 import sg from '@/styles/index.scss'
 
 export const Recipe = () => {
-  const { recipeId } = useAppSelector(s => s.routeReducer.params)
+  const { recipeId } = useParams()
   const { isFetching: isFetchingRecipe, data: dataRecipe } = useGetRecipeQuery({ recipeId: Number(recipeId) })
   const { data: dataMe } = useGetMeQuery()
   const isMine = dataRecipe && dataMe && dataRecipe?.userId === dataMe.id

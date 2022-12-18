@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { ButtonSection } from '@/comps/Buttons'
 import Card, { CardTitle, CardSubtitle } from '@/comps/Card'
 import LoadingIndicator from '@/comps/LoadingIndicator'
 import { RecipeRows } from '@/comps/RecipeRows'
 import { PageFailure } from '@/feats/PageFailure'
-import { useAppSelector, useGetMeQuery, useGetUserQuery, useLogoutMutation } from '@/reducers'
+import { useGetMeQuery, useGetUserQuery, useLogoutMutation } from '@/reducers'
 
 import { DeleteAccount } from './DeleteAccount'
 import { EditAccount } from './EditAccount'
 
 export const Account = () => {
-  const { userId } = useAppSelector(s => s.routeReducer.params)
-  const { isLoading: isLoadingUser, data: dataUser } = useGetUserQuery({ userId: String(userId) })
+  const { userId } = useParams()
+  const { isLoading: isLoadingUser, data: dataUser } = useGetUserQuery({ userId })
   const { data: dataMe } = useGetMeQuery()
 
   const userIsMe = dataUser && dataMe && dataUser.id === dataMe.id
