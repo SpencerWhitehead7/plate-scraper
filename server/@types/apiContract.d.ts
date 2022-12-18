@@ -35,7 +35,7 @@ type ApiUser = ApiMe & {
 
 // AUTH START
 export type GetMeReq = void
-export type GetMeRes = ApiUser | null
+export type GetMeRes = ApiMe | null
 
 export type SignUpReq = {
   email: string,

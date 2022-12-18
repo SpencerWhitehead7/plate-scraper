@@ -66,7 +66,7 @@ export const api = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: (r, e, args) => e ? [] : [{ type: 'user', id: args.userId }, { type: 'auth', id: 'me' }]
+      invalidatesTags: (r, e, args) => e ? [] : [{ type: 'user', id: args.userId }]
     }),
 
     getRecipe: builder.query<AC.GetRecipeRes, AC.GetRecipeReq>({
@@ -95,7 +95,7 @@ export const api = createApi({
           tags: body.tags,
         },
       }),
-      invalidatesTags: (r, e, args) => e ? [] : [{ type: 'recipe', id: args.recipeId }, { type: 'user', id: args.userId }, { type: 'auth', id: 'me' }]
+      invalidatesTags: (r, e, args) => e ? [] : [{ type: 'recipe', id: args.recipeId }, { type: 'user', id: args.userId }]
     }),
 
     deleteRecipe: builder.mutation<AC.DeleteRecipeRes, AC.DeleteRecipeReq & { userId: number }>({
@@ -103,7 +103,7 @@ export const api = createApi({
         url: `/recipe/${body.recipeId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (r, e, args) => e ? [] : [{ type: 'recipe', id: args.recipeId }, { type: 'user', id: args.userId }, { type: 'auth', id: 'me' }]
+      invalidatesTags: (r, e, args) => e ? [] : [{ type: 'recipe', id: args.recipeId }, { type: 'user', id: args.userId }]
     }),
 
     forkRecipe: builder.mutation<AC.ForkRecipeRes, AC.ForkRecipeReq & { userId: number }>({
@@ -111,7 +111,7 @@ export const api = createApi({
         url: `/recipe/fork/${body.recipeId}`,
         method: 'POST',
       }),
-      invalidatesTags: (r, e, args) => e ? [] : [{ type: 'recipe', id: args.recipeId }, { type: 'user', id: args.userId }, { type: 'auth', id: 'me' }],
+      invalidatesTags: (r, e, args) => e ? [] : [{ type: 'recipe', id: args.recipeId }, { type: 'user', id: args.userId }],
     }),
     // RECIPE END
 

@@ -169,7 +169,7 @@ describe("Auth Route: /api/auth", () => {
 
   describe("/login", () => {
     describe("POST", () => {
-      it("logs the user in if they provide correct credentials and returns the user with recipes and tags", async () => {
+      it("logs the user in if they provide correct credentials and returns the user", async () => {
         const user = await connection.manager.findOneBy(User, { id: 1 });
         const recipe = await connection.manager.save(factoryRecipe({ user }));
         await connection.manager.save(factoryTag({ recipes: [recipe] }));
@@ -178,8 +178,6 @@ describe("Auth Route: /api/auth", () => {
         const res = await agent.post(`${route}/login`).send(userCred);
         expect(res.status).to.equal(200);
         expect(res.body.id).to.equal(1);
-        expect(res.body.recipes).to.exist;
-        expect(res.body.recipes[0].tags).to.exist;
       });
       it("returns a 401 if the user provides incorrect credentials", async () => {
         await agent.post(`${route}/logout`);

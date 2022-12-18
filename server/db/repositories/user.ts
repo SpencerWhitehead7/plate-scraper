@@ -8,14 +8,6 @@ import { User } from "../entities";
 
 @EntityRepository(User)
 class UserRepository extends AbstractRepository<User> {
-  private select = () =>
-    this.createQueryBuilder("user")
-      .leftJoinAndSelect("user.recipes", "recipe")
-      .leftJoinAndSelect("recipe.tags", "tag");
-
-  private selectWithAuth = () =>
-    this.select()
-      .addSelect("user.password");
 
   async insert(userData: {
     email: string,
@@ -29,7 +21,7 @@ class UserRepository extends AbstractRepository<User> {
       .returning("*")
       .execute();
 
-    return this.getById(createdUser.identifiers[0].id);
+    return this.getByIdWithRecipes(createdUser.identifiers[0].id);
   }
 
   async update(
@@ -46,7 +38,7 @@ class UserRepository extends AbstractRepository<User> {
       .where("id = :id", { id })
       .execute();
 
-    return this.getById(id);
+    return this.getByIdWithRecipes(id);
   }
 
   delete(user: User) {
@@ -65,25 +57,29 @@ class UserRepository extends AbstractRepository<User> {
   }
 
   getById(id: number) {
-    return this.select()
+    return this.createQueryBuilder("user")
+      .where("user.id = :id", { id })
+      .getOne();
+  }
+
+  getByIdWithRecipes(id: number) {
+    return this.createQueryBuilder("user")
+      .leftJoinAndSelect("user.recipes", "recipe")
+      .leftJoinAndSelect("recipe.tags", "tag")
       .where("user.id = :id", { id })
       .getOne();
   }
 
   getByIdWithAuth(id: number) {
-    return this.selectWithAuth()
+    return this.createQueryBuilder("user")
+      .addSelect("user.password")
       .where("user.id = :id", { id })
       .getOne();
   }
 
-  getByEmail(email: string) {
-    return this.select()
-      .where("user.email = :email", { email })
-      .getOne();
-  }
-
   getByEmailWithAuth(email: string) {
-    return this.selectWithAuth()
+    return this.createQueryBuilder("user")
+      .addSelect("user.password")
       .where("user.email = :email", { email })
       .getOne();
   }

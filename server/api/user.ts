@@ -9,7 +9,7 @@ const userRouter = Router();
 // GET /api/user/:id
 userRouter.get(`/:id`, ...serializers.user.id.get, async (req, res, next) => {
   try {
-    const user = await userRepository.getById(Number(req.params.id));
+    const user = await userRepository.getByIdWithRecipes(Number(req.params.id));
     if (!user) throw notFoundUserErr;
 
     res.json(user);
