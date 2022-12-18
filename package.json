@@ -29,7 +29,6 @@
   "dependencies": {
     "@babel/runtime": "^7.20.6",
     "@reduxjs/toolkit": "^1.9.1",
-    "axios": "^0.24.0",
     "bcrypt": "^5.1.0",
     "cheerio": "^1.0.0-rc.12",
     "class-validator": "0.13.1",
