@@ -59,7 +59,7 @@ authRouter.delete(`/`, isAuthenticated, ...serializers.auth.delete, async (req, 
 
     req.logout();
     await userRepository.delete(authUser);
-    req.session!.destroy(err => { err ? next(err) : res.sendStatus(200) });
+    req.session!.destroy(err => { err ? next(err) : res.sendStatus(204) });
   } catch (err) {
     next(err);
   }

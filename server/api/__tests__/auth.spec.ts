@@ -144,7 +144,7 @@ describe("Auth Route: /api/auth", () => {
           .delete(route)
           .send({ password: userCred.password });
         const user = await connection.manager.findOneBy(User, { id: 1 });
-        expect(res.status).to.equal(200);
+        expect(res.status).to.equal(204);
         expect(user).not.to.exist;
       });
       it("logs out the logged in user", async () => {
