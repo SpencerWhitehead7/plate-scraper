@@ -2,4 +2,8 @@ import React from 'react'
 
 import s from './Card.scss'
 
-export const CardTitle = ({ children }) => <h4 className={s.card__title}>{children}</h4>
+type Props = {
+  children: string
+}
+
+export const CardTitle: React.FC<Props> = ({ children }) => <h4 className={s.card__title}>{children}</h4>

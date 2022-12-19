@@ -47,7 +47,9 @@ export const Modal = () => {
               role="dialog"
               aria-modal
               aria-label="modal"
-              onClick={evt => { evt.stopPropagation() }}
+              onClick={(evt: React.MouseEvent) => {
+                evt.stopPropagation()
+              }}
             >
               <div className={s.modal__closeButtonContainer}>
                 <button type="button" autoFocus onClick={closeModal}>Close</button>

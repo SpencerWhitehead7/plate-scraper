@@ -8,7 +8,9 @@ import { Tags } from '@/comps/Tags'
 import sg from '@/styles/index.scss'
 import s from './RecipeRows.scss'
 
-const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, userId }) => (
+import { ApiRecipe } from '@/@types/apiContract'
+
+const RecipeRow: React.FC<ApiRecipe> = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, userId }) => (
   <div className={s.recipeRow}>
     <div className={s.recipeRow__info}>
       <div>
@@ -48,4 +50,10 @@ const RecipeRow = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, 
   </div>
 )
 
-export const RecipeRows = ({ recipes }) => recipes && recipes.map(recipe => <RecipeRow key={recipe.id} {...recipe} />)
+type Props = {
+  recipes: ApiRecipe[]
+}
+
+export const RecipeRows: React.FC<Props> = ({ recipes }) => <>
+  {recipes.map((recipe: ApiRecipe) => <RecipeRow key={recipe.id} {...recipe} />)}
+</>

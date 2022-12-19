@@ -9,10 +9,11 @@ export const MODAL_TYPES = {
 
 export const MODAL_MAP = {
   [MODAL_TYPES.AUTH]: AuthModal,
+  '': undefined,
 }
 
 type ModalState = {
-  modalType: string
+  modalType: keyof typeof MODAL_MAP | ''
 }
 
 const initialState: ModalState = {
@@ -23,7 +24,7 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openModal: (state, { payload }: PayloadAction<{ modalType: string }>) => {
+    openModal: (state, { payload }: PayloadAction<{ modalType: keyof typeof MODAL_MAP }>) => {
       state.modalType = payload.modalType
     },
     closeModal: (state) => {

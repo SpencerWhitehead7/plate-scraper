@@ -1,4 +1,4 @@
-export const downloadRecipe = (text, title) => {
+export const downloadRecipe = (text: string, title: string) => {
   const textAsBlob = new Blob([text], { type: `text/plain` })
   const downloadLink = document.createElement(`a`)
   downloadLink.download = title

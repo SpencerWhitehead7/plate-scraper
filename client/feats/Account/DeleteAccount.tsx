@@ -14,7 +14,7 @@ export const DeleteAccount = () => {
   const { formState, handleSubmit, register } = useForm({ mode: `onChange` })
 
   const onSubmit = handleSubmit(async ({ password }) => {
-    await triggerDeleteMe({ userId: dataMe.id, password })
+    await triggerDeleteMe({ userId: dataMe!.id, password })
     navigate(URL.base)
   })
 
@@ -24,7 +24,8 @@ export const DeleteAccount = () => {
         identifier="password"
         labelText="Confirm with password"
         type="password"
-        register={register(`password`, { required: true })}
+        register={register}
+        registerOptions={{ required: true }}
         errors={formState.errors}
         Button={<FormSubmit formState={formState} value="Destroy (Are you sure? This cannot be undone!)" />}
       />

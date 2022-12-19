@@ -12,9 +12,6 @@
       "@types/",
       "../node_modules/@types/",
     ],                                                   /* Specify multiple folders that act like './node_modules/@types'. */
-    "allowJs": true,                                     /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */ // TODO: remove
-    "checkJs": false,                                    /* Enable error reporting in type-checked JavaScript files. */ // TODO: remove
     "outDir": "../built/client",                         /* Specify an output folder for all emitted files. */
-    "strict": false,                                     /* Enable all strict type-checking options. */ // TODO: remove
   }
 }

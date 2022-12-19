@@ -14,7 +14,7 @@ export const EditAccount = () => {
   const { formState, handleSubmit, register, watch, reset } = useForm({ mode: `onChange` })
 
   const onSubmit = handleSubmit(async ({ newEmail, newUserName, newPassword, password }) => {
-    await triggerEditMe({ userId: dataMe.id, newEmail, newUserName, newPassword, password })
+    await triggerEditMe({ userId: dataMe!.id, newEmail, newUserName, newPassword, password })
     reset()
   })
 
@@ -24,38 +24,43 @@ export const EditAccount = () => {
         <FormInput
           identifier="newEmail"
           labelText="New email"
-          register={register(`newEmail`, { maxLength: 255 })}
+          register={register}
+          registerOptions={{ maxLength: 255 }}
           errors={formState.errors}
         />
         <FormInput
           identifier="newUserName"
           labelText="New userName"
-          register={register(`newUserName`, { maxLength: 32 })}
+          register={register}
+          registerOptions={{ maxLength: 32 }}
           errors={formState.errors}
         />
         <FormInput
           identifier="newPassword"
           labelText="New password"
           type="password"
-          register={register(`newPassword`, { maxLength: 64 })}
+          register={register}
+          registerOptions={{ maxLength: 64 }}
           errors={formState.errors}
         />
         <FormInput
           identifier="newPasswordConfirm"
           labelText="Confirm new password"
           type="password"
-          register={register(`newPasswordConfirm`, {
+          register={register}
+          registerOptions={{
             validate: {
               matches: value => value === watch(`newPassword`) || `Passwords must match`,
             },
-          })}
+          }}
           errors={formState.errors}
         />
         <FormInput
           identifier="password"
           labelText="Authenticate with current password"
           type="password"
-          register={register(`password`, { required: true })}
+          register={register}
+          registerOptions={{ required: true }}
           errors={formState.errors}
         />
       </div>

@@ -80,7 +80,7 @@ export const api = createApi({
       query: (params) => ({
         url: `/recipe${qs.stringify(params.tags, { addQueryPrefix: true })}`
       }),
-      providesTags: (r, e, args) => e ? [] : r.map((recipe) => ({ type: 'recipe', id: recipe.id })),
+      providesTags: (r, e, args) => e ? [] : (r ?? []).map((recipe) => ({ type: 'recipe', id: recipe.id })),
     }),
 
     // getRecipeAll: builder.query<AC.GetRecipeAllRes, AC.GetRecipeAllReq>({}),

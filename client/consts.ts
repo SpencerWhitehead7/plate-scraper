@@ -23,9 +23,9 @@ export const URL = {
   base: `/`,
   scrape: `/scrape`,
   upload: `/upload`,
-  user: userId => `/user/${userId}`,
-  recipe: recipeId => `/recipe/${recipeId}`,
-  search: (tags = []) => (tags.length
+  user: (userId: number) => `/user/${userId}`,
+  recipe: (recipeId: number) => `/recipe/${recipeId}`,
+  search: (tags = [] as string[]) => (tags.length
     ? `/search${qs.stringify(tags, { addQueryPrefix: true })}`
     : `/search`),
 }

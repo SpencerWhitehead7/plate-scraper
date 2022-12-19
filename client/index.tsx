@@ -12,7 +12,7 @@ import { App } from './App'
 import 'skeleton.css'
 import 'styles/index.scss'
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
       <App />

@@ -13,7 +13,7 @@ import { EditAccount } from './EditAccount'
 
 export const Account = () => {
   const { userId } = useParams()
-  const { isLoading: isLoadingUser, data: dataUser } = useGetUserQuery({ userId })
+  const { isLoading: isLoadingUser, data: dataUser } = useGetUserQuery({ userId: userId ?? `` })
   const { data: dataMe } = useGetMeQuery()
 
   const userIsMe = dataUser && dataMe && dataUser.id === dataMe.id

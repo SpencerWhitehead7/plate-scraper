@@ -47,7 +47,7 @@ export const Search = () => {
         <FormInputButtonBar
           identifier="searchTerms"
           labelText="Search for recipes by tag"
-          register={register(`searchTerms`)}
+          register={register}
           errors={formState.errors}
           Button={<FormSubmit formState={formState} value="Search!" />}
           autoComplete="off"

@@ -1,8 +1,13 @@
+import { ApiTag } from '@/@types/apiContract'
 import React from 'react'
 
 import { Tag } from './Tag'
 
-export const Tags = ({ tags }) => (
+type Props = {
+  tags: ApiTag[]
+}
+
+export const Tags: React.FC<Props> = ({ tags }) => (
   <ul>
     Tags&nbsp;
     {

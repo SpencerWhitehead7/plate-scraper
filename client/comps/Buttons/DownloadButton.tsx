@@ -4,7 +4,12 @@ import { downloadRecipe } from '@/helpers'
 
 import skele from '@/skeleton.css'
 
-export const DownloadButton = ({ text, title }) => (
+type Props = {
+  text: string
+  title: string
+}
+
+export const DownloadButton: React.FC<Props> = ({ text, title }) => (
   <button
     type="button"
     onClick={() => downloadRecipe(text, title)}

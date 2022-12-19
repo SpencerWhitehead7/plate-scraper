@@ -7,7 +7,11 @@ import { useAppDispatch, useSignupMutation } from '@/reducers'
 
 import { closeModal } from '../modalReducer'
 
-export const SignupForm = ({ className }) => {
+type Props = {
+  className?: string
+}
+
+export const SignupForm: React.FC<Props> = ({ className = `` }) => {
   const dispatch = useAppDispatch()
 
   const [triggerSignup] = useSignupMutation()
@@ -25,13 +29,15 @@ export const SignupForm = ({ className }) => {
       <FormInput
         identifier="signupEmail"
         labelText="Email"
-        register={register(`signupEmail`, { required: true, maxLength: 255 })}
+        register={register}
+        registerOptions={{ required: true, maxLength: 255 }}
         errors={formState.errors}
       />
       <FormInput
         identifier="signupUserName"
         labelText="UserName"
-        register={register(`signupUserName`, { required: true, maxLength: 32 })}
+        register={register}
+        registerOptions={{ required: true, maxLength: 32 }}
         errors={formState.errors}
         autoComplete="off"
       />
@@ -39,19 +45,21 @@ export const SignupForm = ({ className }) => {
         identifier="signupPassword"
         labelText="Password"
         type="password"
-        register={register(`signupPassword`, { required: true, maxLength: 64 })}
+        register={register}
+        registerOptions={{ required: true, maxLength: 64 }}
         errors={formState.errors}
       />
       <FormInput
         identifier="signupPasswordConfirm"
         labelText="Confirm password"
         type="password"
-        register={register(`signupPasswordConfirm`, {
-          required: `required`,
+        register={register}
+        registerOptions={{
+          required: true,
           validate: {
             matches: value => value === watch(`signupPassword`) || `Passwords must match`,
           },
-        })}
+        }}
         errors={formState.errors}
       />
       <FormSubmit formState={formState} value="Signup" />

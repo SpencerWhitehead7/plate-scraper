@@ -1,9 +1,16 @@
 import React from 'react'
+import { FormState } from 'react-hook-form'
 import classnames from 'classnames'
 
 import skele from '@/skeleton.css'
 
-export const FormButton = ({ formState, onClick, value }) => (
+type Props = {
+  formState: FormState<{}>
+  onClick: VoidFunction
+  value: string
+}
+
+export const FormButton: React.FC<Props> = ({ formState, onClick, value }) => (
   <button
     type="button"
     onClick={onClick}

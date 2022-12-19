@@ -1,13 +1,25 @@
 import React from 'react'
+import { FieldErrorsImpl, RegisterOptions, UseFormRegister } from 'react-hook-form'
 
 import { Warning } from '@/comps/Form'
 
 import s from './Form.scss'
 
-export const FormInputButtonBar = ({
+type Props = {
+  identifier: string
+  labelText: string
+  register: UseFormRegister<any>
+  registerOptions?: RegisterOptions
+  errors: Partial<FieldErrorsImpl>
+  type?: React.HTMLInputTypeAttribute
+  Button: React.ReactNode
+} & React.InputHTMLAttributes<HTMLInputElement>
+
+export const FormInputButtonBar: React.FC<Props> = ({
   identifier,
   labelText,
   register,
+  registerOptions,
   errors = {},
   type = `text`,
   Button,
@@ -22,9 +34,8 @@ export const FormInputButtonBar = ({
       <input
         {...restProps}
         id={identifier}
-        name={identifier}
         type={type}
-        {...register}
+        {...register(identifier, registerOptions)}
         className={s.form__inputButtonBarInput}
       />
       {Button}

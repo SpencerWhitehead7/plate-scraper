@@ -1,11 +1,22 @@
 import React from 'react'
+import { FieldErrorsImpl, RegisterOptions, UseFormRegister } from 'react-hook-form'
 
 import { Warning } from './Warning'
 
-export const FormInput = ({
+type Props = {
+  identifier: string
+  labelText: string
+  register: UseFormRegister<any>
+  registerOptions?: RegisterOptions
+  errors: Partial<FieldErrorsImpl>
+  type?: React.HTMLInputTypeAttribute
+} & React.InputHTMLAttributes<HTMLInputElement>
+
+export const FormInput: React.FC<Props> = ({
   identifier,
   labelText,
   register,
+  registerOptions,
   errors = {},
   type = `text`,
   ...restProps
@@ -18,9 +29,8 @@ export const FormInput = ({
     <input
       {...restProps}
       id={identifier}
-      name={identifier}
       type={type}
-      {...register}
+      {...register(identifier, registerOptions)}
     />
   </>
 )

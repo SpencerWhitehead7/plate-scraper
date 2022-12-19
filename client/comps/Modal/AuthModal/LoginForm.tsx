@@ -7,7 +7,11 @@ import { useAppDispatch, useLoginMutation } from '@/reducers'
 
 import { closeModal } from '../modalReducer'
 
-export const LoginForm = ({ className }) => {
+type Props = {
+  className?: string
+}
+
+export const LoginForm: React.FC<Props> = ({ className }) => {
   const dispatch = useAppDispatch()
 
   const [triggerLogin] = useLoginMutation()
@@ -25,14 +29,16 @@ export const LoginForm = ({ className }) => {
       <FormInput
         identifier="loginEmail"
         labelText="Email"
-        register={register(`loginEmail`, { required: true })}
+        register={register}
+        registerOptions={{ required: true }}
         errors={formState.errors}
       />
       <FormInput
         identifier="loginPassword"
         labelText="Password"
         type="password"
-        register={register(`loginPassword`, { required: true })}
+        register={register}
+        registerOptions={{ required: true }}
         errors={formState.errors}
       />
       <FormSubmit formState={formState} value="Login" />

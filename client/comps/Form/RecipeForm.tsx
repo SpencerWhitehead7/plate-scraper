@@ -12,11 +12,17 @@ import { FormButton } from './FormButton'
 import { FormEditTags } from './FormEditTags'
 import { FormInputButtonBar } from './FormInputButtonBar'
 
+import { ApiRecipe } from '@/@types/apiContract'
 import skele from '@/skeleton.css'
 
 import s from './Form.scss'
 
-export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
+type Props = {
+  recipe: Partial<ApiRecipe>
+  setEditMode?: React.Dispatch<boolean>
+}
+
+export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
   const navigate = useNavigate()
 
   const { data: dataMe } = useGetMeQuery()
@@ -32,26 +38,26 @@ export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
   const { formState, handleSubmit, register, reset, watch } = useForm({
     mode: `onChange`,
     defaultValues: {
-      title: recipe.title,
-      text: recipe.text,
+      title: recipe.title ?? ``,
+      text: recipe.text ?? ``,
     },
   })
   const [updatedTags, setUpdatedTags] = useState((recipe.tags ?? []).map(({ name }) => name))
 
-  const save = async ({ title, text }) => {
+  const save = handleSubmit(async ({ title, text }) => {
     if (recipe.id) {
       // if the recipe has an ID, it must exist and it's being edited
-      await triggerEditRecipe({ recipeId: recipe.id, userId: recipe.userId, text, title, tags: updatedTags })
-      setEditMode(false)
+      await triggerEditRecipe({ recipeId: recipe.id, userId: dataMe!.id, text, title, tags: updatedTags })
+      setEditMode?.(false)
     } else {
       // otherwise, it must be being scraped/uploaded
-      triggerCreateRecipe({ userId: dataMe.id, text, title, sourceSite: recipe.sourceSite, sourceUrl: recipe.sourceUrl, tags: updatedTags })
+      triggerCreateRecipe({ userId: dataMe!.id, text, title, sourceSite: recipe.sourceSite ?? ``, sourceUrl: recipe.sourceUrl ?? ``, tags: updatedTags })
     }
     if (recipe.sourceSite === `upload` && recipe.sourceUrl === `upload`) {
       setUpdatedTags([])
       reset()
     }
-  }
+  })
 
   return (
     <form className={s.editMode}>
@@ -67,14 +73,15 @@ export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
       <FormInputButtonBar
         identifier="title"
         labelText="Title / Filename"
-        register={register(`title`, { required: true })}
+        register={register}
+        registerOptions={{ required: true }}
         errors={formState.errors}
         Button={(
           <FormButton
             formState={formState}
             value="Download"
             onClick={handleSubmit(({ text, title }) => {
-              downloadRecipe(text, title)
+              downloadRecipe(text!, title!)
             })}
           />
         )}
@@ -84,7 +91,6 @@ export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
         <FormEditTags
           updatedTags={updatedTags}
           setUpdatedTags={setUpdatedTags}
-          updatedTagsSet={new Set(updatedTags)}
         />
       )}
       <FormAutosizingTextarea
@@ -100,7 +106,7 @@ export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
           <button
             type="button"
             onClick={async () => {
-              await triggerDeleteRecipe({ recipeId: recipe.id, userId: recipe.userId })
+              await triggerDeleteRecipe({ recipeId: recipe.id!, userId: recipe.userId! })
               if (stateDeleteRecipe.isSuccess) {
                 navigate(URL.search())
               }
@@ -113,7 +119,7 @@ export const RecipeForm = ({ recipe, setEditMode = (x) => x }) => {
           <FormButton
             formState={formState}
             value="Save"
-            onClick={handleSubmit(save)}
+            onClick={save}
           />
         )}
       </div>

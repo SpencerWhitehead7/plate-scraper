@@ -6,14 +6,15 @@ import { Tag } from '../Tags'
 import skele from '@/skeleton.css'
 import sg from '@/styles/index.scss'
 
-// possible delimiters:
-// comma: 188
-// // enter: 13
-// space: 32
-// // tab: 9
+type Props = {
+  updatedTags: string[]
+  setUpdatedTags: React.Dispatch<string[]>
+}
 
-export const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) => {
+export const FormEditTags: React.FC<Props> = ({ updatedTags, setUpdatedTags }) => {
   const [newTag, setNewTag] = useState(``)
+
+  const updatedTagsSet = new Set(updatedTags)
 
   const handleAdd = () => {
     if (newTag && !updatedTagsSet.has(newTag)) {
@@ -22,8 +23,8 @@ export const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) =>
     }
   }
 
-  const handleRemove = name => {
-    setUpdatedTags(updatedTags.filter(tagName => tagName !== name))
+  const handleRemove = (name: string) => {
+    setUpdatedTags(updatedTags.filter((tagName) => tagName !== name))
   }
 
   return (
@@ -42,7 +43,11 @@ export const FormEditTags = ({ updatedTags, setUpdatedTags, updatedTagsSet }) =>
         type="text"
         autoComplete="off"
         value={newTag}
-        onKeyDown={evt => { if (evt.keyCode === 188 || evt.keyCode === 32) handleAdd() }}
+        onKeyDown={evt => {
+          if (evt.key === `,` || evt.key === ` `) {
+            handleAdd()
+          }
+        }}
         onChange={evt => { setNewTag(evt.target.value.toLowerCase().replace(/[^a-z]/gi, ``)) }}
       />
       <button

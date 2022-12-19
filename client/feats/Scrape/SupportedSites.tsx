@@ -7,7 +7,11 @@ import skele from '@/skeleton.css'
 import sg from '@/styles/index.scss'
 import s from './SupportedSites.scss'
 
-const Row = ({ row }) => (
+type RowProps = {
+  row: string[]
+}
+
+const Row: React.FC<RowProps> = ({ row }) => (
   <div className="row">
     {row.map((site) => (
       <a
@@ -21,7 +25,7 @@ const Row = ({ row }) => (
   </div>
 )
 
-export const SupportedSites = () => {
+export const SupportedSites: React.FC<{}> = () => {
   const columnCount = 3
   const rowCount = Math.ceil(SUPPORTED_SITES.length / columnCount)
   const rows = SUPPORTED_SITES.reduce(
@@ -29,7 +33,7 @@ export const SupportedSites = () => {
       rowsArr[i % rowsArr.length].push(site)
       return rowsArr
     },
-    new Array(rowCount).fill(null).map(_ => []),
+    new Array(rowCount).fill(null).map(_ => [] as string[]),
   )
 
   return (

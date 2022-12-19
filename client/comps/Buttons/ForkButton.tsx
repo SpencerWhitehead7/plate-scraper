@@ -5,7 +5,12 @@ import { useForkRecipeMutation, useSelectIsAuthed } from '@/reducers'
 
 import skele from '@/skeleton.css'
 
-export const ForkButton = ({ recipeId, userId }) => {
+type Props = {
+  recipeId: number
+  userId: number
+}
+
+export const ForkButton: React.FC<Props> = ({ recipeId, userId }) => {
   const isAuthed = useSelectIsAuthed()
 
   const [triggerForkRecipe, stateForkRecipe] = useForkRecipeMutation()
