@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require(`html-webpack-plugin`)
 const MiniCssExtractPlugin = require(`mini-css-extract-plugin`)
 const ForkTsCheckerWebpackPlugin = require(`fork-ts-checker-webpack-plugin`)
 const ReactRefreshWebpackPlugin = require(`@pmmmwh/react-refresh-webpack-plugin`)
+const { BundleAnalyzerPlugin } = require(`webpack-bundle-analyzer`)
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (env, argv) => {
@@ -85,6 +86,7 @@ module.exports = (env, argv) => {
         },
       }),
       isDev && new ReactRefreshWebpackPlugin(),
+      // !isDev && new BundleAnalyzerPlugin(),
     ].filter(Boolean),
 
     module: {

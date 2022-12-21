@@ -18,7 +18,6 @@
     "build:be": "tsc --project server/tsconfig.json",
     "build:fe": "webpack --mode=production",
     "build": "npm run build:be & npm run build:fe",
-    "demo": "node built/server",
     "start": "NODE_ENV='prod' node built/server",
     "dev:be": "ts-node-dev --project server/tsconfig.json server",
     "dev:fe": "node built/server & webpack serve --mode=development",
