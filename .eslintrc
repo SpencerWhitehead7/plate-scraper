@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "reportUnusedDisableDirectives": true,
+
+  "rules": {
+    "@typescript-eslint/no-misused-promises":["error", {"checksVoidReturn": false}] // I'm sorry, this rule is dumb as hell
+  }
+}

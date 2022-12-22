@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "../.eslintrc",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+    // prettier
+  ],
+  "parserOptions": {
+    "tsconfigRootDir": "./client",
+    "project": "./tsconfig.eslint.json"
+  },
+  "env": {
+    "browser": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
