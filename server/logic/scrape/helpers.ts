@@ -15,7 +15,7 @@ export const getCleanStrings = (
       return res;
     })
     .get()
-    .filter(Boolean);
+    .filter(Boolean) as string[];
 
 export const getRecipe = (
   url: string,

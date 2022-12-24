@@ -68,27 +68,31 @@ describe("API Route Recipe: /api/recipe", () => {
 
       it("returns all recipes, including tags, if no recipes are queried by tag", async () => {
         const res = await request(app).get(route);
+        const bodyRecipes = res.body as Recipe[];
         expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(5);
-        expect(res.body[0].tags).to.exist;
+        expect(bodyRecipes.length).to.equal(5);
+        expect(bodyRecipes[0].tags).to.exist;
       });
       it("returns all recipes, including tags, which have a tag that matches a queried tag", async () => {
         const res = await request(app).get(`${route}?0=tone&1=tthree`);
+        const bodyRecipes = res.body as Recipe[];
         expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(3);
-        expect(new Set(res.body.map(({ id }: Recipe) => id))).to.deep.equal(new Set([recipe1.id, recipe2.id, recipe3.id]));
+        expect(bodyRecipes.length).to.equal(3);
+        expect(new Set(bodyRecipes.map(({ id }: Recipe) => id))).to.deep.equal(new Set([recipe1.id, recipe2.id, recipe3.id]));
       });
       it("sanitizes tags", async () => {
         const res = await request(app).get(`${route}?0=T1_one&1=T3_three`);
+        const bodyRecipes = res.body as Recipe[];
         expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(3);
-        expect(new Set(res.body.map(({ id }: Recipe) => id))).to.deep.equal(new Set([recipe1.id, recipe2.id, recipe3.id]));
+        expect(bodyRecipes.length).to.equal(3);
+        expect(new Set(bodyRecipes.map(({ id }: Recipe) => id))).to.deep.equal(new Set([recipe1.id, recipe2.id, recipe3.id]));
       });
       it("does not return duplicate recipes", async () => {
         const res = await request(app).get(`${route}?0=tone&1=ttwo`);
+        const bodyRecipes = res.body as Recipe[];
         expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(2);
-        expect(res.body[0].id).not.to.equal(res.body[1].id);
+        expect(bodyRecipes.length).to.equal(2);
+        expect(bodyRecipes[0].id).not.to.equal(bodyRecipes[1].id);
       });
       it("handles searching for tags that do not exist", async () => {
         const res = await request(app).get(`${route}?0=nonexistant`);
@@ -144,15 +148,16 @@ describe("API Route Recipe: /api/recipe", () => {
       });
       it("returns the recipe, including tags", async () => {
         const res = await agent.post(route).send(factoryRecipe());
+        const bodyRecipe = res.body as Recipe;
         expect(res.status).to.equal(200);
-        expect(res.body.id).to.equal(1);
-        expect(res.body.text).to.equal("text");
-        expect(res.body.title).to.equal("title");
-        expect(res.body.sourceSite).to.equal("upload");
-        expect(res.body.sourceUrl).to.equal("upload");
-        expect(res.body.createdBy).to.equal(1);
-        expect(res.body.forkedCount).to.equal(0);
-        expect(res.body.tags).to.exist;
+        expect(bodyRecipe.id).to.equal(1);
+        expect(bodyRecipe.text).to.equal("text");
+        expect(bodyRecipe.title).to.equal("title");
+        expect(bodyRecipe.sourceSite).to.equal("upload");
+        expect(bodyRecipe.sourceUrl).to.equal("upload");
+        expect(bodyRecipe.createdBy).to.equal(1);
+        expect(bodyRecipe.forkedCount).to.equal(0);
+        expect(bodyRecipe.tags).to.exist;
       });
     });
   });
@@ -166,7 +171,7 @@ describe("API Route Recipe: /api/recipe", () => {
         await agent.post(route).send(factoryRecipe());
       });
       afterEach(async () => {
-        agent2.post("api/auth/logout");
+        await agent2.post("/api/auth/logout");
       });
 
       it("makes a copy of the recipe and saves it to the user's account", async () => {
@@ -220,8 +225,9 @@ describe("API Route Recipe: /api/recipe", () => {
       it("returns the forked recipe, including tags", async () => {
         const res = await agent2.post(`${route}/fork/1`);
         const copy = await connection.manager.findOneByOrFail(Recipe, { id: 2 });
-        expect(res.body.id).to.equal(copy.id);
-        expect(res.body.tags).to.exist;
+        const bodyRecipe = res.body as Recipe;
+        expect(bodyRecipe.id).to.equal(copy.id);
+        expect(bodyRecipe.tags).to.exist;
       });
     });
   });
@@ -232,9 +238,10 @@ describe("API Route Recipe: /api/recipe", () => {
         await connection.manager.save(factoryRecipe({ user }));
 
         const res = await request(app).get(`${route}/1`);
+        const bodyRecipe = res.body as Recipe;
         expect(res.status).to.equal(200);
-        expect(res.body.id).to.equal(1);
-        expect(res.body.tags).to.exist;
+        expect(bodyRecipe.id).to.equal(1);
+        expect(bodyRecipe.tags).to.exist;
       });
       it("returns 404 if the recipe cannot be found", async () => {
         const res = await request(app).get(`${route}/1`);
@@ -344,15 +351,16 @@ describe("API Route Recipe: /api/recipe", () => {
           .put(`${route}/1`)
           .send({ text: "newText", title: "newTitle", tags: [] });
 
+        const bodyRecipe = res.body as Recipe;
         expect(res.status).to.equal(200);
-        expect(res.body.id).to.equal(1);
-        expect(res.body.text).to.equal("newText");
-        expect(res.body.title).to.equal("newTitle");
-        expect(res.body.sourceSite).to.equal("upload");
-        expect(res.body.sourceUrl).to.equal("upload");
-        expect(res.body.createdBy).to.equal(1);
-        expect(res.body.forkedCount).to.equal(0);
-        expect(res.body.tags).to.exist;
+        expect(bodyRecipe.id).to.equal(1);
+        expect(bodyRecipe.text).to.equal("newText");
+        expect(bodyRecipe.title).to.equal("newTitle");
+        expect(bodyRecipe.sourceSite).to.equal("upload");
+        expect(bodyRecipe.sourceUrl).to.equal("upload");
+        expect(bodyRecipe.createdBy).to.equal(1);
+        expect(bodyRecipe.forkedCount).to.equal(0);
+        expect(bodyRecipe.tags).to.exist;
       });
     });
 
@@ -387,7 +395,7 @@ describe("API Route Recipe: /api/recipe", () => {
         const failedRes = await agent2.delete(`${route}/1`);
         const recipe = await connection.manager.findOneByOrFail(Recipe, { id: 1 });
 
-        agent2.post("/api/auth/logout");
+        await agent2.post("/api/auth/logout");
 
         expect(failedRes.status).to.equal(403);
         expect(recipe).not.to.be.a("null");

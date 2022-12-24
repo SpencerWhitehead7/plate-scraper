@@ -11,10 +11,25 @@ export const EditAccount = () => {
 
   const [triggerEditMe] = useEditMeMutation()
 
-  const { formState, handleSubmit, register, watch, reset } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register, watch, reset } = useForm({
+    mode: `onChange`,
+    defaultValues: {
+      newEmail: ``,
+      newUserName: ``,
+      newPassword: ``,
+      password: ``,
+    }
+  })
 
   const onSubmit = handleSubmit(async ({ newEmail, newUserName, newPassword, password }) => {
-    await triggerEditMe({ userId: dataMe!.id, newEmail, newUserName, newPassword, password })
+    await triggerEditMe({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      userId: dataMe!.id,
+      newEmail,
+      newUserName,
+      newPassword,
+      password,
+    })
     reset()
   })
 

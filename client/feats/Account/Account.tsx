@@ -52,7 +52,7 @@ export const Account = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => { triggerLogout() }}
+                    onClick={() => { void triggerLogout() }}
                   >
                     Log out
                   </button>

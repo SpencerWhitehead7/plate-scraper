@@ -44,7 +44,7 @@ describe("User Entity", () => {
       return expect(connection.manager.save(user)).to.be.rejected;
     });
     it("rejects passwords >64 chars", async () => {
-      let user = factoryUser({ password: new Array(65).fill("a").join("") })
+      const user = factoryUser({ password: new Array(65).fill("a").join("") })
       return expect(connection.manager.save(user)).to.be.rejected;
     })
     it("password is hidden from selects", async () => {
@@ -70,7 +70,7 @@ describe("User Entity", () => {
       expect(user1.password).not.to.equal(user2.password);
     });
     it("password is re-encrypted when it updates", async () => {
-      let user = await connection.manager.save(factoryUser());
+      const user = await connection.manager.save(factoryUser());
       const { password: originalPassword } = user;
       // "updates" the values in the db row to their current values
       // which triggers re-encryption, changing value of password

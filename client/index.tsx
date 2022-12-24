@@ -12,6 +12,7 @@ import { App } from './App'
 import 'skeleton.css'
 import 'styles/index.scss'
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>

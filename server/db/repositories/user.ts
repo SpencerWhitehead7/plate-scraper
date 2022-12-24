@@ -21,7 +21,7 @@ class UserRepository extends AbstractRepository<User> {
       .returning("*")
       .execute();
 
-    return this.getByIdWithRecipes(createdUser.identifiers[0].id);
+    return this.getByIdWithRecipes(createdUser.identifiers[0].id as number);
   }
 
   async update(
@@ -85,4 +85,4 @@ class UserRepository extends AbstractRepository<User> {
   }
 }
 
-export default getCustomRepository(UserRepository);
+export const userRepository = getCustomRepository(UserRepository);

@@ -51,23 +51,25 @@ describe("Auth Route: /api/auth", () => {
       });
       it("if the user is logged in, it returns 200 with the user's information", async () => {
         const res = await agent.get(route);
+        const bodyUser = res.body as User;
         expect(res.status).to.equal(200);
-        expect(res.body.id).to.equal(1);
+        expect(bodyUser.id).to.equal(1);
       });
     });
 
     describe("POST", () => {
       it("creates a user with the correct credentials in the database", async () => {
         const user = await getUserWithAuth();
-        expect(user!.email).to.equal(userCred.email);
-        expect(user!.userName).to.equal(userCred.userName);
-        expect(await user!.checkPassword(userCred.password)).to.be.true;
+        expect(user?.email).to.equal(userCred.email);
+        expect(user?.userName).to.equal(userCred.userName);
+        expect(await user?.checkPassword(userCred.password)).to.be.true;
       });
       it("also logs that user into the app", async () => {
         const res = await agent.get(route);
-        expect(res.body.id).to.equal(1);
-        expect(res.body.email).to.equal(userCred.email);
-        expect(res.body.userName).to.equal(userCred.userName);
+        const bodyUser = res.body as User;
+        expect(bodyUser.id).to.equal(1);
+        expect(bodyUser.email).to.equal(userCred.email);
+        expect(bodyUser.userName).to.equal(userCred.userName);
       });
       it("returns a 409 if the user is already logged in", async () => {
         const res = await agent.post(route).send(userCred);
@@ -91,17 +93,18 @@ describe("Auth Route: /api/auth", () => {
           newPassword,
           password: userCred.password,
         });
+        const bodyUser = res.body as User;
 
         const editedUser = await getUserWithAuth();
-        expect(editedUser!.email).not.to.equal(oldUser!.email);
-        expect(editedUser!.userName).not.to.equal(oldUser!.userName);
-        expect(editedUser!.password).not.to.equal(oldUser!.password);
-        expect(editedUser!.email).to.equal(newEmail);
-        expect(editedUser!.userName).to.equal(newUserName);
-        expect(await editedUser!.checkPassword(newPassword)).to.be.true;
-        expect(res.body.email).to.equal(newEmail);
-        expect(res.body.userName).to.equal(newUserName);
-        expect(res.body.password).not.to.exist;
+        expect(editedUser?.email).not.to.equal(oldUser?.email);
+        expect(editedUser?.userName).not.to.equal(oldUser?.userName);
+        expect(editedUser?.password).not.to.equal(oldUser?.password);
+        expect(editedUser?.email).to.equal(newEmail);
+        expect(editedUser?.userName).to.equal(newUserName);
+        expect(await editedUser?.checkPassword(newPassword)).to.be.true;
+        expect(bodyUser.email).to.equal(newEmail);
+        expect(bodyUser.userName).to.equal(newUserName);
+        expect(bodyUser.password).not.to.exist;
       });
       it("handles partial updates", async () => {
         const oldUser = await getUserWithAuth();
@@ -110,16 +113,17 @@ describe("Auth Route: /api/auth", () => {
           newEmail,
           password: userCred.password,
         });
+        const bodyUser = res.body as User;
 
         const editedUser = await getUserWithAuth();
-        expect(editedUser!.email).not.to.equal(oldUser!.email);
-        expect(editedUser!.userName).to.equal(oldUser!.userName);
-        expect(editedUser!.password).to.equal(oldUser!.password);
-        expect(editedUser!.email).to.equal(newEmail);
-        expect(await editedUser!.checkPassword(userCred.password)).to.be.true;
-        expect(res.body.email).to.equal(newEmail);
-        expect(res.body.userName).to.equal(oldUser!.userName);
-        expect(res.body.password).not.to.exist;
+        expect(editedUser?.email).not.to.equal(oldUser?.email);
+        expect(editedUser?.userName).to.equal(oldUser?.userName);
+        expect(editedUser?.password).to.equal(oldUser?.password);
+        expect(editedUser?.email).to.equal(newEmail);
+        expect(await editedUser?.checkPassword(userCred.password)).to.be.true;
+        expect(bodyUser.email).to.equal(newEmail);
+        expect(bodyUser.userName).to.equal(oldUser?.userName);
+        expect(bodyUser.password).not.to.exist;
       });
       it("returns a 401 and does not edit the user if the user sends the wrong confirmation password", async () => {
         const newEmail = "new@example.com";
@@ -176,8 +180,9 @@ describe("Auth Route: /api/auth", () => {
         await agent.post(`${route}/logout`);
 
         const res = await agent.post(`${route}/login`).send(userCred);
+        const bodyUser = res.body as User;
         expect(res.status).to.equal(200);
-        expect(res.body.id).to.equal(1);
+        expect(bodyUser.id).to.equal(1);
       });
       it("returns a 401 if the user provides incorrect credentials", async () => {
         await agent.post(`${route}/logout`);

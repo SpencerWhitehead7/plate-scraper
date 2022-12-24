@@ -4,7 +4,7 @@ import { ISession } from "connect-typeorm";
 import { Column, DeleteDateColumn, Entity, Index, PrimaryColumn } from "typeorm";
 
 @Entity()
-class Session implements ISession {
+export class Session implements ISession {
   @Index()
   @Column("bigint")
   public expiredAt = Date.now();
@@ -18,5 +18,3 @@ class Session implements ISession {
   @DeleteDateColumn()
   public destroyedAt?: Date;
 }
-
-export default Session;

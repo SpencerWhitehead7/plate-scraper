@@ -16,7 +16,14 @@ export const SignupForm: React.FC<Props> = ({ className = `` }) => {
 
   const [triggerSignup] = useSignupMutation()
 
-  const { formState, handleSubmit, register, watch } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register, watch } = useForm({
+    mode: `onChange`,
+    defaultValues: {
+      signupEmail: "",
+      signupUserName: "",
+      signupPassword: "",
+    }
+  })
 
   const onSubmit = handleSubmit(async ({ signupEmail, signupUserName, signupPassword }) => {
     await triggerSignup({ email: signupEmail, userName: signupUserName, password: signupPassword })

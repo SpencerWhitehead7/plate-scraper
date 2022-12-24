@@ -25,7 +25,7 @@ const Row: React.FC<RowProps> = ({ row }) => (
   </div>
 )
 
-export const SupportedSites: React.FC<{}> = () => {
+export const SupportedSites: React.FC<Record<string, never>> = () => {
   const columnCount = 3
   const rowCount = Math.ceil(SUPPORTED_SITES.length / columnCount)
   const rows = SUPPORTED_SITES.reduce(
@@ -33,7 +33,7 @@ export const SupportedSites: React.FC<{}> = () => {
       rowsArr[i % rowsArr.length].push(site)
       return rowsArr
     },
-    new Array(rowCount).fill(null).map(_ => [] as string[]),
+    new Array(rowCount).fill(null).map(() => [] as string[]),
   )
 
   return (

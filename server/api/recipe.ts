@@ -1,16 +1,19 @@
 import { Router, RequestHandler } from "express";
 
+import { CreateRecipeReq, EditRecipeReq } from "../@types/apiContract";
 import { isAuthenticated } from "../logic/auth";
 import { serializers, permDeniedErr, notFoundRecipeErr } from "../logic/errors";
+import { Recipe, User } from "../db/entities";
 import { recipeRepository } from "../db/repositories";
 
-const recipeRouter = Router();
+export const recipeRouter = Router();
 
 const recipeExists: RequestHandler = async (req, __, next) => {
   try {
     const recipe = await recipeRepository.getById(Number(req.params.id));
     if (!recipe) throw notFoundRecipeErr;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     (req as any).recipe = recipe;
     next();
   } catch (err) {
@@ -19,6 +22,7 @@ const recipeExists: RequestHandler = async (req, __, next) => {
 }
 
 const userOwnsRecipe: RequestHandler = (req, __, next) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion
   (req as any).recipe.userId === req.user!.id ? next() : next(permDeniedErr);
 }
 
@@ -45,13 +49,15 @@ recipeRouter.get(`/`, ...serializers.recipe.get, async (req, res, next) => {
 // POST /api/recipe
 recipeRouter.post(`/`, isAuthenticated, ...serializers.recipe.post, async (req, res, next) => {
   try {
-    const { text, title, sourceSite, sourceUrl, tags } = req.body;
+    const { text, title, sourceSite, sourceUrl, tags } = req.body as CreateRecipeReq;
     const recipe = await recipeRepository.insert({
       text,
       title,
       sourceSite,
       sourceUrl,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       createdBy: req.user!.id,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       userId: req.user!.id,
       tags,
     });
@@ -64,7 +70,7 @@ recipeRouter.post(`/`, isAuthenticated, ...serializers.recipe.post, async (req, 
 // POST /api/recipe/fork/:id
 recipeRouter.post(`/fork/:id`, ...serializers.recipe.fork.id.post, ...canForkRecipe, async (req, res, next) => {
   try {
-    const { user, recipe: originalRecipe } = req as any;
+    const { user, recipe: originalRecipe } = req as unknown as { user: User, recipe: Recipe };
 
     const recipe = await recipeRepository.fork(originalRecipe, user.id);
     res.json(recipe);
@@ -88,7 +94,7 @@ recipeRouter.get(`/:id`, ...serializers.recipe.id.get, async (req, res, next) =>
 // PUT /api/recipe/:id
 recipeRouter.put(`/:id`, ...serializers.recipe.id.put, ...canAlterRecipe, async (req, res, next) => {
   try {
-    const { text, title, tags } = req.body;
+    const { text, title, tags } = req.body as EditRecipeReq;
     const updatedRecipeData: { text?: string; title?: string; tags?: string[] } = {};
     if (text) updatedRecipeData.text = text;
     if (title) updatedRecipeData.title = title;
@@ -110,5 +116,3 @@ recipeRouter.delete(`/:id`, ...serializers.recipe.id.delete, ...canAlterRecipe, 
     next(err);
   }
 });
-
-export default recipeRouter;

@@ -2,13 +2,13 @@ import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { Connection, Repository } from "typeorm";
 
-import generateUtils from "./utils";
+import { generateUtils } from "./utils";
 import { Recipe, Tag, User } from "./db/entities";
 
 chai.use(chaiAsPromised);
 export const { expect } = chai;
 
-export let app: any; // actually the result of calling express() but I can't find a type signature for it
+export let app: Express.Application;
 export let connection: Connection;
 
 export const userCred = {

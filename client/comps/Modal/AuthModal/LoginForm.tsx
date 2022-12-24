@@ -16,7 +16,13 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
 
   const [triggerLogin] = useLoginMutation()
 
-  const { formState, handleSubmit, register } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register } = useForm({
+    mode: `onChange`,
+    defaultValues: {
+      loginEmail: "",
+      loginPassword: "",
+    },
+  })
 
   const onSubmit = handleSubmit(async ({ loginEmail, loginPassword }) => {
     await triggerLogin({ email: loginEmail, password: loginPassword })

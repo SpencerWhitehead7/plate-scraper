@@ -1,2 +1,2 @@
-export { default as recipeRepository } from "./recipe";
-export { default as userRepository } from "./user";
+export { recipeRepository } from "./recipe";
+export { userRepository } from "./user";

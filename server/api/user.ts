@@ -4,7 +4,7 @@ import { userRepository } from "../db/repositories";
 import { notFoundUserErr } from "../logic/errors"
 import { serializers } from "../logic/errors";
 
-const userRouter = Router();
+export const userRouter = Router();
 
 // GET /api/user/:id
 userRouter.get(`/:id`, ...serializers.user.id.get, async (req, res, next) => {
@@ -17,5 +17,3 @@ userRouter.get(`/:id`, ...serializers.user.id.get, async (req, res, next) => {
     next(err);
   }
 });
-
-export default userRouter;

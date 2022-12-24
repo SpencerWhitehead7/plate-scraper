@@ -105,7 +105,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 
       // indicates user changed their PW
       if (entity.password) {
-        entity.password = await User.encryptPassword(entity.password)
+        entity.password = await User.encryptPassword(entity.password as string)
       }
     }
   }

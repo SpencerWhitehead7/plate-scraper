@@ -19,7 +19,7 @@ import seriousEats from "./seriouseats";
 import simplyrecipes from "./simplyrecipes";
 // import thekitchn from "./thekitchn"; // uncomment if I ever get it working
 
-const scrape = async (url: string) => {
+export const scrape = async (url: string) => {
   const res = await fetch(url);
   const html = await res.text()
   const $ = load(html);
@@ -71,5 +71,3 @@ const scrape = async (url: string) => {
 
   return recipe;
 };
-
-export default scrape;

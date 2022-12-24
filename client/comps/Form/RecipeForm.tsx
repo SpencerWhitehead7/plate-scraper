@@ -31,11 +31,11 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
   const dispatch = useAppDispatch()
   const openAuthModal = () => { dispatch(openAuthModalAction()) }
 
-  const [triggerCreateRecipe, stateCreateRecipe] = useCreateRecipeMutation()
-  const [triggerDeleteRecipe, stateDeleteRecipe] = useDeleteRecipeMutation()
-  const [triggerEditRecipe, stateEditRecipe] = useEditRecipeMutation()
+  const [triggerCreateRecipe] = useCreateRecipeMutation()
+  const [triggerDeleteRecipe] = useDeleteRecipeMutation()
+  const [triggerEditRecipe] = useEditRecipeMutation()
 
-  const { formState, handleSubmit, register, reset, watch } = useForm({
+  const { formState, handleSubmit, register, watch } = useForm({
     mode: `onChange`,
     defaultValues: {
       title: recipe.title ?? ``,
@@ -47,15 +47,27 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
   const save = handleSubmit(async ({ title, text }) => {
     if (recipe.id) {
       // if the recipe has an ID, it must exist and it's being edited
-      await triggerEditRecipe({ recipeId: recipe.id, userId: dataMe!.id, text, title, tags: updatedTags })
+      await triggerEditRecipe({
+        recipeId: recipe.id,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        userId: dataMe!.id,
+        text,
+        title,
+        tags: updatedTags
+      })
       setEditMode?.(false)
     } else {
       // otherwise, it must be being scraped/uploaded
-      triggerCreateRecipe({ userId: dataMe!.id, text, title, sourceSite: recipe.sourceSite ?? ``, sourceUrl: recipe.sourceUrl ?? ``, tags: updatedTags })
-    }
-    if (recipe.sourceSite === `upload` && recipe.sourceUrl === `upload`) {
-      setUpdatedTags([])
-      reset()
+      const newRecipe = await triggerCreateRecipe({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        userId: dataMe!.id,
+        text,
+        title,
+        sourceSite: recipe.sourceSite ?? ``,
+        sourceUrl: recipe.sourceUrl ?? ``,
+        tags: updatedTags,
+      }).unwrap()
+      navigate(URL.recipe(newRecipe.id))
     }
   })
 
@@ -81,7 +93,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
             formState={formState}
             value="Download"
             onClick={handleSubmit(({ text, title }) => {
-              downloadRecipe(text!, title!)
+              downloadRecipe(text, title)
             })}
           />
         )}
@@ -106,10 +118,9 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
           <button
             type="button"
             onClick={async () => {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               await triggerDeleteRecipe({ recipeId: recipe.id!, userId: recipe.userId! })
-              if (stateDeleteRecipe.isSuccess) {
-                navigate(URL.search())
-              }
+              navigate(URL.search())
             }}
           >
             Delete

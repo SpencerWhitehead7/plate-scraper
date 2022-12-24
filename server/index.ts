@@ -1,12 +1,13 @@
-/* eslint-disable no-console */
-import express from "express"
+import path from "path"
+
+import express, { NextFunction, Request, Response } from "express"
 import helmet from "helmet"
 import compression from "compression"
 import expressSession from "express-session"
 import { createConnection } from "typeorm"
 import { TypeormStore } from "connect-typeorm"
 import passport from "passport"
-import path from "path"
+import volleyball from "volleyball"
 
 import { Session } from "./logic/auth"
 import { generateConnectionOptions } from "./utils"
@@ -24,8 +25,8 @@ const boot = async () => {
     const connection = await createConnection(generateConnectionOptions())
     console.log(`Connected to the database`)
 
-    const api = require(`./api`)
-    const { userRepository } = require(`./db/repositories`)
+    const { apiRouter } = await import("./api")
+    const { userRepository } = await import("./db/repositories")
     const sessionRepository = connection.getRepository(Session)
 
     const app = express()
@@ -43,7 +44,7 @@ const boot = async () => {
     app.use(compression())
 
     // Logging middleware for development environment
-    if (IS_DEV) app.use(require(`volleyball`))
+    if (IS_DEV) app.use(volleyball) // some other logger for prod
 
     app.use(expressSession({
       cookie: {
@@ -59,14 +60,13 @@ const boot = async () => {
         cleanupLimit: 0, // default
         limitSubquery: true, // default
         ttl: undefined, // defaults to session.maxAge according to connect-typeorm's docs (presumably actually session.cookie.maxAge; express-session's docs don't mention a session.maxAge property)
-        // eslint-disable-next-line no-unused-vars
         onError: (typeormStore, err) => {
           console.error(err)
         },
       }).connect(sessionRepository),
     }))
     passport.serializeUser((user, done) => { done(null, user.id) })
-    passport.deserializeUser(async (id, done) => {
+    passport.deserializeUser(async (id: number, done) => {
       try {
         const user = await userRepository.getReqUser(id)
         done(null, user)
@@ -82,7 +82,7 @@ const boot = async () => {
     app.use(express.static(path.join(__dirname, `..`, `..`, `public`)))
 
     // Sub-routers
-    app.use(`/api`, api)
+    app.use(`/api`, apiRouter)
 
     // All other requests
     app.get(`*`, (req, res) => {
@@ -90,11 +90,12 @@ const boot = async () => {
     })
 
     // Error handling endware
-    app.use((err, req, res, next) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
       if (!IS_TEST) console.error(err)
 
       res
-        .status(err.statusCode ?? 500)
+        .status((err as { statusCode?: number }).statusCode ?? 500)
         .json({
           error: err.name ?? `InternalServerErr`,
           message: err.message,
@@ -104,11 +105,10 @@ const boot = async () => {
     app.listen(PORT, () => { console.log(`Partying hard on http://localhost:${PORT}`) })
     return { app, connection } // for testing
   } catch (err) {
-    console.error(`Unable to connect to the database:`, err)
-    console.log(`Not partying hard on any ports`)
+    console.error(`Not partying hard on any ports:`, err)
   }
 }
 
-if (IS_PROD || IS_DEV) boot()
+if (IS_PROD || IS_DEV) void boot()
 
-module.exports = boot // for testing
+export default boot // for testing

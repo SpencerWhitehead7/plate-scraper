@@ -1,6 +1,6 @@
 import { Connection, Repository, getConnection, getRepository } from "typeorm";
 
-import generateUtils from "../utils";
+import { generateUtils } from "../utils";
 import { Recipe, Tag, User } from "../db/entities";
 
 const seed = async () => {
@@ -18,7 +18,7 @@ const seed = async () => {
     tagRepo = getRepository(Tag);
     userRepo = getRepository(User);
   }
-  const save = (row: any) => connection.manager.save(row);
+  const save = (row: unknown) => connection.manager.save(row);
 
   await connection.synchronize(true);
   console.log("Database synced");
@@ -37,7 +37,7 @@ const seed = async () => {
       }),
     ].map(save)
   );
-  const [user1, user2] = users;
+  const [user1, user2] = users as User[];
   console.log(`Seeded ${users.length} users`);
 
   const recipes = await Promise.all(
@@ -187,7 +187,7 @@ const seed = async () => {
       }),
     ].map(save)
   );
-  const [popcake, cream, chickenStrog, cakeShake, forkedPopcake] = recipes;
+  const [popcake, cream, chickenStrog, cakeShake, forkedPopcake] = recipes as Recipe[];
   console.log(`Seeded ${recipes.length} recipes`);
 
   const tags = await Promise.all(
@@ -205,17 +205,16 @@ const seed = async () => {
 };
 
 if (module === require.main) {
-  (async () => {
-    try {
-      console.log("\nSeeding...\n");
-      await seed();
+  console.log("\nSeeding...\n");
+  seed()
+    .then(() => {
       console.log("\nSeeding complete");
       process.exit(0);
-    } catch (err) {
+    })
+    .catch((err) => {
       console.log(err);
       process.exit(1);
-    }
-  })();
+    })
 }
 
 export default seed;

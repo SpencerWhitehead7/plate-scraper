@@ -55,9 +55,9 @@ class RecipeRepository extends AbstractRepository<Recipe> {
         .relation(Recipe, "tags")
         .of(createdRecipe.generatedMaps[0])
         .add(tags);
-    };
+    }
 
-    return await this.getById(createdRecipe.identifiers[0].id, tx) ?? undefined;
+    return await this.getById(createdRecipe.identifiers[0].id as number, tx) ?? undefined;
   }
 
   private updateCb = async (
@@ -88,9 +88,11 @@ class RecipeRepository extends AbstractRepository<Recipe> {
       await tx.createQueryBuilder(Recipe, "recipe")
         .relation(Recipe, "tags")
         .of(updatedRecipe)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         .remove(updatedRecipe!.tags.filter((tag) => !newTagsSet.has(tag.name)));
 
       // add all the tags in updatedValues.tags that the recipe doesn't already have
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const currentTagsSet = new Set(updatedRecipe!.tags.map(({ name }) => name));
       await tx.createQueryBuilder(Recipe, "recipe")
         .relation(Recipe, "tags")
@@ -105,7 +107,7 @@ class RecipeRepository extends AbstractRepository<Recipe> {
       // const originalRecipe = await this.getById(id);
       // const updatedRecipe = { ...originalRecipe, ...updatedValues };
       // return this.repository.save(updatedRecipe);
-    };
+    }
 
     return await this.getById(id, tx) ?? undefined;
   }
@@ -182,4 +184,4 @@ class RecipeRepository extends AbstractRepository<Recipe> {
   }
 }
 
-export default getCustomRepository(RecipeRepository);
+export const recipeRepository = getCustomRepository(RecipeRepository);

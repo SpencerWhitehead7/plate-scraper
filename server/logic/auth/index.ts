@@ -1,2 +1,2 @@
-export { default as Session } from "./session";
+export { Session } from "./session";
 export { isAuthenticated, isNotAlreadyAuthenticated } from "./middlewares";

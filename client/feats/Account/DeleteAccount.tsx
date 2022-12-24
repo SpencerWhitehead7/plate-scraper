@@ -11,9 +11,15 @@ export const DeleteAccount = () => {
   const { data: dataMe } = useGetMeQuery()
   const [triggerDeleteMe] = useDeleteMeMutation()
 
-  const { formState, handleSubmit, register } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register } = useForm({
+    mode: `onChange`,
+    defaultValues: {
+      password: ``,
+    },
+  })
 
   const onSubmit = handleSubmit(async ({ password }) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await triggerDeleteMe({ userId: dataMe!.id, password })
     navigate(URL.base)
   })

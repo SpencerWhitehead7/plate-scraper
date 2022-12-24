@@ -1,6 +1,6 @@
 import { Connection, getConnection } from "typeorm";
 
-import generateUtils from "../utils";
+import { generateUtils } from "../utils";
 
 const cleanupOrpanedTags = async () => {
   let connection: Connection;
@@ -12,6 +12,7 @@ const cleanupOrpanedTags = async () => {
     connection = getConnection();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const [, tagsCount] = await connection.manager.query(
     `
     DELETE FROM tag
@@ -25,22 +26,22 @@ const cleanupOrpanedTags = async () => {
   );
 
   console.log(
-    `Removed ${tagsCount} tag${tagsCount > 1 || tagsCount === 0 ? `s` : ``}`
+    `Removed ${tagsCount as number} tag${tagsCount > 1 || tagsCount === 0 ? `s` : ``}`
   );
 };
 
 if (module === require.main) {
-  (async () => {
-    try {
-      console.log("\nCleaning...\n");
-      await cleanupOrpanedTags();
-      console.log("\nCleaning complete");
+  console.log("\nCleaning...\n");
+  cleanupOrpanedTags()
+    .then(() => {
+      console.log("\nCleaning completed");
       process.exit(0);
-    } catch (err) {
-      console.log(err);
+    })
+    .catch(err => {
+      console.log("\nCleaning errored");
+      console.error(err);
       process.exit(1);
-    }
-  })();
+    })
 }
 
 export default cleanupOrpanedTags;

@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 import expecteds from "./expectedResults";
 
-import scrape from "../index";
+import { scrape } from "../index";
 
 describe("Scraper", () => {
   it("throws when page cannot be loaded", () => {

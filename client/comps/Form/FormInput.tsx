@@ -6,6 +6,7 @@ import { Warning } from './Warning'
 type Props = {
   identifier: string
   labelText: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>
   registerOptions?: RegisterOptions
   errors: Partial<FieldErrorsImpl>

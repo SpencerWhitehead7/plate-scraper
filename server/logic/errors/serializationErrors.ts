@@ -15,7 +15,7 @@ const serializationErrorMiddleware: RequestHandler = (req, res, next) => {
         error: 'InvalidInputErr',
         message: errs.array(),
       });
-  };
+  }
 };
 
 const createBodyEmail = () => body('email')

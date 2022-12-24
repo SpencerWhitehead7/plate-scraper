@@ -16,9 +16,7 @@ export const Warning: React.FC<Props> = ({ leftPadded = true, customError, rhfEr
   customError || rhfError
     ? (
       <span className={classnames(s.form__warning, { [sg.pl_sest]: leftPadded })}>
-        {customError
-          ? customError
-          : rhfError!.message || rhfError!.type}
+        {customError ?? rhfError?.message ?? rhfError?.type ?? "error"}
       </span>
     )
     : null

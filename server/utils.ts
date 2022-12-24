@@ -9,7 +9,7 @@ import {
   UserSubscriber,
 } from "./db/entities";
 import { Session } from "./logic/auth";
-const boot = require("./index");
+import boot from "./index";
 
 export const generateConnectionOptions = (): ConnectionOptions => {
   const isTest = process.env.NODE_ENV === "test";
@@ -28,8 +28,10 @@ export const generateConnectionOptions = (): ConnectionOptions => {
   };
 };
 
-const generateUtils = async () => {
-  const { app, connection } = await boot();
+export const generateUtils = async () => {
+  const { app, connection } = await boot() ?? {};
+
+  if (!app || !connection) throw Error("failed to boot")
 
   return {
     app,
@@ -39,5 +41,3 @@ const generateUtils = async () => {
     userRepo: getRepository(User),
   };
 };
-
-export default generateUtils;

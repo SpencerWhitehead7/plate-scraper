@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import skele from '@/skeleton.css'
 
 type Props = {
-  formState: FormState<{}>
+  formState: FormState<object>
   onClick: VoidFunction
   value: string
 }

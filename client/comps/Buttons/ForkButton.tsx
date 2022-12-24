@@ -21,7 +21,7 @@ export const ForkButton: React.FC<Props> = ({ recipeId, userId }) => {
       ? <LoadingIndicator /> // todo: apply size
       : <button
         type="button"
-        onClick={() => { triggerForkRecipe({ recipeId, userId }) }}
+        onClick={() => { void triggerForkRecipe({ recipeId, userId }) }}
         className={skele[`button-primary`]}
       >
         Fork

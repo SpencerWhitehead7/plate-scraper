@@ -20,12 +20,17 @@ export const Search = () => {
   const [getRecipeByTagTrigger, getRecipeByTagState] = useLazyGetRecipesByTagQuery()
   const { isLoading: isLoadingGetRecipesByTagState, data: dataGetRecipesByTagState } = getRecipeByTagState
 
-  const { formState, handleSubmit, register, setValue } = useForm({ mode: `onChange` })
+  const { formState, handleSubmit, register, setValue } = useForm({
+    mode: `onChange`,
+    defaultValues: {
+      searchTerms: "",
+    }
+  })
 
   useEffect(() => {
     if (tags.length) {
       setValue(`searchTerms`, tags.join(` `))
-      getRecipeByTagTrigger({ tags })
+      void getRecipeByTagTrigger({ tags })
     }
   }, [tags, setValue, getRecipeByTagTrigger])
 

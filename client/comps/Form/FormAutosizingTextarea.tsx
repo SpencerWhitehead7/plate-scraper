@@ -8,6 +8,7 @@ import s from './Form.scss'
 type Props = {
   identifier: string
   labelText: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>
   registerOptions?: RegisterOptions
   watch: (fieldName: string) => void // this sucks, but the TS api for RHF is so awkward that it seems there's no better way

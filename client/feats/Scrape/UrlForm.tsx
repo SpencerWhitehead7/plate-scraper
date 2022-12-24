@@ -29,9 +29,18 @@ export const UrlForm: React.FC<Props> = ({ submit }) => {
         registerOptions={{
           required: `required`,
           validate: {
-            // eslint-disable-next-line no-extra-parens -- useful to indicate difference between conditionals and warning message
-            correctSeriousEats: value => (!value.toLowerCase().includes(`seriouseats.com`) || value.toLowerCase().includes(`seriouseats.com/recipes`)) || `Make sure your url is from seriouseats.com/recipes, not just seriouseats.com`,
-            siteSupported: value => SUPPORTED_SITES.some(site => value.toLowerCase().includes(site)) || `Site is not supported`,
+            correctSeriousEats: (v: string) => {
+              const sanitized = v.toLowerCase()
+              return sanitized.includes(`seriouseats.com`) && !sanitized.includes(`seriouseats.com/recipes`)
+                ? `Make sure your url is from seriouseats.com/recipes, not just seriouseats.com`
+                : undefined
+            },
+            siteSupported: (v: string) => {
+              const sanitized = v.toLowerCase()
+              return !SUPPORTED_SITES.some(site => sanitized.includes(site))
+                ? `Site is not supported`
+                : undefined
+            }
           },
         }}
         errors={formState.errors}

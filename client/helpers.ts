@@ -7,6 +7,5 @@ export const downloadRecipe = (text: string, title: string) => {
   downloadLink.style.display = `none`
   document.body.appendChild(downloadLink)
   downloadLink.click()
-  // eslint-disable-next-line no-alert
   alert(`Saved to your default download location`)
 }

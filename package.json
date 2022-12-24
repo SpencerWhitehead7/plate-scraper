@@ -22,7 +22,9 @@
     "dev:be": "ts-node-dev --project server/tsconfig.json server",
     "dev:fe": "node built/server & webpack serve --mode=development",
     "dev": "ts-node-dev --project server/tsconfig.json server & webpack serve --mode=development",
-    "test:be": "NODE_ENV='test' TS_NODE_PROJECT='./server/tsconfig.json' mocha -r ts-node/register --file server/mochaSetup.ts --timeout 10000 --exit -- 'server/**/__tests__/*.spec.ts'"
+    "test:be": "NODE_ENV='test' TS_NODE_PROJECT='./server/tsconfig.json' mocha -r ts-node/register --file server/mochaSetup.ts --timeout 10000 --exit -- 'server/**/__tests__/*.spec.ts'",
+    "test:fe": "ECHO not implemented",
+    "test": "npm run test:be && npm run test:fe"
   },
   "//": "passport and class-validator are bugged on the current versions - check back in on next update to see if they can be put back on ^latest",
   "dependencies": {
@@ -63,6 +65,7 @@
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/cheerio": "^0.22.31",
+    "@types/compression": "^1.7.2",
     "@types/express": "^4.17.14",
     "@types/express-session": "^1.17.5",
     "@types/mocha": "^10.0.1",
@@ -71,8 +74,8 @@
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.47.0",
-    "@typescript-eslint/parser": "^5.47.0",
+    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/parser": "^5.47.1",
     "babel-loader": "^9.1.0",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",

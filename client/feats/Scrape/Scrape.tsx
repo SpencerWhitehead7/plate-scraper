@@ -8,7 +8,7 @@ import { useScrapeMutation } from '@/reducers'
 import { SupportedSites } from './SupportedSites'
 import { UrlForm } from './UrlForm'
 
-export const Scrape: React.FC<{}> = () => {
+export const Scrape: React.FC<Record<string, never>> = () => {
   const [triggerScrape, stateScrape] = useScrapeMutation()
   const { isLoading: isLoadingScrape, data: dataScrape, error: errorScrape } = stateScrape
 
