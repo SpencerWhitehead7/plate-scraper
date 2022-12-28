@@ -7,7 +7,10 @@ html {
 .main {
   display: flex;
   justify-content: center;
-  background: linear-gradient(rgba(50, 195, 239, 0.6), rgba(50, 195, 239, 0)); // $color-good as an rbga
+  background: linear-gradient(
+    rgba(50, 195, 239, 0.6),
+    rgba(50, 195, 239, 0)
+  ); // $color-good as an rbga
 }
 
 .content {

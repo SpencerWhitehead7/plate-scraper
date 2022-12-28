@@ -6,16 +6,16 @@ export const getCleanStrings = (
 ) =>
   (context ? $(selector, context) : $(selector))
     .map(function (this: void) {
-      let res = $(this).text().trim().replace(/\s+/g, " ");
+      let res = $(this).text().trim().replace(/\s+/g, " ")
 
       additionalCleaners.forEach(([filter, replacer = ""]) => {
-        res = res.replace(filter, replacer);
-      });
+        res = res.replace(filter, replacer)
+      })
 
-      return res;
+      return res
     })
     .get()
-    .filter(Boolean) as string[];
+    .filter(Boolean) as string[]
 
 export const getRecipe = (
   url: string,
@@ -30,4 +30,4 @@ export const getRecipe = (
     ingredients.join("\n"),
     "Instructions",
     ...instructions,
-  ].join("\n\n") + "\n";
+  ].join("\n\n") + "\n"

@@ -1,16 +1,16 @@
-import React from 'react'
-import classnames from 'classnames'
+import classnames from "classnames"
+import React from "react"
 
-import { LoginForm } from './LoginForm'
-import { SignupForm } from './SignupForm'
+import skele from "@/skeleton.css"
 
-import skele from '@/skeleton.css'
+import { LoginForm } from "./LoginForm"
+import { SignupForm } from "./SignupForm"
 
 export const AuthModal = () => (
   <div className={skele.container}>
     <div className={skele.row}>
-      <LoginForm className={classnames(skele[`one-half`], skele.column)} />
-      <SignupForm className={classnames(skele[`one-half`], skele.column)} />
+      <LoginForm className={classnames(skele["one-half"], skele.column)} />
+      <SignupForm className={classnames(skele["one-half"], skele.column)} />
     </div>
   </div>
 )

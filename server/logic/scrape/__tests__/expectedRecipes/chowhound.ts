@@ -31,6 +31,6 @@ An hour before the soup is done, heat your oven to 400°F. Coat a baking sheet w
 Purée the soup, using an immersion blender or carefully transferring it in batches to a regular blender. Stop when you get the consistency you like (we prefer it a little chunky). Season with black pepper and salt to taste (there may be enough salt from the vegetable broth alone, so season with caution).
 
 Ladle into warmed bowls and garnish with the roasted chickpeas.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

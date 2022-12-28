@@ -1,1 +1,1 @@
-export { PageFailure } from "./PageFailure";
+export { PageFailure } from "./PageFailure"

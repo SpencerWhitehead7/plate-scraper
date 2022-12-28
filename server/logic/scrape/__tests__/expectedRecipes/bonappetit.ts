@@ -24,6 +24,6 @@ Cut ends off lemon and discard. Place lemon upright and slice off outer lobes in
 Clean and oil grate, then immediately place salmon on grill skin side down. Cover grill and cook, skin side down the entire time, until skin is lightly charred and fish is opaque, 6–8 minutes. Transfer salmon to a plate and let cool slightly.
 
 Divide salmon among plates. Top with basil. Spoon lemon-sesame sauce over.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

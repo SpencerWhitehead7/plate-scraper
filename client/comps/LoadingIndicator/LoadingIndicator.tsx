@@ -1,8 +1,9 @@
-import React from 'react'
+import React from "react"
 
-import s from './LoadingIndicator.scss'
+import s from "./LoadingIndicator.scss"
 
-export const LoadingIndicator = () => ( // TODO: customizable size
+export const LoadingIndicator = () => (
+  // TODO: customizable size
   <div className={s.loadingIndicator}>
     <div className={s.loadingIndicator__spinner} />
   </div>

@@ -1,23 +1,29 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react"
+import { Link } from "react-router-dom"
 
-import { URL } from '@/consts'
-import { ButtonSection, DownloadButton, ForkButton } from '@/comps/Buttons'
-import { Tags } from '@/comps/Tags'
+import { ApiRecipe } from "@/@types/apiContract"
+import { ButtonSection, DownloadButton, ForkButton } from "@/comps/Buttons"
+import { Tags } from "@/comps/Tags"
+import { URL } from "@/consts"
+import sg from "@/styles/index.scss"
 
-import sg from '@/styles/index.scss'
-import s from './RecipeRows.scss'
+import s from "./RecipeRows.scss"
 
-import { ApiRecipe } from '@/@types/apiContract'
-
-const RecipeRow: React.FC<ApiRecipe> = ({ createdBy, forkedCount, id, sourceSite, tags, text, title, userId }) => (
+const RecipeRow: React.FC<ApiRecipe> = ({
+  createdBy,
+  forkedCount,
+  id,
+  sourceSite,
+  tags,
+  text,
+  title,
+  userId,
+}) => (
   <div className={s.recipeRow}>
     <div className={s.recipeRow__info}>
       <div>
         <div>
-          <Link to={URL.recipe(id)}>
-            {title}
-          </Link>
+          <Link to={URL.recipe(id)}>{title}</Link>
           {` - ${sourceSite}`}
         </div>
         <Tags tags={tags} />
@@ -34,9 +40,7 @@ const RecipeRow: React.FC<ApiRecipe> = ({ createdBy, forkedCount, id, sourceSite
           </div>
           <div>
             Owned&nbsp;by&nbsp;
-            <Link to={URL.user(userId)}>
-              {userId}
-            </Link>
+            <Link to={URL.user(userId)}>{userId}</Link>
           </div>
         </div>
         <div>{`Forked ${forkedCount} times`}</div>
@@ -54,6 +58,10 @@ type Props = {
   recipes: ApiRecipe[]
 }
 
-export const RecipeRows: React.FC<Props> = ({ recipes }) => <>
-  {recipes.map((recipe: ApiRecipe) => <RecipeRow key={recipe.id} {...recipe} />)}
-</>
+export const RecipeRows: React.FC<Props> = ({ recipes }) => (
+  <>
+    {recipes.map((recipe: ApiRecipe) => (
+      <RecipeRow key={recipe.id} {...recipe} />
+    ))}
+  </>
+)

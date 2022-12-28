@@ -1,7 +1,11 @@
-import React from 'react'
-import { FieldErrorsImpl, RegisterOptions, UseFormRegister } from 'react-hook-form'
+import React from "react"
+import {
+  FieldErrorsImpl,
+  RegisterOptions,
+  UseFormRegister,
+} from "react-hook-form"
 
-import { Warning } from './Warning'
+import { Warning } from "./Warning"
 
 type Props = {
   identifier: string
@@ -19,7 +23,7 @@ export const FormInput: React.FC<Props> = ({
   register,
   registerOptions,
   errors = {},
-  type = `text`,
+  type = "text",
   ...restProps
 }) => (
   <>

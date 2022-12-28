@@ -28,6 +28,6 @@ Coat a 10-inch tube pan with baking spray. Weigh or lightly spoon flour into dry
 Add flour mixture and milk alternately to batter, beginning and ending with flour. Spoon batter into pan; bake at 325° for 1 hour and 10 minutes or until a wooden pick inserted in center comes out with moist crumbs clinging. Cool in pan on a wire rack 10 minutes. Invert cake. Cool on rack.
 
 Place juice in a saucepan over medium-high heat; bring to a boil. Cook until reduced to 3 tablespoons (about 4 minutes). Cool slightly. Stir in powdered sugar and remaining 1/8 teaspoon salt. Drizzle over cake.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

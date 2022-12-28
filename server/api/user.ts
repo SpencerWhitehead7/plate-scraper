@@ -1,19 +1,19 @@
-import { Router } from "express";
+import { Router } from "express"
 
-import { userRepository } from "../db/repositories";
+import { userRepository } from "../db/repositories"
 import { notFoundUserErr } from "../logic/errors"
-import { serializers } from "../logic/errors";
+import { serializers } from "../logic/errors"
 
-export const userRouter = Router();
+export const userRouter = Router()
 
 // GET /api/user/:id
-userRouter.get(`/:id`, ...serializers.user.id.get, async (req, res, next) => {
+userRouter.get("/:id", ...serializers.user.id.get, async (req, res, next) => {
   try {
-    const user = await userRepository.getByIdWithRecipes(Number(req.params.id));
-    if (!user) throw notFoundUserErr;
+    const user = await userRepository.getByIdWithRecipes(Number(req.params.id))
+    if (!user) throw notFoundUserErr
 
-    res.json(user);
+    res.json(user)
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})

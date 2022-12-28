@@ -1,0 +1,21 @@
+{
+  "printWidth": 80,
+  "semi": false,
+  "importOrderParserPlugins": [
+    "typescript",
+    "jsx",
+    "decorators-legacy"
+  ],
+  "importOrder": [
+    "core-js/stable",
+    "regenerator-runtime/runtime",
+    "<THIRD_PARTY_MODULES>",
+    "^@/",
+    "^../",
+    "^./",
+    ".*scss$",
+    ".*css$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

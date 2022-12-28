@@ -1,10 +1,9 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import React from "react"
+import { useForm } from "react-hook-form"
 
-import { FormInput, FormSubmit } from '@/comps/Form'
-import { useEditMeMutation, useGetMeQuery } from '@/reducers'
-
-import skele from '@/skeleton.css'
+import { FormInput, FormSubmit } from "@/comps/Form"
+import { useEditMeMutation, useGetMeQuery } from "@/reducers"
+import skele from "@/skeleton.css"
 
 export const EditAccount = () => {
   const { data: dataMe } = useGetMeQuery()
@@ -12,26 +11,28 @@ export const EditAccount = () => {
   const [triggerEditMe] = useEditMeMutation()
 
   const { formState, handleSubmit, register, watch, reset } = useForm({
-    mode: `onChange`,
+    mode: "onChange",
     defaultValues: {
-      newEmail: ``,
-      newUserName: ``,
-      newPassword: ``,
-      password: ``,
-    }
+      newEmail: "",
+      newUserName: "",
+      newPassword: "",
+      password: "",
+    },
   })
 
-  const onSubmit = handleSubmit(async ({ newEmail, newUserName, newPassword, password }) => {
-    await triggerEditMe({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      userId: dataMe!.id,
-      newEmail,
-      newUserName,
-      newPassword,
-      password,
-    })
-    reset()
-  })
+  const onSubmit = handleSubmit(
+    async ({ newEmail, newUserName, newPassword, password }) => {
+      await triggerEditMe({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        userId: dataMe!.id,
+        newEmail,
+        newUserName,
+        newPassword,
+        password,
+      })
+      reset()
+    }
+  )
 
   return (
     <form onSubmit={onSubmit} className={skele.column}>
@@ -65,7 +66,8 @@ export const EditAccount = () => {
           register={register}
           registerOptions={{
             validate: {
-              matches: value => value === watch(`newPassword`) || `Passwords must match`,
+              matches: (val) =>
+                val === watch("newPassword") || "Passwords must match",
             },
           }}
           errors={formState.errors}

@@ -1,10 +1,10 @@
-import React from 'react'
-import { FieldError } from 'react-hook-form'
-import classnames from 'classnames'
+import classnames from "classnames"
+import React from "react"
+import { FieldError } from "react-hook-form"
 
-import s from './Form.scss'
+import sg from "@/styles/index.scss"
 
-import sg from '@/styles/index.scss'
+import s from "./Form.scss"
 
 type Props = {
   leftPadded?: boolean
@@ -12,12 +12,13 @@ type Props = {
   customError?: string
 }
 
-export const Warning: React.FC<Props> = ({ leftPadded = true, customError, rhfError }) => (
-  customError || rhfError
-    ? (
-      <span className={classnames(s.form__warning, { [sg.pl_sest]: leftPadded })}>
-        {customError ?? rhfError?.message ?? rhfError?.type ?? "error"}
-      </span>
-    )
-    : null
-)
+export const Warning: React.FC<Props> = ({
+  leftPadded = true,
+  customError,
+  rhfError,
+}) =>
+  customError || rhfError ? (
+    <span className={classnames(s.form__warning, { [sg.pl_sest]: leftPadded })}>
+      {customError ?? rhfError?.message ?? rhfError?.type ?? "error"}
+    </span>
+  ) : null

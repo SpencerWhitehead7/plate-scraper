@@ -1,34 +1,37 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit"
+import type { PayloadAction } from "@reduxjs/toolkit"
 
-import { AuthModal } from './AuthModal'
+import { AuthModal } from "./AuthModal"
 
 export const MODAL_TYPES = {
-  AUTH: 'modal_types/AUTH',
+  AUTH: "modal_types/AUTH",
 }
 
 export const MODAL_MAP = {
   [MODAL_TYPES.AUTH]: AuthModal,
-  '': undefined,
+  "": undefined,
 }
 
 type ModalState = {
-  modalType: keyof typeof MODAL_MAP | ''
+  modalType: keyof typeof MODAL_MAP
 }
 
 const initialState: ModalState = {
-  modalType: '',
+  modalType: "",
 }
 
 const modalSlice = createSlice({
-  name: 'modal',
+  name: "modal",
   initialState,
   reducers: {
-    openModal: (state, { payload }: PayloadAction<{ modalType: keyof typeof MODAL_MAP }>) => {
+    openModal: (
+      state,
+      { payload }: PayloadAction<{ modalType: keyof typeof MODAL_MAP }>
+    ) => {
       state.modalType = payload.modalType
     },
     closeModal: (state) => {
-      state.modalType = ''
+      state.modalType = ""
     },
   },
 })

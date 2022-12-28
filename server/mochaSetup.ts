@@ -1,29 +1,29 @@
-import chai from "chai";
-import chaiAsPromised from "chai-as-promised";
-import { Connection, Repository } from "typeorm";
+import chai from "chai"
+import chaiAsPromised from "chai-as-promised"
+import { Connection, Repository } from "typeorm"
 
-import { generateUtils } from "./utils";
-import { Recipe, Tag, User } from "./db/entities";
+import { Recipe, Tag, User } from "./db/entities"
+import { generateUtils } from "./utils"
 
-chai.use(chaiAsPromised);
-export const { expect } = chai;
+chai.use(chaiAsPromised)
+export const { expect } = chai
 
-export let app: Express.Application;
-export let connection: Connection;
+export let app: Express.Application
+export let connection: Connection
 
 export const userCred = {
   email: "email@provider.com",
   userName: "userName",
   password: "password",
-};
+}
 
 export const user2Cred = {
   email: "email2@provider.com",
   userName: "userName2",
   password: "password",
-};
+}
 
-let recipeRepo: Repository<Recipe>;
+let recipeRepo: Repository<Recipe>
 export const factoryRecipe = (values = {}) =>
   recipeRepo.create({
     text: "text",
@@ -31,40 +31,35 @@ export const factoryRecipe = (values = {}) =>
     createdBy: 1,
     tags: [],
     ...values,
-  });
+  })
 
-let tagRepo: Repository<Tag>;
+let tagRepo: Repository<Tag>
 export const factoryTag = (values = {}) =>
   tagRepo.create({
     name: "tag",
     ...values,
-  });
+  })
 
-let userRepo: Repository<User>;
+let userRepo: Repository<User>
 export const factoryUser = (values = {}) =>
   userRepo.create({
     ...userCred,
     ...values,
-  });
+  })
 
 export const syncDB = async () => {
   try {
-    await connection.synchronize(true);
+    await connection.synchronize(true)
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
-};
+}
 
 before(async () => {
   try {
-    ({
-      app,
-      connection,
-      recipeRepo,
-      tagRepo,
-      userRepo,
-    } = await generateUtils());
+    ;({ app, connection, recipeRepo, tagRepo, userRepo } =
+      await generateUtils())
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
-});
+})

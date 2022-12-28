@@ -24,6 +24,6 @@ At least two hours before baking, remove dough from refrigerator and shape into 
 1 hour before baking, adjust oven rack with pizza stone to middle position and preheat oven to 500°F. Turn single dough ball out onto lightly flour surface. Gently press out dough into rough 8-inch circle, leaving outer 1-inch higher than the rest. Gently stretch dough by draping over knuckles into a 12 to 14-inch circle about 1/4-inch thick. Transfer to pizza peel.
 
 Spread approximately 2/3 cup of sauce evenly over surface of crust, leaving 1/2 to 1-inch border along edge. Evenly spread 1/3 of cheese over sauce. Slide pizza onto baking stone and bake until cheese is melted with some browned spots and crust is golden brown and puffed, 12 to 15 minutes total. Transfer to cutting board, slice, and serve immediately. Repeat with remaining two dough balls, remaining sauce, and remaining cheese.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

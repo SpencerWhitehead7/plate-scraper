@@ -40,6 +40,6 @@ Place the salmon skin side up on the grill pan and transfer the pan to the grill
 Gently, flip the fish to skin side down, close the lid, and grill for another 3 to 4 minutes. Open the lid and watch carefully until the fish is done, another 1 to 3 minutes. The salmon is perfectly cooked when the top and bottom are opaque and there is a nice translucent streak through the middle. (If you prefer your salmon more well-done, continue cooking to your preferred doneness.)
 
 Serve: Remove from the grill and serve immediately. Top with peach salsa and cilantro and chilies for garnish.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

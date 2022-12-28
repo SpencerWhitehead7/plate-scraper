@@ -1,16 +1,22 @@
-import { getCleanStrings, getRecipe } from "./helpers";
+import { getCleanStrings, getRecipe } from "./helpers"
 
 const allrecipes = ($: cheerio.Root, url: string) => {
-  const title = getCleanStrings($, `h1`);
-  const ingredients = getCleanStrings($, `.mntl-structured-ingredients__list-item`);
-  const instructions = getCleanStrings($, `.comp.mntl-sc-block.mntl-sc-block-html`);
+  const title = getCleanStrings($, "h1")
+  const ingredients = getCleanStrings(
+    $,
+    ".mntl-structured-ingredients__list-item"
+  )
+  const instructions = getCleanStrings(
+    $,
+    ".comp.mntl-sc-block.mntl-sc-block-html"
+  )
 
   return {
-    sourceSite: `allrecipes.com`,
+    sourceSite: "allrecipes.com",
     sourceUrl: url,
     text: getRecipe(url, title, ingredients, instructions),
     title: title[0],
-  };
-};
+  }
+}
 
-export default allrecipes;
+export default allrecipes

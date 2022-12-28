@@ -1,3 +1,3 @@
-export { Modal } from './Modal'
+export { Modal } from "./Modal"
 
-export { modalReducer, openAuthModal } from './modalReducer'
+export { modalReducer, openAuthModal } from "./modalReducer"

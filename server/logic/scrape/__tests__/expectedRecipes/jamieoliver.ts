@@ -22,6 +22,6 @@ Meanwhile, beat the eggs, flour, milk and a pinch of salt and pepper together in
 Carefully remove the tray from the oven, then confidently pour the batter evenly into the compartments.
 
 Pop the tray back in the oven to cook for 12 to 15 minutes, or until risen and golden.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

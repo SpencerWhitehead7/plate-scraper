@@ -21,6 +21,6 @@ Very thinly slice the artichoke hearts and immediately toss them in a bowl with 
 Heat the remaining 2 tablespoons oil in a large skillet over medium-high heat. Add shrimp and the remaining 1/8 teaspoon pepper. Cook, stirring occasionally, until the shrimp are pink, 3 to 4 minutes.
 
 Serve the shrimp with the artichokes and garnished with more mint, if desired.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

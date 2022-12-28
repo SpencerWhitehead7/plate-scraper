@@ -1,9 +1,12 @@
-import React, { useEffect, useRef } from 'react'
-import { FieldErrorsImpl, RegisterOptions, UseFormRegister } from 'react-hook-form'
+import React, { useEffect, useRef } from "react"
+import {
+  FieldErrorsImpl,
+  RegisterOptions,
+  UseFormRegister,
+} from "react-hook-form"
 
-import { Warning } from './Warning'
-
-import s from './Form.scss'
+import s from "./Form.scss"
+import { Warning } from "./Warning"
 
 type Props = {
   identifier: string
@@ -31,7 +34,7 @@ export const FormAutosizingTextarea: React.FC<Props> = ({
   useEffect(() => {
     const originalY = window.scrollY
     if (eleRef.current) {
-      eleRef.current.style.height = `auto`
+      eleRef.current.style.height = "auto"
       eleRef.current.style.height = `${eleRef.current.scrollHeight + 5}px` // enough to remove scrollbar
       eleRef.current.scrollTop = eleRef.current.scrollHeight
       window.scrollTo(window.scrollX, originalY)
@@ -49,7 +52,7 @@ export const FormAutosizingTextarea: React.FC<Props> = ({
       <textarea
         {...restProps}
         id={identifier}
-        ref={ele => {
+        ref={(ele) => {
           ref(ele)
           eleRef.current = ele
         }}

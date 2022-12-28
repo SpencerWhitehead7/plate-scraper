@@ -1,9 +1,13 @@
-import React from 'react'
-import { FieldErrorsImpl, RegisterOptions, UseFormRegister } from 'react-hook-form'
+import React from "react"
+import {
+  FieldErrorsImpl,
+  RegisterOptions,
+  UseFormRegister,
+} from "react-hook-form"
 
-import { Warning } from '@/comps/Form'
+import { Warning } from "@/comps/Form"
 
-import s from './Form.scss'
+import s from "./Form.scss"
 
 type Props = {
   identifier: string
@@ -22,7 +26,7 @@ export const FormInputButtonBar: React.FC<Props> = ({
   register,
   registerOptions,
   errors = {},
-  type = `text`,
+  type = "text",
   Button,
   ...restProps
 }) => (

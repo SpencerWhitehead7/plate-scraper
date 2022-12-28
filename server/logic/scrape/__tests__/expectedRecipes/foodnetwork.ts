@@ -15,6 +15,6 @@ About 20 minutes before grilling, remove the steaks from the refrigerator and le
 Heat your grill to high. Brush the steaks on both sides with oil and season liberally with salt and pepper. Place the steaks on the grill and cook until golden brown and slightly charred, 4 to 5 minutes. Turn the steaks over and continue to grill 3 to 5 minutes for medium-rare (an internal temperature of 135 degrees F), 5 to 7 minutes for medium (140 degrees F) or 8 to 10 minutes for medium-well (150 degrees F).
 
 Transfer the steaks to a cutting board or platter, tent loosely with foil and let rest 5 minutes before slicing.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

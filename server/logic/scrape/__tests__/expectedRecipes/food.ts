@@ -21,6 +21,6 @@ Pour into two 12-ounce glasses.
 Garnish the top with a squirt of whipped cream from a can and about a teaspoon of graham cracker crumbs from the cheesecake kit.
 
 Serve.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

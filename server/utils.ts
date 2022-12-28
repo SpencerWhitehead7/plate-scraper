@@ -1,4 +1,4 @@
-import { getRepository, ConnectionOptions } from "typeorm";
+import { ConnectionOptions, getRepository } from "typeorm"
 
 import {
   Recipe,
@@ -7,12 +7,12 @@ import {
   TagSubscriber,
   User,
   UserSubscriber,
-} from "./db/entities";
-import { Session } from "./logic/auth";
-import boot from "./index";
+} from "./db/entities"
+import boot from "./index"
+import { Session } from "./logic/auth"
 
 export const generateConnectionOptions = (): ConnectionOptions => {
-  const isTest = process.env.NODE_ENV === "test";
+  const isTest = process.env.NODE_ENV === "test"
 
   return {
     type: "postgres",
@@ -20,16 +20,16 @@ export const generateConnectionOptions = (): ConnectionOptions => {
     // port: "5432",
     username: "spencer",
     password: "",
-    database: `plate-scraper${isTest ? `-test` : ``}`,
+    database: `plate-scraper${isTest ? "-test" : ""}`,
     entities: [Recipe, Tag, User, Session],
     subscribers: [RecipeSubscriber, TagSubscriber, UserSubscriber],
     synchronize: isTest,
     dropSchema: isTest,
-  };
-};
+  }
+}
 
 export const generateUtils = async () => {
-  const { app, connection } = await boot() ?? {};
+  const { app, connection } = (await boot()) ?? {}
 
   if (!app || !connection) throw Error("failed to boot")
 
@@ -39,5 +39,5 @@ export const generateUtils = async () => {
     recipeRepo: getRepository(Recipe),
     tagRepo: getRepository(Tag),
     userRepo: getRepository(User),
-  };
-};
+  }
+}

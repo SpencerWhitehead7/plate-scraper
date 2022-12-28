@@ -1,44 +1,43 @@
 import {
-  EntityRepository,
   AbstractRepository,
+  EntityRepository,
   getCustomRepository,
-} from "typeorm";
+} from "typeorm"
 
-import { User } from "../entities";
+import { User } from "../entities"
 
 @EntityRepository(User)
 class UserRepository extends AbstractRepository<User> {
-
   async insert(userData: {
-    email: string,
-    userName: string,
-    password: string,
+    email: string
+    userName: string
+    password: string
   }) {
     const createdUser = await this.createQueryBuilder("user")
       .insert()
       .into(User)
       .values(userData)
       .returning("*")
-      .execute();
+      .execute()
 
-    return this.getByIdWithRecipes(createdUser.identifiers[0].id as number);
+    return this.getByIdWithRecipes(createdUser.identifiers[0].id as number)
   }
 
   async update(
     id: number,
     updatedUserData: {
-      email?: string;
-      userName?: string;
-      password?: string;
+      email?: string
+      userName?: string
+      password?: string
     }
   ) {
     await this.createQueryBuilder("user")
       .update(User)
       .set(updatedUserData)
       .where("id = :id", { id })
-      .execute();
+      .execute()
 
-    return this.getByIdWithRecipes(id);
+    return this.getByIdWithRecipes(id)
   }
 
   delete(user: User) {
@@ -46,20 +45,20 @@ class UserRepository extends AbstractRepository<User> {
       .delete()
       .from(User)
       .where("id = :id", { id: user.id })
-      .execute();
+      .execute()
   }
 
   getReqUser(id: number) {
     return this.createQueryBuilder("user")
       .select()
       .where("user.id = :id", { id })
-      .getOne();
+      .getOne()
   }
 
   getById(id: number) {
     return this.createQueryBuilder("user")
       .where("user.id = :id", { id })
-      .getOne();
+      .getOne()
   }
 
   getByIdWithRecipes(id: number) {
@@ -67,22 +66,22 @@ class UserRepository extends AbstractRepository<User> {
       .leftJoinAndSelect("user.recipes", "recipe")
       .leftJoinAndSelect("recipe.tags", "tag")
       .where("user.id = :id", { id })
-      .getOne();
+      .getOne()
   }
 
   getByIdWithAuth(id: number) {
     return this.createQueryBuilder("user")
       .addSelect("user.password")
       .where("user.id = :id", { id })
-      .getOne();
+      .getOne()
   }
 
   getByEmailWithAuth(email: string) {
     return this.createQueryBuilder("user")
       .addSelect("user.password")
       .where("user.email = :email", { email })
-      .getOne();
+      .getOne()
   }
 }
 
-export const userRepository = getCustomRepository(UserRepository);
+export const userRepository = getCustomRepository(UserRepository)

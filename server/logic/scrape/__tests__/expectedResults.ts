@@ -1,19 +1,20 @@
-import allrecipesRecipe from "./expectedRecipes/allrecipes";
-import bettycrockerRecipe from "./expectedRecipes/bettycrocker";
-import bonappetitRecipe from "./expectedRecipes/bonappetit";
-import chowhoundRecipe from "./expectedRecipes/chowhound";
-import cookinglightRecipe from "./expectedRecipes/cookinglight";
-import eatingwellRecipe from "./expectedRecipes/eatingwell";
-import eatingwellFallbackOriginRecipe from "./expectedRecipes/eatingwellFallbackOrigin";
-import epicuriousRecipe from "./expectedRecipes/epicurious";
-import foodRecipe from "./expectedRecipes/food";
+import allrecipesRecipe from "./expectedRecipes/allrecipes"
+import bettycrockerRecipe from "./expectedRecipes/bettycrocker"
+import bonappetitRecipe from "./expectedRecipes/bonappetit"
+import chowhoundRecipe from "./expectedRecipes/chowhound"
+import cookinglightRecipe from "./expectedRecipes/cookinglight"
+import eatingwellRecipe from "./expectedRecipes/eatingwell"
+import eatingwellFallbackOriginRecipe from "./expectedRecipes/eatingwellFallbackOrigin"
+import epicuriousRecipe from "./expectedRecipes/epicurious"
+import foodRecipe from "./expectedRecipes/food"
 // import food52Recipe from "./food52";
-import foodandwineRecipe from "./expectedRecipes/foodandwine";
-import foodnetworkRecipe from "./expectedRecipes/foodnetwork";
-import jamieoliverRecipe from "./expectedRecipes/jamieoliver";
-import myrecipesRecipe from "./expectedRecipes/myrecipes";
-import seriouseatsRecipe from "./expectedRecipes/seriouseats";
-import simplyrecipesRecipe from "./expectedRecipes/simplyrecipes";
+import foodandwineRecipe from "./expectedRecipes/foodandwine"
+import foodnetworkRecipe from "./expectedRecipes/foodnetwork"
+import jamieoliverRecipe from "./expectedRecipes/jamieoliver"
+import myrecipesRecipe from "./expectedRecipes/myrecipes"
+import seriouseatsRecipe from "./expectedRecipes/seriouseats"
+import simplyrecipesRecipe from "./expectedRecipes/simplyrecipes"
+
 // import thekitchnRecipe from "./correct-recipes/thekitchn";
 
 const expecteds = [
@@ -132,6 +133,6 @@ const expecteds = [
   //   text: thekitchnRecipe,
   //   title: "Watermelon Mint Frosé",
   // },
-];
+]
 
-export default expecteds;
+export default expecteds

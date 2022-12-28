@@ -1,1 +1,1 @@
-export * from '../../server/@types/apiContract'
+export * from "../../server/@types/apiContract"

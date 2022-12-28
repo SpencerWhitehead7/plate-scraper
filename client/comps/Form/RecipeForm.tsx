@@ -1,21 +1,26 @@
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 
-import { openAuthModal as openAuthModalAction } from '@/comps/Modal'
-import { URL } from '@/consts'
-import { downloadRecipe } from '@/helpers'
-import { useAppDispatch, useCreateRecipeMutation, useDeleteRecipeMutation, useEditRecipeMutation, useGetMeQuery, useSelectIsAuthed } from '@/reducers'
+import { ApiRecipe } from "@/@types/apiContract"
+import { openAuthModal as openAuthModalAction } from "@/comps/Modal"
+import { URL } from "@/consts"
+import { downloadRecipe } from "@/helpers"
+import {
+  useAppDispatch,
+  useCreateRecipeMutation,
+  useDeleteRecipeMutation,
+  useEditRecipeMutation,
+  useGetMeQuery,
+  useSelectIsAuthed,
+} from "@/reducers"
+import skele from "@/skeleton.css"
 
-import { FormAutosizingTextarea } from './FormAutosizingTextarea'
-import { FormButton } from './FormButton'
-import { FormEditTags } from './FormEditTags'
-import { FormInputButtonBar } from './FormInputButtonBar'
-
-import { ApiRecipe } from '@/@types/apiContract'
-import skele from '@/skeleton.css'
-
-import s from './Form.scss'
+import s from "./Form.scss"
+import { FormAutosizingTextarea } from "./FormAutosizingTextarea"
+import { FormButton } from "./FormButton"
+import { FormEditTags } from "./FormEditTags"
+import { FormInputButtonBar } from "./FormInputButtonBar"
 
 type Props = {
   recipe: Partial<ApiRecipe>
@@ -29,20 +34,24 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
   const isAuthed = useSelectIsAuthed()
 
   const dispatch = useAppDispatch()
-  const openAuthModal = () => { dispatch(openAuthModalAction()) }
+  const openAuthModal = () => {
+    dispatch(openAuthModalAction())
+  }
 
   const [triggerCreateRecipe] = useCreateRecipeMutation()
   const [triggerDeleteRecipe] = useDeleteRecipeMutation()
   const [triggerEditRecipe] = useEditRecipeMutation()
 
   const { formState, handleSubmit, register, watch } = useForm({
-    mode: `onChange`,
+    mode: "onChange",
     defaultValues: {
-      title: recipe.title ?? ``,
-      text: recipe.text ?? ``,
+      title: recipe.title ?? "",
+      text: recipe.text ?? "",
     },
   })
-  const [updatedTags, setUpdatedTags] = useState((recipe.tags ?? []).map(({ name }) => name))
+  const [updatedTags, setUpdatedTags] = useState(
+    (recipe.tags ?? []).map(({ name }) => name)
+  )
 
   const save = handleSubmit(async ({ title, text }) => {
     if (recipe.id) {
@@ -53,7 +62,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
         userId: dataMe!.id,
         text,
         title,
-        tags: updatedTags
+        tags: updatedTags,
       })
       setEditMode?.(false)
     } else {
@@ -63,8 +72,8 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
         userId: dataMe!.id,
         text,
         title,
-        sourceSite: recipe.sourceSite ?? ``,
-        sourceUrl: recipe.sourceUrl ?? ``,
+        sourceSite: recipe.sourceSite ?? "",
+        sourceUrl: recipe.sourceUrl ?? "",
         tags: updatedTags,
       }).unwrap()
       navigate(URL.recipe(newRecipe.id))
@@ -76,7 +85,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
       {!isAuthed && (
         <button
           type="button"
-          className={skele[`button-primary`]}
+          className={skele["button-primary"]}
           onClick={openAuthModal}
         >
           Signup or login to save recipes
@@ -88,7 +97,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
         register={register}
         registerOptions={{ required: true }}
         errors={formState.errors}
-        Button={(
+        Button={
           <FormButton
             formState={formState}
             value="Download"
@@ -96,7 +105,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
               downloadRecipe(text, title)
             })}
           />
-        )}
+        }
         autoComplete="off"
       />
       {isAuthed && (
@@ -118,8 +127,12 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
           <button
             type="button"
             onClick={async () => {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              await triggerDeleteRecipe({ recipeId: recipe.id!, userId: recipe.userId! })
+              await triggerDeleteRecipe({
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                recipeId: recipe.id!,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                userId: recipe.userId!,
+              })
               navigate(URL.search())
             }}
           >
@@ -127,11 +140,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
           </button>
         )}
         {isAuthed && (
-          <FormButton
-            formState={formState}
-            value="Save"
-            onClick={save}
-          />
+          <FormButton formState={formState} value="Save" onClick={save} />
         )}
       </div>
     </form>

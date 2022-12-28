@@ -1,10 +1,10 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import React from "react"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 
-import { URL } from '@/consts'
-import { FormInputButtonBar, FormSubmit } from '@/comps/Form'
-import { useDeleteMeMutation, useGetMeQuery } from '@/reducers'
+import { FormInputButtonBar, FormSubmit } from "@/comps/Form"
+import { URL } from "@/consts"
+import { useDeleteMeMutation, useGetMeQuery } from "@/reducers"
 
 export const DeleteAccount = () => {
   const navigate = useNavigate()
@@ -12,9 +12,9 @@ export const DeleteAccount = () => {
   const [triggerDeleteMe] = useDeleteMeMutation()
 
   const { formState, handleSubmit, register } = useForm({
-    mode: `onChange`,
+    mode: "onChange",
     defaultValues: {
-      password: ``,
+      password: "",
     },
   })
 
@@ -33,7 +33,12 @@ export const DeleteAccount = () => {
         register={register}
         registerOptions={{ required: true }}
         errors={formState.errors}
-        Button={<FormSubmit formState={formState} value="Destroy (Are you sure? This cannot be undone!)" />}
+        Button={
+          <FormSubmit
+            formState={formState}
+            value="Destroy (Are you sure? This cannot be undone!)"
+          />
+        }
       />
     </form>
   )

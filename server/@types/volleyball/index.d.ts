@@ -1,1 +1,1 @@
-declare module 'volleyball'
+declare module "volleyball"

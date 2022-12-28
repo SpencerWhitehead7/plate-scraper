@@ -1,16 +1,20 @@
-import React from 'react'
+import React from "react"
 
-import { Card } from '@/comps/Card'
-import { RecipeForm, Warning } from '@/comps/Form'
-import { LoadingIndicator } from '@/comps/LoadingIndicator'
-import { useScrapeMutation } from '@/reducers'
+import { Card } from "@/comps/Card"
+import { RecipeForm, Warning } from "@/comps/Form"
+import { LoadingIndicator } from "@/comps/LoadingIndicator"
+import { useScrapeMutation } from "@/reducers"
 
-import { SupportedSites } from './SupportedSites'
-import { UrlForm } from './UrlForm'
+import { SupportedSites } from "./SupportedSites"
+import { UrlForm } from "./UrlForm"
 
 export const Scrape: React.FC<Record<string, never>> = () => {
   const [triggerScrape, stateScrape] = useScrapeMutation()
-  const { isLoading: isLoadingScrape, data: dataScrape, error: errorScrape } = stateScrape
+  const {
+    isLoading: isLoadingScrape,
+    data: dataScrape,
+    error: errorScrape,
+  } = stateScrape
 
   const submit = async (url: string) => {
     await triggerScrape({ url })
@@ -20,15 +24,16 @@ export const Scrape: React.FC<Record<string, never>> = () => {
     <Card>
       <SupportedSites />
       <UrlForm submit={submit} />
-      {isLoadingScrape
-        ? <LoadingIndicator />
-        : dataScrape
-          ? <RecipeForm recipe={dataScrape} />
-          : <Warning
-            leftPadded={false}
-            customError={errorScrape && "Error scraping recipe"}
-          />
-      }
+      {isLoadingScrape ? (
+        <LoadingIndicator />
+      ) : dataScrape ? (
+        <RecipeForm recipe={dataScrape} />
+      ) : (
+        <Warning
+          leftPadded={false}
+          customError={errorScrape && "Error scraping recipe"}
+        />
+      )}
     </Card>
   )
 }

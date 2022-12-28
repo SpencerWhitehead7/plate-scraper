@@ -1,12 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react"
+import { Link } from "react-router-dom"
 
-import { URL } from '@/consts'
+import { URL } from "@/consts"
 
-import s from './Tags.scss'
+import s from "./Tags.scss"
 
 type Props = {
-  name: string,
+  name: string
   handleRemove?: (name: string) => void
 }
 

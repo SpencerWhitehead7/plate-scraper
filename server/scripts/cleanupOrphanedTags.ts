@@ -1,15 +1,15 @@
-import { Connection, getConnection } from "typeorm";
+import { Connection, getConnection } from "typeorm"
 
-import { generateUtils } from "../utils";
+import { generateUtils } from "../utils"
 
 const cleanupOrpanedTags = async () => {
-  let connection: Connection;
+  let connection: Connection
   if (process.env.NODE_ENV === "script") {
     // create your own connection if running independently
-    ({ connection } = await generateUtils());
+    ;({ connection } = await generateUtils())
   } else {
     // use connection from main app/test otherwise
-    connection = getConnection();
+    connection = getConnection()
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -23,25 +23,23 @@ const cleanupOrpanedTags = async () => {
         WHERE recipe_tags_tag."tagName" IS NULL
       )
     `
-  );
+  )
 
-  console.log(
-    `Removed ${tagsCount as number} tag${tagsCount > 1 || tagsCount === 0 ? `s` : ``}`
-  );
-};
+  console.log(`Removed ${tagsCount as number} tag(s)`)
+}
 
 if (module === require.main) {
-  console.log("\nCleaning...\n");
+  console.log("\nCleaning...\n")
   cleanupOrpanedTags()
     .then(() => {
-      console.log("\nCleaning completed");
-      process.exit(0);
+      console.log("\nCleaning completed")
+      process.exit(0)
     })
-    .catch(err => {
-      console.log("\nCleaning errored");
-      console.error(err);
-      process.exit(1);
+    .catch((err) => {
+      console.log("\nCleaning errored")
+      console.error(err)
+      process.exit(1)
     })
 }
 
-export default cleanupOrpanedTags;
+export default cleanupOrpanedTags

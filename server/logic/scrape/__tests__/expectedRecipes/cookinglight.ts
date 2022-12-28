@@ -27,6 +27,6 @@ To prepare topping, combine granulated sugar, grapefruit juice, 3 tablespoons co
 Place egg yolks in a medium bowl. Gradually whisk in half of grapefruit mixture. Add egg mixture to remaining grapefruit mixture in pan. Bring to a boil over medium, whisking constantly. Remove from heat; whisk in Campari. Pour through a fine-mesh strainer into a bowl; discard solids.
 
 Spread grapefruit mixture onto crust. Cover and chill until set, 3 to 4 hours. Cut into 16 squares.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

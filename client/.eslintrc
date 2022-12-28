@@ -2,8 +2,8 @@
   "extends": [
     "../.eslintrc",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
-    // prettier
+    "plugin:react-hooks/recommended",
+    "prettier"
   ],
   "parserOptions": {
     "tsconfigRootDir": "./client",

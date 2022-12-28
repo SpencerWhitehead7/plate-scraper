@@ -1,21 +1,21 @@
 import {
-  Entity,
-  PrimaryColumn,
+  IsAlpha,
+  IsLowercase,
+  IsNotEmpty,
+  validateOrReject,
+} from "class-validator"
+import {
   CreateDateColumn,
-  ManyToMany,
+  Entity,
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
+  ManyToMany,
+  PrimaryColumn,
   UpdateEvent,
-} from "typeorm";
-import {
-  validateOrReject,
-  IsNotEmpty,
-  IsAlpha,
-  IsLowercase,
-} from "class-validator";
+} from "typeorm"
 
-import { Recipe } from "./recipe";
+import { Recipe } from "./recipe"
 
 @Entity()
 export class Tag {
@@ -26,29 +26,29 @@ export class Tag {
   @IsNotEmpty()
   @IsAlpha()
   @IsLowercase()
-  name: string;
+  name: string
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @ManyToMany(() => Recipe, (recipe) => recipe.tags)
-  recipes: Recipe[];
+  recipes: Recipe[]
 }
 
 @EventSubscriber()
 export class TagSubscriber implements EntitySubscriberInterface<Tag> {
   listenTo() {
-    return Tag;
+    return Tag
   }
 
   async beforeInsert(event: InsertEvent<Tag>) {
-    await validateOrReject(event.entity);
+    await validateOrReject(event.entity)
   }
 
   async beforeUpdate(event: UpdateEvent<Tag>) {
     const { entity } = event
     if (entity) {
-      await validateOrReject(entity);
+      await validateOrReject(entity)
     }
   }
 }

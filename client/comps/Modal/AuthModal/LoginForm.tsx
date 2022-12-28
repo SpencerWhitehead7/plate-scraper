@@ -1,11 +1,11 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import React from "react"
+import { useForm } from "react-hook-form"
 
-import { CardTitle } from '@/comps/Card'
-import { FormInput, FormSubmit } from '@/comps/Form'
-import { useAppDispatch, useLoginMutation } from '@/reducers'
+import { CardTitle } from "@/comps/Card"
+import { FormInput, FormSubmit } from "@/comps/Form"
+import { useAppDispatch, useLoginMutation } from "@/reducers"
 
-import { closeModal } from '../modalReducer'
+import { closeModal } from "../modalReducer"
 
 type Props = {
   className?: string
@@ -17,7 +17,7 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
   const [triggerLogin] = useLoginMutation()
 
   const { formState, handleSubmit, register } = useForm({
-    mode: `onChange`,
+    mode: "onChange",
     defaultValues: {
       loginEmail: "",
       loginPassword: "",

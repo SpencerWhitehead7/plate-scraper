@@ -1,8 +1,8 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import React from "react"
+import { useForm } from "react-hook-form"
 
-import { SUPPORTED_SITES } from '@/consts'
-import { FormInputButtonBar, FormSubmit } from '@/comps/Form'
+import { FormInputButtonBar, FormSubmit } from "@/comps/Form"
+import { SUPPORTED_SITES } from "@/consts"
 
 type Props = {
   submit: (url: string) => Promise<void>
@@ -10,9 +10,9 @@ type Props = {
 
 export const UrlForm: React.FC<Props> = ({ submit }) => {
   const { formState, handleSubmit, register } = useForm({
-    mode: `onBlur`,
+    mode: "onBlur",
     defaultValues: {
-      url: ``,
+      url: "",
     },
   })
 
@@ -27,20 +27,21 @@ export const UrlForm: React.FC<Props> = ({ submit }) => {
         labelText="Recipe url"
         register={register}
         registerOptions={{
-          required: `required`,
+          required: "required",
           validate: {
             correctSeriousEats: (v: string) => {
               const sanitized = v.toLowerCase()
-              return sanitized.includes(`seriouseats.com`) && !sanitized.includes(`seriouseats.com/recipes`)
-                ? `Make sure your url is from seriouseats.com/recipes, not just seriouseats.com`
+              return sanitized.includes("seriouseats.com") &&
+                !sanitized.includes("seriouseats.com/recipes")
+                ? "Make sure your url is from seriouseats.com/recipes, not just seriouseats.com"
                 : undefined
             },
             siteSupported: (v: string) => {
               const sanitized = v.toLowerCase()
-              return !SUPPORTED_SITES.some(site => sanitized.includes(site))
-                ? `Site is not supported`
+              return !SUPPORTED_SITES.some((site) => sanitized.includes(site))
+                ? "Site is not supported"
                 : undefined
-            }
+            },
           },
         }}
         errors={formState.errors}

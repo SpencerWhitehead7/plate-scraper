@@ -27,6 +27,6 @@ In 12-inch nonstick skillet, heat 2 tablespoons of the butter over medium heat; 
 In same skillet, melt remaining 2 tablespoons butter; add chicken, and cook 4 to 6 minutes, stirring frequently, until chicken starts to brown. Add onion and mushroom mixture back to skillet; sprinkle with flour mixture, stirring to coat. Slowly add chicken broth and Worcestershire sauce, stirring constantly.
 
 Heat to simmering; reduce heat to medium-low, and cook 3 to 5 minutes, stirring occasionally, until sauce is thickened and chicken is cooked through. Remove from heat; stir in sour cream. Garnish with parsley. Serve mixture over cooked egg noodles.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe

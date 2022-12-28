@@ -1,31 +1,31 @@
-import { hash, compare } from "bcrypt";
+import { compare, hash } from "bcrypt"
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  VersionColumn,
-  Column,
-  OneToMany,
-  EntitySubscriberInterface,
-  EventSubscriber,
-  InsertEvent,
-  UpdateEvent,
-} from "typeorm";
-import {
-  IsEmail,
   IsAlphanumeric,
+  IsEmail,
   MaxLength,
   NotEquals,
   validateOrReject,
-} from "class-validator";
+} from "class-validator"
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  EntitySubscriberInterface,
+  EventSubscriber,
+  InsertEvent,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  UpdateEvent,
+  VersionColumn,
+} from "typeorm"
 
-import { Recipe } from "./recipe";
+import { Recipe } from "./recipe"
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column({
     type: "varchar",
@@ -33,7 +33,7 @@ export class User {
     unique: true,
   })
   @IsEmail()
-  email: string;
+  email: string
 
   @Column({
     type: "varchar",
@@ -42,7 +42,7 @@ export class User {
   })
   @NotEquals("")
   @IsAlphanumeric()
-  userName: string;
+  userName: string
 
   @Column({
     type: "varchar",
@@ -61,47 +61,46 @@ export class User {
   // also prevents DDOS via people just submitting huge passwords
   // because the validator runs before the password is hashed
   @MaxLength(64)
-  password: string;
+  password: string
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
 
   @VersionColumn()
-  version: number;
+  version: number
 
   @OneToMany(() => Recipe, (recipe) => recipe.user, { onDelete: "CASCADE" })
-  recipes: Recipe[];
+  recipes: Recipe[]
 
   static encryptPassword(plainTextPassword: string) {
     return hash(plainTextPassword, 10)
   }
 
   checkPassword(passwordAttempt: string) {
-    return compare(passwordAttempt, this.password);
+    return compare(passwordAttempt, this.password)
   }
 }
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<User> {
   listenTo() {
-    return User;
+    return User
   }
 
   async beforeInsert(event: InsertEvent<User>) {
-    const { entity } = event;
-    await validateOrReject(entity);
+    const { entity } = event
+    await validateOrReject(entity)
 
     entity.password = await User.encryptPassword(entity.password)
   }
 
   async beforeUpdate(event: UpdateEvent<User>) {
-    const { entity } = event;
+    const { entity } = event
     if (entity) {
-
-      await validateOrReject(entity);
+      await validateOrReject(entity)
 
       // indicates user changed their PW
       if (entity.password) {

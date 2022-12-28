@@ -1,1 +1,1 @@
-export { Scrape } from './Scrape'
+export { Scrape } from "./Scrape"

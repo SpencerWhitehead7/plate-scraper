@@ -1,17 +1,16 @@
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import React from "react"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 
-import { PATH } from './consts'
-import { Modal } from './comps/Modal'
-import { Navbar } from './feats/Navbar'
-import { Scrape } from './feats/Scrape'
-import { Upload } from './feats/Upload'
-import { Account } from './feats/Account'
-import { Recipe } from './feats/Recipe'
-import { Search } from './feats/Search'
-import { PageFailure } from './feats/PageFailure'
-
-import s from './App.scss'
+import s from "./App.scss"
+import { Modal } from "./comps/Modal"
+import { PATH } from "./consts"
+import { Account } from "./feats/Account"
+import { Navbar } from "./feats/Navbar"
+import { PageFailure } from "./feats/PageFailure"
+import { Recipe } from "./feats/Recipe"
+import { Scrape } from "./feats/Scrape"
+import { Search } from "./feats/Search"
+import { Upload } from "./feats/Upload"
 
 export const App = () => (
   <BrowserRouter>

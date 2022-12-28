@@ -1,39 +1,39 @@
+import { IsNotEmpty, NotEquals, validateOrReject } from "class-validator"
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  VersionColumn,
   Column,
-  ManyToOne,
-  ManyToMany,
-  JoinTable,
+  CreateDateColumn,
+  Entity,
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
   UpdateEvent,
-} from "typeorm";
-import { validateOrReject, IsNotEmpty, NotEquals } from "class-validator";
+  VersionColumn,
+} from "typeorm"
 
-import { User } from "./user";
-import { Tag } from "./tag";
+import { Tag } from "./tag"
+import { User } from "./user"
 
 @Entity()
 export class Recipe {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column({
     type: "text",
   })
   @IsNotEmpty()
-  text: string; // the recipe itself
+  text: string // the recipe itself
 
   @Column({
     type: "text",
   })
   @IsNotEmpty()
-  title: string; // recipe's title
+  title: string // recipe's title
 
   @Column({
     type: "varchar",
@@ -41,60 +41,60 @@ export class Recipe {
     default: "upload",
   })
   @NotEquals("")
-  sourceSite: string; // site recipe was scraped from
+  sourceSite: string // site recipe was scraped from
 
   @Column({
     type: "text",
     default: "upload",
   })
   @NotEquals("")
-  sourceUrl: string; // exact url recipe was scraped from
+  sourceUrl: string // exact url recipe was scraped from
 
   @Column({
     type: "integer",
   })
-  createdBy: number; // id of user who originally scraped/uploaded recipe
+  createdBy: number // id of user who originally scraped/uploaded recipe
 
   @Column({
     type: "integer",
     default: 0,
   })
-  forkedCount: number; // count of times others have forked recipe
+  forkedCount: number // count of times others have forked recipe
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
 
   @VersionColumn()
-  version: number;
+  version: number
 
   @Column({ type: "integer" })
-  userId: number;
+  userId: number
   @ManyToOne(() => User, (user) => user.recipes, { onDelete: "CASCADE" })
-  user: User;
+  user: User
 
   @ManyToMany(() => Tag, (tag) => tag.recipes)
   // the recipe's rows in the join table are automatically deleted on delete of recipe
   @JoinTable()
-  tags: Tag[];
+  tags: Tag[]
 }
 
 @EventSubscriber()
 export class RecipeSubscriber implements EntitySubscriberInterface<Recipe> {
   listenTo() {
-    return Recipe;
+    return Recipe
   }
 
   async beforeInsert(event: InsertEvent<Recipe>) {
-    await validateOrReject(event.entity);
+    await validateOrReject(event.entity)
   }
 
   async beforeUpdate(event: UpdateEvent<Recipe>) {
-    const { entity } = event;
+    const { entity } = event
     if (entity) {
-      await validateOrReject(entity);
+      await validateOrReject(entity)
     }
   }
 }

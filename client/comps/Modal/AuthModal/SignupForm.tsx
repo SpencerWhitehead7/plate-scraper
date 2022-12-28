@@ -1,34 +1,40 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import React from "react"
+import { useForm } from "react-hook-form"
 
-import { CardTitle } from '@/comps/Card'
-import { FormInput, FormSubmit } from '@/comps/Form'
-import { useAppDispatch, useSignupMutation } from '@/reducers'
+import { CardTitle } from "@/comps/Card"
+import { FormInput, FormSubmit } from "@/comps/Form"
+import { useAppDispatch, useSignupMutation } from "@/reducers"
 
-import { closeModal } from '../modalReducer'
+import { closeModal } from "../modalReducer"
 
 type Props = {
   className?: string
 }
 
-export const SignupForm: React.FC<Props> = ({ className = `` }) => {
+export const SignupForm: React.FC<Props> = ({ className = "" }) => {
   const dispatch = useAppDispatch()
 
   const [triggerSignup] = useSignupMutation()
 
   const { formState, handleSubmit, register, watch } = useForm({
-    mode: `onChange`,
+    mode: "onChange",
     defaultValues: {
       signupEmail: "",
       signupUserName: "",
       signupPassword: "",
-    }
+    },
   })
 
-  const onSubmit = handleSubmit(async ({ signupEmail, signupUserName, signupPassword }) => {
-    await triggerSignup({ email: signupEmail, userName: signupUserName, password: signupPassword })
-    dispatch(closeModal())
-  })
+  const onSubmit = handleSubmit(
+    async ({ signupEmail, signupUserName, signupPassword }) => {
+      await triggerSignup({
+        email: signupEmail,
+        userName: signupUserName,
+        password: signupPassword,
+      })
+      dispatch(closeModal())
+    }
+  )
 
   return (
     <form onSubmit={onSubmit} className={className}>
@@ -64,7 +70,8 @@ export const SignupForm: React.FC<Props> = ({ className = `` }) => {
         registerOptions={{
           required: true,
           validate: {
-            matches: value => value === watch(`signupPassword`) || `Passwords must match`,
+            matches: (val) =>
+              val === watch("signupPassword") || "Passwords must match",
           },
         }}
         errors={formState.errors}

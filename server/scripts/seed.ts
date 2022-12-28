@@ -1,27 +1,27 @@
-import { Connection, Repository, getConnection, getRepository } from "typeorm";
+import { Connection, Repository, getConnection, getRepository } from "typeorm"
 
-import { generateUtils } from "../utils";
-import { Recipe, Tag, User } from "../db/entities";
+import { Recipe, Tag, User } from "../db/entities"
+import { generateUtils } from "../utils"
 
 const seed = async () => {
-  let connection: Connection;
-  let recipeRepo: Repository<Recipe>;
-  let tagRepo: Repository<Tag>;
-  let userRepo: Repository<User>;
+  let connection: Connection
+  let recipeRepo: Repository<Recipe>
+  let tagRepo: Repository<Tag>
+  let userRepo: Repository<User>
   if (process.env.NODE_ENV === "script") {
     // create your own connection if running independently
-    ({ connection, recipeRepo, tagRepo, userRepo } = await generateUtils());
+    ;({ connection, recipeRepo, tagRepo, userRepo } = await generateUtils())
   } else {
     // use connection from main app/test otherwise
-    connection = getConnection();
-    recipeRepo = getRepository(Recipe);
-    tagRepo = getRepository(Tag);
-    userRepo = getRepository(User);
+    connection = getConnection()
+    recipeRepo = getRepository(Recipe)
+    tagRepo = getRepository(Tag)
+    userRepo = getRepository(User)
   }
-  const save = (row: unknown) => connection.manager.save(row);
+  const save = (row: unknown) => connection.manager.save(row)
 
-  await connection.synchronize(true);
-  console.log("Database synced");
+  await connection.synchronize(true)
+  console.log("Database synced")
 
   const users = await Promise.all(
     [
@@ -36,9 +36,9 @@ const seed = async () => {
         userName: "TheSecondTestUser",
       }),
     ].map(save)
-  );
-  const [user1, user2] = users as User[];
-  console.log(`Seeded ${users.length} users`);
+  )
+  const [user1, user2] = users as User[]
+  console.log(`Seeded ${users.length} users`)
 
   const recipes = await Promise.all(
     [
@@ -186,9 +186,10 @@ const seed = async () => {
         user: user2,
       }),
     ].map(save)
-  );
-  const [popcake, cream, chickenStrog, cakeShake, forkedPopcake] = recipes as Recipe[];
-  console.log(`Seeded ${recipes.length} recipes`);
+  )
+  const [popcake, cream, chickenStrog, cakeShake, forkedPopcake] =
+    recipes as Recipe[]
+  console.log(`Seeded ${recipes.length} recipes`)
 
   const tags = await Promise.all(
     [
@@ -200,21 +201,21 @@ const seed = async () => {
       tagRepo.create({ name: "entre", recipes: [chickenStrog] }),
       tagRepo.create({ name: "meat", recipes: [chickenStrog] }),
     ].map(save)
-  );
-  console.log(`Seeded ${tags.length} tags`);
-};
+  )
+  console.log(`Seeded ${tags.length} tags`)
+}
 
 if (module === require.main) {
-  console.log("\nSeeding...\n");
+  console.log("\nSeeding...\n")
   seed()
     .then(() => {
-      console.log("\nSeeding complete");
-      process.exit(0);
+      console.log("\nSeeding complete")
+      process.exit(0)
     })
     .catch((err) => {
-      console.log(err);
-      process.exit(1);
+      console.log(err)
+      process.exit(1)
     })
 }
 
-export default seed;
+export default seed

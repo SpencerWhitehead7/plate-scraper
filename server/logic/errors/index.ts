@@ -8,6 +8,6 @@ export {
   permDeniedErr,
   scrapeFailedErr,
   siteInvalidErr,
-} from "./customErrors";
+} from "./customErrors"
 
-export { serializers } from './serializationErrors';
+export { serializers } from "./serializationErrors"

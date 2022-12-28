@@ -28,6 +28,6 @@ Smear bottom and sides of a 10" cast-iron skillet with butter. Toss pecans, peac
 Bake crisp until topping is golden brown and juices are thick and bubbling around the edges, 25–35 minutes.
 
 Crisp can be made 1 day ahead. Store lightly covered at room temperature.
-`;
+`
 
-export default expectedRecipe;
+export default expectedRecipe
