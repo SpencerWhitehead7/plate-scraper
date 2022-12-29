@@ -4,7 +4,7 @@ import request from "supertest"
 import { User } from "../../db/entities"
 import {
   app,
-  connection,
+  dataSource,
   factoryRecipe,
   factoryTag,
   factoryUser,
@@ -19,9 +19,9 @@ describe("API Route User: /api/user", () => {
   describe("/:id", () => {
     describe("GET", () => {
       it("returns the user, their recipes, and their recipes' tags", async () => {
-        const user = await connection.manager.save(factoryUser())
-        const recipe = await connection.manager.save(factoryRecipe({ user }))
-        await connection.manager.save(factoryTag({ recipes: [recipe] }))
+        const user = await dataSource.manager.save(factoryUser())
+        const recipe = await dataSource.manager.save(factoryRecipe({ user }))
+        await dataSource.manager.save(factoryTag({ recipes: [recipe] }))
 
         const res = await request(app).get(`${route}/1`)
         const bodyUser = res.body as User

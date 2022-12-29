@@ -1,6 +1,6 @@
 import { Tag } from "../../db/entities"
 import {
-  connection,
+  dataSource,
   expect,
   factoryRecipe,
   factoryTag,
@@ -12,21 +12,21 @@ import cleanupOrphanedTags from "../cleanupOrphanedTags"
 describe("CleanupOrphanedTags", () => {
   beforeEach(async () => {
     await syncDB()
-    const user = await connection.manager.save(factoryUser())
-    const recipe = await connection.manager.save(factoryRecipe({ user }))
+    const user = await dataSource.manager.save(factoryUser())
+    const recipe = await dataSource.manager.save(factoryRecipe({ user }))
     await Promise.all(
       [
         factoryTag({ name: "tone", recipes: [recipe] }),
         factoryTag({ name: "ttwo" }),
-      ].map((row) => connection.manager.save(row))
+      ].map((row) => dataSource.manager.save(row))
     )
   })
   afterEach(syncDB)
 
   it("deletes all tags with no associations", async () => {
-    const before = await connection.manager.find(Tag)
-    await cleanupOrphanedTags()
-    const after = await connection.manager.find(Tag)
+    const before = await dataSource.manager.find(Tag)
+    await cleanupOrphanedTags(dataSource)
+    const after = await dataSource.manager.find(Tag)
 
     expect(before.length).to.equal(2)
     expect(after.length).to.equal(1)

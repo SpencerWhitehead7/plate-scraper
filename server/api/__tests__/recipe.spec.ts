@@ -4,7 +4,7 @@ import request from "supertest"
 import { Recipe, Tag, User } from "../../db/entities"
 import {
   app,
-  connection,
+  dataSource,
   factoryRecipe,
   factoryTag,
   syncDB,
@@ -22,7 +22,7 @@ describe("API Route Recipe: /api/recipe", () => {
       await syncDB()
       agent = request.agent(app)
       await agent.post("/api/auth").send(userCred)
-      user = await connection.manager.findOneByOrFail(User, { id: 1 })
+      user = await dataSource.manager.findOneByOrFail(User, { id: 1 })
     } catch (err) {
       console.log(err)
     }
@@ -51,7 +51,7 @@ describe("API Route Recipe: /api/recipe", () => {
               factoryRecipe({ user }),
               factoryRecipe({ user }),
               factoryRecipe({ user }),
-            ].map((row) => connection.manager.save(row))
+            ].map((row) => dataSource.manager.save(row))
           )
           await Promise.all(
             [
@@ -59,7 +59,7 @@ describe("API Route Recipe: /api/recipe", () => {
               factoryTag({ name: "ttwo", recipes: [recipe2] }),
               factoryTag({ name: "tthree", recipes: [recipe3] }),
               factoryTag({ name: "tfour", recipes: [recipe4] }),
-            ].map((row) => connection.manager.save(row))
+            ].map((row) => dataSource.manager.save(row))
           )
         } catch (err) {
           console.log(err)
@@ -107,12 +107,12 @@ describe("API Route Recipe: /api/recipe", () => {
 
     describe("POST", () => {
       it("creates a recipe, assigning and creating new tags if necessary", async () => {
-        await connection.manager.save(factoryTag({ name: "tone" }))
+        await dataSource.manager.save(factoryTag({ name: "tone" }))
         await agent.post(route).send({
           ...factoryRecipe(),
           tags: ["tone", "ttwo"],
         })
-        const recipe = await connection.manager.findOneOrFail(Recipe, {
+        const recipe = await dataSource.manager.findOneOrFail(Recipe, {
           where: { id: 1 },
           relations: { tags: true },
         })
@@ -124,10 +124,10 @@ describe("API Route Recipe: /api/recipe", () => {
           ...factoryRecipe(),
           tags: [" T1 one ", "T2 two_T3 three"],
         })
-        const tagOne = await connection.manager.findOneByOrFail(Tag, {
+        const tagOne = await dataSource.manager.findOneByOrFail(Tag, {
           name: "tone",
         })
-        const tagTwo = await connection.manager.findOneByOrFail(Tag, {
+        const tagTwo = await dataSource.manager.findOneByOrFail(Tag, {
           name: "ttwotthree",
         })
         expect(tagOne).to.exist
@@ -135,27 +135,27 @@ describe("API Route Recipe: /api/recipe", () => {
       })
       it("rejects unauthenticated users' attempts", async () => {
         const failedRes = await request(app).post(route).send(factoryRecipe())
-        const recipe = await connection.manager.findOneBy(Recipe, { id: 1 })
+        const recipe = await dataSource.manager.findOneBy(Recipe, { id: 1 })
         expect(failedRes.status).to.equal(401)
         expect(recipe).not.to.exist
       })
       it("sets createdBy to the user's ID, even with bad input", async () => {
         await agent.post(route).send(factoryRecipe({ createdBy: 2 }))
-        const recipe = await connection.manager.findOneByOrFail(Recipe, {
+        const recipe = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
         expect(recipe.createdBy).to.equal(1)
       })
       it("ensures forkedCount will use default value of 0, even with bad input", async () => {
         await agent.post(route).send(factoryRecipe({ forkedCount: 2 }))
-        const recipe = await connection.manager.findOneByOrFail(Recipe, {
+        const recipe = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
         expect(recipe.forkedCount).to.equal(0)
       })
       it("sets the recipe's owner to the creator", async () => {
         await agent.post(route).send(factoryRecipe())
-        const recipe = await connection.manager.findOneByOrFail(Recipe, {
+        const recipe = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
         expect(recipe.userId).to.equal(1)
@@ -190,7 +190,7 @@ describe("API Route Recipe: /api/recipe", () => {
 
       it("makes a copy of the recipe and saves it to the user's account", async () => {
         await agent2.post(`${route}/fork/1`)
-        const user2 = await connection.manager.findOneOrFail(User, {
+        const user2 = await dataSource.manager.findOneOrFail(User, {
           where: { id: 2 },
           relations: { recipes: true },
         })
@@ -198,19 +198,19 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(user2.recipes[0].createdBy).to.equal(1)
       })
       it("the copy inherits the original's tags", async () => {
-        const original = await connection.manager.findOneByOrFail(Recipe, {
+        const original = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-        await connection.manager.save(
+        await dataSource.manager.save(
           factoryTag({ name: "tone", recipes: [original] })
         )
-        const tagged = await connection.manager.findOneOrFail(Recipe, {
+        const tagged = await dataSource.manager.findOneOrFail(Recipe, {
           where: { id: 1 },
           relations: { tags: true },
         })
 
         await agent2.post(`${route}/fork/1`)
-        const copy = await connection.manager.findOneOrFail(Recipe, {
+        const copy = await dataSource.manager.findOneOrFail(Recipe, {
           where: { id: 2 },
           relations: { tags: true },
         })
@@ -226,25 +226,25 @@ describe("API Route Recipe: /api/recipe", () => {
       })
       it("if the user is not the recipe's creator, it increments the recipe's forkedCount", async () => {
         await agent2.post(`${route}/fork/1`)
-        const original = await connection.manager.findOneByOrFail(Recipe, {
+        const original = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-        const copy = await connection.manager.findOneByOrFail(Recipe, { id: 2 })
+        const copy = await dataSource.manager.findOneByOrFail(Recipe, { id: 2 })
         expect(original.forkedCount).to.equal(1)
         expect(copy.forkedCount).to.equal(0)
       })
       it("if the user is the recipe's creator, it does not increment the recipe's forkedCount", async () => {
         await agent.post(`${route}/fork/1`)
-        const original = await connection.manager.findOneByOrFail(Recipe, {
+        const original = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-        const copy = await connection.manager.findOneByOrFail(Recipe, { id: 2 })
+        const copy = await dataSource.manager.findOneByOrFail(Recipe, { id: 2 })
         expect(original.forkedCount).to.equal(0)
         expect(copy.forkedCount).to.equal(0)
       })
       it("returns the forked recipe, including tags", async () => {
         const res = await agent2.post(`${route}/fork/1`)
-        const copy = await connection.manager.findOneByOrFail(Recipe, { id: 2 })
+        const copy = await dataSource.manager.findOneByOrFail(Recipe, { id: 2 })
         const bodyRecipe = res.body as Recipe
         expect(bodyRecipe.id).to.equal(copy.id)
         expect(bodyRecipe.tags).to.exist
@@ -255,7 +255,7 @@ describe("API Route Recipe: /api/recipe", () => {
   describe("/:id", () => {
     describe("GET", () => {
       it("returns the recipe with the matching ID, including tags", async () => {
-        await connection.manager.save(factoryRecipe({ user }))
+        await dataSource.manager.save(factoryRecipe({ user }))
 
         const res = await request(app).get(`${route}/1`)
         const bodyRecipe = res.body as Recipe
@@ -273,14 +273,14 @@ describe("API Route Recipe: /api/recipe", () => {
     describe("PUT", () => {
       it("edits a recipe, including creating, setting, and unsetting tags", async () => {
         await agent.post(route).send(factoryRecipe())
-        const original = await connection.manager.findOneByOrFail(Recipe, {
+        const original = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
         await Promise.all(
           [
             factoryTag({ name: "tone", recipes: [original] }),
             factoryTag({ name: "ttwo" }),
-          ].map((row) => connection.manager.save(row))
+          ].map((row) => dataSource.manager.save(row))
         )
 
         await agent.put(`${route}/1`).send({
@@ -288,7 +288,7 @@ describe("API Route Recipe: /api/recipe", () => {
           title: "newTitle",
           tags: ["ttwo", "tthree"],
         })
-        const edited = await connection.manager.findOneOrFail(Recipe, {
+        const edited = await dataSource.manager.findOneOrFail(Recipe, {
           where: { id: 1 },
           relations: { tags: true },
         })
@@ -301,12 +301,12 @@ describe("API Route Recipe: /api/recipe", () => {
       })
       it("handles partial updates", async () => {
         await agent.post(route).send(factoryRecipe())
-        const original = await connection.manager.findOneByOrFail(Recipe, {
+        const original = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
 
         await agent.put(`${route}/1`).send({ text: "newText" })
-        const edited = await connection.manager.findOneByOrFail(Recipe, {
+        const edited = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
 
@@ -318,10 +318,10 @@ describe("API Route Recipe: /api/recipe", () => {
         await agent
           .put(`${route}/1`)
           .send({ tags: [" T1 one ", "T2 two_T3 three"] })
-        const tagOne = await connection.manager.findOneByOrFail(Tag, {
+        const tagOne = await dataSource.manager.findOneByOrFail(Tag, {
           name: "tone",
         })
-        const tagTwo = await connection.manager.findOneByOrFail(Tag, {
+        const tagTwo = await dataSource.manager.findOneByOrFail(Tag, {
           name: "ttwotthree",
         })
         expect(tagOne).to.exist
@@ -335,13 +335,13 @@ describe("API Route Recipe: /api/recipe", () => {
       })
       it("rejects unauthenticated users' attempts", async () => {
         await agent.post(route).send(factoryRecipe())
-        const recipeBefore = await connection.manager.findOneByOrFail(Recipe, {
+        const recipeBefore = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
         const failedRes = await request(app)
           .put(`${route}/1`)
           .send({ text: "failedText", title: "failedTitle" })
-        const recipeAfter = await connection.manager.findOneByOrFail(Recipe, {
+        const recipeAfter = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
 
@@ -352,13 +352,13 @@ describe("API Route Recipe: /api/recipe", () => {
         await agent.post(route).send(factoryRecipe())
         const agent2 = request.agent(app)
         await agent2.post("/api/auth").send(user2Cred)
-        const recipeBefore = await connection.manager.findOneByOrFail(Recipe, {
+        const recipeBefore = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
         const failedRes = await agent2
           .put(`${route}/1`)
           .send({ text: "failedText", title: "failedTitle" })
-        const recipeAfter = await connection.manager.findOneByOrFail(Recipe, {
+        const recipeAfter = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
 
@@ -367,7 +367,7 @@ describe("API Route Recipe: /api/recipe", () => {
       })
       it("allows users to edit only text, title, and tags", async () => {
         await agent.post(route).send(factoryRecipe())
-        const recipeBefore = await connection.manager.findOneByOrFail(Recipe, {
+        const recipeBefore = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
         await agent.put(`${route}/1`).send({
@@ -378,7 +378,7 @@ describe("API Route Recipe: /api/recipe", () => {
           forkedCount: 10,
           userId: 10,
         })
-        const recipeAfter = await connection.manager.findOneByOrFail(Recipe, {
+        const recipeAfter = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
 
@@ -411,12 +411,12 @@ describe("API Route Recipe: /api/recipe", () => {
     describe("DELETE", () => {
       it("deletes a recipe", async () => {
         await agent.post(route).send(factoryRecipe())
-        const recipe = await connection.manager.findOneByOrFail(Recipe, {
+        const recipe = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
 
         const res = await agent.delete(`${route}/1`)
-        const noRecipe = await connection.manager.findOneBy(Recipe, { id: 1 })
+        const noRecipe = await dataSource.manager.findOneBy(Recipe, { id: 1 })
         expect(res.status).to.equal(200)
         expect(recipe).to.exist
         expect(noRecipe).not.to.exist
@@ -425,7 +425,7 @@ describe("API Route Recipe: /api/recipe", () => {
         await agent.post(route).send(factoryRecipe())
 
         const failedRes = await request(app).delete(`${route}/1`)
-        const recipe = await connection.manager.findOneByOrFail(Recipe, {
+        const recipe = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
         expect(failedRes.status).to.equal(401)
@@ -441,7 +441,7 @@ describe("API Route Recipe: /api/recipe", () => {
         await agent2.post("/api/auth").send(user2Cred)
 
         const failedRes = await agent2.delete(`${route}/1`)
-        const recipe = await connection.manager.findOneByOrFail(Recipe, {
+        const recipe = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
 

@@ -1,7 +1,7 @@
 import { Recipe } from "../../db/entities"
 import { Tag } from "../../db/entities"
 import { User } from "../../db/entities"
-import { connection, expect, syncDB } from "../../mochaSetup"
+import { dataSource, expect, syncDB } from "../../mochaSetup"
 import seed from "../seed"
 
 describe("Seed", () => {
@@ -9,12 +9,12 @@ describe("Seed", () => {
   afterEach(syncDB)
 
   it("fills the database with some sample data", async () => {
-    await seed()
+    await seed(dataSource)
 
-    const recipes = await connection.manager.find(Recipe)
-    const tags = await connection.manager.find(Tag)
-    const users = await connection.manager.find(User)
-    const recipeTagRelations = await connection.manager
+    const recipes = await dataSource.manager.find(Recipe)
+    const tags = await dataSource.manager.find(Tag)
+    const users = await dataSource.manager.find(User)
+    const recipeTagRelations = await dataSource.manager
       .createQueryBuilder()
       .select("tag")
       .from(Tag, "tag")

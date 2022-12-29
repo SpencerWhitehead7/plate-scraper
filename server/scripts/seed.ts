@@ -1,26 +1,16 @@
-import { Connection, Repository, getConnection, getRepository } from "typeorm"
+import { DataSource } from "typeorm"
 
+import { getGlobalDataSource } from "../db/dataStore"
 import { Recipe, Tag, User } from "../db/entities"
-import { generateUtils } from "../utils"
 
-const seed = async () => {
-  let connection: Connection
-  let recipeRepo: Repository<Recipe>
-  let tagRepo: Repository<Tag>
-  let userRepo: Repository<User>
-  if (process.env.NODE_ENV === "script") {
-    // create your own connection if running independently
-    ;({ connection, recipeRepo, tagRepo, userRepo } = await generateUtils())
-  } else {
-    // use connection from main app/test otherwise
-    connection = getConnection()
-    recipeRepo = getRepository(Recipe)
-    tagRepo = getRepository(Tag)
-    userRepo = getRepository(User)
-  }
-  const save = (row: unknown) => connection.manager.save(row)
+const seed = async (dataSource: DataSource) => {
+  const recipeRepo = dataSource.getRepository(Recipe)
+  const tagRepo = dataSource.getRepository(Tag)
+  const userRepo = dataSource.getRepository(User)
 
-  await connection.synchronize(true)
+  const save = (row: unknown) => dataSource.manager.save(row)
+
+  await dataSource.synchronize(true)
   console.log("Database synced")
 
   const users = await Promise.all(
@@ -207,13 +197,14 @@ const seed = async () => {
 
 if (module === require.main) {
   console.log("\nSeeding...\n")
-  seed()
+  getGlobalDataSource()
+    .then(seed)
     .then(() => {
       console.log("\nSeeding complete")
       process.exit(0)
     })
     .catch((err) => {
-      console.log(err)
+      console.error(err)
       process.exit(1)
     })
 }

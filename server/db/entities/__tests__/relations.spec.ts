@@ -1,5 +1,5 @@
 import {
-  connection,
+  dataSource,
   expect,
   factoryRecipe,
   factoryTag,
@@ -15,7 +15,7 @@ describe("Relations", () => {
   beforeEach(async () => {
     try {
       await syncDB()
-      user = await connection.manager.save(factoryUser())
+      user = await dataSource.manager.save(factoryUser())
     } catch (err) {
       console.log(err)
     }
@@ -25,11 +25,11 @@ describe("Relations", () => {
   it("The User-Recipe one-many relation exists", async () => {
     await Promise.all(
       [factoryRecipe({ user }), factoryRecipe({ user })].map((row) =>
-        connection.manager.save(row)
+        dataSource.manager.save(row)
       )
     )
 
-    const savedUser = await connection.manager.findOneOrFail(User, {
+    const savedUser = await dataSource.manager.findOneOrFail(User, {
       where: { id: 1 },
       relations: { recipes: true },
     })
@@ -39,7 +39,7 @@ describe("Relations", () => {
 
   it("The Recipe-Tag many-many relation exists", async () => {
     const getAllRecipeTagJoinRowsTag = async () =>
-      await connection.manager
+      await dataSource.manager
         .createQueryBuilder()
         .select("tag")
         .from(Tag, "tag")
@@ -47,7 +47,7 @@ describe("Relations", () => {
         .getMany()
 
     const getAllRecipeTagJoinRowsRecipe = async () =>
-      await connection.manager
+      await dataSource.manager
         .createQueryBuilder()
         .select("recipe")
         .from(Recipe, "recipe")
@@ -56,7 +56,7 @@ describe("Relations", () => {
 
     const [tag1, tag2] = await Promise.all(
       [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((row) =>
-        connection.manager.save(row)
+        dataSource.manager.save(row)
       )
     )
 
@@ -64,7 +64,7 @@ describe("Relations", () => {
       [
         factoryRecipe({ user, tags: [tag1, tag2] }),
         factoryRecipe({ user, tags: [tag1, tag2] }),
-      ].map((row) => connection.manager.save(row))
+      ].map((row) => dataSource.manager.save(row))
     )
 
     const tags = await getAllRecipeTagJoinRowsTag()

@@ -1,15 +1,17 @@
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
-import { Connection, Repository } from "typeorm"
+import { Server } from "http"
+import { DataSource, Repository } from "typeorm"
 
+import { getGlobalDataSource } from "./db/dataStore"
 import { Recipe, Tag, User } from "./db/entities"
-import { generateUtils } from "./utils"
+import { boot } from "./index"
 
 chai.use(chaiAsPromised)
 export const { expect } = chai
 
 export let app: Express.Application
-export let connection: Connection
+export let dataSource: DataSource
 
 export const userCred = {
   email: "email@provider.com",
@@ -49,17 +51,26 @@ export const factoryUser = (values = {}) =>
 
 export const syncDB = async () => {
   try {
-    await connection.synchronize(true)
+    await dataSource.synchronize(true)
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
 }
 
+let server: Server
+
 before(async () => {
   try {
-    ;({ app, connection, recipeRepo, tagRepo, userRepo } =
-      await generateUtils())
+    dataSource = await getGlobalDataSource()
+    recipeRepo = dataSource.getRepository(Recipe)
+    tagRepo = dataSource.getRepository(Tag)
+    userRepo = dataSource.getRepository(User)
+    ;({ app, server } = await boot(dataSource))
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
+})
+
+after(() => {
+  server.close()
 })

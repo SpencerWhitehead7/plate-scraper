@@ -24,7 +24,7 @@
     "dev:be": "ts-node-dev --project server/tsconfig.json server",
     "dev:fe": "node built/server & webpack serve --mode=development",
     "dev": "ts-node-dev --project server/tsconfig.json server & webpack serve --mode=development",
-    "test:be": "NODE_ENV='test' TS_NODE_PROJECT='./server/tsconfig.json' mocha -r ts-node/register --file server/mochaSetup.ts --timeout 10000 --exit -- 'server/**/__tests__/*.spec.ts'",
+    "test:be": "NODE_ENV='test' TS_NODE_PROJECT='./server/tsconfig.json' mocha -r ts-node/register --file server/mochaSetup.ts --timeout 10000 -- 'server/**/__tests__/*.spec.ts'",
     "test:fe": "ECHO not implemented",
     "test": "npm run test:be && npm run test:fe"
   },

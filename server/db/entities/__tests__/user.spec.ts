@@ -1,5 +1,5 @@
 import {
-  connection,
+  dataSource,
   expect,
   factoryRecipe,
   factoryUser,
@@ -15,7 +15,7 @@ describe("User Entity", () => {
   afterEach(syncDB)
 
   it("entity and fields exist", async () => {
-    const user = await connection.manager.save(factoryUser())
+    const user = await dataSource.manager.save(factoryUser())
     expect(User).to.exist
     expect(user.email).to.exist
     expect(user.password).to.exist
@@ -24,32 +24,32 @@ describe("User Entity", () => {
 
   describe("Fields validate data", () => {
     it("email rejects duplicates", async () => {
-      await connection.manager.save(factoryUser())
-      return expect(connection.manager.save(factoryUser())).to.be.rejected
+      await dataSource.manager.save(factoryUser())
+      return expect(dataSource.manager.save(factoryUser())).to.be.rejected
     })
     it("email rejects non-email strings", () => {
       const user = factoryUser({ email: "email" })
-      return expect(connection.manager.save(user)).to.be.rejected
+      return expect(dataSource.manager.save(user)).to.be.rejected
     })
     it("userName rejects duplicates", async () => {
-      await connection.manager.save(factoryUser())
-      return expect(connection.manager.save(factoryUser())).to.be.rejected
+      await dataSource.manager.save(factoryUser())
+      return expect(dataSource.manager.save(factoryUser())).to.be.rejected
     })
     it("userName rejects empty strings", () => {
       const user = factoryUser({ userName: "" })
-      return expect(connection.manager.save(user)).to.be.rejected
+      return expect(dataSource.manager.save(user)).to.be.rejected
     })
     it("userName rejects strings with non-alphanumeric characters", () => {
       const user = factoryUser({ userName: "userName!" })
-      return expect(connection.manager.save(user)).to.be.rejected
+      return expect(dataSource.manager.save(user)).to.be.rejected
     })
     it("rejects passwords >64 chars", async () => {
       const user = factoryUser({ password: new Array(65).fill("a").join("") })
-      return expect(connection.manager.save(user)).to.be.rejected
+      return expect(dataSource.manager.save(user)).to.be.rejected
     })
     it("password is hidden from selects", async () => {
-      await connection.manager.save(factoryUser())
-      const user = await connection.manager.findOneByOrFail(User, { id: 1 })
+      await dataSource.manager.save(factoryUser())
+      const user = await dataSource.manager.findOneByOrFail(User, { id: 1 })
       expect(user.password).not.to.exist
     })
   })
@@ -62,7 +62,7 @@ describe("User Entity", () => {
         [
           factoryUser({ ...userCred, password: samePassword }),
           factoryUser({ ...user2Cred, password: samePassword }),
-        ].map((row) => connection.manager.save(row))
+        ].map((row) => dataSource.manager.save(row))
       )
 
       expect(user1.password).not.to.equal(samePassword)
@@ -70,11 +70,11 @@ describe("User Entity", () => {
       expect(user1.password).not.to.equal(user2.password)
     })
     it("password is re-encrypted when it updates", async () => {
-      const user = await connection.manager.save(factoryUser())
+      const user = await dataSource.manager.save(factoryUser())
       const { password: originalPassword } = user
       // "updates" the values in the db row to their current values
       // which triggers re-encryption, changing value of password
-      const { password: newPassword } = await connection.manager.save(user)
+      const { password: newPassword } = await dataSource.manager.save(user)
 
       expect(originalPassword).not.to.equal(newPassword)
     })
@@ -82,22 +82,22 @@ describe("User Entity", () => {
 
   describe("Deletion behaviors", () => {
     it("deleting a user also deletes the user's recipes", async () => {
-      const getAllRecipes = async () => await connection.manager.find(Recipe)
+      const getAllRecipes = async () => await dataSource.manager.find(Recipe)
 
       const [user, otherUser] = await Promise.all(
         [factoryUser(userCred), factoryUser(user2Cred)].map((row) =>
-          connection.manager.save(row)
+          dataSource.manager.save(row)
         )
       )
 
       const [userRecipe] = await Promise.all(
         [factoryRecipe({ user }), factoryRecipe({ user: otherUser })].map(
-          (row) => connection.manager.save(row)
+          (row) => dataSource.manager.save(row)
         )
       )
 
       const originalRecipes = await getAllRecipes()
-      await connection.manager.delete(User, user.id)
+      await dataSource.manager.delete(User, user.id)
       const recipesAfterDelete = await getAllRecipes()
 
       expect(originalRecipes).to.have.lengthOf(2)
@@ -112,7 +112,7 @@ describe("User Entity", () => {
     it("checkPassword returns whether the password is correct", async () => {
       const userData = factoryUser()
       const { password } = userData
-      const user = await connection.manager.save(userData)
+      const user = await dataSource.manager.save(userData)
       expect(await user.checkPassword(password)).to.be.true
       expect(await user.checkPassword(password + "a")).to.be.false
     })

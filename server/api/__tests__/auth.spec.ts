@@ -5,7 +5,7 @@ import { User } from "../../db/entities"
 import { Session } from "../../logic/auth"
 import {
   app,
-  connection,
+  dataSource,
   factoryRecipe,
   factoryTag,
   syncDB,
@@ -16,7 +16,7 @@ describe("Auth Route: /api/auth", () => {
   const route = "/api/auth"
   let agent: request.SuperAgentTest
   const getUserWithAuth = async () =>
-    await connection.manager
+    await dataSource.manager
       .createQueryBuilder()
       .select("user")
       .from(User, "user")
@@ -130,7 +130,7 @@ describe("Auth Route: /api/auth", () => {
         const res = await agent
           .put(route)
           .send({ newEmail, password: "wrongpw" })
-        const user = await connection.manager.findOneByOrFail(User, { id: 1 })
+        const user = await dataSource.manager.findOneByOrFail(User, { id: 1 })
         expect(user.email).not.to.equal(newEmail)
         expect(res.status).to.equal(401)
       })
@@ -147,7 +147,7 @@ describe("Auth Route: /api/auth", () => {
         const res = await agent
           .delete(route)
           .send({ password: userCred.password })
-        const user = await connection.manager.findOneBy(User, { id: 1 })
+        const user = await dataSource.manager.findOneBy(User, { id: 1 })
         expect(res.status).to.equal(204)
         expect(user).not.to.exist
       })
@@ -158,7 +158,7 @@ describe("Auth Route: /api/auth", () => {
       })
       it("returns a 401 and does not delete the user if the user sends the wrong confirmation password", async () => {
         const res = await agent.delete(route).send({ password: "wrongpw" })
-        const user = await connection.manager.findOneBy(User, { id: 1 })
+        const user = await dataSource.manager.findOneBy(User, { id: 1 })
         expect(user).to.exist
         expect(res.status).to.equal(401)
       })
@@ -174,9 +174,9 @@ describe("Auth Route: /api/auth", () => {
   describe("/login", () => {
     describe("POST", () => {
       it("logs the user in if they provide correct credentials and returns the user", async () => {
-        const user = await connection.manager.findOneBy(User, { id: 1 })
-        const recipe = await connection.manager.save(factoryRecipe({ user }))
-        await connection.manager.save(factoryTag({ recipes: [recipe] }))
+        const user = await dataSource.manager.findOneBy(User, { id: 1 })
+        const recipe = await dataSource.manager.save(factoryRecipe({ user }))
+        await dataSource.manager.save(factoryTag({ recipes: [recipe] }))
         await agent.post(`${route}/logout`)
 
         const res = await agent.post(`${route}/login`).send(userCred)
@@ -207,9 +207,9 @@ describe("Auth Route: /api/auth", () => {
         expect(loggedInUser.body).to.be.null
       })
       it("destroy's the user's session if the user is logged in", async () => {
-        const oneLoggedInSession = await connection.manager.find(Session)
+        const oneLoggedInSession = await dataSource.manager.find(Session)
         await agent.post(`${route}/logout`)
-        const noLoggedInSessions = await connection.manager.find(Session)
+        const noLoggedInSessions = await dataSource.manager.find(Session)
 
         expect(oneLoggedInSession).to.have.lengthOf(1)
         expect(noLoggedInSessions).to.have.lengthOf(0)

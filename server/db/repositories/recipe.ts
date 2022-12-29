@@ -1,22 +1,28 @@
-import {
-  AbstractRepository,
-  EntityManager,
-  EntityRepository,
-  getConnection,
-  getCustomRepository,
-} from "typeorm"
+import { DataSource, EntityManager, Repository } from "typeorm"
 
+import { getGlobalDataSource } from "../dataStore"
 import { Recipe, Tag } from "../entities"
 
-@EntityRepository(Recipe)
-class RecipeRepository extends AbstractRepository<Recipe> {
+class RecipeRepository {
+  private dataSource: DataSource
+  private repo: Repository<Recipe>
+
+  constructor() {
+    getGlobalDataSource()
+      .then((gds) => {
+        this.dataSource = gds
+        this.repo = gds.getRepository(Recipe)
+      })
+      .catch(console.error)
+  }
+
   private getTx = (cb: (tx: EntityManager) => Promise<Recipe | undefined>) =>
-    getConnection().transaction("SERIALIZABLE", cb)
+    this.dataSource.transaction("SERIALIZABLE", cb)
 
   private select = (tx?: EntityManager) =>
     (tx
       ? tx.createQueryBuilder(Recipe, "recipe")
-      : this.createQueryBuilder("recipe")
+      : this.repo.createQueryBuilder("recipe")
     ).leftJoinAndSelect("recipe.tags", "tag")
 
   private insertTags = (tx: EntityManager, tagNames: string[] = []) =>
@@ -179,7 +185,8 @@ class RecipeRepository extends AbstractRepository<Recipe> {
   }
 
   delete(id: number) {
-    return this.createQueryBuilder("recipe")
+    return this.repo
+      .createQueryBuilder("recipe")
       .delete()
       .from(Recipe)
       .where("id = :id", { id })
@@ -201,4 +208,4 @@ class RecipeRepository extends AbstractRepository<Recipe> {
   }
 }
 
-export const recipeRepository = getCustomRepository(RecipeRepository)
+export const recipeRepository = new RecipeRepository()

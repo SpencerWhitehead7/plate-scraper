@@ -1,19 +1,28 @@
-import {
-  AbstractRepository,
-  EntityRepository,
-  getCustomRepository,
-} from "typeorm"
+import { DataSource, Repository } from "typeorm"
 
+import { getGlobalDataSource } from "../dataStore"
 import { User } from "../entities"
 
-@EntityRepository(User)
-class UserRepository extends AbstractRepository<User> {
+class UserRepository {
+  private dataSource: DataSource
+  private repo: Repository<User>
+
+  constructor() {
+    getGlobalDataSource()
+      .then((gds) => {
+        this.dataSource = gds
+        this.repo = gds.getRepository(User)
+      })
+      .catch(console.error)
+  }
+
   async insert(userData: {
     email: string
     userName: string
     password: string
   }) {
-    const createdUser = await this.createQueryBuilder("user")
+    const createdUser = await this.repo
+      .createQueryBuilder("user")
       .insert()
       .into(User)
       .values(userData)
@@ -31,7 +40,8 @@ class UserRepository extends AbstractRepository<User> {
       password?: string
     }
   ) {
-    await this.createQueryBuilder("user")
+    await this.repo
+      .createQueryBuilder("user")
       .update(User)
       .set(updatedUserData)
       .where("id = :id", { id })
@@ -41,7 +51,8 @@ class UserRepository extends AbstractRepository<User> {
   }
 
   delete(user: User) {
-    return this.createQueryBuilder("user")
+    return this.repo
+      .createQueryBuilder("user")
       .delete()
       .from(User)
       .where("id = :id", { id: user.id })
@@ -49,20 +60,23 @@ class UserRepository extends AbstractRepository<User> {
   }
 
   getReqUser(id: number) {
-    return this.createQueryBuilder("user")
+    return this.repo
+      .createQueryBuilder("user")
       .select()
       .where("user.id = :id", { id })
       .getOne()
   }
 
   getById(id: number) {
-    return this.createQueryBuilder("user")
+    return this.repo
+      .createQueryBuilder("user")
       .where("user.id = :id", { id })
       .getOne()
   }
 
   getByIdWithRecipes(id: number) {
-    return this.createQueryBuilder("user")
+    return this.repo
+      .createQueryBuilder("user")
       .leftJoinAndSelect("user.recipes", "recipe")
       .leftJoinAndSelect("recipe.tags", "tag")
       .where("user.id = :id", { id })
@@ -70,18 +84,20 @@ class UserRepository extends AbstractRepository<User> {
   }
 
   getByIdWithAuth(id: number) {
-    return this.createQueryBuilder("user")
+    return this.repo
+      .createQueryBuilder("user")
       .addSelect("user.password")
       .where("user.id = :id", { id })
       .getOne()
   }
 
   getByEmailWithAuth(email: string) {
-    return this.createQueryBuilder("user")
+    return this.repo
+      .createQueryBuilder("user")
       .addSelect("user.password")
       .where("user.email = :email", { email })
       .getOne()
   }
 }
 
-export const userRepository = getCustomRepository(UserRepository)
+export const userRepository = new UserRepository()

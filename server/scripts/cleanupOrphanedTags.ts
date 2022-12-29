@@ -1,19 +1,10 @@
-import { Connection, getConnection } from "typeorm"
+import { DataSource } from "typeorm"
 
-import { generateUtils } from "../utils"
+import { getGlobalDataSource } from "../db/dataStore"
 
-const cleanupOrpanedTags = async () => {
-  let connection: Connection
-  if (process.env.NODE_ENV === "script") {
-    // create your own connection if running independently
-    ;({ connection } = await generateUtils())
-  } else {
-    // use connection from main app/test otherwise
-    connection = getConnection()
-  }
-
+const cleanupOrpanedTags = async (dataSource: DataSource) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const [, tagsCount] = await connection.manager.query(
+  const [, tagsCount] = await dataSource.manager.query(
     `
     DELETE FROM tag
     WHERE name IN 
@@ -24,13 +15,13 @@ const cleanupOrpanedTags = async () => {
       )
     `
   )
-
   console.log(`Removed ${tagsCount as number} tag(s)`)
 }
 
 if (module === require.main) {
   console.log("\nCleaning...\n")
-  cleanupOrpanedTags()
+  getGlobalDataSource()
+    .then(cleanupOrpanedTags)
     .then(() => {
       console.log("\nCleaning completed")
       process.exit(0)
