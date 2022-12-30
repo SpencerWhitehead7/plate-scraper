@@ -94,10 +94,19 @@ authRouter.delete(
       if (!authUser || !(await authUser.checkPassword(password)))
         throw incorrectCredsErr
 
-      req.logout()
-      await userRepository.delete(authUser)
-      req.session.destroy((err) => {
-        err ? next(err) : res.sendStatus(204)
+      req.logout((err) => {
+        if (err) {
+          next(err)
+        } else {
+          req.session.destroy((err) => {
+            if (err) {
+              next(err)
+            } else {
+              userRepository.delete(authUser).catch(next)
+              res.sendStatus(204)
+            }
+          })
+        }
       })
     } catch (err) {
       next(err)
@@ -130,8 +139,17 @@ authRouter.post(
 
 // POST /api/auth/logout
 authRouter.post("/logout", isAuthenticated, (req, res, next) => {
-  req.logout()
-  req.session.destroy((err) => {
-    err ? next(err) : res.sendStatus(204)
+  req.logout((err) => {
+    if (err) {
+      next(err)
+    } else {
+      req.session.destroy((err) => {
+        if (err) {
+          next(err)
+        } else {
+          res.sendStatus(204)
+        }
+      })
+    }
   })
 })
