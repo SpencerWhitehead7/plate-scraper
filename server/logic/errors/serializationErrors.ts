@@ -16,7 +16,7 @@ const serializationErrorMiddleware: RequestHandler = (req, res, next) => {
   }
 }
 
-const createBodyEmail = () => body("email").trim().isEmail()
+const createBodyEmail = () => body("email").trim().isEmail().normalizeEmail()
 const bodyEmail = createBodyEmail()
 const bodyNewEmail = createBodyEmail().optional()
 
