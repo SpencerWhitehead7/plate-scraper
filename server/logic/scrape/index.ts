@@ -9,7 +9,7 @@ import { cookinglight } from "./cookinglight"
 import { eatingwell } from "./eatingwell"
 import { epicurious } from "./epicurious"
 import { food } from "./food"
-// import { food52 } from "./food52"; // uncomment if I ever get it working
+import { food52 } from "./food52"
 import { foodandwine } from "./foodandwine"
 import { foodnetwork } from "./foodnetwork"
 import { RecipeData } from "./helpers"
@@ -39,8 +39,8 @@ export const scrape = async (url: string) => {
     recipe = epicurious($, url)
   } else if (url.includes("food.com")) {
     recipe = food($, url)
-    // } else if (url.includes("food52.com")) { // uncomment if I ever get it working
-    //   recipe = food52($, url)
+  } else if (url.includes("food52.com")) {
+    recipe = food52($, url)
   } else if (url.includes("foodandwine.com")) {
     recipe = foodandwine($, url)
   } else if (url.includes("foodnetwork.com")) {

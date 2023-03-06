@@ -70,9 +70,9 @@ describe("Scraper", () => {
     it("food", () => {
       expect(actuals[i]).to.deep.equal(expecteds[i])
     })
-    // it("food52", () => {
-    //   expect(actuals[i]).to.deep.equal(expecteds[i])
-    // })
+    it("food52", () => {
+      expect(actuals[i]).to.deep.equal(expecteds[i])
+    })
     it("foodandwine", () => {
       expect(actuals[i]).to.deep.equal(expecteds[i])
     })

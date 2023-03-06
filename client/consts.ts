@@ -8,7 +8,7 @@ export const SUPPORTED_SITES = [
   "eatingwell.com",
   "epicurious.com",
   "food.com",
-  // "food52.com",
+  "food52.com",
   "foodandwine.com",
   "foodnetwork.com",
   "jamieoliver.com",

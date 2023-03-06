@@ -8,7 +8,7 @@ import eatingwellRecipe from "./expectedRecipes/eatingwell"
 import eatingwellFallbackOriginRecipe from "./expectedRecipes/eatingwellFallbackOrigin"
 import epicuriousRecipe from "./expectedRecipes/epicurious"
 import foodRecipe from "./expectedRecipes/food"
-// import food52Recipe from "./food52";
+import food52Recipe from "./expectedRecipes/food52"
 import foodandwineRecipe from "./expectedRecipes/foodandwine"
 import foodnetworkRecipe from "./expectedRecipes/foodnetwork"
 import jamieoliverRecipe from "./expectedRecipes/jamieoliver"
@@ -73,12 +73,12 @@ export const expecteds: RecipeData[] = [
     text: foodRecipe,
     title: "Sonic Strawberry Cheesecake Shake",
   },
-  // {
-  //   sourceSite: "food52.com",
-  //   sourceUrl: "https://food52.com/recipes/81226-espresso-caramel-sauce",
-  //   text: food52Recipe,
-  //   title: "Espresso Caramel Sauce",
-  // },
+  {
+    sourceSite: "food52.com",
+    sourceUrl: "https://food52.com/recipes/81226-espresso-caramel-sauce",
+    text: food52Recipe,
+    title: "Espresso Caramel Sauce",
+  },
   {
     sourceSite: "foodandwine.com",
     sourceUrl:
