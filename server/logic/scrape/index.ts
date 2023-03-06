@@ -5,7 +5,6 @@ import { scrapeFailedErr, siteInvalidErr } from "../errors"
 import allrecipes from "./allrecipes"
 import bettycrocker from "./bettycrocker"
 import bonappetit from "./bonappetit"
-import chowhound from "./chowhound"
 import cookinglight from "./cookinglight"
 import eatingwell from "./eatingwell"
 import epicurious from "./epicurious"
@@ -32,8 +31,6 @@ export const scrape = async (url: string) => {
     recipe = bettycrocker($, url)
   } else if (url.includes("bonappetit.com")) {
     recipe = bonappetit($, url)
-  } else if (url.includes("chowhound.com")) {
-    recipe = chowhound($, url)
   } else if (url.includes("cookinglight.com")) {
     recipe = cookinglight($, url)
   } else if (url.includes("eatingwell.com")) {

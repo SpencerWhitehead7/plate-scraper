@@ -1,7 +1,6 @@
 import allrecipesRecipe from "./expectedRecipes/allrecipes"
 import bettycrockerRecipe from "./expectedRecipes/bettycrocker"
 import bonappetitRecipe from "./expectedRecipes/bonappetit"
-import chowhoundRecipe from "./expectedRecipes/chowhound"
 import cookinglightRecipe from "./expectedRecipes/cookinglight"
 import eatingwellRecipe from "./expectedRecipes/eatingwell"
 import eatingwellFallbackOriginRecipe from "./expectedRecipes/eatingwellFallbackOrigin"
@@ -37,13 +36,6 @@ const expecteds = [
       "https://www.bonappetit.com/recipe/grilled-salmon-with-lemon-sesame-sauce",
     text: bonappetitRecipe,
     title: "Grilled Crispy-Skinned Salmon with Whole Lemon-Sesame Sauce",
-  },
-  {
-    sourceSite: "chowhound.com",
-    sourceUrl:
-      "https://www.chowhound.com/recipes/slow-cooker-red-pepper-butternut-squash-soup-31117",
-    text: chowhoundRecipe,
-    title: "Slow Cooker Butternut Squash and Red Pepper Soup",
   },
   {
     sourceSite: "cookinglight.com",
