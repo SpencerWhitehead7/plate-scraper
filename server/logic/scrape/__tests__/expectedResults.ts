@@ -1,3 +1,5 @@
+import { RecipeData } from "../helpers"
+
 import allrecipesRecipe from "./expectedRecipes/allrecipes"
 import bettycrockerRecipe from "./expectedRecipes/bettycrocker"
 import bonappetitRecipe from "./expectedRecipes/bonappetit"
@@ -16,7 +18,7 @@ import simplyrecipesRecipe from "./expectedRecipes/simplyrecipes"
 
 // import thekitchnRecipe from "./correct-recipes/thekitchn";
 
-const expecteds = [
+export const expecteds: RecipeData[] = [
   {
     sourceSite: "allrecipes.com",
     sourceUrl: "https://www.allrecipes.com/recipe/22918/pop-cake/",
@@ -35,7 +37,7 @@ const expecteds = [
     sourceUrl:
       "https://www.bonappetit.com/recipe/grilled-salmon-with-lemon-sesame-sauce",
     text: bonappetitRecipe,
-    title: "Grilled Crispy-Skinned Salmon with Whole Lemon-Sesame Sauce",
+    title: "Grilled Crispy-Skinned Salmon With Whole Lemon-Sesame Sauce",
   },
   {
     sourceSite: "cookinglight.com",
@@ -117,7 +119,7 @@ const expecteds = [
     sourceUrl:
       "https://www.simplyrecipes.com/recipes/grilled_salmon_with_peach_salsa/",
     text: simplyrecipesRecipe,
-    title: "Grilled Salmon with Peach Salsa",
+    title: "Grilled Salmon With Peach Salsa",
   },
   // {
   //   sourceSite: "thekitchn.com",
@@ -126,5 +128,3 @@ const expecteds = [
   //   title: "Watermelon Mint Frosé",
   // },
 ]
-
-export default expecteds

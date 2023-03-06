@@ -1,18 +1,18 @@
+export type RecipeData = {
+  sourceSite: string
+  sourceUrl: string
+  text: string
+  title: string
+}
+
 export const getCleanStrings = (
   $: cheerio.Root,
   selector: string,
-  context: string | null = null,
-  additionalCleaners: [RegExp, string?][] = []
+  context: string | null = null
 ) =>
   (context ? $(selector, context) : $(selector))
     .map(function (this: void) {
-      let res = $(this).text().trim().replace(/\s+/g, " ")
-
-      additionalCleaners.forEach(([filter, replacer = ""]) => {
-        res = res.replace(filter, replacer)
-      })
-
-      return res
+      return $(this).text().trim().replace(/\s+/g, " ")
     })
     .get()
     .filter(Boolean) as string[]

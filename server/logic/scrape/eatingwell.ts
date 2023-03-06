@@ -1,6 +1,6 @@
-import { getCleanStrings, getRecipe } from "./helpers"
+import { RecipeData, getCleanStrings, getRecipe } from "./helpers"
 
-const eatingwell = ($: cheerio.Root, url: string) => {
+export const eatingwell = ($: cheerio.Root, url: string): RecipeData => {
   let title
   let ingredients
   let instructions
@@ -22,5 +22,3 @@ const eatingwell = ($: cheerio.Root, url: string) => {
     title: title[0],
   }
 }
-
-export default eatingwell

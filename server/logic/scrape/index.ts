@@ -2,28 +2,29 @@ import { load } from "cheerio"
 
 import { scrapeFailedErr, siteInvalidErr } from "../errors"
 
-import allrecipes from "./allrecipes"
-import bettycrocker from "./bettycrocker"
-import bonappetit from "./bonappetit"
-import cookinglight from "./cookinglight"
-import eatingwell from "./eatingwell"
-import epicurious from "./epicurious"
-import food from "./food"
-// import food52 from "./food52"; // uncomment if I ever get it working
-import foodandwine from "./foodandwine"
-import foodnetwork from "./foodnetwork"
-import jamieoliver from "./jamieoliver"
-import myrecipes from "./myrecipes"
-import seriousEats from "./seriouseats"
-import simplyrecipes from "./simplyrecipes"
+import { allrecipes } from "./allrecipes"
+import { bettycrocker } from "./bettycrocker"
+import { bonappetit } from "./bonappetit"
+import { cookinglight } from "./cookinglight"
+import { eatingwell } from "./eatingwell"
+import { epicurious } from "./epicurious"
+import { food } from "./food"
+// import { food52 } from "./food52"; // uncomment if I ever get it working
+import { foodandwine } from "./foodandwine"
+import { foodnetwork } from "./foodnetwork"
+import { RecipeData } from "./helpers"
+import { jamieoliver } from "./jamieoliver"
+import { myrecipes } from "./myrecipes"
+import { seriousEats } from "./seriouseats"
+import { simplyrecipes } from "./simplyrecipes"
 
-// import thekitchn from "./thekitchn"; // uncomment if I ever get it working
+// import { thekitchn } from "./thekitchn"; // uncomment if I ever get it working
 
 export const scrape = async (url: string) => {
   const res = await fetch(url)
   const html = await res.text()
   const $ = load(html)
-  let recipe
+  let recipe: RecipeData
 
   if (url.includes("allrecipes.com")) {
     recipe = allrecipes($, url)

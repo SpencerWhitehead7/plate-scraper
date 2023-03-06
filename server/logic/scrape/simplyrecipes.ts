@@ -1,14 +1,9 @@
-import { getCleanStrings, getRecipe } from "./helpers"
+import { RecipeData, getCleanStrings, getRecipe } from "./helpers"
 
-const simplyrecipes = ($: cheerio.Root, url: string) => {
+export const simplyrecipes = ($: cheerio.Root, url: string): RecipeData => {
   const title = getCleanStrings($, "h1")
-  const ingredients = getCleanStrings($, ".ingredient")
-  const instructions = getCleanStrings(
-    $,
-    ".entry-details.recipe-method.instructions p",
-    null,
-    [[/^[\s\d]+/]]
-  ) // to deal with leading numbers/spaces
+  const ingredients = getCleanStrings($, ".structured-ingredients__list-item")
+  const instructions = getCleanStrings($, ".mntl-sc-block-group--LI > p")
 
   return {
     sourceSite: "simplyrecipes.com",
@@ -17,5 +12,3 @@ const simplyrecipes = ($: cheerio.Root, url: string) => {
     title: title[0],
   }
 }
-
-export default simplyrecipes

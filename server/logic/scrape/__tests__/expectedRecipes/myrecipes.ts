@@ -7,17 +7,17 @@ Ingredients
 Baking spray with flour
 9 ounces all-purpose flour (about 2 cups)
 1 teaspoon baking powder
-5/8 teaspoon salt, divided
-1 2/3 cups granulated sugar
+.63 teaspoon salt, divided
+1 ⅔ cups granulated sugar
 6 tablespoons butter, softened
 6 ounces 1/3-less-fat cream cheese
 2 large eggs
-1/4 cup canola oil
+¼ cup canola oil
 2 tablespoons grated grapefruit rind
-1/2 teaspoon vanilla extract
-1/2 cup 2% reduced-fat milk
-1/2 cup fresh grapefruit juice
-1 1/4 cups powdered sugar
+½ teaspoon vanilla extract
+½ cup 2% reduced-fat milk
+½ cup fresh grapefruit juice
+1 ¼ cups powdered sugar
 
 Instructions
 

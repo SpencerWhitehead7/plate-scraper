@@ -1,6 +1,6 @@
 const expectedRecipe = `Source: https://www.bonappetit.com/recipe/grilled-salmon-with-lemon-sesame-sauce
 
-Grilled Crispy-Skinned Salmon with Whole Lemon-Sesame Sauce
+Grilled Crispy-Skinned Salmon With Whole Lemon-Sesame Sauce
 
 Ingredients
 

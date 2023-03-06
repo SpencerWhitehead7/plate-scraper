@@ -1,9 +1,13 @@
-import { getCleanStrings, getRecipe } from "./helpers"
+import { RecipeData, getCleanStrings, getRecipe } from "./helpers"
 
-const epicurious = ($: cheerio.Root, url: string) => {
+export const epicurious = ($: cheerio.Root, url: string): RecipeData => {
   const title = getCleanStrings($, "h1")
-  const ingredients = getCleanStrings($, ".ingredient")
-  const instructions = getCleanStrings($, ".preparation-step")
+  const ingredients = getCleanStrings($, "*", "div[class*=List-WECnc]")
+  const instructions = getCleanStrings(
+    $,
+    "p",
+    "div[data-testid=InstructionsWrapper]"
+  )
 
   return {
     sourceSite: "epicurious.com",
@@ -12,5 +16,3 @@ const epicurious = ($: cheerio.Root, url: string) => {
     title: title[0],
   }
 }
-
-export default epicurious

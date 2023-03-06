@@ -1,8 +1,9 @@
 import { expect } from "chai"
 
+import { RecipeData } from "../helpers"
 import { scrape } from "../index"
 
-import expecteds from "./expectedResults"
+import { expecteds } from "./expectedResults"
 
 describe("Scraper", () => {
   it("throws when page cannot be loaded", () => {
@@ -22,20 +23,16 @@ describe("Scraper", () => {
   })
 
   describe.skip("The parsers handle", () => {
-    let actuals: ({
-      sourceSite: string
-      sourceUrl: string
-      text: string
-      title: string
-    } | null)[] = []
+    let actuals: RecipeData[] = []
     let i = 0
 
     before(async () => {
       try {
-        const reses = await Promise.allSettled(
+        actuals = (
+          await Promise.allSettled(
           expecteds.map(({ sourceUrl }) => scrape(sourceUrl))
         )
-        actuals = reses.map((res) =>
+        ).map((res) =>
           res.status === "fulfilled"
             ? res.value
             : { sourceSite: "", sourceUrl: "", text: "", title: "" }
