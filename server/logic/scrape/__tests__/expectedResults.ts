@@ -15,8 +15,7 @@ import jamieoliverRecipe from "./expectedRecipes/jamieoliver"
 import myrecipesRecipe from "./expectedRecipes/myrecipes"
 import seriouseatsRecipe from "./expectedRecipes/seriouseats"
 import simplyrecipesRecipe from "./expectedRecipes/simplyrecipes"
-
-// import thekitchnRecipe from "./correct-recipes/thekitchn";
+import thekitchnRecipe from "./expectedRecipes/thekitchn"
 
 export const expecteds: RecipeData[] = [
   {
@@ -121,10 +120,10 @@ export const expecteds: RecipeData[] = [
     text: simplyrecipesRecipe,
     title: "Grilled Salmon With Peach Salsa",
   },
-  // {
-  //   sourceSite: "thekitchn.com",
-  //   sourceUrl: "https://www.thekitchn.com/recipe-watermelon-mint-frose-233904",
-  //   text: thekitchnRecipe,
-  //   title: "Watermelon Mint Frosé",
-  // },
+  {
+    sourceSite: "thekitchn.com",
+    sourceUrl: "https://www.thekitchn.com/recipe-watermelon-mint-frose-233904",
+    text: thekitchnRecipe,
+    title: "Watermelon Mint Frosé",
+  },
 ]

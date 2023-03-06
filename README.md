@@ -17,7 +17,7 @@ The site is not currently deployed live anywhere, as it's still a little rough a
 - Add whatever that metadata ends up being to individual users' pages
 - Ability to create collections of your and others' recipes
 - Ability to share recipes or collections (...somehow; I don't want to do a social media integration)
-- Figure out a way to scape websites that block server-requests for their pages (looking at you, food52 and thekitchn.com)
+- Figure out a way to scape websites that block server-requests for their pages (looking at you, food52.com)
 - Add support for more websites
 - Make into a PWA, someday
 

@@ -17,8 +17,7 @@ import { jamieoliver } from "./jamieoliver"
 import { myrecipes } from "./myrecipes"
 import { seriousEats } from "./seriouseats"
 import { simplyrecipes } from "./simplyrecipes"
-
-// import { thekitchn } from "./thekitchn"; // uncomment if I ever get it working
+import { thekitchn } from "./thekitchn"
 
 export const scrape = async (url: string) => {
   const res = await fetch(url)
@@ -54,8 +53,8 @@ export const scrape = async (url: string) => {
     recipe = seriousEats($, url)
   } else if (url.includes("simplyrecipes.com")) {
     recipe = simplyrecipes($, url)
-    // } else if (url.includes("thekitchn.com")) { // uncomment if I ever get it working
-    //   recipe = thekitchn($, url)
+  } else if (url.includes("thekitchn.com")) {
+    recipe = thekitchn($, url)
   } else {
     throw siteInvalidErr
   }
