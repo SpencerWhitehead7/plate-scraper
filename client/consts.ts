@@ -16,6 +16,7 @@ export const SUPPORTED_SITES = [
   "seriouseats.com/recipes",
   "simplyrecipes.com",
   "thekitchn.com",
+  "yummly.com",
 ]
 
 export const URL = {

@@ -16,6 +16,7 @@ import myrecipesRecipe from "./expectedRecipes/myrecipes"
 import seriouseatsRecipe from "./expectedRecipes/seriouseats"
 import simplyrecipesRecipe from "./expectedRecipes/simplyrecipes"
 import thekitchnRecipe from "./expectedRecipes/thekitchn"
+import yummlyRecipe from "./expectedRecipes/yummly"
 
 export const expecteds: RecipeData[] = [
   {
@@ -125,5 +126,11 @@ export const expecteds: RecipeData[] = [
     sourceUrl: "https://www.thekitchn.com/recipe-watermelon-mint-frose-233904",
     text: thekitchnRecipe,
     title: "Watermelon Mint Frosé",
+  },
+  {
+    sourceSite: "yummly.com",
+    sourceUrl: "https://www.yummly.com/recipe/Balsamic-Mushroom-1951517",
+    text: yummlyRecipe,
+    title: "Balsamic Mushroom",
   },
 ]

@@ -30,8 +30,8 @@ describe("Scraper", () => {
       try {
         actuals = (
           await Promise.allSettled(
-          expecteds.map(({ sourceUrl }) => scrape(sourceUrl))
-        )
+            expecteds.map(({ sourceUrl }) => scrape(sourceUrl))
+          )
         ).map((res) =>
           res.status === "fulfilled"
             ? res.value
@@ -92,6 +92,9 @@ describe("Scraper", () => {
       expect(actuals[i]).to.deep.equal(expecteds[i])
     })
     it("thekitchn", () => {
+      expect(actuals[i]).to.deep.equal(expecteds[i])
+    })
+    it("yummly", () => {
       expect(actuals[i]).to.deep.equal(expecteds[i])
     })
   })
