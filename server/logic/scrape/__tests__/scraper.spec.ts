@@ -58,6 +58,9 @@ describe("Scraper", () => {
     it("cookinglight", () => {
       expect(actuals[i]).to.deep.equal(expecteds[i])
     })
+    it("delish", () => {
+      expect(actuals[i]).to.deep.equal(expecteds[i])
+    })
     it("eatingwell", () => {
       expect(actuals[i]).to.deep.equal(expecteds[i])
     })

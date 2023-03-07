@@ -5,6 +5,7 @@ export const SUPPORTED_SITES = [
   "bettycrocker.com",
   "bonappetit.com",
   "cookinglight.com",
+  "delish.com",
   "eatingwell.com",
   "epicurious.com",
   "food.com",

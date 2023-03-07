@@ -4,6 +4,7 @@ import allrecipesRecipe from "./expectedRecipes/allrecipes"
 import bettycrockerRecipe from "./expectedRecipes/bettycrocker"
 import bonappetitRecipe from "./expectedRecipes/bonappetit"
 import cookinglightRecipe from "./expectedRecipes/cookinglight"
+import delishRecipe from "./expectedRecipes/delish"
 import eatingwellRecipe from "./expectedRecipes/eatingwell"
 import eatingwellFallbackOriginRecipe from "./expectedRecipes/eatingwellFallbackOrigin"
 import epicuriousRecipe from "./expectedRecipes/epicurious"
@@ -46,6 +47,13 @@ export const expecteds: RecipeData[] = [
       "https://www.cookinglight.com/recipes/grapefruit-campari-bars-shortbread-crust",
     text: cookinglightRecipe,
     title: "Grapefruit-Campari Bars with Shortbread Crust",
+  },
+  {
+    sourceSite: "delish.com",
+    sourceUrl:
+      "https://www.delish.com/cooking/recipe-ideas/a42628377/croque-monsieur-breakfast-casserole-recipe/",
+    text: delishRecipe,
+    title: "Croque Monsieur Breakfast Casserole",
   },
   {
     sourceSite: "eatingwell.com",

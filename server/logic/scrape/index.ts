@@ -6,6 +6,7 @@ import { allrecipes } from "./allrecipes"
 import { bettycrocker } from "./bettycrocker"
 import { bonappetit } from "./bonappetit"
 import { cookinglight } from "./cookinglight"
+import { delish } from "./delish"
 import { eatingwell } from "./eatingwell"
 import { epicurious } from "./epicurious"
 import { food } from "./food"
@@ -35,6 +36,8 @@ export const scrape = async (url: string) => {
     recipe = bonappetit($, url)
   } else if (url.includes("cookinglight.com")) {
     recipe = cookinglight($, url)
+  } else if (url.includes("delish.com")) {
+    recipe = delish($, url)
   } else if (url.includes("eatingwell.com")) {
     recipe = eatingwell($, url)
   } else if (url.includes("epicurious.com")) {
