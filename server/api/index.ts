@@ -1,7 +1,6 @@
 import { Router } from "express"
 
 import { notFoundRouteErr } from "../logic/errors"
-
 import { authRouter } from "./auth"
 import { recipeRouter } from "./recipe"
 import { scrapeRouter } from "./scrape"

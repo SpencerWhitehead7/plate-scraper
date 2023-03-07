@@ -1,6 +1,8 @@
 import "core-js/stable"
-
 import "regenerator-runtime/runtime"
+import "styles/index.scss"
+import "normalize.css"
+import "skeleton.css"
 
 import React from "react"
 import { createRoot } from "react-dom/client"
@@ -11,11 +13,6 @@ import { Provider } from "react-redux"
 import { store } from "@/reducers"
 
 import { App } from "./App"
-
-import "styles/index.scss"
-
-import "normalize.css"
-import "skeleton.css"
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 createRoot(document.getElementById("root")!).render(

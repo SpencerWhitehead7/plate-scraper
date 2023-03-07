@@ -1,5 +1,4 @@
 import { RecipeData } from "../helpers"
-
 import allrecipesRecipe from "./expectedRecipes/allrecipes"
 import bettycrockerRecipe from "./expectedRecipes/bettycrocker"
 import bonappetitRecipe from "./expectedRecipes/bonappetit"

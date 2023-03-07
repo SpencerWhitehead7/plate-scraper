@@ -1,4 +1,4 @@
-import { RecipeData, getCleanStrings, getRecipe } from "./helpers"
+import { getCleanStrings, getRecipe, RecipeData } from "./helpers"
 
 export const bonappetit = ($: cheerio.Root, url: string): RecipeData => {
   // I cannot believe how awful their html markup is

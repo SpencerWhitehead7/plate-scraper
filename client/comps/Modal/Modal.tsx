@@ -5,7 +5,7 @@ import { Card } from "@/comps/Card"
 import { useAppDispatch, useAppSelector } from "@/reducers"
 
 import s from "./Modal.scss"
-import { MODAL_MAP, closeModal as closeModalAction } from "./modalReducer"
+import { closeModal as closeModalAction, MODAL_MAP } from "./modalReducer"
 
 export const Modal = () => {
   const ModalContent = useAppSelector(

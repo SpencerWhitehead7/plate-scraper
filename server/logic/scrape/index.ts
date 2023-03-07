@@ -1,7 +1,6 @@
 import { load } from "cheerio"
 
 import { scrapeFailedErr, siteInvalidErr } from "../errors"
-
 import { allrecipes } from "./allrecipes"
 import { bettycrocker } from "./bettycrocker"
 import { bonappetit } from "./bonappetit"

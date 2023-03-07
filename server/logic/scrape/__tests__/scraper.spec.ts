@@ -2,7 +2,6 @@ import { expect } from "chai"
 
 import { RecipeData } from "../helpers"
 import { scrape } from "../index"
-
 import { expecteds } from "./expectedResults"
 
 describe("Scraper", () => {

@@ -1,4 +1,4 @@
-import { RecipeData, getCleanStrings, getRecipe } from "./helpers"
+import { getCleanStrings, getRecipe, RecipeData } from "./helpers"
 
 export const thekitchn = ($: cheerio.Root, url: string): RecipeData => {
   const title = getCleanStrings($, ".Recipe__title")

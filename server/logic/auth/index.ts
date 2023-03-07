@@ -1,2 +1,2 @@
-export { Session } from "./session"
 export { isAuthenticated, isNotAlreadyAuthenticated } from "./middlewares"
+export { Session } from "./session"
