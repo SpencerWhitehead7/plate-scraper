@@ -15,6 +15,7 @@ import jamieoliverRecipe from "./expectedRecipes/jamieoliver"
 import myrecipesRecipe from "./expectedRecipes/myrecipes"
 import seriouseatsRecipe from "./expectedRecipes/seriouseats"
 import simplyrecipesRecipe from "./expectedRecipes/simplyrecipes"
+import tastyRecipe from "./expectedRecipes/tasty"
 import thekitchnRecipe from "./expectedRecipes/thekitchn"
 import yummlyRecipe from "./expectedRecipes/yummly"
 
@@ -120,6 +121,12 @@ export const expecteds: RecipeData[] = [
       "https://www.simplyrecipes.com/recipes/grilled_salmon_with_peach_salsa/",
     text: simplyrecipesRecipe,
     title: "Grilled Salmon With Peach Salsa",
+  },
+  {
+    sourceSite: "tasty.co",
+    sourceUrl: "https://tasty.co/recipe/chicken-biscuits-bake",
+    text: tastyRecipe,
+    title: "Chicken & Biscuits Bake",
   },
   {
     sourceSite: "thekitchn.com",

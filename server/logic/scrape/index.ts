@@ -17,6 +17,7 @@ import { jamieoliver } from "./jamieoliver"
 import { myrecipes } from "./myrecipes"
 import { seriousEats } from "./seriouseats"
 import { simplyrecipes } from "./simplyrecipes"
+import { tasty } from "./tasty"
 import { thekitchn } from "./thekitchn"
 import { yummly } from "./yummly"
 
@@ -54,6 +55,8 @@ export const scrape = async (url: string) => {
     recipe = seriousEats($, url)
   } else if (url.includes("simplyrecipes.com")) {
     recipe = simplyrecipes($, url)
+  } else if (url.includes("tasty.co")) {
+    recipe = tasty($, url)
   } else if (url.includes("thekitchn.com")) {
     recipe = thekitchn($, url)
   } else if (url.includes("yummly.com")) {

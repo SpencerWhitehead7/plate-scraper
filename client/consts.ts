@@ -15,6 +15,7 @@ export const SUPPORTED_SITES = [
   "myrecipes.com",
   "seriouseats.com/recipes",
   "simplyrecipes.com",
+  "tasty.co",
   "thekitchn.com",
   "yummly.com",
 ]

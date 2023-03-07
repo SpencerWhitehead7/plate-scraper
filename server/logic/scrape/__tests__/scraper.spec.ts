@@ -91,6 +91,9 @@ describe("Scraper", () => {
     it("simplyrecipes", () => {
       expect(actuals[i]).to.deep.equal(expecteds[i])
     })
+    it("tasty", () => {
+      expect(actuals[i]).to.deep.equal(expecteds[i])
+    })
     it("thekitchn", () => {
       expect(actuals[i]).to.deep.equal(expecteds[i])
     })
