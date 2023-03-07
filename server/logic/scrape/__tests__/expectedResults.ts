@@ -3,6 +3,7 @@ import { RecipeData } from "../helpers"
 import allrecipesRecipe from "./expectedRecipes/allrecipes"
 import bettycrockerRecipe from "./expectedRecipes/bettycrocker"
 import bonappetitRecipe from "./expectedRecipes/bonappetit"
+import budgetBytesRecipe from "./expectedRecipes/budgetbytes"
 import cookinglightRecipe from "./expectedRecipes/cookinglight"
 import delishRecipe from "./expectedRecipes/delish"
 import eatingwellRecipe from "./expectedRecipes/eatingwell"
@@ -40,6 +41,12 @@ export const expecteds: RecipeData[] = [
       "https://www.bonappetit.com/recipe/grilled-salmon-with-lemon-sesame-sauce",
     text: bonappetitRecipe,
     title: "Grilled Crispy-Skinned Salmon With Whole Lemon-Sesame Sauce",
+  },
+  {
+    sourceSite: "budgetbytes.com",
+    sourceUrl: "https://www.budgetbytes.com/skillet-cheeseburger-pasta/",
+    text: budgetBytesRecipe,
+    title: "One Pot Cheeseburger Pasta",
   },
   {
     sourceSite: "cookinglight.com",
