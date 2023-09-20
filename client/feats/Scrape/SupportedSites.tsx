@@ -33,7 +33,7 @@ export const SupportedSites: React.FC<Record<string, never>> = () => {
       rowsArr[i % rowsArr.length].push(site)
       return rowsArr
     },
-    new Array(rowCount).fill(null).map(() => [] as string[])
+    new Array(rowCount).fill(null).map(() => [] as string[]),
   )
 
   return (

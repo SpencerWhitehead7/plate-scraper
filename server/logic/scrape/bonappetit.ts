@@ -6,7 +6,7 @@ export const bonappetit = ($: cheerio.Root, url: string): RecipeData => {
   // this bullshit is because the ingredient quantities and names are in different tags
   // they can both be retrieved in one pass, but then they need to be knitted together
   const ingredients = $("*", ".List-WECnc")
-    .map(function (this: void) {
+    .map(function (this: cheerio.Element) {
       return $(this).text().trim().replace(/\s+/g, " ")
     })
     .get() // this chunk is just getCleanStrings without the filter for empty strings
@@ -18,7 +18,7 @@ export const bonappetit = ($: cheerio.Root, url: string): RecipeData => {
   const instructions = getCleanStrings(
     $,
     "p",
-    "li[class^=InstructionListWrapper]"
+    "li[class^=InstructionListWrapper]",
   )
 
   return {

@@ -8,10 +8,10 @@ export type RecipeData = {
 export const getCleanStrings = (
   $: cheerio.Root,
   selector: string,
-  context: string | null = null
+  context: string | null = null,
 ) =>
   (context ? $(selector, context) : $(selector))
-    .map(function (this: void) {
+    .map(function (this: cheerio.Element) {
       return $(this).text().trim().replace(/\s+/g, " ")
     })
     .get()
@@ -21,7 +21,7 @@ export const getRecipe = (
   url: string,
   title: string[],
   ingredients: string[],
-  instructions: string[]
+  instructions: string[],
 ) =>
   [
     `Source: ${url}`,

@@ -62,7 +62,7 @@ describe("User Entity", () => {
         [
           factoryUser({ ...userCred, password: samePassword }),
           factoryUser({ ...user2Cred, password: samePassword }),
-        ].map((row) => dataSource.manager.save(row))
+        ].map((row) => dataSource.manager.save(row)),
       )
 
       expect(user1.password).not.to.equal(samePassword)
@@ -86,14 +86,14 @@ describe("User Entity", () => {
 
       const [user, otherUser] = await Promise.all(
         [factoryUser(userCred), factoryUser(user2Cred)].map((row) =>
-          dataSource.manager.save(row)
-        )
+          dataSource.manager.save(row),
+        ),
       )
 
       const [userRecipe] = await Promise.all(
         [factoryRecipe({ user }), factoryRecipe({ user: otherUser })].map(
-          (row) => dataSource.manager.save(row)
-        )
+          (row) => dataSource.manager.save(row),
+        ),
       )
 
       const originalRecipes = await getAllRecipes()

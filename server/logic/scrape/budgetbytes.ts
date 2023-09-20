@@ -5,12 +5,12 @@ export const budgetbytes = ($: cheerio.Root, url: string): RecipeData => {
   const ingredients = getCleanStrings(
     $,
     "li",
-    "ul[class*=wprm-recipe-ingredients]"
+    "ul[class*=wprm-recipe-ingredients]",
   )
   const instructions = getCleanStrings(
     $,
     "li",
-    "ul[class*=wprm-recipe-instructions]"
+    "ul[class*=wprm-recipe-instructions]",
   )
 
   return {

@@ -69,7 +69,7 @@ recipeRouter.post(
     } catch (err) {
       next(err)
     }
-  }
+  },
 )
 
 // POST /api/recipe/fork/:id
@@ -89,7 +89,7 @@ recipeRouter.post(
     } catch (err) {
       next(err)
     }
-  }
+  },
 )
 
 // GET /api/recipe/:id
@@ -105,7 +105,7 @@ recipeRouter.get(
     } catch (err) {
       next(err)
     }
-  }
+  },
 )
 
 // PUT /api/recipe/:id
@@ -127,13 +127,13 @@ recipeRouter.put(
 
       const updatedRecipe = await recipeRepository.update(
         Number(req.params.id),
-        updatedRecipeData
+        updatedRecipeData,
       )
       res.json(updatedRecipe)
     } catch (err) {
       next(err)
     }
-  }
+  },
 )
 
 // DELETE /api/recipe/:id
@@ -148,5 +148,5 @@ recipeRouter.delete(
     } catch (err) {
       next(err)
     }
-  }
+  },
 )

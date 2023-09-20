@@ -31,7 +31,7 @@ export const EditAccount = () => {
         password,
       })
       reset()
-    }
+    },
   )
 
   return (

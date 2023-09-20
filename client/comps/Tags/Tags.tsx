@@ -11,8 +11,6 @@ type Props = {
 export const Tags: React.FC<Props> = ({ tags }) => (
   <ul>
     Tags&nbsp;
-    {tags && tags.length
-      ? tags.map((tag) => <Tag key={tag.name} {...tag} />)
-      : "none"}
+    {tags.length ? tags.map((tag) => <Tag key={tag.name} {...tag} />) : "none"}
   </ul>
 )

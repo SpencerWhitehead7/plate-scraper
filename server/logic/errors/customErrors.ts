@@ -2,7 +2,7 @@ type ExtendedErrorConstructor = new (error: Error) => Error
 
 const createExtendedError = (
   name: string,
-  statusCode: number
+  statusCode: number,
 ): ExtendedErrorConstructor =>
   class extends Error {
     statusCode: number
@@ -17,16 +17,16 @@ const createExtendedError = (
 
 const NotAuthenticatedErr = createExtendedError("NotAuthenticatedErr", 401)
 export const incorrectCredsErr = new NotAuthenticatedErr(
-  Error("incorrect credentials")
+  Error("incorrect credentials"),
 )
 export const notLoggedInErr = new NotAuthenticatedErr(Error("not logged in"))
 
 const AlreadyAuthenticatedErr = createExtendedError(
   "AlreadyAuthenticatedErr",
-  409
+  409,
 )
 export const alreadyLoggedInErr = new AlreadyAuthenticatedErr(
-  Error("already logged in")
+  Error("already logged in"),
 )
 
 const NotAuthorizedErr = createExtendedError("NotAuthorizedErr", 403)

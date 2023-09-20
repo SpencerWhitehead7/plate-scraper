@@ -40,13 +40,17 @@ export const Account = () => {
           <ButtonSection>
             <button
               type="button"
-              onClick={() => setSection(section === "edit" ? "" : "edit")}
+              onClick={() => {
+                setSection(section === "edit" ? "" : "edit")
+              }}
             >
               Edit Account
             </button>
             <button
               type="button"
-              onClick={() => setSection(section === "destroy" ? "" : "destroy")}
+              onClick={() => {
+                setSection(section === "destroy" ? "" : "destroy")
+              }}
             >
               Destroy Account
             </button>

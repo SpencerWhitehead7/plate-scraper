@@ -51,7 +51,7 @@ describe("API Route Recipe: /api/recipe", () => {
               factoryRecipe({ user }),
               factoryRecipe({ user }),
               factoryRecipe({ user }),
-            ].map((row) => dataSource.manager.save(row))
+            ].map((row) => dataSource.manager.save(row)),
           )
           await Promise.all(
             [
@@ -59,7 +59,7 @@ describe("API Route Recipe: /api/recipe", () => {
               factoryTag({ name: "ttwo", recipes: [recipe2] }),
               factoryTag({ name: "tthree", recipes: [recipe3] }),
               factoryTag({ name: "tfour", recipes: [recipe4] }),
-            ].map((row) => dataSource.manager.save(row))
+            ].map((row) => dataSource.manager.save(row)),
           )
         } catch (err) {
           console.log(err)
@@ -79,7 +79,7 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(res.status).to.equal(200)
         expect(bodyRecipes.length).to.equal(3)
         expect(new Set(bodyRecipes.map(({ id }: Recipe) => id))).to.deep.equal(
-          new Set([recipe1.id, recipe2.id, recipe3.id])
+          new Set([recipe1.id, recipe2.id, recipe3.id]),
         )
       })
       it("sanitizes tags", async () => {
@@ -88,7 +88,7 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(res.status).to.equal(200)
         expect(bodyRecipes.length).to.equal(3)
         expect(new Set(bodyRecipes.map(({ id }: Recipe) => id))).to.deep.equal(
-          new Set([recipe1.id, recipe2.id, recipe3.id])
+          new Set([recipe1.id, recipe2.id, recipe3.id]),
         )
       })
       it("does not return duplicate recipes", async () => {
@@ -202,7 +202,7 @@ describe("API Route Recipe: /api/recipe", () => {
           id: 1,
         })
         await dataSource.manager.save(
-          factoryTag({ name: "tone", recipes: [original] })
+          factoryTag({ name: "tone", recipes: [original] }),
         )
         const tagged = await dataSource.manager.findOneOrFail(Recipe, {
           where: { id: 1 },
@@ -280,7 +280,7 @@ describe("API Route Recipe: /api/recipe", () => {
           [
             factoryTag({ name: "tone", recipes: [original] }),
             factoryTag({ name: "ttwo" }),
-          ].map((row) => dataSource.manager.save(row))
+          ].map((row) => dataSource.manager.save(row)),
         )
 
         await agent.put(`${route}/1`).send({
@@ -296,7 +296,7 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(edited.text).to.equal("newText")
         expect(edited.title).to.equal("newTitle")
         expect(new Set(edited.tags.map(({ name }) => name))).to.deep.equal(
-          new Set(["ttwo", "tthree"])
+          new Set(["ttwo", "tthree"]),
         )
       })
       it("handles partial updates", async () => {

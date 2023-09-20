@@ -1,7 +1,6 @@
 {
   "extends": [
-    "../.eslintrc",
-    "prettier"
+    "../.eslintrc"
   ],
   "parserOptions": {
     "tsconfigRootDir": "./server",

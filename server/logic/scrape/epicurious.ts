@@ -6,7 +6,7 @@ export const epicurious = ($: cheerio.Root, url: string): RecipeData => {
   const instructions = getCleanStrings(
     $,
     "p",
-    "div[data-testid=InstructionsWrapper]"
+    "div[data-testid=InstructionsWrapper]",
   )
 
   return {

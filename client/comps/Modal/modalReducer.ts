@@ -26,7 +26,7 @@ const modalSlice = createSlice({
   reducers: {
     openModal: (
       state,
-      { payload }: PayloadAction<{ modalType: keyof typeof MODAL_MAP }>
+      { payload }: PayloadAction<{ modalType: keyof typeof MODAL_MAP }>,
     ) => {
       state.modalType = payload.modalType
     },

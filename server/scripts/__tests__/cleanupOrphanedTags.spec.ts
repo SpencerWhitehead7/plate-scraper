@@ -18,7 +18,7 @@ describe("CleanupOrphanedTags", () => {
       [
         factoryTag({ name: "tone", recipes: [recipe] }),
         factoryTag({ name: "ttwo" }),
-      ].map((row) => dataSource.manager.save(row))
+      ].map((row) => dataSource.manager.save(row)),
     )
   })
   afterEach(syncDB)

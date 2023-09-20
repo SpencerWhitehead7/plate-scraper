@@ -17,7 +17,9 @@ export const Tag: React.FC<Props> = ({ name, handleRemove }) => (
       <button
         type="button"
         className={s.tag__tagX}
-        onClick={() => handleRemove(name)}
+        onClick={() => {
+          handleRemove(name)
+        }}
       >
         X
       </button>

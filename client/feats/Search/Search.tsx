@@ -16,11 +16,11 @@ export const Search = () => {
   const location = useLocation()
   const queryParams = useMemo(
     () => qs.parse(location.search),
-    [location.search]
+    [location.search],
   )
   const tags = useMemo(
     () => Object.values(queryParams).map(String),
-    [queryParams]
+    [queryParams],
   )
 
   const [getRecipeByTagTrigger, getRecipeByTagState] =

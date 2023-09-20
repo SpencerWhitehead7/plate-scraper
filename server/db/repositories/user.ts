@@ -38,7 +38,7 @@ class UserRepository {
       email?: string
       userName?: string
       password?: string
-    }
+    },
   ) {
     await this.repo
       .createQueryBuilder("user")

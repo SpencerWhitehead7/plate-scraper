@@ -13,7 +13,7 @@ const cleanupOrpanedTags = async (dataSource: DataSource) => {
         LEFT OUTER JOIN recipe_tags_tag ON tag.name = recipe_tags_tag."tagName"
         WHERE recipe_tags_tag."tagName" IS NULL
       )
-    `
+    `,
   )
   console.log(`Removed ${tagsCount as number} tag(s)`)
 }

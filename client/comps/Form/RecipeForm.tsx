@@ -50,7 +50,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
     },
   })
   const [updatedTags, setUpdatedTags] = useState(
-    (recipe.tags ?? []).map(({ name }) => name)
+    (recipe.tags ?? []).map(({ name }) => name),
   )
 
   const save = handleSubmit(async ({ title, text }) => {

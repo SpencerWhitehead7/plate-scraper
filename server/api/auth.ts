@@ -44,7 +44,7 @@ authRouter.post(
     } catch (err) {
       next(err)
     }
-  }
+  },
 )
 
 // PUT /api/auth
@@ -72,13 +72,13 @@ authRouter.put(
 
       const updatedUser = await userRepository.update(
         authUser.id,
-        updatedUserData
+        updatedUserData,
       )
       res.json(updatedUser)
     } catch (err) {
       next(err)
     }
-  }
+  },
 )
 
 // DELETE /api/auth
@@ -111,7 +111,7 @@ authRouter.delete(
     } catch (err) {
       next(err)
     }
-  }
+  },
 )
 
 // POST /api/auth/login/
@@ -134,7 +134,7 @@ authRouter.post(
     } catch (err) {
       next(err)
     }
-  }
+  },
 )
 
 // POST /api/auth/logout

@@ -6,7 +6,7 @@ export const seriousEats = ($: cheerio.Root, url: string): RecipeData => {
   const instructions = getCleanStrings(
     $,
     "p",
-    "ol[class*=mntl-sc-block-group--OL]"
+    "ol[class*=mntl-sc-block-group--OL]",
   )
 
   return {

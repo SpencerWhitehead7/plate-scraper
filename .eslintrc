@@ -1,8 +1,9 @@
 {
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:prettier/recommended"
   ],
   "plugins": ["simple-import-sort"],
   "parser": "@typescript-eslint/parser",

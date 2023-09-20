@@ -9,7 +9,7 @@ import { closeModal as closeModalAction, MODAL_MAP } from "./modalReducer"
 
 export const Modal = () => {
   const ModalContent = useAppSelector(
-    (s) => MODAL_MAP[s.modalReducer.modalType]
+    (s) => MODAL_MAP[s.modalReducer.modalType],
   )
   const dispatch = useAppDispatch()
   const closeModal = () => {

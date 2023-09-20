@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
 type ApiTag = {
   name: string
   createdAt: Date

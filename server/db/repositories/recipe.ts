@@ -44,7 +44,7 @@ class RecipeRepository {
       createdBy: number
       userId: number
       tags?: string[]
-    }
+    },
   ) => {
     const { tags, ...santizedRecipeData } = recipeData
 
@@ -81,7 +81,7 @@ class RecipeRepository {
       title?: string
       tags?: string[]
       forkedCount?: number
-    }
+    },
   ) => {
     const { tags, ...santizedUpdatedRecipeData } = updatedRecipeData
 
@@ -110,7 +110,7 @@ class RecipeRepository {
       // add all the tags in updatedValues.tags that the recipe doesn't already have
       const currentTagsSet = new Set(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        updatedRecipe!.tags.map(({ name }) => name)
+        updatedRecipe!.tags.map(({ name }) => name),
       )
       await tx
         .createQueryBuilder(Recipe, "recipe")
@@ -141,7 +141,7 @@ class RecipeRepository {
       userId: number
       tags?: string[]
     },
-    tx?: EntityManager
+    tx?: EntityManager,
   ) {
     return tx
       ? this.insertCb(tx, recipeData)
@@ -156,7 +156,7 @@ class RecipeRepository {
       tags?: string[]
       forkedCount?: number
     },
-    tx?: EntityManager
+    tx?: EntityManager,
   ) {
     return tx
       ? this.updateCb(tx, id, updatedRecipeData)
@@ -171,13 +171,13 @@ class RecipeRepository {
           tags: originalRecipe.tags.map(({ name }) => name),
           userId,
         },
-        tx
+        tx,
       )
       if (originalRecipe.userId !== userId) {
         await this.update(
           originalRecipe.id,
           { forkedCount: originalRecipe.forkedCount + 1 },
-          tx
+          tx,
         )
       }
       return recipe ?? undefined

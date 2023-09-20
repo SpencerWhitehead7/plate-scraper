@@ -77,15 +77,15 @@ describe("Recipe Entity", () => {
 
       const [tag1, tag2] = await Promise.all(
         [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((row) =>
-          dataSource.manager.save(row)
-        )
+          dataSource.manager.save(row),
+        ),
       )
 
       const [recipe1] = await Promise.all(
         [
           factoryRecipe({ user, tags: [tag1] }),
           factoryRecipe({ user, tags: [tag2] }),
-        ].map((row) => dataSource.manager.save(row))
+        ].map((row) => dataSource.manager.save(row)),
       )
 
       const originalTags = await getAllRecipeTagJoinRows()
@@ -103,14 +103,14 @@ describe("Recipe Entity", () => {
 
       const [tag1, tag2] = await Promise.all(
         [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((row) =>
-          dataSource.manager.save(row)
-        )
+          dataSource.manager.save(row),
+        ),
       )
 
       const [recipe1] = await Promise.all(
         [factoryRecipe({ tags: [tag1] }), factoryRecipe({ tags: [tag2] })].map(
-          (row) => dataSource.manager.save(row)
-        )
+          (row) => dataSource.manager.save(row),
+        ),
       )
 
       const originalTags = await getAllTags()

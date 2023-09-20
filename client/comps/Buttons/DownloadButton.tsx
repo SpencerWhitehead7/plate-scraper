@@ -11,7 +11,9 @@ type Props = {
 export const DownloadButton: React.FC<Props> = ({ text, title }) => (
   <button
     type="button"
-    onClick={() => downloadRecipe(text, title)}
+    onClick={() => {
+      downloadRecipe(text, title)
+    }}
     className={skele["button-primary"]}
   >
     Download

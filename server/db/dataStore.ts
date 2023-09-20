@@ -10,7 +10,7 @@ import {
   UserSubscriber,
 } from "./entities"
 
-let globalDataSource: DataSource
+let globalDataSource: DataSource | undefined
 
 export const getGlobalDataSource = async () => {
   if (globalDataSource === undefined) {

@@ -12,8 +12,8 @@ import volleyball from "volleyball"
 import { getGlobalDataSource } from "./db/dataStore"
 import { Session } from "./logic/auth"
 
-const SECRET = process.env.SESSION_SECRET || "a perhaps worst-practices secret"
-const PORT = process.env.PORT || 1337
+const SECRET = process.env.SESSION_SECRET ?? "a perhaps worst-practices secret"
+const PORT = process.env.PORT ?? 1337
 const ENV = process.env.NODE_ENV
 const IS_PROD = ENV === "prod"
 const IS_SCRIPT = ENV === "script"
@@ -61,7 +61,7 @@ export const boot = async (dataSource: DataSource) => {
           console.error(err)
         },
       }).connect(sessionRepository),
-    })
+    }),
   )
   passport.serializeUser((user, done) => {
     done(null, user.id)
@@ -95,7 +95,7 @@ export const boot = async (dataSource: DataSource) => {
     if (!IS_TEST) console.error(err)
 
     res.status((err as { statusCode?: number }).statusCode ?? 500).json({
-      error: err.name ?? "InternalServerErr",
+      error: err.name,
       message: err.message,
     })
   })

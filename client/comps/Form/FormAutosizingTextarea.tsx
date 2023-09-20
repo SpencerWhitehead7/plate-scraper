@@ -28,6 +28,7 @@ export const FormAutosizingTextarea: React.FC<Props> = ({
   ...restProps
 }) => {
   const eleRef = useRef<HTMLTextAreaElement | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
   const currentValue = watch(identifier)
   const { ref, ...restRegister } = register(identifier, registerOptions)
 

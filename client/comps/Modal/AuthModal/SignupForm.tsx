@@ -33,7 +33,7 @@ export const SignupForm: React.FC<Props> = ({ className = "" }) => {
         password: signupPassword,
       })
       dispatch(closeModal())
-    }
+    },
   )
 
   return (

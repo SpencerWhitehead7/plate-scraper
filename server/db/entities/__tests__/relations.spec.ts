@@ -25,8 +25,8 @@ describe("Relations", () => {
   it("The User-Recipe one-many relation exists", async () => {
     await Promise.all(
       [factoryRecipe({ user }), factoryRecipe({ user })].map((row) =>
-        dataSource.manager.save(row)
-      )
+        dataSource.manager.save(row),
+      ),
     )
 
     const savedUser = await dataSource.manager.findOneOrFail(User, {
@@ -56,15 +56,15 @@ describe("Relations", () => {
 
     const [tag1, tag2] = await Promise.all(
       [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((row) =>
-        dataSource.manager.save(row)
-      )
+        dataSource.manager.save(row),
+      ),
     )
 
     await Promise.all(
       [
         factoryRecipe({ user, tags: [tag1, tag2] }),
         factoryRecipe({ user, tags: [tag1, tag2] }),
-      ].map((row) => dataSource.manager.save(row))
+      ].map((row) => dataSource.manager.save(row)),
     )
 
     const tags = await getAllRecipeTagJoinRowsTag()
@@ -73,13 +73,13 @@ describe("Relations", () => {
     expect(tags).to.have.lengthOf(2)
     tags.forEach((tag) => {
       expect(new Set(tag.recipes.map(({ id }) => id))).to.deep.equal(
-        new Set([1, 2])
+        new Set([1, 2]),
       )
     })
     expect(recipes).to.have.lengthOf(2)
     recipes.forEach((recipe) => {
       expect(new Set(recipe.tags.map(({ name }) => name))).to.deep.equal(
-        new Set(["abc", "def"])
+        new Set(["abc", "def"]),
       )
     })
   })

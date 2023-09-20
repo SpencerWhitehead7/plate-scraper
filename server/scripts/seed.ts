@@ -25,7 +25,7 @@ const seed = async (dataSource: DataSource) => {
         password: "pw2",
         userName: "TheSecondTestUser",
       }),
-    ].map(save)
+    ].map(save),
   )
   const [user1, user2] = users as User[]
   console.log(`Seeded ${users.length} users`)
@@ -175,7 +175,7 @@ const seed = async (dataSource: DataSource) => {
         forkedCount: 0,
         user: user2,
       }),
-    ].map(save)
+    ].map(save),
   )
   const [popcake, cream, chickenStrog, cakeShake, forkedPopcake] =
     recipes as Recipe[]
@@ -190,7 +190,7 @@ const seed = async (dataSource: DataSource) => {
       tagRepo.create({ name: "beverage", recipes: [cream, cakeShake] }),
       tagRepo.create({ name: "entre", recipes: [chickenStrog] }),
       tagRepo.create({ name: "meat", recipes: [chickenStrog] }),
-    ].map(save)
+    ].map(save),
   )
   console.log(`Seeded ${tags.length} tags`)
 }

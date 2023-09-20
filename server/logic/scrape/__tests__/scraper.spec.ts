@@ -11,13 +11,13 @@ describe("Scraper", () => {
   it("throws when the page is not from a supported site", () => {
     return expect(scrape("https://www.wikipedia.org")).to.be.rejectedWith(
       Error,
-      "site invalid"
+      "site invalid",
     )
   })
   it("throws when the site is supported but a recipe cannot be extracted", () => {
     return expect(scrape("https://www.allrecipes.com")).to.be.rejectedWith(
       Error,
-      "scrape failed"
+      "scrape failed",
     )
   })
 
@@ -29,12 +29,12 @@ describe("Scraper", () => {
       try {
         actuals = (
           await Promise.allSettled(
-            expecteds.map(({ sourceUrl }) => scrape(sourceUrl))
+            expecteds.map(({ sourceUrl }) => scrape(sourceUrl)),
           )
         ).map((res) =>
           res.status === "fulfilled"
             ? res.value
-            : { sourceSite: "", sourceUrl: "", text: "", title: "" }
+            : { sourceSite: "", sourceUrl: "", text: "", title: "" },
         )
       } catch (err) {
         console.log(err)

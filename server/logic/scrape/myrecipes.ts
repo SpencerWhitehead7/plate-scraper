@@ -6,7 +6,7 @@ export const myrecipes = ($: cheerio.Root, url: string): RecipeData => {
   const instructions = getCleanStrings(
     $,
     "div[class=paragraph]", // SCREAM omg lol
-    ".recipe-instructions"
+    ".recipe-instructions",
   )
 
   return {

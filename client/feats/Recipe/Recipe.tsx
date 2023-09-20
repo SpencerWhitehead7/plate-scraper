@@ -16,7 +16,7 @@ export const Recipe = () => {
     recipeId: Number(recipeId),
   })
   const { data: dataMe } = useGetMeQuery()
-  const isMine = dataRecipe && dataMe && dataRecipe?.userId === dataMe.id
+  const isMine = dataRecipe && dataMe && dataRecipe.userId === dataMe.id
 
   const [editMode, setEditMode] = useState(false)
 
@@ -27,7 +27,12 @@ export const Recipe = () => {
       <CardTitle>{dataRecipe.title}</CardTitle>
       <ButtonSection>
         {isMine && (
-          <button type="button" onClick={() => setEditMode(!editMode)}>
+          <button
+            type="button"
+            onClick={() => {
+              setEditMode(!editMode)
+            }}
+          >
             {editMode ? "Cancel" : "Edit"}
           </button>
         )}
