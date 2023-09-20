@@ -5,7 +5,7 @@ import {
   UseFormRegister,
 } from "react-hook-form"
 
-import s from "./Form.scss"
+import s from "./Form.module.scss"
 import { Warning } from "./Warning"
 
 type Props = {

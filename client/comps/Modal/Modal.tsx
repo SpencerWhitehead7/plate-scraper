@@ -4,7 +4,7 @@ import React, { useEffect } from "react"
 import { Card } from "@/comps/Card"
 import { useAppDispatch, useAppSelector } from "@/reducers"
 
-import s from "./Modal.scss"
+import s from "./Modal.module.scss"
 import { closeModal as closeModalAction, MODAL_MAP } from "./modalReducer"
 
 export const Modal = () => {

@@ -14,9 +14,9 @@ import {
   useGetMeQuery,
   useSelectIsAuthed,
 } from "@/reducers"
-import skele from "@/skeleton.css"
+import skele from "@/skeleton.module.css"
 
-import s from "./Form.scss"
+import s from "./Form.module.scss"
 import { FormAutosizingTextarea } from "./FormAutosizingTextarea"
 import { FormButton } from "./FormButton"
 import { FormEditTags } from "./FormEditTags"

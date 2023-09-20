@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 import { URL } from "@/consts"
 
-import s from "./Tags.scss"
+import s from "./Tags.module.scss"
 
 type Props = {
   name: string

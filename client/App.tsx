@@ -1,7 +1,7 @@
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
-import s from "./App.scss"
+import s from "./App.module.scss"
 import { Modal } from "./comps/Modal"
 import { PATH } from "./consts"
 import { Account } from "./feats/Account"

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 
 import { FormInput, FormSubmit } from "@/comps/Form"
 import { useEditMeMutation, useGetMeQuery } from "@/reducers"
-import skele from "@/skeleton.css"
+import skele from "@/skeleton.module.css"
 
 export const EditAccount = () => {
   const { data: dataMe } = useGetMeQuery()

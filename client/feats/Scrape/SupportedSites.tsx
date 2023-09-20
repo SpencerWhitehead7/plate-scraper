@@ -2,10 +2,10 @@ import classnames from "classnames"
 import React from "react"
 
 import { SUPPORTED_SITES } from "@/consts"
-import skele from "@/skeleton.css"
-import sg from "@/styles/index.scss"
+import skele from "@/skeleton.module.css"
+import sg from "@/styles/index.module.scss"
 
-import s from "./SupportedSites.scss"
+import s from "./SupportedSites.module.scss"
 
 type RowProps = {
   row: string[]

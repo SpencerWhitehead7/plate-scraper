@@ -1,7 +1,7 @@
 import classnames from "classnames"
 import React from "react"
 
-import skele from "@/skeleton.css"
+import skele from "@/skeleton.module.css"
 
 import { LoginForm } from "./LoginForm"
 import { SignupForm } from "./SignupForm"

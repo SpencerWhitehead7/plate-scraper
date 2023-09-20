@@ -2,7 +2,7 @@ import React from "react"
 
 import { LoadingIndicator } from "@/comps/LoadingIndicator"
 
-import s from "./Card.scss"
+import s from "./Card.module.scss"
 
 type Props = {
   isLoaded?: boolean

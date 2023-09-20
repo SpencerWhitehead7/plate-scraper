@@ -1,6 +1,6 @@
 import React from "react"
 
-import s from "./Card.scss"
+import s from "./Card.module.scss"
 
 type Props = {
   children: string

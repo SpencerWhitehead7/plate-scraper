@@ -7,7 +7,7 @@ import {
 
 import { Warning } from "@/comps/Form"
 
-import s from "./Form.scss"
+import s from "./Form.module.scss"
 
 type Props = {
   identifier: string

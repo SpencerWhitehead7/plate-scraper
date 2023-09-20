@@ -1,6 +1,6 @@
 import React from "react"
 
-import s from "./LoadingIndicator.scss"
+import s from "./LoadingIndicator.module.scss"
 
 export const LoadingIndicator = () => (
   // TODO: customizable size

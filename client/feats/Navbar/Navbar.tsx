@@ -5,9 +5,9 @@ import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { openAuthModal as openAuthModalAction } from "@/comps/Modal"
 import { URL } from "@/consts"
 import { useAppDispatch, useGetMeQuery } from "@/reducers"
-import skele from "@/skeleton.css"
+import skele from "@/skeleton.module.css"
 
-import s from "./Navbar.scss"
+import s from "./Navbar.module.scss"
 
 // my scss module solution does not cooperate with their auto-applied "active" class
 const linkStyle = {

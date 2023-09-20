@@ -5,9 +5,9 @@ import { ApiRecipe } from "@/@types/apiContract"
 import { ButtonSection, DownloadButton, ForkButton } from "@/comps/Buttons"
 import { Tags } from "@/comps/Tags"
 import { URL } from "@/consts"
-import sg from "@/styles/index.scss"
+import sg from "@/styles/index.module.scss"
 
-import s from "./RecipeRows.scss"
+import s from "./RecipeRows.module.scss"
 
 const RecipeRow: React.FC<ApiRecipe> = ({
   createdBy,

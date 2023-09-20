@@ -4,6 +4,9 @@ node_modules/*
 # compiled output
 built/*
 
+# bundle size report
+stats.html
+
 # npm errors
 npm-debug.log
 

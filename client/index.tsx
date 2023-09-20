@@ -1,8 +1,6 @@
-import "core-js/stable"
-import "regenerator-runtime/runtime"
-import "styles/index.scss"
 import "normalize.css"
-import "skeleton.css"
+import "./skeleton.module.css"
+import "./styles/index.module.scss"
 
 import React from "react"
 import { createRoot } from "react-dom/client"

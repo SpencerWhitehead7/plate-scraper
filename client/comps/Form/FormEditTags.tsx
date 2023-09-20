@@ -1,8 +1,8 @@
 import classnames from "classnames"
 import React, { useState } from "react"
 
-import skele from "@/skeleton.css"
-import sg from "@/styles/index.scss"
+import skele from "@/skeleton.module.css"
+import sg from "@/styles/index.module.scss"
 
 import { Tag } from "../Tags"
 

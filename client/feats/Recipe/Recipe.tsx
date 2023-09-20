@@ -8,7 +8,7 @@ import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { Tags } from "@/comps/Tags"
 import { PageFailure } from "@/feats/PageFailure"
 import { useGetMeQuery, useGetRecipeQuery } from "@/reducers"
-import sg from "@/styles/index.scss"
+import sg from "@/styles/index.module.scss"
 
 export const Recipe = () => {
   const { recipeId } = useParams()

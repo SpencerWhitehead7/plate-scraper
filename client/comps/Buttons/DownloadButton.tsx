@@ -1,7 +1,7 @@
 import React from "react"
 
 import { downloadRecipe } from "@/helpers"
-import skele from "@/skeleton.css"
+import skele from "@/skeleton.module.css"
 
 type Props = {
   text: string

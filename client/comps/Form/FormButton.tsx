@@ -2,7 +2,7 @@ import classnames from "classnames"
 import React from "react"
 import { FormState } from "react-hook-form"
 
-import skele from "@/skeleton.css"
+import skele from "@/skeleton.module.css"
 
 type Props = {
   formState: FormState<object>

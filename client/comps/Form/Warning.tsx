@@ -2,9 +2,9 @@ import classnames from "classnames"
 import React from "react"
 import { FieldError } from "react-hook-form"
 
-import sg from "@/styles/index.scss"
+import sg from "@/styles/index.module.scss"
 
-import s from "./Form.scss"
+import s from "./Form.module.scss"
 
 type Props = {
   leftPadded?: boolean

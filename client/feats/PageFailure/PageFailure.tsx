@@ -1,7 +1,7 @@
 import React from "react"
 
 import { Card } from "@/comps/Card"
-import sg from "@/styles/index.scss"
+import sg from "@/styles/index.module.scss"
 
 type Props = {
   type?: "404" | "No such user" | "No such recipe" | ""

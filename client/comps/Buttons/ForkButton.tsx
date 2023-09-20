@@ -2,7 +2,7 @@ import React from "react"
 
 import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { useForkRecipeMutation, useSelectIsAuthed } from "@/reducers"
-import skele from "@/skeleton.css"
+import skele from "@/skeleton.module.css"
 
 type Props = {
   recipeId: number
