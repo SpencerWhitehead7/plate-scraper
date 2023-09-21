@@ -46,7 +46,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.41.2",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.6.1",
+    "react-router-dom": "^6.16.0",
     "typeorm": "^0.3.11"
   },
   "devDependencies": {
