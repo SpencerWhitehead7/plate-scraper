@@ -25,7 +25,7 @@ const Row: React.FC<RowProps> = ({ row }) => (
   </div>
 )
 
-export const SupportedSites: React.FC<Record<string, never>> = () => {
+export const SupportedSites: React.FC = () => {
   const columnCount = 3
   const rowCount = Math.ceil(SUPPORTED_SITES.length / columnCount)
   const rows = SUPPORTED_SITES.reduce(

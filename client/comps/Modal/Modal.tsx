@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/reducers"
 import s from "./Modal.module.scss"
 import { closeModal as closeModalAction, MODAL_MAP } from "./modalReducer"
 
-export const Modal = () => {
+export const Modal: React.FC = () => {
   const ModalContent = useAppSelector(
     (s) => MODAL_MAP[s.modalReducer.modalType],
   )

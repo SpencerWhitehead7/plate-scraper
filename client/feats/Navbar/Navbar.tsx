@@ -20,7 +20,7 @@ const activeLinkStyle = {
   color: "black",
 }
 
-export const Navbar = () => {
+export const Navbar: React.FC = () => {
   const { isLoading: isLoadingMe, data: dataMe } = useGetMeQuery()
 
   const dispatch = useAppDispatch()

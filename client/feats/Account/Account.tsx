@@ -11,7 +11,7 @@ import { useGetMeQuery, useGetUserQuery, useLogoutMutation } from "@/reducers"
 import { DeleteAccount } from "./DeleteAccount"
 import { EditAccount } from "./EditAccount"
 
-export const Account = () => {
+export const Account: React.FC = () => {
   const { userId } = useParams()
   const { isLoading: isLoadingUser, data: dataUser } = useGetUserQuery({
     userId: userId ?? "",

@@ -12,7 +12,7 @@ import { Scrape } from "./feats/Scrape"
 import { Search } from "./feats/Search"
 import { Upload } from "./feats/Upload"
 
-export const App = () => (
+export const App: React.FC = () => (
   <BrowserRouter>
     <Navbar />
     <main className={s.main}>

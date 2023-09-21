@@ -6,7 +6,7 @@ import skele from "@/skeleton.module.css"
 import { LoginForm } from "./LoginForm"
 import { SignupForm } from "./SignupForm"
 
-export const AuthModal = () => (
+export const AuthModal: React.FC = () => (
   <div className={skele.container}>
     <div className={skele.row}>
       <LoginForm className={classnames(skele["one-half"], skele.column)} />

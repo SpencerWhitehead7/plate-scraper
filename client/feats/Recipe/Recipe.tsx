@@ -10,7 +10,7 @@ import { PageFailure } from "@/feats/PageFailure"
 import { useGetMeQuery, useGetRecipeQuery } from "@/reducers"
 import sg from "@/styles/index.module.scss"
 
-export const Recipe = () => {
+export const Recipe: React.FC = () => {
   const { recipeId } = useParams()
   const { isFetching: isFetchingRecipe, data: dataRecipe } = useGetRecipeQuery({
     recipeId: Number(recipeId),

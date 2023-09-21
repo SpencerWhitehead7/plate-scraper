@@ -10,7 +10,7 @@ import { RecipeRows } from "@/comps/RecipeRows"
 import { URL } from "@/consts"
 import { useLazyGetRecipesByTagQuery } from "@/reducers"
 
-export const Search = () => {
+export const Search: React.FC = () => {
   const navigate = useNavigate()
 
   const location = useLocation()

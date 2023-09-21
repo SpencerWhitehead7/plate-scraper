@@ -5,7 +5,7 @@ import { FormInput, FormSubmit } from "@/comps/Form"
 import { useEditMeMutation, useGetMeQuery } from "@/reducers"
 import skele from "@/skeleton.module.css"
 
-export const EditAccount = () => {
+export const EditAccount: React.FC = () => {
   const { data: dataMe } = useGetMeQuery()
 
   const [triggerEditMe] = useEditMeMutation()
