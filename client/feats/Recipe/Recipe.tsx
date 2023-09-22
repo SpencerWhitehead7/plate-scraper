@@ -51,6 +51,6 @@ export const Recipe: React.FC = () => {
       )}
     </Card>
   ) : (
-    <PageFailure type="No such recipe" />
+    <PageFailure type="no recipe" />
   )
 }

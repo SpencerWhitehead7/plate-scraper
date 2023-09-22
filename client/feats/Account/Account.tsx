@@ -69,6 +69,6 @@ export const Account: React.FC = () => {
       )}
     </>
   ) : (
-    <PageFailure type="No such user" />
+    <PageFailure type="no user" />
   )
 }

@@ -4,7 +4,7 @@ import { Card } from "@/comps/Card"
 import sg from "@/styles/index.module.scss"
 
 type Props = {
-  type?: "404" | "No such user" | "No such recipe" | ""
+  type?: "404" | "no user" | "no recipe" | ""
 }
 
 export const PageFailure: React.FC<Props> = ({ type = "" }) => {
@@ -12,19 +12,19 @@ export const PageFailure: React.FC<Props> = ({ type = "" }) => {
   let subtitle = ""
   switch (type) {
     case "404":
-      title = "404 Page Not Found."
-      subtitle = "Oh no, there's nothing here!"
+      title = "404 Page Not Found"
+      subtitle = "Oh no, there's nothing here"
       break
-    case "No such user":
+    case "no user":
       title = "This user does not exist. It may have been deleted."
-      subtitle = "Try a different userId?"
+      subtitle = "Try a different user?"
       break
-    case "No such recipe":
+    case "no recipe":
       title = "This recipe does not exist. It may have been deleted."
       subtitle = "Try a different recipe?"
       break
     default:
-      title = "Something went wrong."
+      title = "something is wrong"
       subtitle = "sorry"
   }
 
