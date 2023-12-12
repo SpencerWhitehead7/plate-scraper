@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm"
 
-import { getGlobalDataSource } from "../db/dataStore"
-import { Recipe, Tag, User } from "../db/entities"
+import { getGlobalDataSource } from "../src/db/dataStore"
+import { Recipe, Tag, User } from "../src/db/entities"
 
 const seed = async (dataSource: DataSource) => {
   const recipeRepo = dataSource.getRepository(Recipe)
@@ -16,12 +16,12 @@ const seed = async (dataSource: DataSource) => {
   const users = await Promise.all(
     [
       userRepo.create({
-        email: "testUser@example.com",
+        email: "testuser@example.com",
         password: "pw",
         userName: "TheFirstTestUser",
       }),
       userRepo.create({
-        email: "testUser2@example.com",
+        email: "testuser2@example.com",
         password: "pw2",
         userName: "TheSecondTestUser",
       }),

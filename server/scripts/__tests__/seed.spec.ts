@@ -1,7 +1,5 @@
-import { Recipe } from "../../db/entities"
-import { Tag } from "../../db/entities"
-import { User } from "../../db/entities"
 import { dataSource, expect, syncDB } from "../../mochaSetup"
+import { Recipe, Tag, User } from "../../src/db/entities"
 import seed from "../seed"
 
 describe("Seed", () => {

@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm"
 
-import { getGlobalDataSource } from "../db/dataStore"
+import { getGlobalDataSource } from "../src/db/dataStore"
 
 const cleanupOrpanedTags = async (dataSource: DataSource) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

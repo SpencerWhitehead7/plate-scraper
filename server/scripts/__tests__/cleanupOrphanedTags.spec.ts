@@ -1,4 +1,3 @@
-import { Tag } from "../../db/entities"
 import {
   dataSource,
   expect,
@@ -7,6 +6,7 @@ import {
   factoryUser,
   syncDB,
 } from "../../mochaSetup"
+import { Tag } from "../../src/db/entities"
 import cleanupOrphanedTags from "../cleanupOrphanedTags"
 
 describe("CleanupOrphanedTags", () => {

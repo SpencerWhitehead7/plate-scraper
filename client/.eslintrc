@@ -1,19 +1,32 @@
 {
   "extends": [
-    "../.eslintrc",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended", //
+    "plugin:react-hooks/recommended" //
   ],
+  "plugins": ["simple-import-sort"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "tsconfigRootDir": "./client",
+    "ecmaVersion": "latest",
+    "sourceType": "module",
     "project": "./tsconfig.eslint.json"
   },
-  "env": {
+  "env": { //
     "browser": true
   },
-  "settings": {
+  "settings": { //
     "react": {
       "version": "detect"
     }
+  },
+  "reportUnusedDisableDirectives": true,
+
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "@typescript-eslint/no-misused-promises": ["error", { "checksVoidReturn": false }] // I'm sorry, this rule is dumb as hell
   }
 }

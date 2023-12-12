@@ -1,8 +1,8 @@
 # js dependencies
-node_modules/*
+node_modules
 
 # compiled output
-built/*
+dist
 
 # bundle size report
 stats.html

@@ -1,4 +1,2 @@
-*.html
-*.css
-*.json
-*.eslintrc
+**.json
+**.eslintrc

@@ -3,9 +3,9 @@ import chaiAsPromised from "chai-as-promised"
 import { Server } from "http"
 import { DataSource, Repository } from "typeorm"
 
-import { getGlobalDataSource } from "./db/dataStore"
-import { Recipe, Tag, User } from "./db/entities"
-import { boot } from "./index"
+import { getGlobalDataSource } from "./src/db/dataStore"
+import { Recipe, Tag, User } from "./src/db/entities"
+import { boot } from "./src/index"
 
 chai.use(chaiAsPromised)
 export const { expect } = chai

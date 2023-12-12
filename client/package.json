@@ -1,0 +1,52 @@
+{
+  "name": "plate-scraper-fe",
+  "version": "1.0.0",
+  "description": "Frontend for an app for collecting, editing, organizing, and storing recipes",
+  "author": "Spencer Whitehead",
+  "license": "Unlicense",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpencerWhitehead7/plate-scraper.git"
+  },
+  "scripts": {
+    "lint": "eslint ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "clean": "rm -rf node_modules ./dist && npm install",
+    "dev": "vite dev",
+    "test": "ECHO not implemented",
+    "build": "vite build --emptyOutDir"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.7",
+    "classnames": "^2.3.2",
+    "compression": "^1.7.4",
+    "focus-trap-react": "^10.2.3",
+    "normalize.css": "^8.0.1",
+    "qs": "^6.11.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.0",
+    "react-redux": "^8.1.3",
+    "react-router-dom": "^6.20.1"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.9.10",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-legacy": "^5.2.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "rollup-plugin-visualizer": "^5.11.0",
+    "sass": "^1.69.5",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.7",
+    "vite-plugin-checker": "^0.6.2"
+  }
+}
