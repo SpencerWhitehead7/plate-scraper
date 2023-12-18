@@ -13,7 +13,7 @@
     "lint:fix": "npm run lint -- --fix",
     "clean": "rm -rf node_modules ./dist && npm install",
     "dev": "ts-node-dev ./src",
-    "test": "NODE_ENV='test' mocha -r ts-node/register --file mochaSetup.ts --timeout 10000 -- '**/__tests__/*.spec.ts'",
+    "test": "NODE_ENV='test' mocha -r ts-node/register --file mochaSetup.ts -- '**/__tests__/*.spec.ts'",
     "build": "rm -rf ./dist && tsc",
     "seed": "NODE_ENV='script' npx ts-node scripts/seed.ts",
     "cleanupOrphanedTags": "NODE_ENV='script' npx ts-node scripts/cleanupOrphanedTags.ts"
@@ -30,6 +30,7 @@
     "helmet": "^7.1.0",
     "passport": "0.7.0",
     "pg": "^8.11.3",
+    "plate-scraper-parsers": "file:../parsers",
     "typeorm": "^0.3.17"
   },
   "devDependencies": {

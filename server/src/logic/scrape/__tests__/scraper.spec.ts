@@ -1,8 +1,6 @@
 import { expect } from "chai"
 
-import { RecipeData } from "../helpers"
 import { scrape } from "../index"
-import { expecteds } from "./expectedResults"
 
 describe("Scraper", () => {
   it("throws when page cannot be loaded", () => {
@@ -19,91 +17,5 @@ describe("Scraper", () => {
       Error,
       "scrape failed",
     )
-  })
-
-  describe.skip("The parsers handle", () => {
-    let actuals: RecipeData[] = []
-    let i = 0
-
-    before(async () => {
-      try {
-        actuals = (
-          await Promise.allSettled(
-            expecteds.map(({ sourceUrl }) => scrape(sourceUrl)),
-          )
-        ).map((res) =>
-          res.status === "fulfilled"
-            ? res.value
-            : { sourceSite: "", sourceUrl: "", text: "", title: "" },
-        )
-      } catch (err) {
-        console.log(err)
-      }
-    })
-
-    afterEach(() => {
-      i++
-    })
-
-    it("allrecipes", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("bettycrocker", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("bonappetit", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("budgetbytes", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("cookinglight", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("delish", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("eatingwell", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("eatingwell fallback origin", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("epicurious", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("food", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("food52", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("foodandwine", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("foodnetwork", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("jamieoliver", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("myrecipes", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("seriouseats", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("simplyrecipes", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("tasty", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("thekitchn", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
-    it("yummly", () => {
-      expect(actuals[i]).to.deep.equal(expecteds[i])
-    })
   })
 })
