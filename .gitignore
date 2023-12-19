@@ -3,6 +3,7 @@ node_modules
 
 # compiled output
 dist
+plate-scraper.zip
 
 # bundle size report
 stats.html

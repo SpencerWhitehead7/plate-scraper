@@ -2,7 +2,7 @@
 
 A webapp for creating, storing, and organizing recipes. It can scrape recipes from major recipe aggregation sites, or you can upload your own. Recipes can be scraped and downloaded as plaintext without making an account, or saved, edited, organized etc on the site with an account. You can also view and search for recipes saved on the site without an account. For a more comprehensive list of existing and upcoming features, see the shipped features and public roadmap sections.
 
-A minimal version which can only scrape, edit and download is also available as a [Chrome extension](https://chrome.google.com/webstore/detail/plate-scraper/pohdgoipnoaopknopkpdeooophfnkmel?hl=en-US) and the code base is [here](https://github.com/SpencerWhitehead7/plate-scraper-chrome-extension)
+A minimal version which can only scrape, edit and download is also available as a [Chrome extension](https://chrome.google.com/webstore/detail/plate-scraper/pohdgoipnoaopknopkpdeooophfnkmel?hl=en-US)
 
 ## Seeing it
 

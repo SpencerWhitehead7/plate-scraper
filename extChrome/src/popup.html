@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Plate Scraper!</title>
+  <meta name="description" content="Plate Scraper is a chrome extension for scraping and editing recipes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #222;
+    }
+
+    body {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      padding: 16px;
+      background-color: rgba(50, 195, 239, 0.6);
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .text {
+      flex: 1 0 auto;
+      padding: 8px;
+      margin-bottom: 16px;
+    }
+
+    .download {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .download label {
+      line-height: 32px;
+    }
+
+    .download input {
+      width: 320px;
+      height: 32px;
+    }
+
+    .download button {
+      width: 120px;
+      height: 32px;
+      background-color: gold;
+    }
+
+    .download button:disabled {
+      background-color: lightgray;
+    }
+  </style>
+  <script src="popup.js"></script>
+</head>
+
+<body>
+  <h1 class="title">Plate Scraper!</h1>
+  <textarea class="text">
+      Looks like we failed to load; try scraping again when the recipe has finished loading
+    </textarea>
+  <div class="download">
+    <label for="download">Filename&nbsp;</label>
+    <input id="download" name="download" />
+    <button type="button">Download!</button>
+  </div>
+</body>
+
+</html>

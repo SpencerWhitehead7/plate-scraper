@@ -1,0 +1,26 @@
+{
+  "name": "plate-scraper-ext-chrome",
+  "version": "1.0.0",
+  "description": "A chrome extension for scraping data from recipe sites",
+  "author": "spencer",
+  "license": "Unlicense",
+  "main": "content.js",
+  "scripts": {
+    "clean": "rm -rf node_modules ./dist && npm install",
+    "build:prepare": "rm -rf ./dist && mkdir ./dist",
+    "build:icons": "cp -r ./icons ./dist/icons",
+    "build:background": "cp ./src/background.js ./dist/background.js",
+    "build:content": "esbuild ./src/content.js --bundle --minify --outfile=./dist/content.js",
+    "build:popup": "cp ./src/popup.html ./dist/popup.html && cp ./src/popup.js ./dist/popup.js",
+    "build:manifest": "cp ./manifest.json ./dist/manifest.json",
+    "build:zip": "zip -r plate-scraper.zip ./dist",
+    "build": "npm run build:prepare && npm run build:icons && npm run build:background && npm run build:content && npm run build:popup && npm run build:manifest && npm run build:zip"
+  },
+  "dependencies": {
+    "jquery": "^3.7.1",
+    "plate-scraper-parsers": "file:../parsers"
+  },
+  "devDependencies": {
+    "esbuild": "^0.19.9"
+  }
+}
