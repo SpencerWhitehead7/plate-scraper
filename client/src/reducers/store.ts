@@ -10,10 +10,8 @@ export const store = configureStore({
     [api.reducerPath]: api.reducer,
     modalReducer,
   },
-  middleware: (getDefaultMiddleware) => [
-    ...getDefaultMiddleware(),
-    api.middleware,
-  ],
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
 })
 
 setupListeners(store.dispatch)
