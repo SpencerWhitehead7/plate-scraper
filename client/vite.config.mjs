@@ -3,7 +3,7 @@ import path from "node:path"
 import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react-swc"
 import { visualizer } from "rollup-plugin-visualizer"
-import { defineConfig, splitVendorChunkPlugin } from "vite"
+import { defineConfig } from "vite"
 import checker from "vite-plugin-checker"
 
 export default defineConfig({
@@ -29,6 +29,14 @@ export default defineConfig({
     },
   },
 
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: "modern-compiler",
+      },
+    },
+  },
+
   plugins: [
     react({
       include: "./src/**.*{jsx,tsx}",
@@ -36,7 +44,6 @@ export default defineConfig({
     checker({
       typescript: true,
     }),
-    splitVendorChunkPlugin(),
     legacy({ targets: ["defaults", "not IE 11"] }),
     visualizer(),
   ],
