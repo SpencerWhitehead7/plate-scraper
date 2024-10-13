@@ -98,6 +98,10 @@ class UserRepository {
       .where("user.email = :email", { email })
       .getOne()
   }
+
+  getAll() {
+    return this.repo.createQueryBuilder("user").getMany()
+  }
 }
 
 export const userRepository = new UserRepository()

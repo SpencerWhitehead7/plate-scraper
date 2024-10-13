@@ -16,6 +16,21 @@ describe("API Route User: /api/user", () => {
   beforeEach(syncDB)
   afterEach(syncDB)
 
+  describe("/", () => {
+    describe("GET", () => {
+      it("returns all users", async () => {
+        const user = await dataSource.manager.save(factoryUser())
+
+        const res = await request(app).get(route)
+        const bodyUsers = res.body as User[]
+        expect(res.status).to.equal(200)
+        expect(bodyUsers[0].id).to.equal(user.id)
+        expect(bodyUsers[0].email).to.equal(user.email)
+        expect(bodyUsers[0].userName).to.equal(user.userName)
+      })
+    })
+  })
+
   describe("/:id", () => {
     describe("GET", () => {
       it("returns the user, their recipes, and their recipes' tags", async () => {

@@ -97,7 +97,10 @@ export const api = createApi({
         e ? [] : [{ type: "recipe", id: args.recipeId }],
     }),
 
-    getRecipesByTag: builder.query<AC.GetRecipeByTagRes, AC.GetRecipeByTagReq>({
+    getRecipesByTag: builder.query<
+      AC.GetRecipesByTagRes,
+      AC.GetRecipesByTagReq
+    >({
       query: (params) => ({
         url: `/recipe${qs.stringify(params.tags, { addQueryPrefix: true })}`,
       }),
@@ -105,7 +108,7 @@ export const api = createApi({
         e ? [] : (r ?? []).map((recipe) => ({ type: "recipe", id: recipe.id })),
     }),
 
-    // getRecipeAll: builder.query<AC.GetRecipeAllRes, AC.GetRecipeAllReq>({}),
+    // getRecipesAll: builder.query<AC.GetRecipesAllRes, AC.GetRecipesAllReq>({}),
 
     editRecipe: builder.mutation<
       AC.EditRecipeRes,
@@ -164,6 +167,7 @@ export const api = createApi({
     }),
     // RECIPE END
 
+    // SCRAPE START
     scrape: builder.mutation<AC.ScrapeRes, AC.ScrapeReq>({
       query: (body) => ({
         url: "/scrape",
@@ -171,7 +175,9 @@ export const api = createApi({
         body,
       }),
     }),
+    // SCRAPE END
 
+    // USER START
     getUser: builder.query<AC.GetUserRes, AC.GetUserReq>({
       query: (params) => ({
         url: `/user/${params.userId}`,
@@ -179,6 +185,7 @@ export const api = createApi({
       providesTags: (r, e, args) =>
         e ? [] : [{ type: "user", id: args.userId }],
     }),
+    // USER END
   }),
 })
 

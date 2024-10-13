@@ -4,7 +4,7 @@ type ApiTag = {
   createdAt: Date
 }
 
-type ApiMe = {
+type ApiUser = {
   id: number
   email: string
   userName: string
@@ -28,22 +28,20 @@ type ApiRecipe = {
   tags: ApiTag[]
 }
 
-type ApiUser = ApiMe & {
+type ApiUserWithRecipes = ApiUser & {
   recipes: ApiRecipe[]
 }
 
-// gonna have to hand validate ALL the ress :(
-
 // AUTH START
 export type GetMeReq = void
-export type GetMeRes = ApiMe | null
+export type GetMeRes = ApiUser | null
 
 export type SignUpReq = {
   email: string
   userName: string
   password: string
 }
-export type SignUpRes = ApiMe | null
+export type SignUpRes = ApiUser | null
 
 export type EditMeReq = {
   password: string
@@ -51,7 +49,7 @@ export type EditMeReq = {
   newUserName?: string
   newPassword?: string
 }
-export type EditMeRes = ApiMe | null
+export type EditMeRes = ApiUser | null
 
 export type DeleteMeReq = {
   password: string
@@ -62,14 +60,13 @@ export type LoginReq = {
   email: string
   password: string
 }
-export type LoginRes = ApiMe | null
+export type LoginRes = ApiUser | null
 
 export type LogoutReq = void
 export type LogoutRes = void
 // AUTH END
 
 // RECIPE START
-
 export type CreateRecipeReq = {
   text: string
   title: string
@@ -84,13 +81,13 @@ export type GetRecipeReq = {
 }
 export type GetRecipeRes = ApiRecipe
 
-export type GetRecipeByTagReq = {
+export type GetRecipesByTagReq = {
   tags: string[]
 }
-export type GetRecipeByTagRes = ApiRecipe[]
+export type GetRecipesByTagRes = ApiRecipe[]
 
-// export type GetRecipeAllReq = void
-// export type GetRecipeAllRes = ApiRecipe[]
+// export type GetRecipesAllReq = void
+// export type GetRecipesAllRes = ApiRecipe[]
 
 export type ForkRecipeReq = {
   recipeId: number
@@ -109,15 +106,21 @@ export type DeleteRecipeReq = {
   recipeId: number
 }
 export type DeleteRecipeRes = void
-
 // RECIPE END
 
+// SCRAPE START
 export type ScrapeReq = {
   url: string
 }
 export type ScrapeRes = ApiRecipe | null
+// SCRAPE END
+
+// USER START
+export type GetUsersAllReq = void
+export type GetUsersAllRes = ApiUser[]
 
 export type GetUserReq = {
   userId: string
 }
-export type GetUserRes = ApiUser | null
+export type GetUserRes = ApiUserWithRecipes | null
+// USER END
