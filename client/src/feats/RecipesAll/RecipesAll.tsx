@@ -10,7 +10,7 @@ import { RecipeRows } from "@/comps/RecipeRows"
 import { URL } from "@/consts"
 import { useLazyGetRecipesByTagQuery } from "@/reducers"
 
-export const Search: React.FC = () => {
+export const RecipesAll: React.FC = () => {
   const navigate = useNavigate()
 
   const location = useLocation()
@@ -52,7 +52,7 @@ export const Search: React.FC = () => {
       .trim()
       .split(" ")
 
-    navigate(URL.search(tags), { replace: true })
+    navigate(URL.recipesAll(tags), { replace: true })
   })
 
   return (

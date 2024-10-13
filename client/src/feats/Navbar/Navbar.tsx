@@ -59,11 +59,18 @@ export const Navbar: React.FC = () => {
         Upload
       </NavLink>
       <NavLink
-        to={URL.search()}
+        to={URL.recipesAll()}
         end
         style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
       >
-        Search
+        Recipes
+      </NavLink>
+      <NavLink
+        to={URL.usersAll}
+        end
+        style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+      >
+        Users
       </NavLink>
       {isLoadingMe ? (
         <LoadingIndicator /> // TODO: apply size

@@ -8,9 +8,10 @@ import { Account } from "./feats/Account"
 import { Navbar } from "./feats/Navbar"
 import { PageFailure } from "./feats/PageFailure"
 import { Recipe } from "./feats/Recipe"
+import { RecipesAll } from "./feats/RecipesAll"
 import { Scrape } from "./feats/Scrape"
-import { Search } from "./feats/Search"
 import { Upload } from "./feats/Upload"
+import { UsersAll } from "./feats/UsersAll"
 
 const router = createBrowserRouter([
   {
@@ -44,16 +45,20 @@ const router = createBrowserRouter([
             element: <Upload />,
           },
           {
+            path: PATH.usersAll,
+            element: <UsersAll />,
+          },
+          {
             path: PATH.user,
             element: <Account />,
           },
           {
-            path: PATH.recipe,
-            element: <Recipe />,
+            path: PATH.recipesAll,
+            element: <RecipesAll />,
           },
           {
-            path: PATH.search,
-            element: <Search />,
+            path: PATH.recipe,
+            element: <Recipe />,
           },
           {
             path: "*",

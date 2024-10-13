@@ -12,7 +12,7 @@ type Props = {
 
 export const Tag: React.FC<Props> = ({ name, handleRemove }) => (
   <li className={s.tag}>
-    <Link to={URL.search([name])}>{name}</Link>
+    <Link to={URL.recipesAll([name])}>{name}</Link>
     {handleRemove && (
       <button
         type="button"

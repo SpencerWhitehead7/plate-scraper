@@ -134,7 +134,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 userId: recipe.userId!,
               })
-              navigate(URL.search())
+              navigate(URL.recipesAll())
             }}
           >
             Delete

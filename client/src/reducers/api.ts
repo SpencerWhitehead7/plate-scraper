@@ -7,7 +7,7 @@ import * as AC from "@/@types/apiContract"
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  tagTypes: ["auth", "recipe", "user"],
+  tagTypes: ["auth", "recipe", "user", "usersAll"],
   endpoints: (builder) => ({
     // AUTH START
     getMe: builder.query<AC.GetMeRes, AC.GetMeReq>({
@@ -21,7 +21,8 @@ export const api = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: (r, e, args) => (e ? [] : [{ type: "auth", id: "me" }]),
+      invalidatesTags: (r, e, args) =>
+        e ? [] : [{ type: "auth", id: "me" }, { type: "usersAll" }],
     }),
 
     editMe: builder.mutation<AC.EditMeRes, AC.EditMeReq & { userId: number }>({
@@ -36,6 +37,7 @@ export const api = createApi({
           : [
               { type: "auth", id: "me" },
               { type: "user", id: args.userId },
+              { type: "usersAll" },
             ],
     }),
 
@@ -54,6 +56,7 @@ export const api = createApi({
           : [
               { type: "auth", id: "me" },
               { type: "user", id: args.userId },
+              { type: "usersAll" },
             ],
     }),
 
@@ -178,6 +181,13 @@ export const api = createApi({
     // SCRAPE END
 
     // USER START
+    getUsersAll: builder.query<AC.GetUsersAllRes, AC.GetUsersAllReq>({
+      query: () => ({
+        url: `/user`,
+      }),
+      providesTags: (r, e, args) => (e ? [] : [{ type: "usersAll" }]),
+    }),
+
     getUser: builder.query<AC.GetUserRes, AC.GetUserReq>({
       query: (params) => ({
         url: `/user/${params.userId}`,
@@ -204,5 +214,6 @@ export const {
   useDeleteRecipeMutation,
   useForkRecipeMutation,
   useScrapeMutation,
+  useGetUsersAllQuery,
   useGetUserQuery,
 } = api

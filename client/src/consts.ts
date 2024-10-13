@@ -25,19 +25,21 @@ export const URL = {
   base: "/",
   scrape: "/scrape",
   upload: "/upload",
-  user: (userId: number) => `/user/${userId}`,
-  recipe: (recipeId: number) => `/recipe/${recipeId}`,
-  search: (tags = [] as string[]) =>
+  usersAll: "/users",
+  user: (userId: number) => `/users/${userId}`,
+  recipesAll: (tags = [] as string[]) =>
     tags.length
-      ? `/search${qs.stringify(tags, { addQueryPrefix: true })}`
-      : "/search",
+      ? `/recipes${qs.stringify(tags, { addQueryPrefix: true })}`
+      : "/recipes",
+  recipe: (recipeId: number) => `/recipes/${recipeId}`,
 }
 
 export const PATH = {
   base: "/",
   scrape: "/scrape",
   upload: "/upload",
-  user: "/user/:userId",
-  recipe: "/recipe/:recipeId",
-  search: "/search",
+  usersAll: "/users",
+  user: "/users/:userId",
+  recipesAll: "/recipes",
+  recipe: "/recipes/:recipeId",
 }
