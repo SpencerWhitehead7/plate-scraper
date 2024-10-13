@@ -98,12 +98,16 @@ authRouter.delete(
         if (err) {
           next(err)
         } else {
-          req.session.destroy((err) => {
+          req.session.destroy(async (err) => {
             if (err) {
               next(err)
             } else {
-              userRepository.delete(authUser).catch(next)
-              res.sendStatus(204)
+              try {
+                await userRepository.delete(authUser)
+                res.sendStatus(204)
+              } catch (err) {
+                next(err)
+              }
             }
           })
         }
