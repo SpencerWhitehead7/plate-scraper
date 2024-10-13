@@ -121,7 +121,6 @@ authRouter.post(
   ...serializers.auth.login.post,
   async (req, res, next) => {
     try {
-      console.log(req.body)
       const { email, password } = req.body as LoginReq
       const authUser = await userRepository.getByEmailWithAuth(email)
       if (!authUser || !(await authUser.checkPassword(password)))
