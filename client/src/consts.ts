@@ -35,11 +35,11 @@ export const URL = {
 }
 
 export const PATH = {
-  base: "/",
-  scrape: "/scrape",
-  upload: "/upload",
-  usersAll: "/users",
-  user: "/users/:userId",
-  recipesAll: "/recipes",
-  recipe: "/recipes/:recipeId",
-}
+  base: "/" as const,
+  scrape: "/scrape" as const,
+  upload: "/upload" as const,
+  usersAll: "/users" as const,
+  user: "/users/:userId" as const,
+  recipesAll: "/recipes" as const,
+  recipe: "/recipes/:recipeId" as const,
+} as const
