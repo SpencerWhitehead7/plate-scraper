@@ -23,8 +23,6 @@ export const SUPPORTED_SITES = [
 
 export const URL = {
   base: "/",
-  scrape: "/scrape",
-  upload: "/upload",
   usersAll: "/users",
   user: (userId: number) => `/users/${userId}`,
   recipesAll: (tags = [] as string[]) =>
@@ -36,8 +34,6 @@ export const URL = {
 
 export const PATH = {
   base: "/" as const,
-  scrape: "/scrape" as const,
-  upload: "/upload" as const,
   usersAll: "/users" as const,
   user: "/users/:userId" as const,
   recipesAll: "/recipes" as const,

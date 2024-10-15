@@ -38,7 +38,7 @@ export const SupportedSites: React.FC = () => {
 
   return (
     <section className={s.supportedSites}>
-      <h3 className={sg.textCenter}> Supported Sites</h3>
+      <h5 className={sg.textCenter}> Supported Sites</h5>
       <div className={skele.container}>
         {rows.map((row) => (
           <Row key={row[0]} row={row} />

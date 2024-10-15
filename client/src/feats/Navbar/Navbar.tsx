@@ -45,20 +45,6 @@ export const Navbar: React.FC = () => {
         <span className={s.navbar__title}>Plate Scraper!</span>
       </NavLink>
       <NavLink
-        to={URL.scrape}
-        end
-        style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
-      >
-        Scrape from website
-      </NavLink>
-      <NavLink
-        to={URL.upload}
-        end
-        style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
-      >
-        Upload
-      </NavLink>
-      <NavLink
         to={URL.recipesAll()}
         end
         style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}

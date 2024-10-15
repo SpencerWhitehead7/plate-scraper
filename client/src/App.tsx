@@ -5,12 +5,11 @@ import s from "./App.module.scss"
 import { Modal } from "./comps/Modal"
 import { PATH } from "./consts"
 import { Account } from "./feats/Account"
+import { Home } from "./feats/Home"
 import { Navbar } from "./feats/Navbar"
 import { PageFailure } from "./feats/PageFailure"
 import { Recipe } from "./feats/Recipe"
 import { RecipesAll } from "./feats/RecipesAll"
-import { Scrape } from "./feats/Scrape"
-import { Upload } from "./feats/Upload"
 import { UsersAll } from "./feats/UsersAll"
 
 const router = createBrowserRouter([
@@ -34,15 +33,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Scrape />,
-          },
-          {
-            path: PATH.scrape,
-            element: <Scrape />,
-          },
-          {
-            path: PATH.upload,
-            element: <Upload />,
+            element: <Home />,
           },
           {
             path: PATH.usersAll,
