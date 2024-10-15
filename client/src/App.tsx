@@ -4,12 +4,12 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 import s from "./App.module.scss"
 import { Modal } from "./comps/Modal"
 import { PATH } from "./consts"
-import { Account } from "./feats/Account"
 import { Home } from "./feats/Home"
 import { Navbar } from "./feats/Navbar"
 import { PageFailure } from "./feats/PageFailure"
 import { Recipe } from "./feats/Recipe"
 import { RecipesAll } from "./feats/RecipesAll"
+import { User } from "./feats/User"
 import { UsersAll } from "./feats/UsersAll"
 
 const router = createBrowserRouter([
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
           },
           {
             path: PATH.user,
-            element: <Account />,
+            element: <User />,
           },
           {
             path: PATH.recipesAll,

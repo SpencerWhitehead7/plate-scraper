@@ -6,7 +6,7 @@ import { FormInputButtonBar, FormSubmit } from "@/comps/Form"
 import { URL } from "@/consts"
 import { useDeleteMeMutation, useGetMeQuery } from "@/reducers"
 
-export const DeleteAccount: React.FC = () => {
+export const Delete: React.FC = () => {
   const navigate = useNavigate()
   const { data: dataMe } = useGetMeQuery()
   const [triggerDeleteMe] = useDeleteMeMutation()
