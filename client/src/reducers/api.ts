@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import qs from "qs"
+import { stringify as qsStringify } from "qs-esm"
 
 import * as AC from "@/@types/apiContract"
 
@@ -105,7 +105,7 @@ export const api = createApi({
       AC.GetRecipesByTagReq
     >({
       query: (params) => ({
-        url: `/recipe${qs.stringify(params.tags, { addQueryPrefix: true })}`,
+        url: `/recipe${qsStringify(params.tags, { addQueryPrefix: true })}`,
       }),
       providesTags: (r, e, args) =>
         e ? [] : (r ?? []).map((recipe) => ({ type: "recipe", id: recipe.id })),
