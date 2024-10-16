@@ -32,4 +32,16 @@
     font-size: 3rem;
     padding-left: $space-smaller;
   }
+
+  &__link {
+    text-decoration: none;
+    font-weight: 600;
+
+    &__active {
+      color: black;
+      &:hover {
+        color: inherit;
+      }
+    }
+  }
 }

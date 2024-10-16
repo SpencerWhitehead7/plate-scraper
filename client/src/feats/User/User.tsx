@@ -1,10 +1,11 @@
+import { useParams } from "@tanstack/react-router"
 import React, { useState } from "react"
-import { useParams } from "react-router-dom"
 
 import { ButtonSection } from "@/comps/Buttons"
 import { Card, CardSubtitle, CardTitle } from "@/comps/Card"
 import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { RecipeRows } from "@/comps/RecipeRows"
+import { PATH } from "@/consts"
 import { PageFailure } from "@/feats/PageFailure"
 import { useGetMeQuery, useGetUserQuery, useLogoutMutation } from "@/reducers"
 
@@ -12,9 +13,9 @@ import { Delete } from "./Delete"
 import { Edit } from "./Edit"
 
 export const User: React.FC = () => {
-  const { userId } = useParams()
+  const { userId } = useParams({ from: PATH.user })
   const { isLoading: isLoadingUser, data: dataUser } = useGetUserQuery({
-    userId: userId ?? "",
+    userId,
   })
   const { data: dataMe } = useGetMeQuery()
 

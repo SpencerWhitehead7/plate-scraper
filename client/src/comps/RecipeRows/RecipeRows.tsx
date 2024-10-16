@@ -1,5 +1,5 @@
+import { Link } from "@tanstack/react-router"
 import React from "react"
-import { Link } from "react-router-dom"
 
 import { ApiRecipe } from "@/@types/apiContract"
 import { ButtonSection, DownloadButton, ForkButton } from "@/comps/Buttons"
@@ -23,7 +23,7 @@ const RecipeRow: React.FC<ApiRecipe> = ({
     <div className={s.recipeRow__info}>
       <div>
         <div>
-          <Link to={URL.recipe(id)}>{title}</Link>
+          <Link {...URL.recipe(id)}>{title}</Link>
           {` - ${sourceSite}`}
         </div>
         <Tags tags={tags} />
@@ -34,13 +34,13 @@ const RecipeRow: React.FC<ApiRecipe> = ({
         <div>
           <div>
             Created&nbsp;by&nbsp;
-            <Link className={sg.pr_m} to={URL.user(createdBy)}>
+            <Link {...URL.user(createdBy)} className={sg.pr_m}>
               {createdBy}
             </Link>
           </div>
           <div>
             Owned&nbsp;by&nbsp;
-            <Link to={URL.user(userId)}>{userId}</Link>
+            <Link {...URL.user(userId)}>{userId}</Link>
           </div>
         </div>
         <div>{`Forked ${forkedCount} times`}</div>

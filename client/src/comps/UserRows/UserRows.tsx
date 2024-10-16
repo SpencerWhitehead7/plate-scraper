@@ -1,5 +1,5 @@
+import { Link } from "@tanstack/react-router"
 import React from "react"
-import { Link } from "react-router-dom"
 
 import { ApiUser } from "@/@types/apiContract"
 import { URL } from "@/consts"
@@ -8,7 +8,7 @@ import s from "./UserRows.module.scss"
 
 const UserRow: React.FC<ApiUser> = ({ id, userName }) => (
   <div className={s.userRow}>
-    <Link to={URL.user(id)}>{userName}</Link>
+    <Link {...URL.user(id)}>{userName}</Link>
   </div>
 )
 

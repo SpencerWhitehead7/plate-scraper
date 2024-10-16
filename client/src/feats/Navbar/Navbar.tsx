@@ -1,5 +1,5 @@
+import { Link } from "@tanstack/react-router"
 import React from "react"
-import { NavLink } from "react-router-dom"
 
 import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { openAuthModal as openAuthModalAction } from "@/comps/Modal"
@@ -11,17 +11,6 @@ import skele from "@/skeleton.module.css"
 import logoSvg from "../../../../public/logo.svg"
 import s from "./Navbar.module.scss"
 
-// my scss module solution does not cooperate with their auto-applied "active" class
-const linkStyle = {
-  textDecoration: "none",
-  fontWeight: 600,
-}
-
-const activeLinkStyle = {
-  ...linkStyle,
-  color: "black",
-}
-
 export const Navbar: React.FC = () => {
   const { isLoading: isLoadingMe, data: dataMe } = useGetMeQuery()
 
@@ -32,10 +21,9 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className={s.navbar}>
-      <NavLink
-        to={URL.base}
-        className={s.navbar__logoTitle}
-        style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+      <Link
+        {...URL.base()}
+        className={`${s.navbar__logoTitle} ${s.navbar__link}`}
       >
         <img
           src={logoSvg as string}
@@ -43,31 +31,40 @@ export const Navbar: React.FC = () => {
           className={s.navbar__logo}
         />
         <span className={s.navbar__title}>Plate Scraper!</span>
-      </NavLink>
-      <NavLink
-        to={URL.recipesAll()}
-        end
-        style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+      </Link>
+      <Link
+        {...URL.recipesAll()}
+        className={s.navbar__link}
+        activeOptions={{ exact: true }}
+        activeProps={{
+          className: s.navbar__link__active,
+        }}
       >
         Recipes
-      </NavLink>
-      <NavLink
-        to={URL.usersAll}
-        end
-        style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+      </Link>
+      <Link
+        {...URL.usersAll()}
+        className={s.navbar__link}
+        activeOptions={{ exact: true }}
+        activeProps={{
+          className: s.navbar__link__active,
+        }}
       >
         Users
-      </NavLink>
+      </Link>
       {isLoadingMe ? (
         <LoadingIndicator /> // TODO: apply size
       ) : dataMe ? (
-        <NavLink
-          to={URL.user(dataMe.id)}
-          end
-          style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+        <Link
+          {...URL.user(dataMe.id)}
+          className={s.navbar__link}
+          activeOptions={{ exact: true }}
+          activeProps={{
+            className: s.navbar__link__active,
+          }}
         >
           My Account
-        </NavLink>
+        </Link>
       ) : (
         <button
           type="button"

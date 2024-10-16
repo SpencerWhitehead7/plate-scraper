@@ -1,6 +1,6 @@
+import { useNavigate } from "@tanstack/react-router"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
 
 import { ApiRecipe } from "@/@types/apiContract"
 import { openAuthModal as openAuthModalAction } from "@/comps/Modal"
@@ -77,7 +77,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
         sourceUrl: recipe.sourceUrl ?? "",
         tags: updatedTags,
       }).unwrap()
-      navigate(URL.recipe(newRecipe.id))
+      void navigate(URL.recipe(newRecipe.id))
     }
   })
 
@@ -134,7 +134,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 userId: recipe.userId!,
               })
-              navigate(URL.recipesAll())
+              void navigate(URL.recipesAll())
             }}
           >
             Delete

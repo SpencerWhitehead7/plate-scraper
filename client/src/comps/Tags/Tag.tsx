@@ -1,5 +1,5 @@
+import { Link } from "@tanstack/react-router"
 import React from "react"
-import { Link } from "react-router-dom"
 
 import { URL } from "@/consts"
 
@@ -12,7 +12,7 @@ type Props = {
 
 export const Tag: React.FC<Props> = ({ name, handleRemove }) => (
   <li className={s.tag}>
-    <Link to={URL.recipesAll([name])}>{name}</Link>
+    <Link {...URL.recipesAll([name])}>{name}</Link>
     {handleRemove && (
       <button
         type="button"

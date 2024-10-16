@@ -1,27 +1,18 @@
-import qs from "qs"
-import React, { useEffect, useMemo } from "react"
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import React, { useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { useLocation, useNavigate } from "react-router-dom"
 
 import { Card, CardTitle } from "@/comps/Card"
 import { FormInputButtonBar, FormSubmit } from "@/comps/Form"
 import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { RecipeRows } from "@/comps/RecipeRows"
-import { URL } from "@/consts"
+import { PATH, URL } from "@/consts"
 import { useLazyGetRecipesByTagQuery } from "@/reducers"
 
 export const RecipesAll: React.FC = () => {
   const navigate = useNavigate()
 
-  const location = useLocation()
-  const queryParams = useMemo(
-    () => qs.parse(location.search),
-    [location.search],
-  )
-  const tags = useMemo(
-    () => Object.values(queryParams).map(String),
-    [queryParams],
-  )
+  const { tags } = useSearch({ from: PATH.recipesAll })
 
   const [getRecipeByTagTrigger, getRecipeByTagState] =
     useLazyGetRecipesByTagQuery()
@@ -38,21 +29,25 @@ export const RecipesAll: React.FC = () => {
   })
 
   useEffect(() => {
-    if (tags.length) {
+    if (tags?.length) {
       setValue("searchTerms", tags.join(" "))
       void getRecipeByTagTrigger({ tags })
     }
   }, [tags, setValue, getRecipeByTagTrigger])
 
   const onSubmit = handleSubmit(({ searchTerms }) => {
-    const tags = searchTerms
-      .toLowerCase()
-      .replace(/[^a-z\s]/gi, "")
-      .replace(/\s\s+/g, " ")
-      .trim()
-      .split(" ")
+    const trimmedSearchTerms = searchTerms.trim()
+    if (trimmedSearchTerms === "") {
+      void navigate({ ...URL.recipesAll(), replace: true })
+    } else {
+      const tags = trimmedSearchTerms
+        .toLowerCase()
+        .replace(/[^a-z\s]/gi, "")
+        .replace(/\s\s+/g, " ")
+        .split(" ")
 
-    navigate(URL.recipesAll(tags), { replace: true })
+      void navigate({ ...URL.recipesAll(tags), replace: true })
+    }
   })
 
   return (

@@ -1,5 +1,6 @@
 import path from "node:path"
 
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite"
 import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react-swc"
 import { visualizer } from "rollup-plugin-visualizer"
@@ -38,6 +39,7 @@ export default defineConfig({
   },
 
   plugins: [
+    TanStackRouterVite(),
     react({
       include: "./src/**.*{jsx,tsx}",
     }),

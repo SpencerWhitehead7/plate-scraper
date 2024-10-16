@@ -1,5 +1,3 @@
-import qs from "qs"
-
 export const SUPPORTED_SITES = [
   "allrecipes.com",
   "bettycrocker.com",
@@ -22,20 +20,34 @@ export const SUPPORTED_SITES = [
 ]
 
 export const URL = {
-  base: "/",
-  usersAll: "/users",
-  user: (userId: number) => `/users/${userId}`,
-  recipesAll: (tags = [] as string[]) =>
-    tags.length
-      ? `/recipes${qs.stringify(tags, { addQueryPrefix: true })}`
-      : "/recipes",
-  recipe: (recipeId: number) => `/recipes/${recipeId}`,
-}
+  base: () =>
+    ({
+      to: "/",
+    }) as const,
+  usersAll: () =>
+    ({
+      to: "/users",
+    }) as const,
+  user: (userId: number) =>
+    ({
+      to: "/users/$userId",
+      params: { userId: String(userId) },
+    }) as const,
+  recipesAll: (tags: string[] = []) => ({
+    to: "/recipes" as const,
+    search: tags.length ? { tags } : {},
+  }),
+  recipe: (recipeId: number) =>
+    ({
+      to: "/recipes/$recipeId",
+      params: { recipeId: String(recipeId) },
+    }) as const,
+} as const
 
 export const PATH = {
   base: "/" as const,
-  usersAll: "/users" as const,
-  user: "/users/:userId" as const,
-  recipesAll: "/recipes" as const,
-  recipe: "/recipes/:recipeId" as const,
+  usersAll: "/users/" as const,
+  user: "/users/$userId" as const,
+  recipesAll: "/recipes/" as const,
+  recipe: "/recipes/$recipeId" as const,
 } as const

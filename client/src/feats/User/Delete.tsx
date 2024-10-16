@@ -1,6 +1,6 @@
+import { useNavigate } from "@tanstack/react-router"
 import React from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
 
 import { FormInputButtonBar, FormSubmit } from "@/comps/Form"
 import { URL } from "@/consts"
@@ -22,7 +22,7 @@ export const Delete: React.FC = () => {
     if (!dataMe) return
 
     await triggerDeleteMe({ userId: dataMe.id, password })
-    navigate(URL.base)
+    void navigate(URL.base())
   })
 
   return (
