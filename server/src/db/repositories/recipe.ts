@@ -198,9 +198,17 @@ class RecipeRepository {
   }
 
   getByTagNames(tagNames: string[]) {
-    return this.select()
+    const subQuery = this.repo
+      .createQueryBuilder("recipe")
+      .select("recipe.id")
+      .leftJoin("recipe.tags", "tag")
       .where("tag.name IN (:...tagNames)", { tagNames })
+
+    return this.select()
+      .where(`recipe.id IN (${subQuery.getQuery()})`)
+      .setParameters(subQuery.getParameters())
       .getMany()
+    // TODO: order by number of matched tags would be a nice feature
   }
 
   getAll() {

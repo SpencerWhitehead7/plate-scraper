@@ -73,6 +73,13 @@ describe("API Route Recipe: /api/recipe", () => {
       it("returns all recipes, including tags, if no recipes are queried by tag", async () => {
         const res = await request(app).get(route)
         const bodyRecipes = res.body as Recipe[]
+        const tagNamesByRecipeId = bodyRecipes.reduce<Record<string, string[]>>(
+          (acc, r) => {
+            acc[r.id] = r.tags.map((t) => t.name)
+            return acc
+          },
+          {},
+        )
         expect(res.status).to.equal(200)
         expect(bodyRecipes.map((r) => r.id)).to.have.members([
           recipe1.id,
@@ -81,22 +88,31 @@ describe("API Route Recipe: /api/recipe", () => {
           recipe4.id,
           recipe5.id,
         ])
-        bodyRecipes.forEach((r) => {
-          expect(r.tags).to.exist
-        })
+        expect(tagNamesByRecipeId[recipe1.id]).to.have.members(["tone"])
+        expect(tagNamesByRecipeId[recipe2.id]).to.have.members(["tone", "ttwo"])
+        expect(tagNamesByRecipeId[recipe3.id]).to.have.members(["tthree"])
+        expect(tagNamesByRecipeId[recipe4.id]).to.have.members(["tfour"])
+        expect(tagNamesByRecipeId[recipe5.id]).to.have.members([])
       })
       it("returns all recipes, including tags, which have a tag that matches a queried tag", async () => {
         const res = await request(app).get(`${route}?0=tone&1=tthree`)
         const bodyRecipes = res.body as Recipe[]
+        const tagNamesByRecipeId = bodyRecipes.reduce<Record<string, string[]>>(
+          (acc, r) => {
+            acc[r.id] = r.tags.map((t) => t.name)
+            return acc
+          },
+          {},
+        )
         expect(res.status).to.equal(200)
         expect(bodyRecipes.map((r) => r.id)).have.members([
           recipe1.id,
           recipe2.id,
           recipe3.id,
         ])
-        bodyRecipes.forEach((r) => {
-          expect(r.tags).to.exist
-        })
+        expect(tagNamesByRecipeId[recipe1.id]).to.have.members(["tone"])
+        expect(tagNamesByRecipeId[recipe2.id]).to.have.members(["tone", "ttwo"])
+        expect(tagNamesByRecipeId[recipe3.id]).to.have.members(["tthree"])
       })
       it("sanitizes tags", async () => {
         const res = await request(app).get(`${route}?0=T_one-1`)
