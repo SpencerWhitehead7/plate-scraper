@@ -1,4 +1,6 @@
-import chai from "chai"
+import "mocha"
+
+import * as chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 import { Server } from "http"
 import { DataSource, Repository } from "typeorm"

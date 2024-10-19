@@ -12,6 +12,7 @@ import { User } from "../user"
 
 describe("Relations", () => {
   let user: User
+
   beforeEach(async () => {
     try {
       await syncDB()
@@ -20,12 +21,13 @@ describe("Relations", () => {
       console.log(err)
     }
   })
+
   afterEach(syncDB)
 
   it("The User-Recipe one-many relation exists", async () => {
     await Promise.all(
-      [factoryRecipe({ user }), factoryRecipe({ user })].map((row) =>
-        dataSource.manager.save(row),
+      [factoryRecipe({ user }), factoryRecipe({ user })].map((r) =>
+        dataSource.manager.save(r),
       ),
     )
 
@@ -34,29 +36,13 @@ describe("Relations", () => {
       relations: { recipes: true },
     })
 
-    expect(savedUser.recipes.map(({ id }) => id)).to.deep.equal([1, 2])
+    expect(savedUser.recipes.map((r) => r.id)).to.have.members([1, 2])
   })
 
   it("The Recipe-Tag many-many relation exists", async () => {
-    const getAllRecipeTagJoinRowsTag = async () =>
-      await dataSource.manager
-        .createQueryBuilder()
-        .select("tag")
-        .from(Tag, "tag")
-        .innerJoinAndSelect("tag.recipes", "recipe")
-        .getMany()
-
-    const getAllRecipeTagJoinRowsRecipe = async () =>
-      await dataSource.manager
-        .createQueryBuilder()
-        .select("recipe")
-        .from(Recipe, "recipe")
-        .innerJoinAndSelect("recipe.tags", "tag")
-        .getMany()
-
     const [tag1, tag2] = await Promise.all(
-      [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((row) =>
-        dataSource.manager.save(row),
+      [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((r) =>
+        dataSource.manager.save(r),
       ),
     )
 
@@ -64,23 +50,31 @@ describe("Relations", () => {
       [
         factoryRecipe({ user, tags: [tag1, tag2] }),
         factoryRecipe({ user, tags: [tag1, tag2] }),
-      ].map((row) => dataSource.manager.save(row)),
+      ].map((r) => dataSource.manager.save(r)),
     )
 
-    const tags = await getAllRecipeTagJoinRowsTag()
-    const recipes = await getAllRecipeTagJoinRowsRecipe()
+    const tags = await dataSource.manager
+      .createQueryBuilder()
+      .select("tag")
+      .from(Tag, "tag")
+      .innerJoinAndSelect("tag.recipes", "recipe")
+      .getMany()
+
+    const recipes = await dataSource.manager
+      .createQueryBuilder()
+      .select("recipe")
+      .from(Recipe, "recipe")
+      .innerJoinAndSelect("recipe.tags", "tag")
+      .getMany()
 
     expect(tags).to.have.lengthOf(2)
     tags.forEach((tag) => {
-      expect(new Set(tag.recipes.map(({ id }) => id))).to.deep.equal(
-        new Set([1, 2]),
-      )
+      expect(tag.recipes.map((r) => r.id)).to.have.members([1, 2])
     })
+
     expect(recipes).to.have.lengthOf(2)
     recipes.forEach((recipe) => {
-      expect(new Set(recipe.tags.map(({ name }) => name))).to.deep.equal(
-        new Set(["abc", "def"]),
-      )
+      expect(recipe.tags.map((t) => t.name)).to.have.members(["abc", "def"])
     })
   })
 })

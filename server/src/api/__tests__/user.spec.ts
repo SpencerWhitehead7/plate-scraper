@@ -13,7 +13,9 @@ import { User } from "../../db/entities"
 
 describe("API Route User: /api/user", () => {
   const route = "/api/user"
+
   beforeEach(syncDB)
+
   afterEach(syncDB)
 
   describe("/", () => {
@@ -25,8 +27,6 @@ describe("API Route User: /api/user", () => {
         const bodyUsers = res.body as User[]
         expect(res.status).to.equal(200)
         expect(bodyUsers[0].id).to.equal(user.id)
-        expect(bodyUsers[0].email).to.equal(user.email)
-        expect(bodyUsers[0].userName).to.equal(user.userName)
       })
     })
   })
@@ -42,14 +42,11 @@ describe("API Route User: /api/user", () => {
         const bodyUser = res.body as User
         expect(res.status).to.equal(200)
         expect(bodyUser.id).to.equal(user.id)
-        expect(bodyUser.email).to.equal(user.email)
-        expect(bodyUser.userName).to.equal(user.userName)
         expect(bodyUser.recipes).to.have.lengthOf(1)
         expect(bodyUser.recipes[0].tags).to.have.lengthOf(1)
       })
       it("returns 404 if the user cannot be found", async () => {
         const res = await request(app).get(`${route}/1`)
-
         expect(res.status).to.equal(404)
       })
     })

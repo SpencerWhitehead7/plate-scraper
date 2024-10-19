@@ -4,6 +4,7 @@ import seed from "../seed"
 
 describe("Seed", () => {
   beforeEach(syncDB)
+
   afterEach(syncDB)
 
   it("fills the database with some sample data", async () => {

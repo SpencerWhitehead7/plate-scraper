@@ -12,6 +12,7 @@ import { User } from "../user"
 
 describe("Recipe Entity", () => {
   let user: User
+
   beforeEach(async () => {
     try {
       await syncDB()
@@ -20,6 +21,7 @@ describe("Recipe Entity", () => {
       console.log(err)
     }
   })
+
   afterEach(syncDB)
 
   it("entity and fields exist", async () => {
@@ -35,33 +37,33 @@ describe("Recipe Entity", () => {
   })
 
   describe("Fields validate data", () => {
-    it("text rejects empty strings", () => {
-      const recipe = factoryRecipe({ text: "" })
-      return expect(dataSource.manager.save(recipe)).to.be.rejected
+    it("text rejects empty strings", async () => {
+      const r = factoryRecipe({ user, text: "" })
+      await expect(dataSource.manager.save(r)).to.be.rejected
     })
-    it("title rejects empty strings", () => {
-      const recipe = factoryRecipe({ title: "" })
-      return expect(dataSource.manager.save(recipe)).to.be.rejected
+    it("title rejects empty strings", async () => {
+      const r = factoryRecipe({ user, title: "" })
+      await expect(dataSource.manager.save(r)).to.be.rejected
     })
-    it("sourceSite rejects empty strings", () => {
-      const recipe = factoryRecipe({ sourceSite: "" })
-      return expect(dataSource.manager.save(recipe)).to.be.rejected
+    it("sourceSite rejects empty strings", async () => {
+      const r = factoryRecipe({ user, sourceSite: "" })
+      await expect(dataSource.manager.save(r)).to.be.rejected
     })
     it("sourceSite defaults to 'upload'", async () => {
-      const recipe = await dataSource.manager.save(factoryRecipe({ user }))
-      return expect(recipe.sourceSite).to.equal("upload")
+      const r = await dataSource.manager.save(factoryRecipe({ user }))
+      expect(r.sourceSite).to.equal("upload")
     })
-    it("sourceUrl rejects empty strings", () => {
-      const recipe = factoryRecipe({ sourceUrl: "" })
-      return expect(dataSource.manager.save(recipe)).to.be.rejected
+    it("sourceUrl rejects empty strings", async () => {
+      const r = factoryRecipe({ user, sourceUrl: "" })
+      await expect(dataSource.manager.save(r)).to.be.rejected
     })
     it("sourceUrl defaults to 'upload'", async () => {
-      const recipe = await dataSource.manager.save(factoryRecipe({ user }))
-      expect(recipe.sourceUrl).to.equal("upload")
+      const r = await dataSource.manager.save(factoryRecipe({ user }))
+      expect(r.sourceUrl).to.equal("upload")
     })
     it("forkedCount defaults to 0", async () => {
-      const recipe = await dataSource.manager.save(factoryRecipe({ user }))
-      expect(recipe.forkedCount).to.equal(0)
+      const r = await dataSource.manager.save(factoryRecipe({ user }))
+      expect(r.forkedCount).to.equal(0)
     })
   })
 
@@ -76,8 +78,8 @@ describe("Recipe Entity", () => {
           .getMany()
 
       const [tag1, tag2] = await Promise.all(
-        [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((row) =>
-          dataSource.manager.save(row),
+        [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((r) =>
+          dataSource.manager.save(r),
         ),
       )
 
@@ -85,7 +87,7 @@ describe("Recipe Entity", () => {
         [
           factoryRecipe({ user, tags: [tag1] }),
           factoryRecipe({ user, tags: [tag2] }),
-        ].map((row) => dataSource.manager.save(row)),
+        ].map((r) => dataSource.manager.save(r)),
       )
 
       const originalTags = await getAllRecipeTagJoinRows()
@@ -93,24 +95,25 @@ describe("Recipe Entity", () => {
       const tagsAfterDelete = await getAllRecipeTagJoinRows()
 
       expect(originalTags).to.have.lengthOf(2)
-      expect(originalTags.map(({ name }) => name)).to.include(tag1.name)
+      expect(originalTags.map((t) => t.name)).to.include(tag1.name)
       expect(tagsAfterDelete).to.have.lengthOf(1)
-      expect(tagsAfterDelete.map(({ name }) => name)).not.to.include(tag1.name)
+      expect(tagsAfterDelete.map((t) => t.name)).not.to.include(tag1.name)
     })
     xit("if a tag no longer applies to any recipes after a recipe is deleted, the tag is deleted", async () => {
       // implement if I ever figure out how to do this; it will probably require writing custom queries with the queryBuilder, which would be properly implemented and tested by the delete endpoint
       const getAllTags = async () => await dataSource.manager.find(Tag)
 
       const [tag1, tag2] = await Promise.all(
-        [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((row) =>
-          dataSource.manager.save(row),
+        [factoryTag({ name: "abc" }), factoryTag({ name: "def" })].map((r) =>
+          dataSource.manager.save(r),
         ),
       )
 
       const [recipe1] = await Promise.all(
-        [factoryRecipe({ tags: [tag1] }), factoryRecipe({ tags: [tag2] })].map(
-          (row) => dataSource.manager.save(row),
-        ),
+        [
+          factoryRecipe({ user, tags: [tag1] }),
+          factoryRecipe({ user, tags: [tag2] }),
+        ].map((r) => dataSource.manager.save(r)),
       )
 
       const originalTags = await getAllTags()
@@ -118,9 +121,9 @@ describe("Recipe Entity", () => {
       const tagsAfterDelete = await getAllTags()
 
       expect(originalTags).to.have.lengthOf(2)
-      expect(originalTags.map(({ name }) => name)).to.include(tag1.name)
+      expect(originalTags.map((t) => t.name)).to.include(tag1.name)
       expect(tagsAfterDelete).to.have.lengthOf(1)
-      expect(tagsAfterDelete.map(({ name }) => name)).not.to.include(tag1.name)
+      expect(tagsAfterDelete.map((t) => t.name)).not.to.include(tag1.name)
     })
   })
 })

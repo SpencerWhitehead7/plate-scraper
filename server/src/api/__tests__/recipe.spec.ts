@@ -14,7 +14,9 @@ import { Recipe, Tag, User } from "../../db/entities"
 
 describe("API Route Recipe: /api/recipe", () => {
   const route = "/api/recipe"
+
   let agent: request.SuperAgentTest
+
   let user: User
 
   beforeEach(async () => {
@@ -27,9 +29,10 @@ describe("API Route Recipe: /api/recipe", () => {
       console.log(err)
     }
   })
+
   afterEach(async () => {
     try {
-      await Promise.all([agent.post("/api/auth/logout")])
+      await agent.post("/api/auth/logout")
       await syncDB()
     } catch (err) {
       console.log(err)
@@ -42,16 +45,17 @@ describe("API Route Recipe: /api/recipe", () => {
       let recipe2: Recipe
       let recipe3: Recipe
       let recipe4: Recipe
+      let recipe5: Recipe
       beforeEach(async () => {
         try {
-          ;[recipe1, recipe2, recipe3, recipe4] = await Promise.all(
+          ;[recipe1, recipe2, recipe3, recipe4, recipe5] = await Promise.all(
             [
               factoryRecipe({ user }),
               factoryRecipe({ user }),
               factoryRecipe({ user }),
               factoryRecipe({ user }),
               factoryRecipe({ user }),
-            ].map((row) => dataSource.manager.save(row)),
+            ].map((r) => dataSource.manager.save(r)),
           )
           await Promise.all(
             [
@@ -59,7 +63,7 @@ describe("API Route Recipe: /api/recipe", () => {
               factoryTag({ name: "ttwo", recipes: [recipe2] }),
               factoryTag({ name: "tthree", recipes: [recipe3] }),
               factoryTag({ name: "tfour", recipes: [recipe4] }),
-            ].map((row) => dataSource.manager.save(row)),
+            ].map((r) => dataSource.manager.save(r)),
           )
         } catch (err) {
           console.log(err)
@@ -70,26 +74,38 @@ describe("API Route Recipe: /api/recipe", () => {
         const res = await request(app).get(route)
         const bodyRecipes = res.body as Recipe[]
         expect(res.status).to.equal(200)
-        expect(bodyRecipes.length).to.equal(5)
-        expect(bodyRecipes[0].tags).to.exist
+        expect(bodyRecipes.map((r) => r.id)).to.have.members([
+          recipe1.id,
+          recipe2.id,
+          recipe3.id,
+          recipe4.id,
+          recipe5.id,
+        ])
+        bodyRecipes.forEach((r) => {
+          expect(r.tags).to.exist
+        })
       })
       it("returns all recipes, including tags, which have a tag that matches a queried tag", async () => {
         const res = await request(app).get(`${route}?0=tone&1=tthree`)
         const bodyRecipes = res.body as Recipe[]
         expect(res.status).to.equal(200)
-        expect(bodyRecipes.length).to.equal(3)
-        expect(new Set(bodyRecipes.map(({ id }: Recipe) => id))).to.deep.equal(
-          new Set([recipe1.id, recipe2.id, recipe3.id]),
-        )
+        expect(bodyRecipes.map((r) => r.id)).have.members([
+          recipe1.id,
+          recipe2.id,
+          recipe3.id,
+        ])
+        bodyRecipes.forEach((r) => {
+          expect(r.tags).to.exist
+        })
       })
       it("sanitizes tags", async () => {
-        const res = await request(app).get(`${route}?0=T1_one&1=T3_three`)
+        const res = await request(app).get(`${route}?0=T_one-1`)
         const bodyRecipes = res.body as Recipe[]
         expect(res.status).to.equal(200)
-        expect(bodyRecipes.length).to.equal(3)
-        expect(new Set(bodyRecipes.map(({ id }: Recipe) => id))).to.deep.equal(
-          new Set([recipe1.id, recipe2.id, recipe3.id]),
-        )
+        expect(bodyRecipes.map((r) => r.id)).have.members([
+          recipe1.id,
+          recipe2.id,
+        ])
       })
       it("does not return duplicate recipes", async () => {
         const res = await request(app).get(`${route}?0=tone&1=ttwo`)
@@ -108,6 +124,7 @@ describe("API Route Recipe: /api/recipe", () => {
     describe("POST", () => {
       it("creates a recipe, assigning and creating new tags if necessary", async () => {
         await dataSource.manager.save(factoryTag({ name: "tone" }))
+
         await agent.post(route).send({
           ...factoryRecipe(),
           tags: ["tone", "ttwo"],
@@ -117,21 +134,21 @@ describe("API Route Recipe: /api/recipe", () => {
           relations: { tags: true },
         })
         expect(recipe).to.exist
-        expect(recipe.tags).to.have.lengthOf(2)
+        expect(recipe.tags.map((t) => t.name)).to.have.members(["tone", "ttwo"])
       })
       it("sanitizes tags", async () => {
         await agent.post(route).send({
           ...factoryRecipe(),
           tags: [" T1 one ", "T2 two_T3 three"],
         })
-        const tagOne = await dataSource.manager.findOneByOrFail(Tag, {
+        const tagOne = dataSource.manager.findOneByOrFail(Tag, {
           name: "tone",
         })
-        const tagTwo = await dataSource.manager.findOneByOrFail(Tag, {
+        const tagTwo = dataSource.manager.findOneByOrFail(Tag, {
           name: "ttwotthree",
         })
-        expect(tagOne).to.exist
-        expect(tagTwo).to.exist
+        expect(await tagOne).to.exist
+        expect(await tagTwo).to.exist
       })
       it("rejects unauthenticated users' attempts", async () => {
         const failedRes = await request(app).post(route).send(factoryRecipe())
@@ -161,7 +178,10 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(recipe.userId).to.equal(1)
       })
       it("returns the recipe, including tags", async () => {
-        const res = await agent.post(route).send(factoryRecipe())
+        const res = await agent.post(route).send({
+          ...factoryRecipe(),
+          tags: ["tone"],
+        })
         const bodyRecipe = res.body as Recipe
         expect(res.status).to.equal(200)
         expect(bodyRecipe.id).to.equal(1)
@@ -171,7 +191,7 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(bodyRecipe.sourceUrl).to.equal("upload")
         expect(bodyRecipe.createdBy).to.equal(1)
         expect(bodyRecipe.forkedCount).to.equal(0)
-        expect(bodyRecipe.tags).to.exist
+        expect(bodyRecipe.tags.map((t) => t.name)).to.have.members(["tone"])
       })
     })
   })
@@ -179,11 +199,13 @@ describe("API Route Recipe: /api/recipe", () => {
   describe("/fork/:id", () => {
     describe("POST", () => {
       let agent2: request.SuperAgentTest
+
       beforeEach(async () => {
         agent2 = request.agent(app)
         await agent2.post("/api/auth").send(user2Cred)
         await agent.post(route).send(factoryRecipe())
       })
+
       afterEach(async () => {
         await agent2.post("/api/auth/logout")
       })
@@ -201,20 +223,16 @@ describe("API Route Recipe: /api/recipe", () => {
         const original = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-        await dataSource.manager.save(
+        const originalTag = await dataSource.manager.save(
           factoryTag({ name: "tone", recipes: [original] }),
         )
-        const tagged = await dataSource.manager.findOneOrFail(Recipe, {
-          where: { id: 1 },
-          relations: { tags: true },
-        })
 
         await agent2.post(`${route}/fork/1`)
         const copy = await dataSource.manager.findOneOrFail(Recipe, {
           where: { id: 2 },
           relations: { tags: true },
         })
-        expect(tagged.tags).to.deep.equal(copy.tags)
+        expect(copy.tags.map((t) => t.name)).to.have.members([originalTag.name])
       })
       it("rejects unauthenticated users", async () => {
         const failedRes = await request(app).post(`${route}/fork/1`)
@@ -247,7 +265,7 @@ describe("API Route Recipe: /api/recipe", () => {
         const copy = await dataSource.manager.findOneByOrFail(Recipe, { id: 2 })
         const bodyRecipe = res.body as Recipe
         expect(bodyRecipe.id).to.equal(copy.id)
-        expect(bodyRecipe.tags).to.exist
+        expect(bodyRecipe.tags).to.have.members([])
       })
     })
   })
@@ -261,11 +279,10 @@ describe("API Route Recipe: /api/recipe", () => {
         const bodyRecipe = res.body as Recipe
         expect(res.status).to.equal(200)
         expect(bodyRecipe.id).to.equal(1)
-        expect(bodyRecipe.tags).to.exist
+        expect(bodyRecipe.tags).to.have.members([])
       })
       it("returns 404 if the recipe cannot be found", async () => {
         const res = await request(app).get(`${route}/1`)
-
         expect(res.status).to.equal(404)
       })
     })
@@ -280,7 +297,7 @@ describe("API Route Recipe: /api/recipe", () => {
           [
             factoryTag({ name: "tone", recipes: [original] }),
             factoryTag({ name: "ttwo" }),
-          ].map((row) => dataSource.manager.save(row)),
+          ].map((r) => dataSource.manager.save(r)),
         )
 
         await agent.put(`${route}/1`).send({
@@ -292,12 +309,12 @@ describe("API Route Recipe: /api/recipe", () => {
           where: { id: 1 },
           relations: { tags: true },
         })
-
         expect(edited.text).to.equal("newText")
         expect(edited.title).to.equal("newTitle")
-        expect(new Set(edited.tags.map(({ name }) => name))).to.deep.equal(
-          new Set(["ttwo", "tthree"]),
-        )
+        expect(edited.tags.map((t) => t.name)).to.have.members([
+          "ttwo",
+          "tthree",
+        ])
       })
       it("handles partial updates", async () => {
         await agent.post(route).send(factoryRecipe())
@@ -309,12 +326,12 @@ describe("API Route Recipe: /api/recipe", () => {
         const edited = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-
         expect(edited.text).to.equal("newText")
         expect(edited.title).to.equal(original.title)
       })
       it("sanitizes tags", async () => {
         await agent.post(route).send(factoryRecipe())
+
         await agent
           .put(`${route}/1`)
           .send({ tags: [" T1 one ", "T2 two_T3 three"] })
@@ -330,7 +347,7 @@ describe("API Route Recipe: /api/recipe", () => {
       it("rejects attempts to edit a recipe that does not exist", async () => {
         const failedRes = await agent
           .put(`${route}/1`)
-          .send({ text: "failedText", title: "failedTitle" })
+          .send({ text: "failedText" })
         expect(failedRes.status).to.equal(404)
       })
       it("rejects unauthenticated users' attempts", async () => {
@@ -338,13 +355,13 @@ describe("API Route Recipe: /api/recipe", () => {
         const recipeBefore = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
+
         const failedRes = await request(app)
           .put(`${route}/1`)
-          .send({ text: "failedText", title: "failedTitle" })
+          .send({ text: "failedText" })
         const recipeAfter = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-
         expect(failedRes.status).to.equal(401)
         expect(recipeBefore).to.deep.equal(recipeAfter)
       })
@@ -355,13 +372,13 @@ describe("API Route Recipe: /api/recipe", () => {
         const recipeBefore = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
+
         const failedRes = await agent2
           .put(`${route}/1`)
-          .send({ text: "failedText", title: "failedTitle" })
+          .send({ text: "failedText" })
         const recipeAfter = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-
         expect(failedRes.status).to.equal(403)
         expect(recipeBefore).to.deep.equal(recipeAfter)
       })
@@ -370,6 +387,7 @@ describe("API Route Recipe: /api/recipe", () => {
         const recipeBefore = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
+
         await agent.put(`${route}/1`).send({
           id: 10,
           sourceSite: "new site",
@@ -381,7 +399,6 @@ describe("API Route Recipe: /api/recipe", () => {
         const recipeAfter = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-
         expect(recipeBefore.id).to.equal(recipeAfter.id)
         expect(recipeBefore.sourceSite).to.equal(recipeAfter.sourceSite)
         expect(recipeBefore.sourceUrl).to.equal(recipeAfter.sourceUrl)
@@ -391,10 +408,10 @@ describe("API Route Recipe: /api/recipe", () => {
       })
       it("returns the recipe, including tags", async () => {
         await agent.post(route).send(factoryRecipe())
+
         const res = await agent
           .put(`${route}/1`)
           .send({ text: "newText", title: "newTitle", tags: [] })
-
         const bodyRecipe = res.body as Recipe
         expect(res.status).to.equal(200)
         expect(bodyRecipe.id).to.equal(1)
@@ -404,7 +421,7 @@ describe("API Route Recipe: /api/recipe", () => {
         expect(bodyRecipe.sourceUrl).to.equal("upload")
         expect(bodyRecipe.createdBy).to.equal(1)
         expect(bodyRecipe.forkedCount).to.equal(0)
-        expect(bodyRecipe.tags).to.exist
+        expect(bodyRecipe.tags).to.have.members([])
       })
     })
 
@@ -444,11 +461,8 @@ describe("API Route Recipe: /api/recipe", () => {
         const recipe = await dataSource.manager.findOneByOrFail(Recipe, {
           id: 1,
         })
-
-        await agent2.post("/api/auth/logout")
-
         expect(failedRes.status).to.equal(403)
-        expect(recipe).not.to.be.a("null")
+        expect(recipe).to.exist
       })
     })
   })

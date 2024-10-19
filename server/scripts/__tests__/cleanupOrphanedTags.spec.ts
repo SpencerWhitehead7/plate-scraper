@@ -18,9 +18,10 @@ describe("CleanupOrphanedTags", () => {
       [
         factoryTag({ name: "tone", recipes: [recipe] }),
         factoryTag({ name: "ttwo" }),
-      ].map((row) => dataSource.manager.save(row)),
+      ].map((r) => dataSource.manager.save(r)),
     )
   })
+
   afterEach(syncDB)
 
   it("deletes all tags with no associations", async () => {
@@ -29,6 +30,8 @@ describe("CleanupOrphanedTags", () => {
     const after = await dataSource.manager.find(Tag)
 
     expect(before.length).to.equal(2)
+    expect(before.map((t) => t.name)).to.have.members(["tone", "ttwo"])
     expect(after.length).to.equal(1)
+    expect(after.map((t) => t.name)).to.have.members(["tone"])
   })
 })

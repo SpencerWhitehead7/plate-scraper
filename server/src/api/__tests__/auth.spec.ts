@@ -1,20 +1,15 @@
 import { expect } from "chai"
 import request from "supertest"
 
-import {
-  app,
-  dataSource,
-  factoryRecipe,
-  factoryTag,
-  syncDB,
-  userCred,
-} from "../../../mochaSetup"
+import { app, dataSource, syncDB, userCred } from "../../../mochaSetup"
 import { User } from "../../db/entities"
 import { Session } from "../../logic/auth"
 
-describe("Auth Route: /api/auth", () => {
+describe("API Route Auth: /api/auth", () => {
   const route = "/api/auth"
+
   let agent: request.SuperAgentTest
+
   const getUserWithAuth = async () =>
     await dataSource.manager
       .createQueryBuilder()
@@ -33,6 +28,7 @@ describe("Auth Route: /api/auth", () => {
       console.log(err)
     }
   })
+
   afterEach(async () => {
     try {
       await agent.post(`${route}/logout`)
@@ -94,7 +90,6 @@ describe("Auth Route: /api/auth", () => {
           password: userCred.password,
         })
         const bodyUser = res.body as User
-
         const editedUser = await getUserWithAuth()
         expect(editedUser?.email).not.to.equal(oldUser?.email)
         expect(editedUser?.userName).not.to.equal(oldUser?.userName)
@@ -114,7 +109,6 @@ describe("Auth Route: /api/auth", () => {
           password: userCred.password,
         })
         const bodyUser = res.body as User
-
         const editedUser = await getUserWithAuth()
         expect(editedUser?.email).not.to.equal(oldUser?.email)
         expect(editedUser?.userName).to.equal(oldUser?.userName)
@@ -135,9 +129,12 @@ describe("Auth Route: /api/auth", () => {
         expect(res.status).to.equal(401)
       })
       it("returns a 401 if the user is not logged in", async () => {
+        const newEmail = "new@example.com"
         const res = await request(app)
           .put(route)
-          .send({ newEmail: "new@example.com", password: "pw" })
+          .send({ newEmail, password: "pw" })
+        const user = await dataSource.manager.findOneByOrFail(User, { id: 1 })
+        expect(user.email).not.to.equal(newEmail)
         expect(res.status).to.equal(401)
       })
     })
@@ -174,9 +171,6 @@ describe("Auth Route: /api/auth", () => {
   describe("/login", () => {
     describe("POST", () => {
       it("logs the user in if they provide correct credentials and returns the user", async () => {
-        const user = await dataSource.manager.findOneBy(User, { id: 1 })
-        const recipe = await dataSource.manager.save(factoryRecipe({ user }))
-        await dataSource.manager.save(factoryTag({ recipes: [recipe] }))
         await agent.post(`${route}/logout`)
 
         const res = await agent.post(`${route}/login`).send(userCred)

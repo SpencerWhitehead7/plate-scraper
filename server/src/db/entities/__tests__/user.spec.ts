@@ -12,6 +12,7 @@ import { User } from "../user"
 
 describe("User Entity", () => {
   beforeEach(syncDB)
+
   afterEach(syncDB)
 
   it("entity and fields exist", async () => {
@@ -24,28 +25,30 @@ describe("User Entity", () => {
 
   describe("Fields validate data", () => {
     it("email rejects duplicates", async () => {
-      await dataSource.manager.save(factoryUser())
-      return expect(dataSource.manager.save(factoryUser())).to.be.rejected
+      await dataSource.manager.save(factoryUser({ username: "abc" }))
+      await expect(dataSource.manager.save(factoryUser({ username: "def" }))).to
+        .be.rejected
     })
-    it("email rejects non-email strings", () => {
-      const user = factoryUser({ email: "email" })
-      return expect(dataSource.manager.save(user)).to.be.rejected
+    it("email rejects non-email strings", async () => {
+      const u = factoryUser({ email: "email" })
+      await expect(dataSource.manager.save(u)).to.be.rejected
     })
     it("userName rejects duplicates", async () => {
-      await dataSource.manager.save(factoryUser())
-      return expect(dataSource.manager.save(factoryUser())).to.be.rejected
+      await dataSource.manager.save(factoryUser({ email: "a@b.com" }))
+      await expect(dataSource.manager.save(factoryUser({ email: "c@d.com" })))
+        .to.be.rejected
     })
-    it("userName rejects empty strings", () => {
-      const user = factoryUser({ userName: "" })
-      return expect(dataSource.manager.save(user)).to.be.rejected
+    it("userName rejects empty strings", async () => {
+      const u = factoryUser({ userName: "" })
+      await expect(dataSource.manager.save(u)).to.be.rejected
     })
-    it("userName rejects strings with non-alphanumeric characters", () => {
-      const user = factoryUser({ userName: "userName!" })
-      return expect(dataSource.manager.save(user)).to.be.rejected
+    it("userName rejects strings with non-alphanumeric characters", async () => {
+      const u = factoryUser({ userName: "userName!" })
+      await expect(dataSource.manager.save(u)).to.be.rejected
     })
     it("rejects passwords >64 chars", async () => {
-      const user = factoryUser({ password: new Array(65).fill("a").join("") })
-      return expect(dataSource.manager.save(user)).to.be.rejected
+      const u = factoryUser({ password: new Array(65).fill("a").join("") })
+      await expect(dataSource.manager.save(u)).to.be.rejected
     })
     it("password is hidden from selects", async () => {
       await dataSource.manager.save(factoryUser())
@@ -62,7 +65,7 @@ describe("User Entity", () => {
         [
           factoryUser({ ...userCred, password: samePassword }),
           factoryUser({ ...user2Cred, password: samePassword }),
-        ].map((row) => dataSource.manager.save(row)),
+        ].map((r) => dataSource.manager.save(r)),
       )
 
       expect(user1.password).not.to.equal(samePassword)
@@ -85,14 +88,14 @@ describe("User Entity", () => {
       const getAllRecipes = async () => await dataSource.manager.find(Recipe)
 
       const [user, otherUser] = await Promise.all(
-        [factoryUser(userCred), factoryUser(user2Cred)].map((row) =>
-          dataSource.manager.save(row),
+        [factoryUser(userCred), factoryUser(user2Cred)].map((r) =>
+          dataSource.manager.save(r),
         ),
       )
 
       const [userRecipe] = await Promise.all(
-        [factoryRecipe({ user }), factoryRecipe({ user: otherUser })].map(
-          (row) => dataSource.manager.save(row),
+        [factoryRecipe({ user }), factoryRecipe({ user: otherUser })].map((r) =>
+          dataSource.manager.save(r),
         ),
       )
 

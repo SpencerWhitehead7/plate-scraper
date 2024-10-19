@@ -3,6 +3,7 @@ import { Tag } from "../tag"
 
 describe("Tag Entity", () => {
   beforeEach(syncDB)
+
   afterEach(syncDB)
 
   it("entity and fields exist", async () => {
@@ -24,19 +25,19 @@ describe("Tag Entity", () => {
           .execute()
 
       await insert()
-      return expect(insert()).to.be.rejected
+      await expect(insert()).to.be.rejected
     })
-    it("name rejects empty strings", () => {
-      const tag = factoryTag({ name: "" })
-      return expect(dataSource.manager.save(tag)).to.be.rejected
+    it("name rejects empty strings", async () => {
+      const t = factoryTag({ name: "" })
+      await expect(dataSource.manager.save(t)).to.be.rejected
     })
-    it("name rejects strings with non-alpha characters", () => {
-      const tag = factoryTag({ name: "a2c" })
-      return expect(dataSource.manager.save(tag)).to.be.rejected
+    it("name rejects strings with non-alpha characters", async () => {
+      const t = factoryTag({ name: "a2c" })
+      await expect(dataSource.manager.save(t)).to.be.rejected
     })
-    it("name rejects strings with non-lowercase characters", () => {
-      const tag = factoryTag({ name: "aBc" })
-      return expect(dataSource.manager.save(tag)).to.be.rejected
+    it("name rejects strings with non-lowercase characters", async () => {
+      const t = factoryTag({ name: "aBc" })
+      await expect(dataSource.manager.save(t)).to.be.rejected
     })
   })
 })
