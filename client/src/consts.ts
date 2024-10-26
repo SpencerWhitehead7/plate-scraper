@@ -19,6 +19,21 @@ export const SUPPORTED_SITES = [
   "yummly.com",
 ]
 
+const SUPPORTED_SITES_FOR_DISPLAY_COLUMN_COUNT = 3
+const SUPPORTED_SITES_FOR_DISPLAY_ROW_COUNT = Math.ceil(
+  SUPPORTED_SITES.length / SUPPORTED_SITES_FOR_DISPLAY_COLUMN_COUNT,
+)
+
+export const SUPPORTED_SITES_FOR_DISPLAY = SUPPORTED_SITES.reduce<string[][]>(
+  (rows, site, i) => {
+    rows[i % rows.length].push(site)
+    return rows
+  },
+  new Array(SUPPORTED_SITES_FOR_DISPLAY_ROW_COUNT)
+    .fill(undefined)
+    .map(() => []),
+)
+
 export const URL = {
   base: () =>
     ({
