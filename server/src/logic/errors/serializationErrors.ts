@@ -85,7 +85,7 @@ export const serializers = {
       serializationErrorMiddleware,
     ],
     delete: [bodyPassword, serializationErrorMiddleware],
-    login: {
+    session: {
       post: [bodyEmail, bodyPassword, serializationErrorMiddleware],
     },
   },

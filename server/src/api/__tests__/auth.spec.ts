@@ -31,7 +31,7 @@ describe("API Route Auth: /api/auth", () => {
 
   afterEach(async () => {
     try {
-      await agent.post(`${route}/logout`)
+      await agent.delete(`${route}/session`)
       await syncDB()
     } catch (err) {
       console.log(err)
@@ -168,48 +168,46 @@ describe("API Route Auth: /api/auth", () => {
     })
   })
 
-  describe("/login", () => {
+  describe("/session", () => {
     describe("POST", () => {
       it("logs the user in if they provide correct credentials and returns the user", async () => {
-        await agent.post(`${route}/logout`)
+        await agent.delete(`${route}/session`)
 
-        const res = await agent.post(`${route}/login`).send(userCred)
+        const res = await agent.post(`${route}/session`).send(userCred)
         const bodyUser = res.body as User
         expect(res.status).to.equal(200)
         expect(bodyUser.id).to.equal(1)
       })
       it("returns a 401 if the user provides incorrect credentials", async () => {
-        await agent.post(`${route}/logout`)
+        await agent.delete(`${route}/session`)
         const res = await agent
-          .post(`${route}/login`)
+          .post(`${route}/session`)
           .send({ ...userCred, password: "wrongpw" })
         expect(res.status).to.equal(401)
       })
       it("returns a 409 if the user is already logged in", async () => {
-        const res = await agent.post(`${route}/login`).send(userCred)
+        const res = await agent.post(`${route}/session`).send(userCred)
         expect(res.status).to.equal(409)
       })
     })
-  })
 
-  describe("/logout", () => {
-    describe("POST", () => {
+    describe("DELETE", () => {
       it("logs the user out if the user is logged in", async () => {
-        const res = await agent.post(`${route}/logout`)
+        const res = await agent.delete(`${route}/session`)
         const loggedInUser = await agent.get(route)
         expect(res.status).to.equal(204)
         expect(loggedInUser.body).to.be.null
       })
       it("destroy's the user's session if the user is logged in", async () => {
         const oneLoggedInSession = await dataSource.manager.find(Session)
-        await agent.post(`${route}/logout`)
+        await agent.delete(`${route}/session`)
         const noLoggedInSessions = await dataSource.manager.find(Session)
 
         expect(oneLoggedInSession).to.have.lengthOf(1)
         expect(noLoggedInSessions).to.have.lengthOf(0)
       })
       it("returns a 401 if the user is not logged in", async () => {
-        const res = await request(app).post(`${route}/logout`)
+        const res = await request(app).delete(`${route}/session`)
         expect(res.status).to.equal(401)
       })
     })

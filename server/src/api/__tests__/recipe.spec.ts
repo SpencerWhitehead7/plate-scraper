@@ -32,7 +32,7 @@ describe("API Route Recipe: /api/recipe", () => {
 
   afterEach(async () => {
     try {
-      await agent.post("/api/auth/logout")
+      await agent.delete("/api/auth/session")
       await syncDB()
     } catch (err) {
       console.log(err)
@@ -223,7 +223,7 @@ describe("API Route Recipe: /api/recipe", () => {
       })
 
       afterEach(async () => {
-        await agent2.post("/api/auth/logout")
+        await agent2.delete("/api/auth/session")
       })
 
       it("makes a copy of the recipe and saves it to the user's account", async () => {

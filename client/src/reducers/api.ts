@@ -12,7 +12,7 @@ export const api = createApi({
     // AUTH START
     getMe: builder.query<AC.GetMeRes, AC.GetMeReq>({
       query: () => "/auth",
-      providesTags: (r, e, args) => (e ? [] : [{ type: "auth", id: "me" }]),
+      providesTags: (r, e, args) => (e ? [] : [{ type: "auth" }]),
     }),
 
     signup: builder.mutation<AC.SignUpRes, AC.SignUpReq>({
@@ -22,7 +22,7 @@ export const api = createApi({
         body,
       }),
       invalidatesTags: (r, e, args) =>
-        e ? [] : [{ type: "auth", id: "me" }, { type: "usersAll" }],
+        e ? [] : [{ type: "auth" }, { type: "usersAll" }],
     }),
 
     editMe: builder.mutation<AC.EditMeRes, AC.EditMeReq & { userId: number }>({
@@ -35,7 +35,7 @@ export const api = createApi({
         e
           ? []
           : [
-              { type: "auth", id: "me" },
+              { type: "auth" },
               { type: "user", id: args.userId },
               { type: "usersAll" },
             ],
@@ -54,7 +54,7 @@ export const api = createApi({
         e
           ? []
           : [
-              { type: "auth", id: "me" },
+              { type: "auth" },
               { type: "user", id: args.userId },
               { type: "usersAll" },
             ],
@@ -62,19 +62,19 @@ export const api = createApi({
 
     login: builder.mutation<AC.LoginRes, AC.LoginReq>({
       query: (body) => ({
-        url: "/auth/login",
+        url: "/auth/session",
         method: "POST",
         body,
       }),
-      invalidatesTags: (r, e, args) => (e ? [] : [{ type: "auth", id: "me" }]),
+      invalidatesTags: (r, e, args) => (e ? [] : [{ type: "auth" }]),
     }),
 
     logout: builder.mutation<AC.LogoutRes, AC.LogoutReq>({
       query: () => ({
-        url: "/auth/logout",
-        method: "POST",
+        url: "/auth/session",
+        method: "DELETE",
       }),
-      invalidatesTags: (r, e, args) => (e ? [] : [{ type: "auth", id: "me" }]),
+      invalidatesTags: (r, e, args) => (e ? [] : [{ type: "auth" }]),
     }),
     // AUTH END
 

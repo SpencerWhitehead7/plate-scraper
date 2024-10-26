@@ -118,11 +118,11 @@ authRouter.delete(
   },
 )
 
-// POST /api/auth/login/
+// POST /api/auth/session
 authRouter.post(
-  "/login",
+  "/session",
   isNotAlreadyAuthenticated,
-  ...serializers.auth.login.post,
+  ...serializers.auth.session.post,
   async (req, res, next) => {
     try {
       const { email, password } = req.body as LoginReq
@@ -141,8 +141,8 @@ authRouter.post(
   },
 )
 
-// POST /api/auth/logout
-authRouter.post("/logout", isAuthenticated, (req, res, next) => {
+// DELETE /api/auth/session
+authRouter.delete("/session", isAuthenticated, (req, res, next) => {
   req.logout((err) => {
     if (err) {
       next(err)
