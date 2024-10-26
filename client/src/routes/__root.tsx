@@ -2,8 +2,8 @@ import { createRootRoute, Outlet } from "@tanstack/react-router"
 import React from "react"
 
 import { Modal } from "@/comps/Modal"
-import { Navbar } from "@/feats/Navbar"
-import { PageFailure } from "@/feats/PageFailure"
+import { Navbar } from "@/comps/Navbar"
+import { PageFailure } from "@/comps/PageFailure"
 
 import s from "./__root.module.scss"
 
