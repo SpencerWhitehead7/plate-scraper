@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router"
 import React from "react"
 
-import { LoadingIndicator } from "@/comps/LoadingIndicator"
+import { useQueryMe } from "@/api"
 import { openAuthModal as openAuthModalAction } from "@/comps/Modal"
 import { URL } from "@/consts"
-import { useAppDispatch, useGetMeQuery } from "@/reducers"
+import { useAppDispatch } from "@/reducers"
 import skele from "@/skeleton.module.css"
 
 // @ts-expect-error-static-asset
@@ -12,7 +12,7 @@ import logoSvg from "../../../../public/logo.svg"
 import s from "./Navbar.module.scss"
 
 export const Navbar: React.FC = () => {
-  const { isLoading: isLoadingMe, data: dataMe } = useGetMeQuery()
+  const { data: dataMe } = useQueryMe()
 
   const dispatch = useAppDispatch()
   const openAuthModal = () => {
@@ -52,9 +52,7 @@ export const Navbar: React.FC = () => {
       >
         Users
       </Link>
-      {isLoadingMe ? (
-        <LoadingIndicator /> // TODO: apply size
-      ) : dataMe ? (
+      {dataMe ? (
         <Link
           {...URL.user(dataMe.id)}
           className={s.navbar__link}

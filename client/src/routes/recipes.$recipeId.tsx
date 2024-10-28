@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { useParams } from "@tanstack/react-router"
 import React, { useState } from "react"
 
+import { useQueryMe, useQueryRecipe } from "@/api"
 import { ButtonSection, DownloadButton, ForkButton } from "@/comps/Buttons"
 import { Card, CardTitle } from "@/comps/Card"
 import { RecipeForm } from "@/comps/Form"
@@ -9,22 +10,23 @@ import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { PageFailure } from "@/comps/PageFailure"
 import { Tags } from "@/comps/Tags"
 import { PATH } from "@/consts"
-import { useGetMeQuery, useGetRecipeQuery } from "@/reducers"
 import sg from "@/styles/index.module.scss"
 
 export const Recipe: React.FC = () => {
   const { recipeId } = useParams({ from: PATH.recipe })
-  const { isFetching: isFetchingRecipe, data: dataRecipe } = useGetRecipeQuery({
-    recipeId: Number(recipeId),
-  })
-  const { data: dataMe } = useGetMeQuery()
+  const {
+    isPending: isPendingRecipe,
+    isSuccess: isSuccessRecipe,
+    data: dataRecipe,
+  } = useQueryRecipe(Number(recipeId))
+  const { data: dataMe } = useQueryMe()
   const isMine = dataRecipe && dataMe && dataRecipe.userId === dataMe.id
 
-  const [editMode, setEditMode] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
 
-  return isFetchingRecipe ? (
+  return isPendingRecipe ? (
     <LoadingIndicator />
-  ) : dataRecipe ? (
+  ) : isSuccessRecipe ? (
     <Card>
       <CardTitle>{dataRecipe.title}</CardTitle>
       <ButtonSection>
@@ -32,19 +34,19 @@ export const Recipe: React.FC = () => {
           <button
             type="button"
             onClick={() => {
-              setEditMode(!editMode)
+              setIsEditMode(!isEditMode)
             }}
           >
-            {editMode ? "Cancel" : "Edit"}
+            {isEditMode ? "Cancel" : "Edit"}
           </button>
         )}
-        {!editMode && (
+        {!isEditMode && (
           <DownloadButton text={dataRecipe.text} title={dataRecipe.title} />
         )}
-        <ForkButton recipeId={dataRecipe.id} userId={dataRecipe.userId} />
+        <ForkButton recipeId={dataRecipe.id} />
       </ButtonSection>
-      {editMode ? (
-        <RecipeForm recipe={dataRecipe} setEditMode={setEditMode} />
+      {isEditMode ? (
+        <RecipeForm recipe={dataRecipe} setEditMode={setIsEditMode} />
       ) : (
         <>
           <Tags tags={dataRecipe.tags} />

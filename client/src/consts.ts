@@ -1,3 +1,5 @@
+import { stringify as qsStringify } from "qs-esm"
+
 export const SUPPORTED_SITES = [
   "allrecipes.com",
   "bettycrocker.com",
@@ -35,34 +37,43 @@ export const SUPPORTED_SITES_FOR_DISPLAY = SUPPORTED_SITES.reduce<string[][]>(
 )
 
 export const URL = {
-  base: () =>
-    ({
-      to: "/",
-    }) as const,
-  usersAll: () =>
-    ({
-      to: "/users",
-    }) as const,
-  user: (userId: number) =>
-    ({
-      to: "/users/$userId",
-      params: { userId: String(userId) },
-    }) as const,
+  base: () => ({
+    to: "/",
+  }),
+  usersAll: () => ({
+    to: "/users",
+  }),
+  user: (userId: number) => ({
+    to: "/users/$userId",
+    params: { userId: String(userId) },
+  }),
   recipesAll: (tags: string[] = []) => ({
-    to: "/recipes" as const,
+    to: "/recipes",
     search: tags.length ? { tags } : {},
   }),
-  recipe: (recipeId: number) =>
-    ({
-      to: "/recipes/$recipeId",
-      params: { recipeId: String(recipeId) },
-    }) as const,
+  recipe: (recipeId: number) => ({
+    to: "/recipes/$recipeId",
+    params: { recipeId: String(recipeId) },
+  }),
 } as const
 
 export const PATH = {
-  base: "/" as const,
-  usersAll: "/users/" as const,
-  user: "/users/$userId" as const,
-  recipesAll: "/recipes/" as const,
-  recipe: "/recipes/$recipeId" as const,
+  base: "/",
+  usersAll: "/users/",
+  user: "/users/$userId",
+  recipesAll: "/recipes/",
+  recipe: "/recipes/$recipeId",
 } as const
+
+export const API = {
+  auth: () => "/api/auth",
+  session: () => "/api/auth/session",
+  recipe: (recipeId?: number) =>
+    recipeId === undefined ? "/api/recipe" : `/api/recipe/${recipeId}`,
+  recipesByTags: (tags?: string[]) =>
+    tags === undefined ? "/api/recipe" : `/api/recipe?${qsStringify(tags)}`,
+  recipeFork: (recipeId: number) => `/api/recipe/fork/${recipeId}`,
+  scrape: () => "/api/scrape",
+  user: (userId?: number) =>
+    userId === undefined ? "/api/user" : `/api/user/${userId}`,
+}

@@ -1,10 +1,10 @@
 import { Router } from "express"
 
 import {
-  DeleteMeReq,
-  EditMeReq,
-  LoginReq,
-  SignUpReq,
+  CreateMeBody,
+  DeleteMeBody,
+  LoginBody,
+  UpdateMeBody,
 } from "../@types/apiContract"
 import { userRepository } from "../db/repositories"
 import { isAuthenticated, isNotAlreadyAuthenticated } from "../logic/auth"
@@ -31,7 +31,7 @@ authRouter.post(
   ...serializers.auth.post,
   async (req, res, next) => {
     try {
-      const { email, userName, password } = req.body as SignUpReq
+      const { email, userName, password } = req.body as CreateMeBody
       const user = await userRepository.insert({
         email,
         userName,
@@ -55,7 +55,7 @@ authRouter.put(
   async (req, res, next) => {
     try {
       const { newEmail, newUserName, newPassword, password } =
-        req.body as EditMeReq
+        req.body as UpdateMeBody
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const authUser = await userRepository.getByIdWithAuth(req.user!.id)
       if (!authUser || !(await authUser.checkPassword(password)))
@@ -88,7 +88,7 @@ authRouter.delete(
   ...serializers.auth.delete,
   async (req, res, next) => {
     try {
-      const { password } = req.body as DeleteMeReq
+      const { password } = req.body as DeleteMeBody
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const authUser = await userRepository.getByIdWithAuth(req.user!.id)
       if (!authUser || !(await authUser.checkPassword(password)))
@@ -125,7 +125,7 @@ authRouter.post(
   ...serializers.auth.session.post,
   async (req, res, next) => {
     try {
-      const { email, password } = req.body as LoginReq
+      const { email, password } = req.body as LoginBody
       const authUser = await userRepository.getByEmailWithAuth(email)
       if (!authUser || !(await authUser.checkPassword(password)))
         throw incorrectCredsErr

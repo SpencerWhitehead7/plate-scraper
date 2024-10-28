@@ -3,15 +3,11 @@ import { setupListeners } from "@reduxjs/toolkit/query/react"
 
 import { modalReducer } from "@/comps/Modal"
 
-import { api } from "./api"
-
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,
     modalReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 })
 
 setupListeners(store.dispatch)

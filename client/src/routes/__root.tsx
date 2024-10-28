@@ -1,6 +1,9 @@
+import { QueryClientProvider } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { createRootRoute, Outlet } from "@tanstack/react-router"
 import React from "react"
 
+import { queryClient } from "@/api"
 import { Modal } from "@/comps/Modal"
 import { Navbar } from "@/comps/Navbar"
 import { PageFailure } from "@/comps/PageFailure"
@@ -18,7 +21,7 @@ const TanStackRouterDevtools =
       )
 
 const RootComponent = () => (
-  <>
+  <QueryClientProvider client={queryClient}>
     <Navbar />
     <main className={s.main}>
       <div className={s.content}>
@@ -26,8 +29,9 @@ const RootComponent = () => (
       </div>
     </main>
     <Modal />
+    <ReactQueryDevtools />
     <TanStackRouterDevtools />
-  </>
+  </QueryClientProvider>
 )
 
 export const Route = createRootRoute({

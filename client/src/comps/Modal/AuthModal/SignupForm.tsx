@@ -1,9 +1,10 @@
 import React from "react"
 import { useForm } from "react-hook-form"
 
+import { useMutationCreateMe } from "@/api"
 import { CardTitle } from "@/comps/Card"
 import { FormInput, FormSubmit } from "@/comps/Form"
-import { useAppDispatch, useSignupMutation } from "@/reducers"
+import { useAppDispatch } from "@/reducers"
 
 import { closeModal } from "../modalReducer"
 
@@ -14,7 +15,7 @@ type Props = {
 export const SignupForm: React.FC<Props> = ({ className = "" }) => {
   const dispatch = useAppDispatch()
 
-  const [triggerSignup] = useSignupMutation()
+  const { mutate: triggerCreateMe } = useMutationCreateMe()
 
   const { formState, handleSubmit, register, watch } = useForm({
     mode: "onChange",
@@ -26,13 +27,15 @@ export const SignupForm: React.FC<Props> = ({ className = "" }) => {
   })
 
   const onSubmit = handleSubmit(
-    async ({ signupEmail, signupUserName, signupPassword }) => {
-      await triggerSignup({
-        email: signupEmail,
-        userName: signupUserName,
-        password: signupPassword,
-      })
-      dispatch(closeModal())
+    ({ signupEmail, signupUserName, signupPassword }) => {
+      triggerCreateMe(
+        {
+          email: signupEmail,
+          userName: signupUserName,
+          password: signupPassword,
+        },
+        { onSuccess: () => void dispatch(closeModal()) },
+      )
     },
   )
 

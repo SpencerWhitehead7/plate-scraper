@@ -1,10 +1,4 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
-type ApiTag = {
-  name: string
-  createdAt: Date
-}
-
-type ApiUser = {
+export type ApiUser = {
   id: number
   email: string
   userName: string
@@ -13,7 +7,7 @@ type ApiUser = {
   version: number
 }
 
-type ApiRecipe = {
+export type ApiRecipe = {
   id: number
   text: string
   title: string
@@ -28,99 +22,52 @@ type ApiRecipe = {
   tags: ApiTag[]
 }
 
-type ApiUserWithRecipes = ApiUser & {
+export type ApiTag = {
+  name: string
+  createdAt: Date
+}
+
+export type ApiUserWithRecipes = ApiUser & {
   recipes: ApiRecipe[]
 }
 
-// AUTH START
-export type GetMeReq = void
-export type GetMeRes = ApiUser | null
-
-export type SignUpReq = {
+export type CreateMeBody = {
   email: string
   userName: string
   password: string
 }
-export type SignUpRes = ApiUser | null
 
-export type EditMeReq = {
+export type UpdateMeBody = {
   password: string
-  newEmail?: string
-  newUserName?: string
-  newPassword?: string
-}
-export type EditMeRes = ApiUser | null
+} & (
+  | { newEmail: string; newUserName?: string; newPassword?: string }
+  | { newEmail?: string; newUserName: string; newPassword?: string }
+  | { newEmail?: string; newUserName?: string; newPassword: string }
+)
 
-export type DeleteMeReq = {
+export type DeleteMeBody = {
   password: string
 }
-export type DeleteMeRes = void
 
-export type LoginReq = {
+export type LoginBody = {
   email: string
   password: string
 }
-export type LoginRes = ApiUser | null
 
-export type LogoutReq = void
-export type LogoutRes = void
-// AUTH END
-
-// RECIPE START
-export type CreateRecipeReq = {
+export type CreateRecipeBody = {
   text: string
   title: string
   sourceSite: string
   sourceUrl: string
   tags: string[]
 }
-export type CreateRecipeRes = ApiRecipe
 
-export type GetRecipeReq = {
-  recipeId: number
-}
-export type GetRecipeRes = ApiRecipe
-
-export type GetRecipesByTagReq = {
-  tags: string[]
-}
-export type GetRecipesByTagRes = ApiRecipe[]
-
-// export type GetRecipesAllReq = void
-// export type GetRecipesAllRes = ApiRecipe[]
-
-export type ForkRecipeReq = {
-  recipeId: number
-}
-export type ForkRecipeRes = ApiRecipe
-
-export type EditRecipeReq = {
-  recipeId: number
+export type UpdateRecipeBody = {
   text?: string
   title?: string
   tags?: string[]
 }
-export type EditRecipeRes = ApiRecipe
 
-export type DeleteRecipeReq = {
-  recipeId: number
-}
-export type DeleteRecipeRes = void
-// RECIPE END
-
-// SCRAPE START
-export type ScrapeReq = {
+export type ScrapeBody = {
   url: string
 }
-export type ScrapeRes = ApiRecipe | null
-// SCRAPE END
-
-// USER START
-export type GetUsersAllReq = void
-export type GetUsersAllRes = ApiUser[]
-
-export type GetUserReq = {
-  userId: string
-}
-export type GetUserRes = ApiUserWithRecipes | null
-// USER END

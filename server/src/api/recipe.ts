@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from "express"
 
-import { CreateRecipeReq, EditRecipeReq } from "../@types/apiContract"
+import { CreateRecipeBody, UpdateRecipeBody } from "../@types/apiContract"
 import { Recipe, User } from "../db/entities"
 import { recipeRepository } from "../db/repositories"
 import { isAuthenticated } from "../logic/auth"
@@ -53,7 +53,7 @@ recipeRouter.post(
   async (req, res, next) => {
     try {
       const { text, title, sourceSite, sourceUrl, tags } =
-        req.body as CreateRecipeReq
+        req.body as CreateRecipeBody
       const recipe = await recipeRepository.insert({
         text,
         title,
@@ -115,7 +115,7 @@ recipeRouter.put(
   ...canAlterRecipe,
   async (req, res, next) => {
     try {
-      const { text, title, tags } = req.body as EditRecipeReq
+      const { text, title, tags } = req.body as UpdateRecipeBody
       const updatedRecipeData: {
         text?: string
         title?: string

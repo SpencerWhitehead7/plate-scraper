@@ -6,7 +6,8 @@
     "plugin:prettier/recommended",
     "plugin:react/recommended", //
     "plugin:react-hooks/recommended", //
-    "plugin:@tanstack/eslint-plugin-router/recommended"
+    "plugin:@tanstack/eslint-plugin-router/recommended",
+    "plugin:@tanstack/query/recommended"
   ],
   "plugins": ["simple-import-sort"],
   "parser": "@typescript-eslint/parser",

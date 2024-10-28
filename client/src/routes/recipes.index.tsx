@@ -3,24 +3,20 @@ import { useNavigate, useSearch } from "@tanstack/react-router"
 import React, { useEffect } from "react"
 import { useForm } from "react-hook-form"
 
+import { useQueryRecipesAll } from "@/api"
 import { Card, CardTitle } from "@/comps/Card"
 import { FormInputButtonBar, FormSubmit } from "@/comps/Form"
 import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { RecipeRows } from "@/comps/RecipeRows"
 import { PATH, URL } from "@/consts"
-import { useLazyGetRecipesByTagQuery } from "@/reducers"
 
 export const RecipesAll: React.FC = () => {
   const navigate = useNavigate()
 
   const { tags } = useSearch({ from: PATH.recipesAll })
 
-  const [getRecipeByTagTrigger, getRecipeByTagState] =
-    useLazyGetRecipesByTagQuery()
-  const {
-    isLoading: isLoadingGetRecipesByTagState,
-    data: dataGetRecipesByTagState,
-  } = getRecipeByTagState
+  const { isPending: isPendingRecipesAll, data: dataRecipesAll } =
+    useQueryRecipesAll(tags?.length ? tags : undefined)
 
   const { formState, handleSubmit, register, setValue } = useForm({
     mode: "onChange",
@@ -32,9 +28,8 @@ export const RecipesAll: React.FC = () => {
   useEffect(() => {
     if (tags?.length) {
       setValue("searchTerms", tags.join(" "))
-      void getRecipeByTagTrigger({ tags })
     }
-  }, [tags, setValue, getRecipeByTagTrigger])
+  }, [tags, setValue])
 
   const onSubmit = handleSubmit(({ searchTerms }) => {
     const trimmedSearchTerms = searchTerms.trim()
@@ -65,13 +60,13 @@ export const RecipesAll: React.FC = () => {
           placeholder="fish entre cod"
         />
       </form>
-      {isLoadingGetRecipesByTagState ? (
+      {isPendingRecipesAll ? (
         <LoadingIndicator />
       ) : (
-        dataGetRecipesByTagState && (
+        dataRecipesAll && (
           <>
-            <p>{`${dataGetRecipesByTagState.length} recipes with these tags`}</p>
-            <RecipeRows recipes={dataGetRecipesByTagState} />
+            <p>{`${dataRecipesAll.length} recipes with these tags`}</p>
+            <RecipeRows recipes={dataRecipesAll} />
           </>
         )
       )}
