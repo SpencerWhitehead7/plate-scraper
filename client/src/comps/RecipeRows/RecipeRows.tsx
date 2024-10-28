@@ -49,7 +49,7 @@ const RecipeRow: React.FC<ApiRecipe> = ({
 
     <ButtonSection>
       <DownloadButton text={text} title={title} />
-      <ForkButton recipeId={id} userId={userId} />
+      <ForkButton recipeId={id} />
     </ButtonSection>
   </div>
 )

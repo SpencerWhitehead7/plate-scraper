@@ -3,17 +3,16 @@ import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 
 import { ApiRecipe } from "@/@types/apiContract"
+import {
+  useMutationCreateRecipe,
+  useMutationDeleteRecipe,
+  useMutationUpdateRecipe,
+  useQueryIsAuthed,
+} from "@/api"
 import { openAuthModal as openAuthModalAction } from "@/comps/Modal"
 import { URL } from "@/consts"
 import { downloadRecipe } from "@/helpers"
-import {
-  useAppDispatch,
-  useCreateRecipeMutation,
-  useDeleteRecipeMutation,
-  useEditRecipeMutation,
-  useGetMeQuery,
-  useSelectIsAuthed,
-} from "@/reducers"
+import { useAppDispatch } from "@/reducers"
 import skele from "@/skeleton.module.css"
 
 import s from "./Form.module.scss"
@@ -30,17 +29,16 @@ type Props = {
 export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
   const navigate = useNavigate()
 
-  const { data: dataMe } = useGetMeQuery()
-  const isAuthed = useSelectIsAuthed()
+  const isAuthed = useQueryIsAuthed()
 
   const dispatch = useAppDispatch()
   const openAuthModal = () => {
     dispatch(openAuthModalAction())
   }
 
-  const [triggerCreateRecipe] = useCreateRecipeMutation()
-  const [triggerDeleteRecipe] = useDeleteRecipeMutation()
-  const [triggerEditRecipe] = useEditRecipeMutation()
+  const { mutate: triggerCreateRecipe } = useMutationCreateRecipe()
+  const { mutate: triggerDeleteRecipe } = useMutationDeleteRecipe()
+  const { mutate: triggerUpdateRecipe } = useMutationUpdateRecipe()
 
   const { formState, handleSubmit, register, watch } = useForm({
     mode: "onChange",
@@ -53,31 +51,32 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
     (recipe.tags ?? []).map(({ name }) => name),
   )
 
-  const save = handleSubmit(async ({ title, text }) => {
-    if (!dataMe) return
-
+  const save = handleSubmit(({ title, text }) => {
     if (recipe.id) {
       // if the recipe has an ID, it must exist and it's being edited
-      await triggerEditRecipe({
+      triggerUpdateRecipe({
         recipeId: recipe.id,
-
-        userId: dataMe.id,
-        text,
-        title,
-        tags: updatedTags,
+        body: {
+          text,
+          title,
+          tags: updatedTags,
+        },
       })
       setEditMode?.(false)
     } else {
       // otherwise, it must be being scraped/uploaded
-      const newRecipe = await triggerCreateRecipe({
-        userId: dataMe.id,
-        text,
-        title,
-        sourceSite: recipe.sourceSite ?? "",
-        sourceUrl: recipe.sourceUrl ?? "",
-        tags: updatedTags,
-      }).unwrap()
-      void navigate(URL.recipe(newRecipe.id))
+      triggerCreateRecipe(
+        {
+          text,
+          title,
+          sourceSite: recipe.sourceSite ?? "",
+          sourceUrl: recipe.sourceUrl ?? "",
+          tags: updatedTags,
+        },
+        {
+          onSuccess: (newRecipe) => void navigate(URL.recipe(newRecipe.id)),
+        },
+      )
     }
   })
 
@@ -127,14 +126,11 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
         {recipe.id && (
           <button
             type="button"
-            onClick={async () => {
-              await triggerDeleteRecipe({
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                recipeId: recipe.id!,
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                userId: recipe.userId!,
+            onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              triggerDeleteRecipe(recipe.id!, {
+                onSuccess: () => void navigate(URL.recipesAll()),
               })
-              void navigate(URL.recipesAll())
             }}
           >
             Delete

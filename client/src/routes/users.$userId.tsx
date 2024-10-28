@@ -4,6 +4,13 @@ import { useNavigate } from "@tanstack/react-router"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 
+import {
+  useMutationDeleteMe,
+  useMutationLogout,
+  useMutationUpdateMe,
+  useQueryMe,
+  useQueryUser,
+} from "@/api"
 import { ButtonSection } from "@/comps/Buttons"
 import { Card, CardSubtitle, CardTitle } from "@/comps/Card"
 import { FormInput } from "@/comps/Form"
@@ -13,27 +20,26 @@ import { PageFailure } from "@/comps/PageFailure"
 import { RecipeRows } from "@/comps/RecipeRows"
 import { PATH } from "@/consts"
 import { URL } from "@/consts"
-import { useGetMeQuery, useGetUserQuery, useLogoutMutation } from "@/reducers"
-import { useEditMeMutation } from "@/reducers"
-import { useDeleteMeMutation } from "@/reducers"
 import skele from "@/skeleton.module.css"
 
 export const User: React.FC = () => {
   const { userId } = useParams({ from: PATH.user })
-  const { isLoading: isLoadingUser, data: dataUser } = useGetUserQuery({
-    userId,
-  })
-  const { data: dataMe } = useGetMeQuery()
+  const {
+    isPending: isPendingUser,
+    isSuccess: isSucccessUser,
+    data: dataUser,
+  } = useQueryUser(Number(userId))
+  const { data: dataMe } = useQueryMe()
 
   const userIsMe = dataUser && dataMe && dataUser.id === dataMe.id
 
-  const [triggerLogout] = useLogoutMutation()
+  const { mutate: triggerLogout } = useMutationLogout()
 
   const [section, setSection] = useState("")
 
-  return isLoadingUser ? (
+  return isPendingUser ? (
     <LoadingIndicator />
-  ) : dataUser ? (
+  ) : isSucccessUser ? (
     <>
       <Card>
         <CardTitle>{dataUser.userName}</CardTitle>
@@ -64,7 +70,7 @@ export const User: React.FC = () => {
             <button
               type="button"
               onClick={() => {
-                void triggerLogout()
+                triggerLogout()
               }}
             >
               Log out
@@ -81,9 +87,7 @@ export const User: React.FC = () => {
 }
 
 export const Edit: React.FC = () => {
-  const { data: dataMe } = useGetMeQuery()
-
-  const [triggerEditMe] = useEditMeMutation()
+  const { mutate: triggerUpdateMe } = useMutationUpdateMe()
 
   const { formState, handleSubmit, register, watch, reset } = useForm({
     mode: "onChange",
@@ -96,17 +100,20 @@ export const Edit: React.FC = () => {
   })
 
   const onSubmit = handleSubmit(
-    async ({ newEmail, newUserName, newPassword, password }) => {
-      if (!dataMe) return
-
-      await triggerEditMe({
-        userId: dataMe.id,
-        newEmail,
-        newUserName,
-        newPassword,
-        password,
-      })
-      reset()
+    ({ newEmail, newUserName, newPassword, password }) => {
+      triggerUpdateMe(
+        {
+          newEmail,
+          newUserName,
+          newPassword,
+          password,
+        },
+        {
+          onSuccess: () => {
+            reset()
+          },
+        },
+      )
     },
   )
 
@@ -164,8 +171,7 @@ export const Edit: React.FC = () => {
 
 export const Delete: React.FC = () => {
   const navigate = useNavigate()
-  const { data: dataMe } = useGetMeQuery()
-  const [triggerDeleteMe] = useDeleteMeMutation()
+  const { mutate: triggerDeleteMe } = useMutationDeleteMe()
 
   const { formState, handleSubmit, register } = useForm({
     mode: "onChange",
@@ -174,11 +180,11 @@ export const Delete: React.FC = () => {
     },
   })
 
-  const onSubmit = handleSubmit(async ({ password }) => {
-    if (!dataMe) return
-
-    await triggerDeleteMe({ userId: dataMe.id, password })
-    void navigate(URL.base())
+  const onSubmit = handleSubmit(({ password }) => {
+    triggerDeleteMe(
+      { password },
+      { onSuccess: () => void navigate(URL.base()) },
+    )
   })
 
   return (

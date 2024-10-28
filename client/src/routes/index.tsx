@@ -3,6 +3,7 @@ import classnames from "classnames"
 import React from "react"
 import { useForm } from "react-hook-form"
 
+import { useMutationScrape } from "@/api"
 import { Card, CardTitle } from "@/comps/Card"
 import {
   FormInputButtonBar,
@@ -12,17 +13,17 @@ import {
 } from "@/comps/Form"
 import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { SUPPORTED_SITES, SUPPORTED_SITES_FOR_DISPLAY } from "@/consts"
-import { useScrapeMutation } from "@/reducers"
 import skele from "@/skeleton.module.css"
 import sg from "@/styles/index.module.scss"
 
 export const Home: React.FC = () => {
-  const [triggerScrape, stateScrape] = useScrapeMutation()
   const {
-    isLoading: isLoadingScrape,
+    mutate: triggerScrape,
+    isPending: isPendingScrape,
+    isError: isErrorScrape,
+    isSuccess: isSuccessScrape,
     data: dataScrape,
-    error: errorScrape,
-  } = stateScrape
+  } = useMutationScrape()
 
   const { formState, handleSubmit, register } = useForm({
     mode: "onBlur",
@@ -31,8 +32,8 @@ export const Home: React.FC = () => {
     },
   })
 
-  const onSubmit = handleSubmit(async (formValues) => {
-    await triggerScrape(formValues)
+  const onSubmit = handleSubmit((formValues) => {
+    triggerScrape(formValues)
   })
 
   return (
@@ -90,13 +91,13 @@ export const Home: React.FC = () => {
         />
       </form>
 
-      {errorScrape ? (
-        <Warning leftPadded={false} customError={"Error scraping recipe"} />
-      ) : isLoadingScrape ? (
+      {isPendingScrape ? (
         <LoadingIndicator />
-      ) : (
-        <RecipeForm recipe={dataScrape ?? {}} />
-      )}
+      ) : isErrorScrape ? (
+        <Warning leftPadded={false} customError={"Error scraping recipe"} />
+      ) : isSuccessScrape ? (
+        <RecipeForm recipe={dataScrape} />
+      ) : null}
     </Card>
   )
 }

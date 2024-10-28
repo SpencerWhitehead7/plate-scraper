@@ -1,3 +1,5 @@
+import { stringify as qsStringify } from "qs-esm"
+
 export const SUPPORTED_SITES = [
   "allrecipes.com",
   "bettycrocker.com",
@@ -66,3 +68,16 @@ export const PATH = {
   recipesAll: "/recipes/" as const,
   recipe: "/recipes/$recipeId" as const,
 } as const
+
+export const API = {
+  auth: () => "/api/auth",
+  session: () => "/api/auth/session",
+  recipe: (recipeId?: number) =>
+    recipeId === undefined ? "/api/recipe" : `/api/recipe/${recipeId}`,
+  recipesByTags: (tags?: string[]) =>
+    tags === undefined ? "/api/recipe" : `/api/recipe?${qsStringify(tags)}`,
+  recipeFork: (recipeId: number) => `/api/recipe/fork/${recipeId}`,
+  scrape: () => "/api/scrape",
+  user: (userId?: number) =>
+    userId === undefined ? "/api/user" : `/api/user/${userId}`,
+}

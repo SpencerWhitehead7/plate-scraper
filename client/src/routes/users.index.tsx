@@ -1,23 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router"
 import React from "react"
 
+import { useQueryUsersAll } from "@/api"
 import { Card, CardTitle } from "@/comps/Card"
 import { LoadingIndicator } from "@/comps/LoadingIndicator"
 import { UserRows } from "@/comps/UserRows"
-import { useGetUsersAllQuery } from "@/reducers/api"
 
 export const UsersAll: React.FC = () => {
-  const { isFetching: isFetchingUsersAll, data: dataUsersAll } =
-    useGetUsersAllQuery()
+  const {
+    isPending: isPendingUsersAll,
+    isSuccess: isSucccessUsersAll,
+    data: dataUsersAll,
+  } = useQueryUsersAll()
 
   return (
     <Card>
       <CardTitle>Users</CardTitle>
-      {isFetchingUsersAll ? (
+      {isPendingUsersAll ? (
         <LoadingIndicator />
-      ) : (
-        dataUsersAll && <UserRows users={dataUsersAll} />
-      )}
+      ) : isSucccessUsersAll ? (
+        <UserRows users={dataUsersAll} />
+      ) : null}
     </Card>
   )
 }
