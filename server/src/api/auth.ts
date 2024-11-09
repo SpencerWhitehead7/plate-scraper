@@ -7,7 +7,7 @@ import {
   UpdateMeBody,
 } from "../@types/apiContract"
 import { userRepository } from "../db/repositories"
-import { isAuthenticated, isNotAlreadyAuthenticated } from "../logic/auth"
+import { isAuthenticated, isNotAuthenticated } from "../logic/auth"
 import { incorrectCredsErr, serializers } from "../logic/errors"
 
 export const authRouter = Router()
@@ -27,7 +27,7 @@ authRouter.get("/", async (req, res, next) => {
 // POST /api/auth
 authRouter.post(
   "/",
-  isNotAlreadyAuthenticated,
+  isNotAuthenticated,
   ...serializers.auth.post,
   async (req, res, next) => {
     try {
@@ -121,7 +121,7 @@ authRouter.delete(
 // POST /api/auth/session
 authRouter.post(
   "/session",
-  isNotAlreadyAuthenticated,
+  isNotAuthenticated,
   ...serializers.auth.session.post,
   async (req, res, next) => {
     try {
