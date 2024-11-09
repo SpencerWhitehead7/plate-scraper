@@ -20,7 +20,7 @@ import {
   yummly,
 } from "plate-scraper-parsers"
 
-import { scrapeFailedErr, siteInvalidErr } from "../errors"
+import { scrapeFailedErr, siteInvalidErr } from "./errors"
 
 export const scrape = async (url: string) => {
   const res = await fetch(url)

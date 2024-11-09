@@ -1,6 +1,6 @@
 import { expect } from "chai"
 
-import { scrape } from "../index"
+import { scrape } from "../scrape"
 
 describe("Scraper", () => {
   it("throws when page cannot be loaded", async () => {
