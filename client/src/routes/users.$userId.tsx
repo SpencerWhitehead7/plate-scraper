@@ -103,10 +103,12 @@ export const Edit: React.FC = () => {
     ({ newEmail, newUserName, newPassword, password }) => {
       triggerUpdateMe(
         {
-          newEmail,
-          newUserName,
-          newPassword,
           password,
+          updatedUserData: {
+            email: newEmail,
+            userName: newUserName,
+            password: newPassword,
+          },
         },
         {
           onSuccess: () => {

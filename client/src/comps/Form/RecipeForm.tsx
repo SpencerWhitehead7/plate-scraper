@@ -65,8 +65,8 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
         {
           text,
           title,
-          sourceSite: recipe.sourceSite ?? "",
-          sourceUrl: recipe.sourceUrl ?? "",
+          sourceSite: recipe.sourceSite,
+          sourceUrl: recipe.sourceUrl,
           tags: updatedTags,
         },
         {

@@ -1,8 +1,9 @@
 import { Router } from "express"
 
+import { userIdGetSchema } from "../@types/apiContract"
 import { userRepository } from "../db/repositories"
 import { notFoundUserErr } from "../logic/errors"
-import { serializers } from "../logic/errors"
+import { validate } from "../logic/serialization"
 
 export const userRouter = Router()
 
@@ -18,9 +19,10 @@ userRouter.get("/", async (req, res, next) => {
 })
 
 // GET /api/user/:id
-userRouter.get("/:id", ...serializers.user.id.get, async (req, res, next) => {
+userRouter.get("/:id", validate(userIdGetSchema), async (req, res, next) => {
   try {
-    const user = await userRepository.getByIdWithRecipes(Number(req.params.id))
+    const userId = req.params.id
+    const user = await userRepository.getByIdWithRecipes(userId)
     if (!user) throw notFoundUserErr
 
     res.json(user)

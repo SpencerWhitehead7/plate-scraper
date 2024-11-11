@@ -1,130 +1,42 @@
 import { RequestHandler } from "express"
-import { body, param, query, validationResult } from "express-validator"
+import { AnyZodObject, z, ZodError, ZodRecord } from "zod"
 
-const serializationErrorMiddleware: RequestHandler = (req, res, next) => {
-  const errs = validationResult(req)
+import { SerializationError } from "./errors"
 
-  if (errs.isEmpty()) {
-    next()
-  } else {
-    if (process.env.NODE_ENV !== "test") console.error(errs.array())
+export const validate = <
+  P extends AnyZodObject,
+  B extends AnyZodObject,
+  Q extends AnyZodObject | ZodRecord,
+>(
+  schema: {
+    params?: P
+    body?: B
+    query?: Q
+  } = {},
+): RequestHandler<z.infer<P>, unknown, z.infer<B>, z.infer<Q>> => {
+  const fullSchema = z.object({
+    params: z.object({}),
+    body: z.object({}),
+    query: z.record(z.string(), z.unknown()),
+    ...schema,
+  })
 
-    res.status(400).json({
-      error: "InvalidInputErr",
-      message: errs.array(),
-    })
+  return async (req, res, next) => {
+    try {
+      const validatedReq = await fullSchema.parseAsync({
+        body: req.body,
+        query: req.query,
+        params: req.params,
+      })
+      // @ts-expect-error typescript HATES it, but it should be valid
+      req.body = validatedReq.body
+      // @ts-expect-error typescript HATES it, but it should be valid
+      req.query = validatedReq.query
+      // @ts-expect-error typescript HATES it, but it should be valid
+      req.params = validatedReq.params
+      next()
+    } catch (err) {
+      next(new SerializationError(err as ZodError))
+    }
   }
-}
-
-const createBodyEmail = () => body("email").trim().isEmail().normalizeEmail()
-const bodyEmail = createBodyEmail()
-const bodyNewEmail = createBodyEmail().optional()
-
-const createBodyUserName = () =>
-  body("userName")
-    .trim()
-    .isString()
-    .notEmpty()
-    .isAlphanumeric()
-    .isLength({ min: 0, max: 32 })
-const bodyUserName = createBodyUserName()
-const bodyNewUserName = createBodyUserName().optional()
-
-const createBodyPassword = () =>
-  body("password").trim().isString().notEmpty().isLength({ min: 0, max: 64 })
-const bodyPassword = createBodyPassword()
-const bodyNewPassword = createBodyPassword().optional()
-
-const createBodyText = () => body("text").trim().isString().notEmpty()
-const bodyText = createBodyText()
-const bodyNewText = createBodyText().optional()
-
-const createBodyTitle = () => body("title").trim().isString().notEmpty()
-const bodyTitle = createBodyTitle()
-const bodyNewTitle = createBodyTitle().optional()
-
-const bodySourceSite = body("sourceSite")
-  .trim()
-  .isString()
-  .notEmpty()
-  .isLength({ min: 0, max: 64 })
-  .optional()
-
-const bodySourceUrl = body("sourceUrl").trim().isString().notEmpty().optional()
-
-const bodyTags = body("tags.*")
-  .trim()
-  .toLowerCase()
-  .whitelist("abcdefghijklmnopqrstuvwxyz")
-  .isString()
-  .notEmpty()
-  .isLength({ min: 0, max: 32 })
-  .optional()
-
-const bodyUrl = body("url").trim().isURL()
-
-const paramId = param("id").isInt()
-
-const queryTags = query("*")
-  .trim()
-  .toLowerCase()
-  .whitelist("abcdefghijklmnopqrstuvwxyz")
-  .isString()
-  .notEmpty()
-  .isLength({ min: 0, max: 32 })
-  .optional()
-
-export const serializers = {
-  auth: {
-    post: [bodyEmail, bodyUserName, bodyPassword, serializationErrorMiddleware],
-    put: [
-      bodyNewEmail,
-      bodyNewUserName,
-      bodyNewPassword,
-      bodyPassword,
-      serializationErrorMiddleware,
-    ],
-    delete: [bodyPassword, serializationErrorMiddleware],
-    session: {
-      post: [bodyEmail, bodyPassword, serializationErrorMiddleware],
-    },
-  },
-  recipe: {
-    middleware: {
-      canAlterRecipe: [paramId, serializationErrorMiddleware],
-    },
-    get: [queryTags, serializationErrorMiddleware],
-    post: [
-      bodyText,
-      bodyTitle,
-      bodySourceSite,
-      bodySourceUrl,
-      bodyTags,
-      serializationErrorMiddleware,
-    ],
-    fork: {
-      id: {
-        post: [paramId, serializationErrorMiddleware],
-      },
-    },
-    id: {
-      get: [paramId, serializationErrorMiddleware],
-      put: [
-        paramId,
-        bodyNewText,
-        bodyNewTitle,
-        bodyTags,
-        serializationErrorMiddleware,
-      ],
-      delete: [paramId, serializationErrorMiddleware],
-    },
-  },
-  scrape: {
-    post: [bodyUrl, serializationErrorMiddleware],
-  },
-  user: {
-    id: {
-      get: [paramId, serializationErrorMiddleware],
-    },
-  },
 }

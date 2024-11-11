@@ -60,6 +60,7 @@ export class User {
 
   // also prevents DDOS via people just submitting huge passwords
   // because the validator runs before the password is hashed
+  // TODO: DEPLOY: minlength
   @MaxLength(64)
   password: string
 

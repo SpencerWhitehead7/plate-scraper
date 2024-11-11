@@ -1,16 +1,16 @@
 import { Router } from "express"
 
-import { ScrapeBody } from "../@types/apiContract"
-import { serializers } from "../logic/errors"
+import { scrapePostSchema } from "../@types/apiContract"
 import { scrape } from "../logic/scrape"
+import { validate } from "../logic/serialization"
 
 export const scrapeRouter = Router()
 
 // POST /api/scrape/
-scrapeRouter.post("/", ...serializers.scrape.post, async (req, res, next) => {
+scrapeRouter.post("/", validate(scrapePostSchema), async (req, res, next) => {
   try {
-    const { url } = req.body as ScrapeBody
-    const recipeData = await scrape(url)
+    const recipeUrl = req.body.url
+    const recipeData = await scrape(recipeUrl)
     res.json(recipeData)
   } catch (err) {
     next(err)

@@ -1,14 +1,15 @@
 import { Router } from "express"
 
 import {
-  CreateMeBody,
-  DeleteMeBody,
-  LoginBody,
-  UpdateMeBody,
+  authDeleteSchema,
+  authPostSchema,
+  authPutSchema,
+  authSessionPostSchema,
 } from "../@types/apiContract"
 import { userRepository } from "../db/repositories"
 import { isAuthenticated, isNotAuthenticated } from "../logic/auth"
-import { incorrectCredsErr, serializers } from "../logic/errors"
+import { incorrectCredsErr } from "../logic/errors"
+import { validate } from "../logic/serialization"
 
 export const authRouter = Router()
 
@@ -27,16 +28,12 @@ authRouter.get("/", async (req, res, next) => {
 // POST /api/auth
 authRouter.post(
   "/",
-  isNotAuthenticated,
-  ...serializers.auth.post,
+  isNotAuthenticated(),
+  validate(authPostSchema),
   async (req, res, next) => {
     try {
-      const { email, userName, password } = req.body as CreateMeBody
-      const user = await userRepository.insert({
-        email,
-        userName,
-        password,
-      })
+      const userData = req.body
+      const user = await userRepository.insert(userData)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       req.login(user!, (err) => {
         err ? next(err) : res.json(user)
@@ -50,25 +47,15 @@ authRouter.post(
 // PUT /api/auth
 authRouter.put(
   "/",
-  isAuthenticated,
-  ...serializers.auth.put,
+  isAuthenticated(),
+  validate(authPutSchema),
   async (req, res, next) => {
     try {
-      const { newEmail, newUserName, newPassword, password } =
-        req.body as UpdateMeBody
+      const { password, updatedUserData } = req.body
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const authUser = await userRepository.getByIdWithAuth(req.user!.id)
       if (!authUser || !(await authUser.checkPassword(password)))
         throw incorrectCredsErr
-
-      const updatedUserData: {
-        email?: string
-        userName?: string
-        password?: string
-      } = {}
-      if (newEmail) updatedUserData.email = newEmail
-      if (newUserName) updatedUserData.userName = newUserName
-      if (newPassword) updatedUserData.password = newPassword
 
       const updatedUser = await userRepository.update(
         authUser.id,
@@ -84,11 +71,11 @@ authRouter.put(
 // DELETE /api/auth
 authRouter.delete(
   "/",
-  isAuthenticated,
-  ...serializers.auth.delete,
+  isAuthenticated(),
+  validate(authDeleteSchema),
   async (req, res, next) => {
     try {
-      const { password } = req.body as DeleteMeBody
+      const { password } = req.body
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const authUser = await userRepository.getByIdWithAuth(req.user!.id)
       if (!authUser || !(await authUser.checkPassword(password)))
@@ -121,11 +108,11 @@ authRouter.delete(
 // POST /api/auth/session
 authRouter.post(
   "/session",
-  isNotAuthenticated,
-  ...serializers.auth.session.post,
+  isNotAuthenticated(),
+  validate(authSessionPostSchema),
   async (req, res, next) => {
     try {
-      const { email, password } = req.body as LoginBody
+      const { email, password } = req.body
       const authUser = await userRepository.getByEmailWithAuth(email)
       if (!authUser || !(await authUser.checkPassword(password)))
         throw incorrectCredsErr
@@ -142,7 +129,7 @@ authRouter.post(
 )
 
 // DELETE /api/auth/session
-authRouter.delete("/session", isAuthenticated, (req, res, next) => {
+authRouter.delete("/session", isAuthenticated(), (req, res, next) => {
   req.logout((err) => {
     if (err) {
       next(err)

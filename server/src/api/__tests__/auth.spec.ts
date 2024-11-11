@@ -84,10 +84,12 @@ describe("API Route Auth: /api/auth", () => {
         const newUserName = "newUserName"
         const newPassword = "newpw"
         const res = await agent.put(route).send({
-          newEmail,
-          newUserName,
-          newPassword,
           password: userCred.password,
+          updatedUserData: {
+            email: newEmail,
+            userName: newUserName,
+            password: newPassword,
+          },
         })
         const bodyUser = res.body as User
         const editedUser = await getUserWithAuth()
@@ -105,8 +107,10 @@ describe("API Route Auth: /api/auth", () => {
         const oldUser = await getUserWithAuth()
         const newEmail = "new@example.com"
         const res = await agent.put(route).send({
-          newEmail,
           password: userCred.password,
+          updatedUserData: {
+            email: newEmail,
+          },
         })
         const bodyUser = res.body as User
         const editedUser = await getUserWithAuth()
@@ -121,9 +125,12 @@ describe("API Route Auth: /api/auth", () => {
       })
       it("returns a 401 and does not edit the user if the user sends the wrong confirmation password", async () => {
         const newEmail = "new@example.com"
-        const res = await agent
-          .put(route)
-          .send({ newEmail, password: "wrongpw" })
+        const res = await agent.put(route).send({
+          password: "wrongpw",
+          updatedUserData: {
+            email: newEmail,
+          },
+        })
         const user = await dataSource.manager.findOneByOrFail(User, { id: 1 })
         expect(user.email).not.to.equal(newEmail)
         expect(res.status).to.equal(401)

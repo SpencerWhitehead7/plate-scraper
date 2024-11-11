@@ -15,6 +15,8 @@ const createExtendedError = (
     }
   }
 
+export const SerializationError = createExtendedError("SerializationErr", 400)
+
 const NotAuthenticatedErr = createExtendedError("NotAuthenticatedErr", 401)
 export const incorrectCredsErr = new NotAuthenticatedErr(
   Error("incorrect credentials"),

@@ -26,12 +26,12 @@
     "connect-typeorm": "^2.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.3",
-    "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
     "passport": "0.7.0",
     "pg": "^8.11.3",
     "plate-scraper-parsers": "file:../parsers",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
