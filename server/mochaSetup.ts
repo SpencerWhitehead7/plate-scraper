@@ -28,7 +28,7 @@ export const user2Cred = {
 }
 
 let recipeRepo: Repository<Recipe>
-export const factoryRecipe = (values = {}) =>
+export const factoryRecipe = (values: Partial<Recipe> = {}) =>
   recipeRepo.create({
     text: "text",
     title: "title",
@@ -38,14 +38,14 @@ export const factoryRecipe = (values = {}) =>
   })
 
 let tagRepo: Repository<Tag>
-export const factoryTag = (values = {}) =>
+export const factoryTag = (values: Partial<Tag> = {}) =>
   tagRepo.create({
     name: "tag",
     ...values,
   })
 
 let userRepo: Repository<User>
-export const factoryUser = (values = {}) =>
+export const factoryUser = (values: Partial<User> = {}) =>
   userRepo.create({
     ...userCred,
     ...values,

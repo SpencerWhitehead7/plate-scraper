@@ -25,8 +25,8 @@ describe("User Entity", () => {
 
   describe("Fields validate data", () => {
     it("email rejects duplicates", async () => {
-      await dataSource.manager.save(factoryUser({ username: "abc" }))
-      await expect(dataSource.manager.save(factoryUser({ username: "def" }))).to
+      await dataSource.manager.save(factoryUser({ userName: "abc" }))
+      await expect(dataSource.manager.save(factoryUser({ userName: "def" }))).to
         .be.rejected
     })
     it("email rejects non-email strings", async () => {
