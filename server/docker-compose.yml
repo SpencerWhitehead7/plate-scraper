@@ -1,0 +1,25 @@
+name: plate-scraper
+
+services:
+  db:
+    image: postgres:17.2-alpine3.20
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+
+  db-test:
+    image: postgres:17.2-alpine3.20
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5431:5432"
+
+volumes:
+  postgresql_data:
