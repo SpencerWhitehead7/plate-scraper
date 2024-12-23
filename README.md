@@ -1,12 +1,32 @@
 # Plate Scraper
 
-A webapp for creating, storing, and organizing recipes. It can scrape recipes from major recipe aggregation sites, or you can upload your own. Recipes can be scraped and downloaded as plaintext without making an account, or saved, edited, organized etc on the site with an account. You can also view and search for recipes saved on the site without an account. For a more comprehensive list of existing and upcoming features, see the shipped features and public roadmap sections.
+This monorepo contains all aspects of the plate-scraper project, the scraping logic itself, the webapp, and the chrome extension.
 
-A minimal version which can only scrape, edit and download is also available as a [Chrome extension](https://chrome.google.com/webstore/detail/plate-scraper/pohdgoipnoaopknopkpdeooophfnkmel?hl=en-US)
+The scraping logic is functions for parsing html pages from various recipe aggregation sites.
 
-## Seeing it
+The webapp allows you to create, store, and organize recipes. It can scrape recipes from major recipe aggregation sites, or you can upload your own. Recipes can be scraped and downloaded as plaintext without making an account, or saved, edited, organized, etc on the site with an account. You can also view and search recipes saved on the site without an account. For a more comprehensive list of existing and upcoming features, see the shipped features and public roadmap sections. The site is not deployed live anywhere, as is rough and feature incomplete, and probably always will be.
 
-The site is not currently deployed live anywhere, as it's still a little rough and not quite feature complete. However, if you have a relatively recent version of PostgreSQL, Node and NPM installed, you should be able to run it locally. You will need to create an PostgreSQL database with the appropriate name, git clone the repo, then run `npm install`, `npm run build`, `npm run start` in your terminal from within the folder and open localhost:8080 in a browser.
+The chrome extension is a minimal version of the site which can only scrape, edit and download. Unlike the site, it is available for use on the [chrome webstore](https://chrome.google.com/webstore/detail/plate-scraper/pohdgoipnoaopknopkpdeooophfnkmel?hl=en-US).
+
+## Local dev
+
+If you have docker, node and npm, you can run the packages and develop locally. The top level folders of this repo contain the different aspects of the project. You will need to `npm install` for each directory individually, and refer to their `package.json` files for test, run, and build commands.
+
+### parsers
+
+These are the functions that actually parse html pages from the recipe aggregation sites. They are used in `extChrome` and `server`.
+
+### extChrome
+
+This is the chrome extension. It is mostly a wrapper for the parsers plus a little extension-specific logic.
+
+### client
+
+This is the FE component of the webapp.
+
+### server
+
+This is the BE component of the webapp. Unlike the other packages, you will also need to run `docker compose up -d` from the directory because the app's database is in a docker container.
 
 ## Public roadmap (features)
 
@@ -17,8 +37,10 @@ The site is not currently deployed live anywhere, as it's still a little rough a
 - Add whatever that metadata ends up being to individual users' pages
 - Ability to create collections of your and others' recipes
 - Ability to share recipes or collections (...somehow; I don't want to do a social media integration)
-- Add support for more websites
-- Make into a PWA, someday
+- Pagination on all users, all recipes pages
+- LLM integration for parsing arbitrary pages or images of text
+- Support for more websites
+- PWA
 
 ## Public roadmap (technical improvements)
 
