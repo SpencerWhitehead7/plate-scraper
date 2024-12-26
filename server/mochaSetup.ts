@@ -2,12 +2,11 @@ import "mocha"
 
 import * as chai from "chai"
 import chaiAsPromised from "chai-as-promised"
-import { Server } from "http"
 import { DataSource, Repository } from "typeorm"
 
+import { initialize } from "./src/app"
 import { getGlobalDataSource } from "./src/db/dataStore"
 import { Recipe, Tag, User } from "./src/db/entities"
-import { boot } from "./src/index"
 
 chai.use(chaiAsPromised)
 export const { expect } = chai
@@ -59,20 +58,14 @@ export const syncDB = async () => {
   }
 }
 
-let server: Server
-
 before(async () => {
   try {
     dataSource = await getGlobalDataSource()
     recipeRepo = dataSource.getRepository(Recipe)
     tagRepo = dataSource.getRepository(Tag)
     userRepo = dataSource.getRepository(User)
-    ;({ app, server } = await boot(dataSource))
+    app = await initialize(dataSource)
   } catch (err) {
     console.error(err)
   }
-})
-
-after(() => {
-  server.close()
 })

@@ -11,8 +11,5 @@ stats.html
 # npm errors
 npm-debug.log
 
-# secrets
-secrets.js
-
 # notes
 ___.txt

@@ -12,11 +12,14 @@
     "lint": "eslint ./src ./scripts",
     "lint:fix": "npm run lint -- --fix",
     "clean": "rm -rf node_modules ./dist && npm install",
-    "dev": "ts-node-dev ./src",
-    "test": "NODE_ENV='test' mocha -r ts-node/register --file mochaSetup.ts -- '**/__tests__/*.spec.ts'",
+    "node:local": "NODE_ENV=production node --env-file=.env.local",
+    "node:test": "NODE_ENV=production node --env-file=.env.test",
+    "node:prod": "NODE_ENV=production node",
+    "dev": "npm run node:local ./node_modules/ts-node-dev/lib/bin -- ./src",
+    "test": "npm run node:test ./node_modules/mocha/bin/mocha -- -r ts-node/register --file mochaSetup.ts -- '**/__tests__/*.spec.ts'",
     "build": "rm -rf ./dist && tsc",
-    "seed": "NODE_ENV='script' npx ts-node scripts/seed.ts",
-    "cleanupOrphanedTags": "NODE_ENV='script' npx ts-node scripts/cleanupOrphanedTags.ts"
+    "seed": "npm run node:local ./node_modules/ts-node/dist/bin -- scripts/seed.ts",
+    "cleanupOrphanedTags": "npm run node:local ./node_modules/ts-node/dist/bin -- scripts/cleanupOrphanedTags.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
