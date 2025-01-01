@@ -21,7 +21,7 @@ class UserRepository {
     userName: string
     password: string
   }) {
-    const createdUser = await this.repo
+    const result = await this.repo
       .createQueryBuilder("user")
       .insert()
       .into(User)
@@ -29,7 +29,7 @@ class UserRepository {
       .returning("*")
       .execute()
 
-    return this.getByIdWithRecipes(createdUser.identifiers[0].id as number)
+    return result.generatedMaps[0] as User
   }
 
   async update(
@@ -57,14 +57,6 @@ class UserRepository {
       .from(User)
       .where("id = :id", { id: user.id })
       .execute()
-  }
-
-  getReqUser(id: number) {
-    return this.repo
-      .createQueryBuilder("user")
-      .select()
-      .where("user.id = :id", { id })
-      .getOne()
   }
 
   getById(id: number) {

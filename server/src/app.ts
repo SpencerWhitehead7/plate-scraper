@@ -60,7 +60,7 @@ export const initialize = async (dataSource: DataSource) => {
   })
   passport.deserializeUser(async (id: number, done) => {
     try {
-      const user = await userRepository.getReqUser(id)
+      const user = await userRepository.getById(id)
       done(null, user)
     } catch (err) {
       done(err)
