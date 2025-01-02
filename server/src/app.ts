@@ -1,21 +1,15 @@
 import path from "node:path"
 
 import compression from "compression"
-import { TypeormStore } from "connect-typeorm"
+import cookieSession from "cookie-session"
 import express, { NextFunction, Request, Response } from "express"
-import expressSession from "express-session"
 import helmet from "helmet"
-import passport from "passport"
-import { DataSource } from "typeorm"
 import volleyball from "volleyball"
 
 import { ENV, ENVS, SESSION_SECRET } from "./env"
-import { Session } from "./logic/auth"
 
-export const initialize = async (dataSource: DataSource) => {
+export const initialize = async () => {
   const { apiRouter } = await import("./api")
-  const { userRepository } = await import("./db/repositories")
-  const sessionRepository = dataSource.getRepository(Session)
 
   const app = express()
 
@@ -33,41 +27,14 @@ export const initialize = async (dataSource: DataSource) => {
   if (ENV === ENVS.LOCAL) app.use(volleyball)
 
   app.use(
-    expressSession({
-      cookie: {
-        maxAge: 60 * 60 * 24 * 7 * 1000, // 1 week
-        // secure cookies interfere with superagent and running on localhost - auth may be an issue in a real deployment too
-        // TODO: still a problem with jwt?
-        secure: ENV === ENVS.PROD,
-        httpOnly: true,
-      },
-      resave: false,
-      saveUninitialized: false,
+    cookieSession({
       secret: SESSION_SECRET,
-      name: "sessionId",
-      store: new TypeormStore({
-        cleanupLimit: 0, // default
-        limitSubquery: true, // default
-        ttl: undefined, // defaults to session.maxAge according to connect-typeorm's docs (presumably actually session.cookie.maxAge; express-session's docs don't mention a session.maxAge property)
-        onError: (typeormStore, err) => {
-          console.error(err)
-        },
-      }).connect(sessionRepository),
+      maxAge: 1_000 * 60 * 60 * 24 * 7,
+      sameSite: "lax",
+      secure: ENV === ENVS.PROD, // breaks running FE locally via vite
+      httpOnly: true,
     }),
   )
-  passport.serializeUser((user, done) => {
-    done(null, user.id)
-  })
-  passport.deserializeUser(async (id: number, done) => {
-    try {
-      const user = await userRepository.getById(id)
-      done(null, user)
-    } catch (err) {
-      done(err)
-    }
-  })
-  app.use(passport.initialize())
-  app.use(passport.session())
 
   // Static file serving middleware
   app.use(express.static(path.join(__dirname, "..", "..", "client")))

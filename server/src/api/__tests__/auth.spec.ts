@@ -3,7 +3,6 @@ import request from "supertest"
 
 import { app, dataSource, syncDB, userCred } from "../../../mochaSetup"
 import { User } from "../../db/entities"
-import { Session } from "../../logic/auth"
 
 describe("API Route Auth: /api/auth", () => {
   const route = "/api/auth"
@@ -19,6 +18,17 @@ describe("API Route Auth: /api/auth", () => {
       .where("id = :id", { id: 1 })
       .getOne()
 
+  const getSession = (res: request.Response) => {
+    const setCookies = res.get("Set-Cookie")
+    const sessionCookie = setCookies.find((c) => c.startsWith("session="))
+    const sessionKV = sessionCookie?.split(";")[0]
+    const sessionV = sessionKV?.split("=")[1]
+    return (sessionV ? JSON.parse(atob(sessionV)) : {}) as {
+      userId?: number
+      refreshTrigger?: number
+    }
+  }
+
   beforeEach(async () => {
     try {
       await syncDB()
@@ -32,7 +42,6 @@ describe("API Route Auth: /api/auth", () => {
   afterEach(async () => {
     try {
       await agent.delete(`${route}/session`)
-      await syncDB()
     } catch (err) {
       console.log(err)
     }
@@ -40,16 +49,26 @@ describe("API Route Auth: /api/auth", () => {
 
   describe("/", () => {
     describe("GET", () => {
-      it("if the user is not logged in, it returns 200 with no body", async () => {
-        const res = await request(app).get(route)
-        expect(res.status).to.equal(200)
-        expect(res.body).to.be.null
-      })
-      it("if the user is logged in, it returns 200 with the user's information", async () => {
+      it("returns the logged in user", async () => {
         const res = await agent.get(route)
         const bodyUser = res.body as User
         expect(res.status).to.equal(200)
         expect(bodyUser.id).to.equal(1)
+      })
+      it("triggers a refresh to extend user's session", async () => {
+        const res1 = await agent.get(route)
+        const { refreshTrigger: refreshTrigger1 } = getSession(res1)
+        expect(refreshTrigger1).to.equal(1)
+        const res2 = await agent.get(route)
+        const { refreshTrigger: refreshTrigger2 } = getSession(res2)
+        expect(refreshTrigger2).to.equal(0)
+        const res3 = await agent.get(route)
+        const { refreshTrigger: refreshTrigger3 } = getSession(res3)
+        expect(refreshTrigger3).to.equal(1)
+      })
+      it("returns a 401 if the user is not logged in", async () => {
+        const res = await request(app).get(route)
+        expect(res.status).to.equal(401)
       })
     })
 
@@ -157,8 +176,8 @@ describe("API Route Auth: /api/auth", () => {
       })
       it("logs out the logged in user", async () => {
         await agent.delete(route).send({ password: userCred.password })
-        const res = await agent.get(route)
-        expect(res.body).to.be.null
+        const loggedOutUserRes = await agent.get(route)
+        expect(loggedOutUserRes.status).to.equal(401)
       })
       it("returns a 401 and does not delete the user if the user sends the wrong confirmation password", async () => {
         const res = await agent.delete(route).send({ password: "wrongpw" })
@@ -177,7 +196,7 @@ describe("API Route Auth: /api/auth", () => {
 
   describe("/session", () => {
     describe("POST", () => {
-      it("logs the user in if they provide correct credentials and returns the user", async () => {
+      it("logs the user in and returns them if they provide correct credentials", async () => {
         await agent.delete(`${route}/session`)
 
         const res = await agent.post(`${route}/session`).send(userCred)
@@ -199,19 +218,11 @@ describe("API Route Auth: /api/auth", () => {
     })
 
     describe("DELETE", () => {
-      it("logs the user out if the user is logged in", async () => {
+      it("logs the user out", async () => {
         const res = await agent.delete(`${route}/session`)
-        const loggedInUser = await agent.get(route)
+        const loggedOutUserRes = await agent.get(route)
         expect(res.status).to.equal(204)
-        expect(loggedInUser.body).to.be.null
-      })
-      it("destroy's the user's session if the user is logged in", async () => {
-        const oneLoggedInSession = await dataSource.manager.find(Session)
-        await agent.delete(`${route}/session`)
-        const noLoggedInSessions = await dataSource.manager.find(Session)
-
-        expect(oneLoggedInSession).to.have.lengthOf(1)
-        expect(noLoggedInSessions).to.have.lengthOf(0)
+        expect(loggedOutUserRes.status).to.equal(401)
       })
       it("returns a 401 if the user is not logged in", async () => {
         const res = await request(app).delete(`${route}/session`)

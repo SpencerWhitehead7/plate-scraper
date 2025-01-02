@@ -64,7 +64,7 @@ before(async () => {
     recipeRepo = dataSource.getRepository(Recipe)
     tagRepo = dataSource.getRepository(Tag)
     userRepo = dataSource.getRepository(User)
-    app = await initialize(dataSource)
+    app = await initialize()
   } catch (err) {
     console.error(err)
   }

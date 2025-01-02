@@ -33,7 +33,6 @@ describe("API Route Recipe: /api/recipe", () => {
   afterEach(async () => {
     try {
       await agent.delete("/api/auth/session")
-      await syncDB()
     } catch (err) {
       console.log(err)
     }

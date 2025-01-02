@@ -9,7 +9,6 @@ import {
   ENV,
   ENVS,
 } from "../env"
-import { Session } from "../logic/auth"
 import {
   Recipe,
   RecipeSubscriber,
@@ -30,7 +29,7 @@ export const getGlobalDataSource = async () => {
       database: DB_DATABASE,
       username: DB_USERNAME,
       password: DB_PASSWORD,
-      entities: [Recipe, Tag, User, Session],
+      entities: [Recipe, Tag, User],
       subscribers: [RecipeSubscriber, TagSubscriber, UserSubscriber],
       synchronize: ENV === ENVS.TEST,
       dropSchema: ENV === ENVS.TEST,

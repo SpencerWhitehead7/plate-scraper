@@ -14,11 +14,15 @@ import { validate } from "../logic/serialization"
 export const authRouter = Router()
 
 // GET /api/auth
-authRouter.get("/", async (req, res, next) => {
+authRouter.get("/", isAuthenticated(), async (req, res, next) => {
   try {
-    const user = req.isAuthenticated()
-      ? await userRepository.getById(req.user.id)
-      : null
+    // @ts-expect-error added by isAuthenticated middleware
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const user = await userRepository.getById(req.userId)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    req.session!.refreshTrigger += 1
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    req.session!.refreshTrigger %= 2
     res.json(user)
   } catch (err) {
     next(err)
@@ -35,9 +39,10 @@ authRouter.post(
       const userData = req.body
       const user = await userRepository.insert(userData)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      req.login(user!, (err) => {
-        err ? next(err) : res.json(user)
-      })
+      req.session!.userId = user.id
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      req.session!.refreshTrigger = 0
+      res.json(user)
     } catch (err) {
       next(err)
     }
@@ -52,8 +57,9 @@ authRouter.put(
   async (req, res, next) => {
     try {
       const { password, updatedUserData } = req.body
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const authUser = await userRepository.getByIdWithAuth(req.user!.id)
+      // @ts-expect-error added by isAuthenticated middleware
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const authUser = await userRepository.getByIdWithAuth(req.userId)
       if (!authUser || !(await authUser.checkPassword(password)))
         throw incorrectCredsErr
 
@@ -76,29 +82,15 @@ authRouter.delete(
   async (req, res, next) => {
     try {
       const { password } = req.body
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const authUser = await userRepository.getByIdWithAuth(req.user!.id)
+      // @ts-expect-error added by isAuthenticated middleware
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const authUser = await userRepository.getByIdWithAuth(req.userId)
       if (!authUser || !(await authUser.checkPassword(password)))
         throw incorrectCredsErr
 
-      req.logout((err) => {
-        if (err) {
-          next(err)
-        } else {
-          req.session.destroy(async (err) => {
-            if (err) {
-              next(err)
-            } else {
-              try {
-                await userRepository.delete(authUser)
-                res.sendStatus(204)
-              } catch (err) {
-                next(err)
-              }
-            }
-          })
-        }
-      })
+      await userRepository.delete(authUser)
+      req.session = null
+      res.sendStatus(204)
     } catch (err) {
       next(err)
     }
@@ -119,9 +111,11 @@ authRouter.post(
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password: removedPassword, ...sanitizedUser } = authUser
-      req.login(authUser, (err) => {
-        err ? next(err) : res.json(sanitizedUser)
-      })
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      req.session!.userId = authUser.id
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      req.session!.refreshTrigger = 0
+      res.json(sanitizedUser)
     } catch (err) {
       next(err)
     }
@@ -130,17 +124,10 @@ authRouter.post(
 
 // DELETE /api/auth/session
 authRouter.delete("/session", isAuthenticated(), (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      next(err)
-    } else {
-      req.session.destroy((err) => {
-        if (err) {
-          next(err)
-        } else {
-          res.sendStatus(204)
-        }
-      })
-    }
-  })
+  try {
+    req.session = null
+    res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
 })

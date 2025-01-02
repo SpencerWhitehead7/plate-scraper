@@ -16,13 +16,13 @@ import { validate } from "../logic/serialization"
 
 export const recipeRouter = Router()
 
-const recipeExists: RequestHandler<{ id: number }> = async (req, __, next) => {
+const recipeExists: RequestHandler<{ id: number }> = async (req, _, next) => {
   try {
     const recipeId = req.params.id
     const recipe = await recipeRepository.getById(recipeId)
     if (!recipe) throw notFoundRecipeErr
 
-    // @ts-expect-error put it at the same level as user
+    // @ts-expect-error need it for downstream middleware/handlers
     req.recipe = recipe
     next()
   } catch (err) {
@@ -30,13 +30,11 @@ const recipeExists: RequestHandler<{ id: number }> = async (req, __, next) => {
   }
 }
 
-const userOwnsRecipe: RequestHandler<{ id: number }> = (req, __, next) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const user = req.user!
-  // @ts-expect-error recipe added by recipeExists
-  const recipe = req.recipe as Recipe
+const userOwnsRecipe: RequestHandler<{ id: number }> = (req, _, next) => {
+  // @ts-expect-error added by recipeExists middleware and isAuthenticated middleware
+  const { recipe, userId } = req as { recipe: Recipe; userId: number }
 
-  recipe.userId === user.id ? next() : next(permDeniedErr)
+  recipe.userId === userId ? next() : next(permDeniedErr)
 }
 
 // GET /api/recipe
@@ -63,10 +61,12 @@ recipeRouter.post(
       const recipeData = req.body
       const recipe = await recipeRepository.insert({
         ...recipeData,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        createdBy: req.user!.id,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        userId: req.user!.id,
+        // @ts-expect-error added by isAuthenticated middleware
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        createdBy: req.userId,
+        // @ts-expect-error added by isAuthenticated middleware
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        userId: req.userId,
       })
       res.json(recipe)
     } catch (err) {
@@ -85,10 +85,10 @@ recipeRouter.post(
     try {
       // @ts-expect-error recipe added by recipeExists
       const originalRecipe = req.recipe as Recipe
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const user = req.user!
 
-      const recipe = await recipeRepository.fork(originalRecipe, user.id)
+      // @ts-expect-error added by isAuthenticated middleware
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const recipe = await recipeRepository.fork(originalRecipe, req.userId)
       res.json(recipe)
     } catch (err) {
       next(err)
