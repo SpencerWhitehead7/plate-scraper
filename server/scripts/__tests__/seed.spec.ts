@@ -3,9 +3,9 @@ import { Recipe, Tag, User } from "../../src/db/entities"
 import seed from "../seed"
 
 describe("Seed", () => {
-  beforeEach(syncDB)
-
-  afterEach(syncDB)
+  beforeEach(async () => {
+    await syncDB()
+  })
 
   it("fills the database with some sample data", async () => {
     await seed(dataSource)

@@ -180,7 +180,7 @@ class RecipeRepository {
           tx,
         )
       }
-      return recipe ?? undefined
+      return recipe
     })
   }
 

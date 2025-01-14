@@ -39,6 +39,10 @@ export const notFoundRecipeErr = new NotFoundErr(Error("recipe not found"))
 export const notFoundRouteErr = new NotFoundErr(Error("route not found"))
 export const notFoundUserErr = new NotFoundErr(Error("user not found"))
 
-const ScrapeErr = createExtendedError("ScrapeFailedErr", 500)
-export const scrapeFailedErr = new ScrapeErr(Error("scrape failed"))
-export const siteInvalidErr = new ScrapeErr(Error("site invalid"))
+const ScrapeSiteInvalidErr = createExtendedError("ScrapeSiteInvalidErr", 400)
+export const scrapeSiteInvalidErr = new ScrapeSiteInvalidErr(
+  Error("site invalid"),
+)
+
+const ScrapeFailedErr = createExtendedError("ScrapeFailedErr", 500)
+export const scrapeFailedErr = new ScrapeFailedErr(Error("scrape failed"))

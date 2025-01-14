@@ -1,32 +1,40 @@
 import { expect } from "chai"
-import request from "supertest"
 
 import {
-  app,
+  BASE_ROUTE,
   dataSource,
   factoryRecipe,
   factoryTag,
   factoryUser,
   syncDB,
+  user2Cred,
+  userCred,
 } from "../../../mochaSetup"
 import { User } from "../../db/entities"
 
 describe("API Route User: /api/user", () => {
-  const route = "/api/user"
+  const route = BASE_ROUTE + "/api/user"
 
-  beforeEach(syncDB)
-
-  afterEach(syncDB)
+  beforeEach(async () => {
+    await syncDB()
+  })
 
   describe("/", () => {
     describe("GET", () => {
       it("returns all users", async () => {
-        const user = await dataSource.manager.save(factoryUser())
+        const [user1, user2] = await Promise.all(
+          [factoryUser(userCred), factoryUser(user2Cred)].map((u) =>
+            dataSource.manager.save(u),
+          ),
+        )
 
-        const res = await request(app).get(route)
-        const bodyUsers = res.body as User[]
+        const res = await fetch(route)
+        const body = (await res.json()) as User[]
+
         expect(res.status).to.equal(200)
-        expect(bodyUsers[0].id).to.equal(user.id)
+        expect(body).to.have.lengthOf(2)
+        expect(body[0].id).to.equal(user1.id)
+        expect(body[1].id).to.equal(user2.id)
       })
     })
   })
@@ -38,15 +46,18 @@ describe("API Route User: /api/user", () => {
         const recipe = await dataSource.manager.save(factoryRecipe({ user }))
         await dataSource.manager.save(factoryTag({ recipes: [recipe] }))
 
-        const res = await request(app).get(`${route}/1`)
-        const bodyUser = res.body as User
+        const res = await fetch(route + "/1")
+        const body = (await res.json()) as User
+
         expect(res.status).to.equal(200)
-        expect(bodyUser.id).to.equal(user.id)
-        expect(bodyUser.recipes).to.have.lengthOf(1)
-        expect(bodyUser.recipes[0].tags).to.have.lengthOf(1)
+        expect(body.id).to.equal(user.id)
+        expect(body.recipes).to.have.lengthOf(1)
+        expect(body.recipes[0].tags).to.have.lengthOf(1)
       })
-      it("returns 404 if the user cannot be found", async () => {
-        const res = await request(app).get(`${route}/1`)
+
+      it("404s if the user does not exist", async () => {
+        const res = await fetch(route + "/1")
+
         expect(res.status).to.equal(404)
       })
     })

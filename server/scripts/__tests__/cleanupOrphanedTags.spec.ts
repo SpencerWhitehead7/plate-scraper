@@ -12,26 +12,24 @@ import cleanupOrphanedTags from "../cleanupOrphanedTags"
 describe("CleanupOrphanedTags", () => {
   beforeEach(async () => {
     await syncDB()
+  })
+
+  it("deletes all tags with no associations", async () => {
     const user = await dataSource.manager.save(factoryUser())
     const recipe = await dataSource.manager.save(factoryRecipe({ user }))
-    await Promise.all(
+    const tagsBefore = await Promise.all(
       [
         factoryTag({ name: "tone", recipes: [recipe] }),
         factoryTag({ name: "ttwo" }),
       ].map((r) => dataSource.manager.save(r)),
     )
-  })
 
-  afterEach(syncDB)
-
-  it("deletes all tags with no associations", async () => {
-    const before = await dataSource.manager.find(Tag)
     await cleanupOrphanedTags(dataSource)
-    const after = await dataSource.manager.find(Tag)
+    const tagsAfter = await dataSource.manager.find(Tag)
 
-    expect(before.length).to.equal(2)
-    expect(before.map((t) => t.name)).to.have.members(["tone", "ttwo"])
-    expect(after.length).to.equal(1)
-    expect(after.map((t) => t.name)).to.have.members(["tone"])
+    expect(tagsBefore.length).to.equal(2)
+    expect(tagsBefore.map((t) => t.name)).to.have.members(["tone", "ttwo"])
+    expect(tagsAfter.length).to.equal(1)
+    expect(tagsAfter.map((t) => t.name)).to.have.members(["tone"])
   })
 })

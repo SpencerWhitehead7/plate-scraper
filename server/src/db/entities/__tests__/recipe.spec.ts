@@ -22,8 +22,6 @@ describe("Recipe Entity", () => {
     }
   })
 
-  afterEach(syncDB)
-
   it("entity and fields exist", async () => {
     const recipe = await dataSource.manager.save(factoryRecipe({ user }))
     expect(Recipe).to.exist

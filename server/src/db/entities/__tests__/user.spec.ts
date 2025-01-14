@@ -11,9 +11,9 @@ import { Recipe } from "../recipe"
 import { User } from "../user"
 
 describe("User Entity", () => {
-  beforeEach(syncDB)
-
-  afterEach(syncDB)
+  beforeEach(async () => {
+    await syncDB()
+  })
 
   it("entity and fields exist", async () => {
     const user = await dataSource.manager.save(factoryUser())

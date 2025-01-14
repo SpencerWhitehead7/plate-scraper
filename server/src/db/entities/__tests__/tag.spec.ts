@@ -2,9 +2,9 @@ import { dataSource, expect, factoryTag, syncDB } from "../../../../mochaSetup"
 import { Tag } from "../tag"
 
 describe("Tag Entity", () => {
-  beforeEach(syncDB)
-
-  afterEach(syncDB)
+  beforeEach(async () => {
+    await syncDB()
+  })
 
   it("entity and fields exist", async () => {
     const tag = await dataSource.manager.save(factoryTag())

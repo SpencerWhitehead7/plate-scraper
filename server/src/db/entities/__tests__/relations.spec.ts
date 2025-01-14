@@ -22,8 +22,6 @@ describe("Relations", () => {
     }
   })
 
-  afterEach(syncDB)
-
   it("The User-Recipe one-many relation exists", async () => {
     await Promise.all(
       [factoryRecipe({ user }), factoryRecipe({ user })].map((r) =>

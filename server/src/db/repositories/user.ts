@@ -92,7 +92,10 @@ class UserRepository {
   }
 
   getAll() {
-    return this.repo.createQueryBuilder("user").getMany()
+    return this.repo
+      .createQueryBuilder("user")
+      .orderBy("user.userName")
+      .getMany()
   }
 }
 
