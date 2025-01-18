@@ -1,6 +1,6 @@
 {
   "name": "plate-scraper-parsers",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "parsing logic for recipe websites",
   "author": "Spencer Whitehead",
   "license": "Unlicense",

@@ -3,27 +3,25 @@ import { afterEach, before, describe, it } from "node:test"
 
 import { load } from "cheerio"
 
+import { allrecipes } from "../allrecipes"
+import { bettycrocker } from "../bettycrocker"
+import { bonappetit } from "../bonappetit"
+import { budgetbytes } from "../budgetbytes"
+import { delish } from "../delish"
+import { eatingwell } from "../eatingwell"
+import { epicurious } from "../epicurious"
+import { food } from "../food"
+import { food52 } from "../food52"
+import { foodandwine } from "../foodandwine"
+import { foodnetwork } from "../foodnetwork"
 import type { Parser, RecipeData } from "../helpers"
-import {
-  allrecipes,
-  bettycrocker,
-  bonappetit,
-  budgetbytes,
-  delish,
-  eatingwell,
-  epicurious,
-  food,
-  food52,
-  foodandwine,
-  foodnetwork,
-  jamieoliver,
-  myrecipes,
-  seriouseats,
-  simplyrecipes,
-  tasty,
-  thekitchn,
-  yummly,
-} from "../index"
+import { jamieoliver } from "../jamieoliver"
+import { myrecipes } from "../myrecipes"
+import { seriouseats } from "../seriouseats"
+import { simplyrecipes } from "../simplyrecipes"
+import { tasty } from "../tasty"
+import { thekitchn } from "../thekitchn"
+import { yummly } from "../yummly"
 import {
   allrecipesRecipe,
   bettycrockerRecipe,
@@ -43,7 +41,7 @@ import {
   tastyRecipe,
   thekitchnRecipe,
   yummlyRecipe,
-} from "./expectedRecipes/index"
+} from "./expectedRecipes"
 
 void describe("Parsers", () => {
   const cases: {
