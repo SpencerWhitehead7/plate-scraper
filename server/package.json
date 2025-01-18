@@ -9,7 +9,7 @@
     "url": "git+https://github.com/SpencerWhitehead7/plate-scraper.git"
   },
   "scripts": {
-    "lint": "eslint ./src ./scripts",
+    "lint": "eslint ./src ./scripts ./mochaSetup.ts",
     "lint:fix": "npm run lint -- --fix",
     "clean": "rm -rf node_modules ./dist && npm install",
     "node:local": "NODE_ENV=production node --env-file=.env.local",
@@ -17,7 +17,7 @@
     "node:prod": "NODE_ENV=production node",
     "dev": "npm run node:local ./node_modules/ts-node-dev/lib/bin -- ./src",
     "test": "npm run node:test ./node_modules/mocha/bin/mocha -- -r ts-node/register --file mochaSetup.ts -- '**/__tests__/*.spec.ts'",
-    "build": "rm -rf ./dist && tsc",
+    "build": "rm -rf ./dist && tsc -p tsconfig.build.json",
     "seed": "npm run node:local ./node_modules/ts-node/dist/bin -- scripts/seed.ts",
     "cleanupOrphanedTags": "npm run node:local ./node_modules/ts-node/dist/bin -- scripts/cleanupOrphanedTags.ts"
   },

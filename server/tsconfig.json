@@ -1,12 +1,9 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["./src/**/*.*"],
-  "exclude": ["./src/**/__tests__/**"],
   "compilerOptions": {
     "experimentalDecorators": true,                      /* Enable experimental support for TC39 stage 2 draft decorators. */ // typeorm requires this
     "emitDecoratorMetadata": true,                       /* Emit design-type metadata for decorated declarations in source files. */ // typeorm requires this
     "module": "commonjs",                                /* Specify what module code is generated. */
-    "rootDir": "./src",                                  /* Specify the root folder within your source files. */
     "typeRoots": [
       "src/@types/",
       "node_modules/@types/",

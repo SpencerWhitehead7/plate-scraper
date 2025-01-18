@@ -15,7 +15,7 @@
     "lint:fix": "npm run lint -- --fix",
     "clean": "rm -rf node_modules ./dist && npm install",
     "test": "node --require ts-node/register --test ./src/__tests__/*.spec.ts",
-    "build": "rm -rf ./dist && tsc"
+    "build": "rm -rf ./dist && tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12"
