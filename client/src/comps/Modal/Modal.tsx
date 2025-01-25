@@ -1,5 +1,4 @@
-import FocusTrap from "focus-trap-react"
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 
 import { Card } from "@/comps/Card"
 
@@ -7,51 +6,35 @@ import s from "./Modal.module.scss"
 import { useCtxModal } from "./modalContext"
 
 export const Modal: React.FC = () => {
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
   const { ModalContent, closeModal } = useCtxModal()
 
   useEffect(() => {
-    const closeModalListener = (evt: KeyboardEvent) => {
-      if (evt.key === "Escape" && ModalContent) {
-        closeModal()
-      }
-    }
+    ModalContent === null
+      ? dialogRef.current?.close()
+      : dialogRef.current?.showModal()
+  }, [ModalContent])
 
-    window.addEventListener("keyup", closeModalListener)
-
-    return () => {
-      window.removeEventListener("keyup", closeModalListener)
-    }
-  }, [ModalContent, closeModal])
-
-  return ModalContent ? (
-    <FocusTrap
-      focusTrapOptions={{
-        // fragile-y hardcoded to webpack classname output from App.scss file
-        onActivate: () => {
-          document.body.classList.add("App--bodyScrollLock")
-        },
-        onDeactivate: () => {
-          document.body.classList.remove("App--bodyScrollLock")
-        },
-      }}
+  return (
+    <dialog
+      ref={dialogRef}
+      onClose={closeModal}
+      onClick={closeModal}
+      className={s.modal}
     >
-      <aside onClick={closeModal} className={s.modal__overlay}>
-        <Card
-          role="dialog"
-          aria-modal
-          aria-label="modal"
-          onClick={(evt: React.MouseEvent) => {
-            evt.stopPropagation()
-          }}
-        >
-          <div className={s.modal__closeButtonContainer}>
-            <button type="button" autoFocus onClick={closeModal}>
-              Close
-            </button>
-          </div>
-          <ModalContent />
-        </Card>
-      </aside>
-    </FocusTrap>
-  ) : null
+      <Card
+        onClick={(evt) => {
+          evt.stopPropagation()
+        }}
+      >
+        <div className={s.modal__closeButtonContainer}>
+          <button type="button" autoFocus onClick={closeModal}>
+            Close
+          </button>
+        </div>
+        {ModalContent && <ModalContent />}
+      </Card>
+    </dialog>
+  )
 }
