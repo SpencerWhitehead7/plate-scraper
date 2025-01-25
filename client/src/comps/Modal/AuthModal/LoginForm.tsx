@@ -4,16 +4,15 @@ import { useForm } from "react-hook-form"
 import { useMutationLogin } from "@/api"
 import { CardTitle } from "@/comps/Card"
 import { FormInput, FormSubmit } from "@/comps/Form"
-import { useAppDispatch } from "@/reducers"
 
-import { closeModal } from "../modalReducer"
+import { useCtxModal } from "../modalContext"
 
 type Props = {
   className?: string
 }
 
 export const LoginForm: React.FC<Props> = ({ className }) => {
-  const dispatch = useAppDispatch()
+  const { closeModal } = useCtxModal()
 
   const { mutate: triggerLogin } = useMutationLogin()
 
@@ -28,7 +27,7 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
   const onSubmit = handleSubmit(({ loginEmail, loginPassword }) => {
     triggerLogin(
       { email: loginEmail, password: loginPassword },
-      { onSuccess: () => void dispatch(closeModal()) },
+      { onSuccess: closeModal },
     )
   })
 

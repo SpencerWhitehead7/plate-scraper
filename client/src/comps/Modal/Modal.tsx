@@ -2,24 +2,17 @@ import FocusTrap from "focus-trap-react"
 import React, { useEffect } from "react"
 
 import { Card } from "@/comps/Card"
-import { useAppDispatch, useAppSelector } from "@/reducers"
 
 import s from "./Modal.module.scss"
-import { closeModal as closeModalAction, MODAL_MAP } from "./modalReducer"
+import { useCtxModal } from "./modalContext"
 
 export const Modal: React.FC = () => {
-  const ModalContent = useAppSelector(
-    (s) => MODAL_MAP[s.modalReducer.modalType],
-  )
-  const dispatch = useAppDispatch()
-  const closeModal = () => {
-    dispatch(closeModalAction())
-  }
+  const { ModalContent, closeModal } = useCtxModal()
 
   useEffect(() => {
     const closeModalListener = (evt: KeyboardEvent) => {
       if (evt.key === "Escape" && ModalContent) {
-        dispatch(closeModalAction())
+        closeModal()
       }
     }
 
@@ -28,7 +21,7 @@ export const Modal: React.FC = () => {
     return () => {
       window.removeEventListener("keyup", closeModalListener)
     }
-  }, [dispatch, ModalContent])
+  }, [ModalContent, closeModal])
 
   return ModalContent ? (
     <FocusTrap

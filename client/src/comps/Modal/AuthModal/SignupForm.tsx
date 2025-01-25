@@ -4,16 +4,15 @@ import { useForm } from "react-hook-form"
 import { useMutationCreateMe } from "@/api"
 import { CardTitle } from "@/comps/Card"
 import { FormInput, FormSubmit } from "@/comps/Form"
-import { useAppDispatch } from "@/reducers"
 
-import { closeModal } from "../modalReducer"
+import { useCtxModal } from "../modalContext"
 
 type Props = {
   className?: string
 }
 
 export const SignupForm: React.FC<Props> = ({ className = "" }) => {
-  const dispatch = useAppDispatch()
+  const { closeModal } = useCtxModal()
 
   const { mutate: triggerCreateMe } = useMutationCreateMe()
 
@@ -34,7 +33,7 @@ export const SignupForm: React.FC<Props> = ({ className = "" }) => {
           userName: signupUserName,
           password: signupPassword,
         },
-        { onSuccess: () => void dispatch(closeModal()) },
+        { onSuccess: closeModal },
       )
     },
   )

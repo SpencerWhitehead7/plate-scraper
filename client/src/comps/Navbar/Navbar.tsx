@@ -2,22 +2,18 @@ import { Link } from "@tanstack/react-router"
 import React from "react"
 
 import { useQueryMe } from "@/api"
-import { openAuthModal as openAuthModalAction } from "@/comps/Modal"
 import { URL } from "@/consts"
-import { useAppDispatch } from "@/reducers"
 import skele from "@/skeleton.module.css"
 
 // @ts-expect-error-static-asset
 import logoSvg from "../../../../public/logo.svg"
+import { useCtxModal } from "../Modal"
 import s from "./Navbar.module.scss"
 
 export const Navbar: React.FC = () => {
-  const { data: dataMe } = useQueryMe()
+  const { openModalAuth } = useCtxModal()
 
-  const dispatch = useAppDispatch()
-  const openAuthModal = () => {
-    dispatch(openAuthModalAction())
-  }
+  const { data: dataMe } = useQueryMe()
 
   return (
     <nav className={s.navbar}>
@@ -67,7 +63,7 @@ export const Navbar: React.FC = () => {
         <button
           type="button"
           className={skele["button-primary"]}
-          onClick={openAuthModal}
+          onClick={openModalAuth}
         >
           Signup&nbsp;/&nbsp;Login
         </button>

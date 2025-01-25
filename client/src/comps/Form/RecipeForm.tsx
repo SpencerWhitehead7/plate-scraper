@@ -9,10 +9,9 @@ import {
   useMutationUpdateRecipe,
   useQueryIsAuthed,
 } from "@/api"
-import { openAuthModal as openAuthModalAction } from "@/comps/Modal"
+import { useCtxModal } from "@/comps/Modal"
 import { URL } from "@/consts"
 import { downloadRecipe } from "@/helpers"
-import { useAppDispatch } from "@/reducers"
 import skele from "@/skeleton.module.css"
 
 import s from "./Form.module.scss"
@@ -29,12 +28,9 @@ type Props = {
 export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
   const navigate = useNavigate()
 
-  const isAuthed = useQueryIsAuthed()
+  const { openModalAuth } = useCtxModal()
 
-  const dispatch = useAppDispatch()
-  const openAuthModal = () => {
-    dispatch(openAuthModalAction())
-  }
+  const isAuthed = useQueryIsAuthed()
 
   const { mutate: triggerCreateRecipe } = useMutationCreateRecipe()
   const { mutate: triggerDeleteRecipe } = useMutationDeleteRecipe()
@@ -86,7 +82,7 @@ export const RecipeForm: React.FC<Props> = ({ recipe, setEditMode }) => {
         <button
           type="button"
           className={skele["button-primary"]}
-          onClick={openAuthModal}
+          onClick={openModalAuth}
         >
           Signup or login to save recipes
         </button>

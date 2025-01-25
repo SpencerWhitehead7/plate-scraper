@@ -5,6 +5,7 @@ import React from "react"
 
 import { queryClient } from "@/api"
 import { Modal } from "@/comps/Modal"
+import { ProviderModal } from "@/comps/Modal"
 import { Navbar } from "@/comps/Navbar"
 import { PageFailure } from "@/comps/PageFailure"
 
@@ -22,15 +23,17 @@ const TanStackRouterDevtools =
 
 const RootComponent = () => (
   <QueryClientProvider client={queryClient}>
-    <Navbar />
-    <main className={s.main}>
-      <div className={s.content}>
-        <Outlet />
-      </div>
-    </main>
-    <Modal />
-    <ReactQueryDevtools />
-    <TanStackRouterDevtools />
+    <ProviderModal>
+      <Navbar />
+      <main className={s.main}>
+        <div className={s.content}>
+          <Outlet />
+        </div>
+      </main>
+      <Modal />
+      <ReactQueryDevtools />
+      <TanStackRouterDevtools />
+    </ProviderModal>
   </QueryClientProvider>
 )
 

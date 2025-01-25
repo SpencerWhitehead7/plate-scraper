@@ -1,2 +1,2 @@
 export { Modal } from "./Modal"
-export { modalReducer, openAuthModal } from "./modalReducer"
+export { ProviderModal, useCtxModal } from "./modalContext"
