@@ -10,12 +10,10 @@ import { food52 } from "./food52"
 import { foodandwine } from "./foodandwine"
 import { foodnetwork } from "./foodnetwork"
 import { jamieoliver } from "./jamieoliver"
-import { myrecipes } from "./myrecipes"
 import { seriouseats } from "./seriouseats"
 import { simplyrecipes } from "./simplyrecipes"
 import { tasty } from "./tasty"
 import { thekitchn } from "./thekitchn"
-import { yummly } from "./yummly"
 
 export const selectParser = (url: string) => {
   if (url.includes("allrecipes.com")) {
@@ -42,8 +40,6 @@ export const selectParser = (url: string) => {
     return foodnetwork
   } else if (url.includes("jamieoliver.com")) {
     return jamieoliver
-  } else if (url.includes("myrecipes.com")) {
-    return myrecipes
   } else if (url.includes("seriouseats.com/recipes")) {
     return seriouseats
   } else if (url.includes("simplyrecipes.com")) {
@@ -52,8 +48,6 @@ export const selectParser = (url: string) => {
     return tasty
   } else if (url.includes("thekitchn.com")) {
     return thekitchn
-  } else if (url.includes("yummly.com")) {
-    return yummly
   } else {
     return null
   }

@@ -16,12 +16,10 @@ import { foodandwine } from "../foodandwine"
 import { foodnetwork } from "../foodnetwork"
 import type { Parser, RecipeData } from "../helpers"
 import { jamieoliver } from "../jamieoliver"
-import { myrecipes } from "../myrecipes"
 import { seriouseats } from "../seriouseats"
 import { simplyrecipes } from "../simplyrecipes"
 import { tasty } from "../tasty"
 import { thekitchn } from "../thekitchn"
-import { yummly } from "../yummly"
 import {
   allrecipesRecipe,
   bettycrockerRecipe,
@@ -35,12 +33,10 @@ import {
   foodnetworkRecipe,
   foodRecipe,
   jamieoliverRecipe,
-  myrecipesRecipe,
   seriouseatsRecipe,
   simplyrecipesRecipe,
   tastyRecipe,
   thekitchnRecipe,
-  yummlyRecipe,
 } from "./expectedRecipes"
 
 void describe("Parsers", () => {
@@ -180,16 +176,6 @@ void describe("Parsers", () => {
       },
     },
     {
-      src: "https://www.myrecipes.com/recipe/grapefruit-pound-cake",
-      parser: myrecipes,
-      expected: {
-        sourceSite: "myrecipes.com",
-        sourceUrl: "https://www.myrecipes.com/recipe/grapefruit-pound-cake",
-        text: myrecipesRecipe,
-        title: "Grapefruit Pound Cake",
-      },
-    },
-    {
       src: "https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html",
       parser: seriouseats,
       expected: {
@@ -230,16 +216,6 @@ void describe("Parsers", () => {
           "https://www.thekitchn.com/recipe-watermelon-mint-frose-233904",
         text: thekitchnRecipe,
         title: "Watermelon Mint Frosé",
-      },
-    },
-    {
-      src: "https://www.yummly.com/recipe/Balsamic-Mushroom-1951517",
-      parser: yummly,
-      expected: {
-        sourceSite: "yummly.com",
-        sourceUrl: "https://www.yummly.com/recipe/Balsamic-Mushroom-1951517",
-        text: yummlyRecipe,
-        title: "Balsamic Mushroom",
       },
     },
   ]
@@ -305,9 +281,6 @@ void describe("Parsers", () => {
   void it("jamieoliver", () => {
     assert.deepStrictEqual(cases[i].actual, cases[i].expected)
   })
-  void it("myrecipes", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
   void it("seriouseats", () => {
     assert.deepStrictEqual(cases[i].actual, cases[i].expected)
   })
@@ -318,9 +291,6 @@ void describe("Parsers", () => {
     assert.deepStrictEqual(cases[i].actual, cases[i].expected)
   })
   void it("thekitchn", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("yummly", () => {
     assert.deepStrictEqual(cases[i].actual, cases[i].expected)
   })
 })

@@ -13,12 +13,10 @@ const SUPPORTED_SITES = [
   "foodandwine.com",
   "foodnetwork.com",
   "jamieoliver.com",
-  "myrecipes.com",
   "seriouseats.com",
   "simplyrecipes.com",
   "tasty.co",
   "thekitchn.com",
-  "yummly.com",
 ]
 
 // Show/grey out browser button depending on whether site is supported

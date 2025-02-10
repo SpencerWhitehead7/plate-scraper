@@ -13,12 +13,10 @@ export const SUPPORTED_SITES = [
   "foodandwine.com",
   "foodnetwork.com",
   "jamieoliver.com",
-  "myrecipes.com",
   "seriouseats.com/recipes",
   "simplyrecipes.com",
   "tasty.co",
   "thekitchn.com",
-  "yummly.com",
 ]
 
 const SUPPORTED_SITES_FOR_DISPLAY_COLUMN_COUNT = 3

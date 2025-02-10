@@ -29,12 +29,10 @@
         "*://www.foodandwine.com/*",
         "*://www.foodnetwork.com/*",
         "*://www.jamieoliver.com/*",
-        "*://www.myrecipes.com/*",
         "*://www.seriouseats.com/*",
         "*://www.simplyrecipes.com/*",
         "*://www.tasty.co/*",
-        "*://www.thekitchn.com/*",
-        "*://www.yummly.com/*"
+        "*://www.thekitchn.com/*"
       ]
     }
   ],
