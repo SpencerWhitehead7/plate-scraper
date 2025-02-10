@@ -71,13 +71,12 @@ void describe("Parsers", async () => {
     },
     {
       title: "eatingwell",
-      src: "https://www.eatingwell.com/recipe/278567/shaved-artichoke-salad-with-shrimp/",
+      src: "https://www.eatingwell.com/recipe/259489/shrimp-fish-stew/",
       expected: {
         sourceSite: "eatingwell.com",
-        sourceUrl:
-          "https://www.eatingwell.com/recipe/278567/shaved-artichoke-salad-with-shrimp/",
+        sourceUrl: "https://www.eatingwell.com/recipe/259489/shrimp-fish-stew/",
         text: eatingwellRecipe,
-        title: "Shaved Artichoke Salad with Shrimp",
+        title: "Shrimp & Fish Stew",
       },
     },
     {
@@ -142,7 +141,7 @@ void describe("Parsers", async () => {
         sourceUrl:
           "https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html",
         text: seriouseatsRecipe,
-        title: "New York-Style Pizza Recipe",
+        title: "New York-Style Pizza",
       },
     },
     {

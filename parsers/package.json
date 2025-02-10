@@ -18,7 +18,7 @@
     "build": "rm -rf ./dist && tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12"
+    "cheerio": "^1.0.0"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.35",

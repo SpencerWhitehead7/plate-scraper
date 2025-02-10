@@ -16,7 +16,7 @@ Ingredients
 
 Instructions
 
-Prepare and bake cake mix according to package directions for a 9x13 inch pan. Poke holes in cake while still hot with a fork.
+Prepare and bake cake mix according to package directions for a 9x13-inch pan. Poke holes in cake with a fork while it's still hot.
 
 Make gelatin with boiling water, then stir in lemon-lime soda. Pour hot mixture over cake. Cool cake completely, then refrigerate for at least 4 hours before frosting.
 
@@ -91,15 +91,15 @@ Ingredients
 
 1 large loaf country-style bread, cut into 1\" cubes
 6 large eggs
-1 c. half-and-half
-1/4 c. Dijon mustard
+1 cup half-and-half
+1/4 cup Dijon mustard
 Kosher salt
 Freshly ground black pepper
-4 tbsp. unsalted butter, plus more for pan
+4 Tbsp. unsalted butter, plus more for pan
 6 oz. shredded Gruyére (about 2 1/2 c.), divided
 4 oz. ham, torn into 1\" pieces, divided
-1/4 c. (30 g.) all-purpose flour
-2 1/2 c. whole milk
+1/4 cup (30 g.) all-purpose flour
+2 1/2 cups whole milk
 Pinch of ground nutmeg
 
 Instructions
@@ -119,29 +119,34 @@ Preheat broiler. Pour sauce over casserole and top with remaining 1 cup Gruyére
 Broil, watching closely, until cheese is melted and golden in spots, 2 to 5 minutes.
 `
 
-export const eatingwell = `Source: https://www.eatingwell.com/recipe/278567/shaved-artichoke-salad-with-shrimp/
+export const eatingwell = `Source: https://www.eatingwell.com/recipe/259489/shrimp-fish-stew/
 
-Shaved Artichoke Salad with Shrimp
+Shrimp & Fish Stew
 
 Ingredients
 
-1 lemon, halved
-12 small to medium artichokes
-4 tablespoons extra-virgin olive oil, divided
-2 tablespoons torn fresh mint leaves
-Pinch of salt
-¼ teaspoon ground pepper, divided
-½ pound large shrimp (26-30 per pound), peeled and deveined
+8 ounces skinless cod or sea bass fillets
+6 ounces raw shrimp (31-40 per pound), peeled and deveined
+⅓ cup chopped onion
+2 stalks celery, sliced
+½ teaspoon minced garlic
+2 teaspoons extra-virgin olive oil
+1 cup reduced-sodium chicken broth
+¼ cup dry white wine or reduced-sodium chicken broth
+1 (14.5 ounce) can no-salt-added diced tomatoes, drained
+1 (8 ounce) can no-salt-added tomato sauce
+1 teaspoon dried oregano, crushed
+¼ teaspoon salt
+⅛ teaspoon ground black pepper
+1 tablespoon snipped fresh parsley
 
 Instructions
 
-Squeeze a lemon half into a bowl of cold water. Cut stems from artichokes and discard. Working with one artichoke at a time, pull off all the leaves and soft purple petals and discard. Using a sharp paring knife, trim any remaining green parts from the heart. Rub with the cut side of the remaining lemon half. Scoop out the fuzzy choke with a melon baller or spoon. Rub again with the lemon half. Place the artichoke heart in the lemon water to prevent discoloration while you trim the rest.
+Cut fish into 1 1/2-inch pieces. Cut shrimp in half lengthwise. Refrigerate until ready to use.
 
-Very thinly slice the artichoke hearts and immediately toss them in a bowl with 2 tablespoons oil, mint, salt and 1/8 teaspoon pepper.
+Heat oil in a large saucepan over medium heat. Add onion, celery, and garlic and cook, stirring occasionally, until tender, about 5 minutes. Carefully stir in 1 cup broth and wine. Bring to a boil. Reduce heat to a simmer and cook for 5 minutes. Stir in drained tomatoes, tomato sauce, oregano, salt and pepper. Return to a boil, then reduce heat to a simmer, cover and cook for 5 minutes.
 
-Heat the remaining 2 tablespoons oil in a large skillet over medium-high heat. Add shrimp and the remaining 1/8 teaspoon pepper. Cook, stirring occasionally, until the shrimp are pink, 3 to 4 minutes.
-
-Serve the shrimp with the artichokes and garnished with more mint, if desired.
+Gently stir in fish and shrimp. Return to a boil, then immediately reduce heat to low. Cover and simmer until the fish flakes easily with a fork and the shrimp are opaque, 3 to 5 minutes. Sprinkle with parsley before serving.
 `
 
 export const epicurious = `Source: https://www.epicurious.com/recipes/food/views/iron-skillet-peach-crisp-56389711
@@ -273,7 +278,7 @@ Transfer the steaks to a cutting board or platter, tent loosely with foil and le
 
 export const seriouseats = `Source: https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html
 
-New York-Style Pizza Recipe
+New York-Style Pizza
 
 Ingredients
 
@@ -305,6 +310,7 @@ Grilled Salmon With Peach Salsa
 
 Ingredients
 
+For the salmon:
 1 1/2 teaspoons smoked paprika
 1 1/2 teaspoons granulated garlic
 1 1/2 teaspoons granulated onion
@@ -314,6 +320,7 @@ Ingredients
 Pinch cayenne
 1 pound skin-on salmon filets (about 4 pieces)
 2 to 3 tablespoons neutral cooking oil, such as grapeseed, avocado, or canola oil
+For the salsa:
 2 heaping cups diced peaches, unpeeled (about 3 medium peaches)
 1 medium ripe avocado, diced
 1/4 cup finely diced red onion
@@ -321,6 +328,7 @@ Pinch cayenne
 2 tablespoons finely minced jalapeno, optional
 1 tablespoon fresh lemon juice
 1/4 teaspoon kosher salt
+To serve:
 Jalapeño slices, for garnish
 Chopped cilantro, for garnish
 

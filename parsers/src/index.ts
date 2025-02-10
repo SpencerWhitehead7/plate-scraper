@@ -36,11 +36,13 @@ const allrecipes: Parser = ($, url) => {
   const title = getCleanStrings($, "h1")
   const ingredients = getCleanStrings(
     $,
-    ".mntl-structured-ingredients__list-item",
+    "li",
+    "ul.mm-recipes-structured-ingredients__list",
   )
   const instructions = getCleanStrings(
     $,
-    ".comp.mntl-sc-block.mntl-sc-block-html",
+    "li > p",
+    "div.mm-recipes-steps__content",
   )
 
   return {
@@ -103,7 +105,8 @@ const budgetbytes: Parser = ($, url) => {
 const delish: Parser = ($, url) => {
   const title = getCleanStrings($, "h1")
   const ingredients = getCleanStrings($, "li", "ul[class*=ingredient-lists]")
-  const instructions = $("li", "ol[class*=et3p2gv0]")
+  const instructions = $("li", "ul[class*=directions]")
+    .slice(1)
     .map((_, e) => {
       return $(e)
         .contents()
@@ -126,11 +129,13 @@ const eatingwell: Parser = ($, url) => {
   const title = getCleanStrings($, "h1")
   const ingredients = getCleanStrings(
     $,
-    ".mntl-structured-ingredients__list-item",
+    "li",
+    "ul.mm-recipes-structured-ingredients__list",
   )
   const instructions = getCleanStrings(
     $,
-    ".comp .mntl-sc-block .mntl-sc-block-html",
+    "li > p",
+    "div.mm-recipes-steps__content",
   )
 
   return {
@@ -229,8 +234,12 @@ const seriouseats: Parser = ($, url) => {
 
 const simplyrecipes: Parser = ($, url) => {
   const title = getCleanStrings($, "h1")
-  const ingredients = getCleanStrings($, ".structured-ingredients__list-item")
-  const instructions = getCleanStrings($, ".mntl-sc-block-group--LI > p")
+  const ingredients = getCleanStrings($, "p", "div.structured-ingredients")
+  const instructions = getCleanStrings(
+    $,
+    "p",
+    "div.structured-project__steps",
+  ).slice(0, -1) // the last step is always some bullshit rate and review cta
 
   return {
     sourceSite: "simplyrecipes.com",
@@ -246,7 +255,7 @@ const tasty: Parser = ($, url) => {
   const instructions = getCleanStrings($, "li", "ol[class*=prep-steps]").slice(
     0,
     -2,
-  ) // the last two steps are always "Enjoy!" and some bullshit about downloading their app
+  ) // the last two steps are always "Enjoy!" and some bullshit download their app cta
 
   return {
     sourceSite: "tasty.co",
