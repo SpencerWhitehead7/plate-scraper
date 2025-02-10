@@ -2,7 +2,6 @@ import { stringify as qsStringify } from "qs-esm"
 
 export const SUPPORTED_SITES = [
   "allrecipes.com",
-  "bettycrocker.com",
   "bonappetit.com",
   "budgetbytes.com",
   "delish.com",
@@ -12,7 +11,6 @@ export const SUPPORTED_SITES = [
   "food52.com",
   "foodandwine.com",
   "foodnetwork.com",
-  "jamieoliver.com",
   "seriouseats.com/recipes",
   "simplyrecipes.com",
   "tasty.co",

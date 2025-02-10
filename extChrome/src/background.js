@@ -2,7 +2,6 @@
 
 const SUPPORTED_SITES = [
   "allrecipes.com",
-  "bettycrocker.com",
   "bonappetit.com",
   "budgetbytes.com",
   "delish.com",
@@ -12,7 +11,6 @@ const SUPPORTED_SITES = [
   "food52.com",
   "foodandwine.com",
   "foodnetwork.com",
-  "jamieoliver.com",
   "seriouseats.com",
   "simplyrecipes.com",
   "tasty.co",

@@ -74,40 +74,40 @@ const seed = async (dataSource: DataSource) => {
         user: user1,
       }),
       recipeRepo.create({
-        text: `Source: https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44
+        text: `Source: https://www.budgetbytes.com/skillet-cheeseburger-pasta/
 
-      Skillet Chicken Stroganoff
+      One Pot Cheeseburger Pasta
 
       Ingredients
 
-      1/4 cup Gold Medal™ all-purpose flour
-      1 teaspoon paprika
-      1/2 teaspoon salt
-      1/2 teaspoon pepper
-      1/4 cup butter
-      1/2 cup chopped onion
-      1 package (8 oz) white mushrooms, sliced
-      1 package (20 oz) boneless skinless chicken thighs, cut into 1-inch pieces
-      1 1/4 cups Progresso™ chicken broth (from 32-oz carton)
-      1 tablespoon Worcestershire sauce
-      1 cup sour cream
-      Chopped Italian (flat-leaf) parsley, if desired
-      6 cups cooked egg noodles, if desired
+      1 yellow onion ($0.25)
+      1 Tbsp olive oil ($0.16)
+      1/2 lb. ground beef ($2.50)
+      2 Tbsp all-purpose flour ($0.02)
+      1 8oz. can tomato sauce ($0.29)
+      2 cups beef broth ($0.26)
+      1/2 lb. pasta shells, uncooked ($0.50)
+      4 oz. cheddar cheese, shredded ($0.75)
+      2 Tbsp hot dog relish ($0.16)
+      2 green onions, sliced (optional) ($0.20)
 
       Instructions
 
-      In small bowl, mix flour, paprika, salt and pepper; set aside.
+      Finely dice the onion. Add the onion, olive oil, and ground beef to a large deep skillet and sauté over medium heat until the beef is fully browned and the onion is soft and translucent. Drain off any excess fat, if needed.
 
-      In 12-inch nonstick skillet, heat 2 tablespoons of the butter over medium heat; add onion and mushrooms. Cook 5 to 7 minutes, stirring occasionally, until vegetables are tender; transfer mixture to small bowl.
+      Add the flour to the skillet and continue to stir and cook for one minute more. The flour will begin to coat the bottom of the skillet. Be careful not to let the flour burn.
 
-      In same skillet, melt remaining 2 tablespoons butter; add chicken, and cook 4 to 6 minutes, stirring frequently, until chicken starts to brown. Add onion and mushroom mixture back to skillet; sprinkle with flour mixture, stirring to coat. Slowly add chicken broth and Worcestershire sauce, stirring constantly.
+      Add the tomato sauce and beef broth to the skillet and stir to dissolve the flour off the bottom of the skillet.
 
-      Heat to simmering; reduce heat to medium-low, and cook 3 to 5 minutes, stirring occasionally, until sauce is thickened and chicken is cooked through. Remove from heat; stir in sour cream. Garnish with parsley. Serve mixture over cooked egg noodles.
+      Add the uncooked pasta to the skillet and stir to combine. The liquid in the skillet may not fully cover the pasta, but that is okay.
+
+      Place a lid on the skillet, turn the heat up to medium-high, and let the liquid come up to a boil. Once it reaches a boil, give it a quick stir to loosen any pasta from the bottom of the skillet, replace the lid, and turn the heat down to low. Let the pasta simmer, stirring occasionally (always replacing the lid), for about 10 minutes, or until the pasta is tender and the sauce has thickened. Turn the heat off.
+
+      Add the shredded cheddar to the skillet and stir until it has melted into the sauce. Stir the hot dog relish into the sauce and then top with sliced green onions. Serve hot.
       `,
-        title: "Skillet Chicken Stroganoff",
-        sourceSite: "bettycrocker.com",
-        sourceUrl:
-          "https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44",
+        title: "One Pot Cheeseburger Pasta",
+        sourceSite: "budgetbytes.com",
+        sourceUrl: "https://www.budgetbytes.com/skillet-cheeseburger-pasta/",
         createdBy: 2,
         forkedCount: 0,
         user: user2,

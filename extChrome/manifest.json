@@ -18,7 +18,6 @@
       "js": ["content.js"],
       "matches": [
         "*://www.allrecipes.com/*",
-        "*://www.bettycrocker.com/*",
         "*://www.bonappetit.com/*",
         "*://www.budgetbytes.com/*",
         "*://www.delish.com/*",
@@ -28,7 +27,6 @@
         "*://food52.com/*",
         "*://www.foodandwine.com/*",
         "*://www.foodnetwork.com/*",
-        "*://www.jamieoliver.com/*",
         "*://www.seriouseats.com/*",
         "*://www.simplyrecipes.com/*",
         "*://www.tasty.co/*",

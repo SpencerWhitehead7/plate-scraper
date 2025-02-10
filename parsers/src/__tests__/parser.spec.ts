@@ -4,7 +4,6 @@ import { afterEach, before, describe, it } from "node:test"
 import { load } from "cheerio"
 
 import { allrecipes } from "../allrecipes"
-import { bettycrocker } from "../bettycrocker"
 import { bonappetit } from "../bonappetit"
 import { budgetbytes } from "../budgetbytes"
 import { delish } from "../delish"
@@ -15,14 +14,12 @@ import { food52 } from "../food52"
 import { foodandwine } from "../foodandwine"
 import { foodnetwork } from "../foodnetwork"
 import type { Parser, RecipeData } from "../helpers"
-import { jamieoliver } from "../jamieoliver"
 import { seriouseats } from "../seriouseats"
 import { simplyrecipes } from "../simplyrecipes"
 import { tasty } from "../tasty"
 import { thekitchn } from "../thekitchn"
 import {
   allrecipesRecipe,
-  bettycrockerRecipe,
   bonappetitRecipe,
   budgetbytesRecipe,
   delishRecipe,
@@ -32,7 +29,6 @@ import {
   foodandwineRecipe,
   foodnetworkRecipe,
   foodRecipe,
-  jamieoliverRecipe,
   seriouseatsRecipe,
   simplyrecipesRecipe,
   tastyRecipe,
@@ -54,17 +50,6 @@ void describe("Parsers", () => {
         sourceUrl: "https://www.allrecipes.com/recipe/22918/pop-cake/",
         text: allrecipesRecipe,
         title: "Pop Cake",
-      },
-    },
-    {
-      src: "https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44",
-      parser: bettycrocker,
-      expected: {
-        sourceSite: "bettycrocker.com",
-        sourceUrl:
-          "https://www.bettycrocker.com/recipes/skillet-chicken-stroganoff/4966ef59-6380-49aa-89bf-5bf285b37a44",
-        text: bettycrockerRecipe,
-        title: "Skillet Chicken Stroganoff",
       },
     },
     {
@@ -165,17 +150,6 @@ void describe("Parsers", () => {
       },
     },
     {
-      src: "https://www.jamieoliver.com/recipes/eggs-recipes/amazing-yorkies/",
-      parser: jamieoliver,
-      expected: {
-        sourceSite: "jamieoliver.com",
-        sourceUrl:
-          "https://www.jamieoliver.com/recipes/eggs-recipes/amazing-yorkies/",
-        text: jamieoliverRecipe,
-        title: "Amazing Yorkies",
-      },
-    },
-    {
       src: "https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html",
       parser: seriouseats,
       expected: {
@@ -248,9 +222,6 @@ void describe("Parsers", () => {
   void it("allrecipes", () => {
     assert.deepStrictEqual(cases[i].actual, cases[i].expected)
   })
-  void it("bettycrocker", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
   void it("bonappetit", () => {
     assert.deepStrictEqual(cases[i].actual, cases[i].expected)
   })
@@ -276,9 +247,6 @@ void describe("Parsers", () => {
     assert.deepStrictEqual(cases[i].actual, cases[i].expected)
   })
   void it("foodnetwork", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("jamieoliver", () => {
     assert.deepStrictEqual(cases[i].actual, cases[i].expected)
   })
   void it("seriouseats", () => {
