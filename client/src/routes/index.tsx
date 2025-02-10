@@ -70,13 +70,6 @@ export const Home: React.FC = () => {
           registerOptions={{
             required: "required",
             validate: {
-              correctSeriousEats: (v: string) => {
-                const sanitized = v.toLowerCase()
-                return sanitized.includes("seriouseats.com") &&
-                  !sanitized.includes("seriouseats.com/recipes")
-                  ? "Make sure your url is from seriouseats.com/recipes, not just seriouseats.com"
-                  : undefined
-              },
               siteSupported: (v: string) => {
                 const sanitized = v.toLowerCase()
                 return !SUPPORTED_SITES.some((site) => sanitized.includes(site))

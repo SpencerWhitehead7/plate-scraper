@@ -147,11 +147,10 @@ void describe("Parsers", async () => {
     },
     {
       title: "seriouseats",
-      src: "https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html",
+      src: "https://www.seriouseats.com/new-york-style-pizza",
       expected: {
         sourceSite: "seriouseats.com",
-        sourceUrl:
-          "https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html",
+        sourceUrl: "https://www.seriouseats.com/new-york-style-pizza",
         text: seriouseatsRecipe,
         title: "New York-Style Pizza",
       },

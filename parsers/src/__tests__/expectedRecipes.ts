@@ -312,7 +312,7 @@ Heat your grill to high. Brush the steaks on both sides with oil and season libe
 Transfer the steaks to a cutting board or platter, tent loosely with foil and let rest 5 minutes before slicing.
 `
 
-export const seriouseats = `Source: https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html
+export const seriouseats = `Source: https://www.seriouseats.com/new-york-style-pizza
 
 New York-Style Pizza
 

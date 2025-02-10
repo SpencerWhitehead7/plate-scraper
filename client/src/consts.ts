@@ -12,7 +12,7 @@ export const SUPPORTED_SITES = [
   "food52.com",
   "foodandwine.com",
   "foodnetwork.com",
-  "seriouseats.com/recipes",
+  "seriouseats.com",
   "simplyrecipes.com",
   "tasty.co",
   "thekitchn.com",

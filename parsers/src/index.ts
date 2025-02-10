@@ -322,7 +322,7 @@ export const selectParser = (url: string) => {
     return foodandwine
   } else if (url.includes("foodnetwork.com")) {
     return foodnetwork
-  } else if (url.includes("seriouseats.com/recipes")) {
+  } else if (url.includes("seriouseats.com")) {
     return seriouseats
   } else if (url.includes("simplyrecipes.com")) {
     return simplyrecipes
