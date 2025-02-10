@@ -1,50 +1,35 @@
 import assert from "node:assert/strict"
-import { afterEach, before, describe, it } from "node:test"
+import { describe, it } from "node:test"
 
 import { load } from "cheerio"
 
-import { allrecipes } from "../allrecipes"
-import { bonappetit } from "../bonappetit"
-import { budgetbytes } from "../budgetbytes"
-import { delish } from "../delish"
-import { eatingwell } from "../eatingwell"
-import { epicurious } from "../epicurious"
-import { food } from "../food"
-import { food52 } from "../food52"
-import { foodandwine } from "../foodandwine"
-import { foodnetwork } from "../foodnetwork"
-import type { Parser, RecipeData } from "../helpers"
-import { seriouseats } from "../seriouseats"
-import { simplyrecipes } from "../simplyrecipes"
-import { tasty } from "../tasty"
-import { thekitchn } from "../thekitchn"
+import { RecipeData, selectParser } from "../index"
 import {
-  allrecipesRecipe,
-  bonappetitRecipe,
-  budgetbytesRecipe,
-  delishRecipe,
-  eatingwellRecipe,
-  epicuriousRecipe,
-  food52Recipe,
-  foodandwineRecipe,
-  foodnetworkRecipe,
-  foodRecipe,
-  seriouseatsRecipe,
-  simplyrecipesRecipe,
-  tastyRecipe,
-  thekitchnRecipe,
+  allrecipes as allrecipesRecipe,
+  bonappetit as bonappetitRecipe,
+  budgetbytes as budgetbytesRecipe,
+  delish as delishRecipe,
+  eatingwell as eatingwellRecipe,
+  epicurious as epicuriousRecipe,
+  food as foodRecipe,
+  food52 as food52Recipe,
+  foodandwine as foodandwineRecipe,
+  foodnetwork as foodnetworkRecipe,
+  seriouseats as seriouseatsRecipe,
+  simplyrecipes as simplyrecipesRecipe,
+  tasty as tastyRecipe,
+  thekitchn as thekitchnRecipe,
 } from "./expectedRecipes"
 
-void describe("Parsers", () => {
+void describe("Parsers", async () => {
   const cases: {
+    title: string
     src: string
-    parser: Parser
     expected: RecipeData
-    actual?: RecipeData
   }[] = [
     {
+      title: "allrecipes",
       src: "https://www.allrecipes.com/recipe/22918/pop-cake/",
-      parser: allrecipes,
       expected: {
         sourceSite: "allrecipes.com",
         sourceUrl: "https://www.allrecipes.com/recipe/22918/pop-cake/",
@@ -53,8 +38,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "bonappetit",
       src: "https://www.bonappetit.com/recipe/grilled-salmon-with-lemon-sesame-sauce",
-      parser: bonappetit,
       expected: {
         sourceSite: "bonappetit.com",
         sourceUrl:
@@ -64,8 +49,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "budgetbytes",
       src: "https://www.budgetbytes.com/skillet-cheeseburger-pasta/",
-      parser: budgetbytes,
       expected: {
         sourceSite: "budgetbytes.com",
         sourceUrl: "https://www.budgetbytes.com/skillet-cheeseburger-pasta/",
@@ -74,8 +59,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "delish",
       src: "https://www.delish.com/cooking/recipe-ideas/a42628377/croque-monsieur-breakfast-casserole-recipe/",
-      parser: delish,
       expected: {
         sourceSite: "delish.com",
         sourceUrl:
@@ -85,8 +70,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "eatingwell",
       src: "https://www.eatingwell.com/recipe/278567/shaved-artichoke-salad-with-shrimp/",
-      parser: eatingwell,
       expected: {
         sourceSite: "eatingwell.com",
         sourceUrl:
@@ -96,8 +81,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "epicurious",
       src: "https://www.epicurious.com/recipes/food/views/iron-skillet-peach-crisp-56389711",
-      parser: epicurious,
       expected: {
         sourceSite: "epicurious.com",
         sourceUrl:
@@ -107,8 +92,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "food",
       src: "https://www.food.com/recipe/sonic-strawberry-cheesecake-shake-122785",
-      parser: food,
       expected: {
         sourceSite: "food.com",
         sourceUrl:
@@ -118,8 +103,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "food52",
       src: "https://food52.com/recipes/81226-espresso-caramel-sauce",
-      parser: food52,
       expected: {
         sourceSite: "food52.com",
         sourceUrl: "https://food52.com/recipes/81226-espresso-caramel-sauce",
@@ -128,8 +113,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "foodandwine",
       src: "https://www.foodandwine.com/recipes/classic-southern-fried-chicken",
-      parser: foodandwine,
       expected: {
         sourceSite: "foodandwine.com",
         sourceUrl:
@@ -139,8 +124,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "foodnetwork",
       src: "https://www.foodnetwork.com/recipes/bobby-flay/perfectly-grilled-steak-recipe-1973350",
-      parser: foodnetwork,
       expected: {
         sourceSite: "foodnetwork.com",
         sourceUrl:
@@ -150,8 +135,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "seriouseats",
       src: "https://www.seriouseats.com/recipes/2010/10/new-york-style-pizza.html",
-      parser: seriouseats,
       expected: {
         sourceSite: "seriouseats.com",
         sourceUrl:
@@ -161,8 +146,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "simplyrecipes",
       src: "https://www.simplyrecipes.com/recipes/grilled_salmon_with_peach_salsa/",
-      parser: simplyrecipes,
       expected: {
         sourceSite: "simplyrecipes.com",
         sourceUrl:
@@ -172,8 +157,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "tasty",
       src: "https://tasty.co/recipe/chicken-biscuits-bake",
-      parser: tasty,
       expected: {
         sourceSite: "tasty.co",
         sourceUrl: "https://tasty.co/recipe/chicken-biscuits-bake",
@@ -182,8 +167,8 @@ void describe("Parsers", () => {
       },
     },
     {
+      title: "thekitchn",
       src: "https://www.thekitchn.com/recipe-watermelon-mint-frose-233904",
-      parser: thekitchn,
       expected: {
         sourceSite: "thekitchn.com",
         sourceUrl:
@@ -194,71 +179,37 @@ void describe("Parsers", () => {
     },
   ]
 
-  let i = 0
-
-  before(async () => {
-    const results = (
-      await Promise.allSettled(
-        cases.map(({ parser, src }) =>
-          fetch(src)
-            .then((r) => r.text())
-            .then((t) => load(t))
-            .then(($) => parser($, src)),
-        ),
-      )
-    ).map((r) =>
-      r.status === "fulfilled" ? r.value : ({} as unknown as RecipeData),
+  const loadedHtml = (
+    await Promise.allSettled(
+      cases.map(({ src }) =>
+        fetch(src)
+          .then((r) => r.text())
+          .then((t) => load(t)),
+      ),
     )
+  ).map((r) => (r.status === "fulfilled" ? r.value : null))
 
-    cases.forEach((c, i) => {
-      c.actual = results[i]
+  cases.forEach(({ title, src, expected }, i) => {
+    void it(`parses ${title}`, () => {
+      const loadedHtmlPage = loadedHtml[i]
+      assert.notEqual(loadedHtmlPage, null)
+
+      const parser = selectParser(src)
+      assert.notEqual(parser, null)
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const actual = parser!(loadedHtml[i]!, src)
+
+      assert.equal(actual.sourceSite, expected.sourceSite)
+      assert.equal(actual.sourceUrl, expected.sourceUrl)
+      assert.equal(actual.text, expected.text)
+      assert.equal(actual.title, expected.title)
     })
   })
 
-  afterEach(() => {
-    i++
-  })
+  void it("returns null if site cannot be parsed", () => {
+    const parser = selectParser("https://www.wikipedia.org")
 
-  void it("allrecipes", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("bonappetit", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("budgetbytes", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("delish", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("eatingwell", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("epicurious", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("food", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("food52", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("foodandwine", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("foodnetwork", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("seriouseats", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("simplyrecipes", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("tasty", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
-  })
-  void it("thekitchn", () => {
-    assert.deepStrictEqual(cases[i].actual, cases[i].expected)
+    assert.equal(parser, null)
   })
 })
