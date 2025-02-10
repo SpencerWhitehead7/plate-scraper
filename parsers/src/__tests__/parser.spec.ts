@@ -8,6 +8,7 @@ import {
   allrecipes as allrecipesRecipe,
   bonappetit as bonappetitRecipe,
   budgetbytes as budgetbytesRecipe,
+  cookingnytimes as cookingnytimesRecipe,
   delish as delishRecipe,
   eatingwell as eatingwellRecipe,
   epicurious as epicuriousRecipe,
@@ -56,6 +57,17 @@ void describe("Parsers", async () => {
         sourceUrl: "https://www.budgetbytes.com/skillet-cheeseburger-pasta/",
         text: budgetbytesRecipe,
         title: "One Pot Cheeseburger Pasta",
+      },
+    },
+    {
+      title: "cooking.nytimes",
+      src: "https://cooking.nytimes.com/recipes/1019772-spiced-chickpea-stew-with-coconut-and-turmeric",
+      expected: {
+        sourceSite: "cooking.nytimes.com",
+        sourceUrl:
+          "https://cooking.nytimes.com/recipes/1019772-spiced-chickpea-stew-with-coconut-and-turmeric",
+        text: cookingnytimesRecipe,
+        title: "Spiced Chickpea Stew With Coconut and Turmeric",
       },
     },
     {

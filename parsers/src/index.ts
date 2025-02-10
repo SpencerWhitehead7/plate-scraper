@@ -102,6 +102,27 @@ const budgetbytes: Parser = ($, url) => {
   }
 }
 
+const cookingnytimes: Parser = ($, url) => {
+  const title = getCleanStrings($, "h1")
+  const ingredients = getCleanStrings(
+    $,
+    "ul > li",
+    "div[class*=recipebody_ingredients-block]",
+  )
+  const instructions = getCleanStrings(
+    $,
+    "ol > li p",
+    "div[class*=recipebody_prep-block]",
+  )
+
+  return {
+    sourceSite: "cooking.nytimes.com",
+    sourceUrl: url,
+    text: getRecipe(url, title, ingredients, instructions),
+    title: title[0],
+  }
+}
+
 const delish: Parser = ($, url) => {
   const title = getCleanStrings($, "h1")
   const ingredients = getCleanStrings($, "li", "ul[class*=ingredient-lists]")
@@ -285,6 +306,8 @@ export const selectParser = (url: string) => {
     return bonappetit
   } else if (url.includes("budgetbytes.com")) {
     return budgetbytes
+  } else if (url.includes("cooking.nytimes.com")) {
+    return cookingnytimes
   } else if (url.includes("delish.com")) {
     return delish
   } else if (url.includes("eatingwell.com")) {
