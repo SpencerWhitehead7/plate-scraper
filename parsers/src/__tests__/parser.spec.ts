@@ -210,10 +210,12 @@ void describe("Parsers", async () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const actual = parser!(loadedHtml[i]!, src)
 
-      assert.equal(actual.sourceSite, expected.sourceSite)
-      assert.equal(actual.sourceUrl, expected.sourceUrl)
-      assert.equal(actual.text, expected.text)
-      assert.equal(actual.title, expected.title)
+      assert.equal(actual.data.sourceSite, expected.sourceSite)
+      assert.equal(actual.data.sourceUrl, expected.sourceUrl)
+      assert.equal(actual.data.text, expected.text)
+      assert.equal(actual.data.title, expected.title)
+
+      assert.equal(actual.isValid, true)
     })
   })
 

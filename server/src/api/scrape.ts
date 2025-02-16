@@ -20,18 +20,11 @@ scrapeRouter.post("/", validate(scrapePostSchema), async (req, res, next) => {
     const recipeHtml = await recipeRes.text()
     const $ = load(recipeHtml)
 
-    const recipe = parser($, url)
+    const { data, isValid } = parser($, url)
 
-    // this doesn't cover all _nearly_ the ways the parser can be wrong
-    // but no title, no ingredients, or no instructions is a sure sign _something's_ broken
-    const compressedText = recipe.text.replace(/\s/g, "")
-    const hasNoTitle = !recipe.title
-    const hasNoIngredients = compressedText.includes("IngredientsInstructions")
-    const hasNoInstructions = compressedText.endsWith("Instructions")
-    if (hasNoTitle || hasNoIngredients || hasNoInstructions)
-      throw scrapeFailedErr
+    if (!isValid) throw scrapeFailedErr
 
-    res.json(recipe)
+    res.json(data)
   } catch (err) {
     next(err)
   }

@@ -15,20 +15,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           return
         }
 
-        const recipeData = parser($, sourceUrl)
+        const { data, isValid } = parser($, sourceUrl)
 
-        const compressedText = recipeData.text.replace(/\s/g, "")
-        const hasNoTitle = !recipeData.title
-        const hasNoIngredients = compressedText.includes(
-          "IngredientsInstructions"
-        )
-        const hasNoInstructions = compressedText.endsWith("Instructions")
-        if (hasNoTitle || hasNoIngredients || hasNoInstructions) {
+        if (!isValid) {
           sendResponse([null, "Failed to scrape"])
           return
         }
 
-        sendResponse([recipeData, null])
+        sendResponse([data, null])
       } catch (err) {
         sendResponse([null, err.toString()])
       }
