@@ -9,11 +9,12 @@
     "clean": "rm -rf node_modules ./dist && npm install",
     "build:prepare": "rm -rf ./dist && mkdir ./dist",
     "build:icons": "cp -r ./icons ./dist/icons",
+    "build:serviceWorker": "cp ./src/serviceWorker.js ./dist/serviceWorker.js",
     "build:content": "esbuild ./src/content.js --bundle --minify --outfile=./dist/content.js",
     "build:popup": "cp ./src/popup.html ./dist/popup.html && cp ./src/popup.js ./dist/popup.js",
     "build:manifest": "cp ./manifest.json ./dist/manifest.json",
     "build:zip": "zip -r plate-scraper.zip ./dist",
-    "build": "npm run build:prepare && npm run build:icons && npm run build:content && npm run build:popup && npm run build:manifest && npm run build:zip"
+    "build": "npm run build:prepare && npm run build:icons && npm run build:serviceWorker && npm run build:content && npm run build:popup && npm run build:manifest && npm run build:zip"
   },
   "dependencies": {
     "jquery": "^3.7.1",

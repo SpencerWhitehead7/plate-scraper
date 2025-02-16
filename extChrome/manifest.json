@@ -5,10 +5,13 @@
   "version": "0.12",
   "description": "Scrapes title, ingredients, and instructions from recipe sites as editable, minimally formatted, downloadable plaintext.",
   "icons": {
-    "16": "icons/icon16.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "background": {
+    "service_worker": "serviceWorker.js"
   },
   "content_scripts": [
     {
@@ -34,13 +37,14 @@
   ],
   "action": {
     "default_icon": {
-      "16": "icons/icon16.png",
-      "32": "icons/icon32.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/icon-disabled-16.png",
+      "32": "icons/icon-disabled-32.png",
+      "48": "icons/icon-disabled-48.png",
+      "128": "icons/icon-disabled-128.png"
     },
     "default_title": "Scrape recipe!",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_state": "disabled"
   },
-  "permissions": ["activeTab"]
+  "permissions": ["activeTab", "declarativeContent"]
 }
