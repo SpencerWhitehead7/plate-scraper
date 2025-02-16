@@ -22,6 +22,6 @@
     "plate-scraper-parsers": "file:../parsers"
   },
   "devDependencies": {
-    "esbuild": "^0.19.9"
+    "esbuild": "^0.25.0"
   }
 }
