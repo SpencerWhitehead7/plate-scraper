@@ -1,46 +1,44 @@
-/* global chrome:false */
-
-window.addEventListener(`DOMContentLoaded`, () => {
-  const textarea = document.getElementsByTagName(`textarea`)[0]
-  const button = document.getElementsByTagName(`button`)[0]
-  const input = document.getElementsByTagName(`input`)[0]
+window.addEventListener("DOMContentLoaded", async () => {
+  const recipeTextArea = document.getElementById("recipe")
+  const filenameInput = document.getElementById("filename")
+  const downloadButton = document.getElementById("download")
 
   // Download text as .txt file
-  const download = () => {
-    // Getting text into a downloadable format
-    const text = textarea.value
-    const textBlob = new Blob([text], { type: `text/plain` })
-    const fileName = input.value
-
-    // Triggering download
-    const downloadLink = document.createElement(`a`)
-    downloadLink.download = fileName
+  downloadButton.addEventListener("click", () => {
+    // get text into a downloadable format
+    const text = recipeTextArea.value
+    const textBlob = new Blob([text], { type: "text/plain" })
+    const filename = filenameInput.value
+    // create download link
+    const downloadLink = document.createElement("a")
+    downloadLink.download = filename
     downloadLink.href = window.URL.createObjectURL(textBlob)
-    downloadLink.onclick = (evt) => {
-      document.body.removeChild(evt.target)
-    }
-    downloadLink.style.display = `none`
+    downloadLink.style.display = "none"
     document.body.appendChild(downloadLink)
+    // trigger download
     downloadLink.click()
-    alert(`Saved to your default download location`)
-  }
-
-  // Populate textarea
-  chrome.runtime.getBackgroundPage((background) => {
-    const { recipe } = background
-    if (!recipe) {
-      textarea.value = `No recipe`
-      button.disabled = true
-    } else if (recipe.error) {
-      textarea.value = recipe.error
-      button.disabled = true
-    } else if (recipe && (!recipe.title || !recipe.text)) {
-      textarea.value = `Failed to scrape: make sure you're on a specific recipe's page`
-      button.disabled = true
-    } else {
-      textarea.value = recipe.text
-      input.value = `${recipe.sourceSite} ${recipe.title}`
-      button.addEventListener(`click`, download)
-    }
+    // cleanup
+    document.body.removeChild(downloadLink)
+    // notify
+    alert(`Saved ${filename} to your default download folder`)
   })
+
+  // get current tab
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    lastFocusedWindow: true,
+  })
+
+  // get recipe from current tab's content.js
+  const [recipeData, err] = await chrome.tabs.sendMessage(tab.id, {
+    action: "GET_RECIPE",
+  })
+
+  if (err) {
+    recipeTextArea.value = err
+  } else {
+    recipeTextArea.value = recipeData.text
+    filenameInput.value = `${recipeData.sourceSite} ${recipeData.title}`
+    downloadButton.disabled = false
+  }
 })
