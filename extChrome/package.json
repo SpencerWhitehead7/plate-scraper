@@ -14,7 +14,8 @@
     "build:popup": "cp ./src/popup.html ./dist/popup.html && cp ./src/popup.js ./dist/popup.js",
     "build:manifest": "cp ./manifest.json ./dist/manifest.json",
     "build:zip": "zip -r plate-scraper.zip ./dist",
-    "build": "npm run build:prepare && npm run build:icons && npm run build:serviceWorker && npm run build:content && npm run build:popup && npm run build:manifest && npm run build:zip"
+    "build": "npm run build:prepare && npm run build:icons && npm run build:serviceWorker && npm run build:content && npm run build:popup && npm run build:manifest && npm run build:zip",
+    "dev": "npm run build:prepare && npm run build:icons && npm run build:serviceWorker && npm run build:content && npm run build:popup && npm run build:manifest"
   },
   "dependencies": {
     "jquery": "^3.7.1",
